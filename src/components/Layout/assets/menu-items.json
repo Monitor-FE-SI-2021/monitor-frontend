@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "title": "menu_item_locations",
+      "route": "/",
+      "access_level": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "title": "menu_item_about",
+      "route": "/about",
+      "access_level": [
+        0,
+        1,
+        2
+      ]
+    }
+  ]
+}

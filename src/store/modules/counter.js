@@ -10,16 +10,11 @@ const initialState = {
 
 // Reducer ( glavni dio, mutira state direktno)
 
-const counterReducer = (state = initialState, action) => {
-    switch (action.type) {
-
-        case INCREMENT:
-            return {
-                count: state.count + 1,
-            }
-
-        default:
-            return state
+const ACTION_HANDLERS = {
+    [INCREMENT]: (state, action) => {
+        return {
+            count: state.count + 1,
+        }
     }
 }
 
@@ -33,4 +28,9 @@ export const increment = () => {
     }
 }
 
-export default counterReducer;
+export default function counter(state = initialState, action) {
+
+    const handler = ACTION_HANDLERS[action.type];
+
+    return handler ? handler(state, action) : state;
+}
