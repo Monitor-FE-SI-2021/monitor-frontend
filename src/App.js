@@ -1,25 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import { push } from 'connected-react-router';
+import { Route } from "react-router-dom";
+import { connect } from "react-redux";
+import { increment } from "./store/modules/counter";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+function App({ push, brojac, increment }) {
+    return (
+        <div className="App">
+            <div>
+                <button onClick={() => push('/')}>Idi na home</button>
+                <button onClick={() => push('/about-us')}>Idi na about us</button>
+            </div>
+
+            <h1>
+                Trenutni broj: {brojac}
+            </h1>
+
+            <button onClick={increment}>Povecaj broj</button>
+
+            <Route exact path="/" component={() => <h1>Home</h1>}/>
+            <Route path="/about-us" component={() => <h1>About</h1>}/>
+        </div>
+    );
 }
 
-export default App;
+export default connect(state => ({
+    brojac: state.counterReducer.count,
+}), { push, increment })(App);
+
