@@ -1,3 +1,6 @@
+// Ovo je primjer jednog store modula (globalni state) koji sluzi kao sablon za ostale module
+
+
 // Tipovi akcija
 
 export const INCREMENT = 'INCREMENT_COUNTER'
@@ -8,7 +11,7 @@ const initialState = {
     count: 0,
 }
 
-// Reducer ( glavni dio, mutira state direktno)
+// Reducer ( glavni dio, mutira state direktno, mora vratiti novi state)
 
 const ACTION_HANDLERS = {
     [INCREMENT]: (state, action) => {
@@ -19,7 +22,6 @@ const ACTION_HANDLERS = {
 }
 
 // Kreatori akcija
-
 export const increment = () => {
     return dispatch => {
         dispatch({
@@ -28,6 +30,7 @@ export const increment = () => {
     }
 }
 
+// Sablon, ovo mozete copy paste, samo zamijenite ime counter -> novoIme
 export default function counter(state = initialState, action) {
 
     const handler = ACTION_HANDLERS[action.type];
