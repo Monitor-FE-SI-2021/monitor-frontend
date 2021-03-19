@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import React, { useState } from "react";
+import { useState } from "react";
 
 const handleClick = () => {
     console.log("called");
@@ -14,6 +14,8 @@ const RemoteControl = () => {
     const [url, setUrl] = useState("slkadhjaksl");
 
     
+
+
     
     return (
         <div className='page dashboard'>
