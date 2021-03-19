@@ -1,0 +1,63 @@
+#device-name{
+    margin-left: 169px;
+}
+
+#device-location{
+    margin-left: 151px;
+}
+
+#device-longitude{
+    margin-left: 141px;
+}
+
+#device-latitude{
+    margin-left: 154px;
+}
+
+#device-status{
+    margin-left: 165px;
+}
+
+#device-online{
+    margin-left: 98px;
+}
+
+#device-log{
+    margin-left: 14px;
+}
+
+#device-group{
+    margin-left: 122px;
+}
+
+section{
+    margin-bottom: 15px;
+}
+
+
+.email, #update-time{
+    height: 30px;
+}
+
+#update-time{
+    margin-left: 23px;
+    width: 233px;
+}
+
+
+
+#often, #time1, select{
+    display:inline;
+    margin-bottom: 30px;
+}
+
+.table{
+    margin-top: 50px;
+}
+
+.device_data{
+    border: 1px solid grey;
+    padding: 10px 10px 10px 10px;
+    width: 300px;
+    border-radius: 25px;
+}
