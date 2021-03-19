@@ -64,3 +64,27 @@ html, body, #app {
         }
     }
 }
+.card {
+    border-radius: 10px;
+    height: 200px;
+    box-shadow: 0 2px 5px #ccc;
+    text-align: left;
+    width: 30%;
+    margin: 20px 0 0 0
+}
+.card .card-img {
+    float: left;
+    width: 50%
+    
+}
+.card .card-img img {
+    width: 70%;
+    margin: 30px 0px 0px 20px
+}
+
+.card .card-info h3,p{
+    margin: 0 0 20px 0
+}
+.card .card-info {
+    margin: 30px 0 0 0
+}
