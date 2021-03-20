@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from "react-redux";
 import {makeStyles, TextField, MenuItem, Button, FormHelperText} from '@material-ui/core';
-import {useState} from 'react'
+import {useState} from 'react';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -55,14 +55,28 @@ const AddDeviceForm = () => {
 
     const validate = () => {
         let temp = {}
-        temp.naziv = values.naziv?"":"This field is required!"
-        temp.lokacija = values.lokacija?"":"This field is required!"
+       // temp.naziv = ""
+        let letterNumber = /^[0-9a-zA-Z]+$/
+
+        if(values.naziv == "")
+            temp.naziv = "This field is required"
+        else if(!values.naziv.match(letterNumber))
+            temp.naziv = "This field can only contain the following characters: A-Z, a-z, 0-9" 
+        else
+            temp.naziv=""
+        
+        temp.lokacija = ""
+        if(values.lokacija =="")
+            temp.lokacija = "This field is required"
+        else if(!values.lokacija.match(letterNumber))
+            temp.lokacija = "This field can only contain the following characters: A-Z, a-z, 0-9"  
+        else
+            temp.lokacija = ""
+
         temp.gSirina = values.gSirina.length==6?"":"Latitude should consist of exactly 6 numbers!"
         temp.gDuzina = values.gDuzina.length==6?"":"Longitude should consist of exactly 6 numbers!"
         temp.grupa = selectedGroup ? "" : "This field is required!"
-        setErrors({
-            ...temp
-        })
+        setErrors(temp)
 
         return Object.values(temp).every(x => x=="")
     }
@@ -76,13 +90,13 @@ const AddDeviceForm = () => {
             ...values,
             [name]:value
         })
-        //console.log(values)
+        
     }
 
     const handleSubmit = (e) => {
         e.preventDefault()
         if(validate())
-            alert("radi")
+            alert("Validno")
     }
 
     return (
@@ -110,7 +124,7 @@ const AddDeviceForm = () => {
 
                 
             </TextField>
-            {errors.grupa && <FormHelperText>{errors.grupa}</FormHelperText>} 
+            {errors.grupa && <FormHelperText className="groupError" style={{color:"red"}}>{errors.grupa}</FormHelperText>} 
             <Button type = "submit" onClick={onClick} variant="contained">Dodaj mašinu</Button>
         </form>
     );
