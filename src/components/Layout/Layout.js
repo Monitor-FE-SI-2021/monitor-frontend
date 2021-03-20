@@ -7,6 +7,7 @@ import { connect } from "react-redux";
 import Devices from "../../pages/Devices/Devices";
 import PrimjerKomponente from "../PrimjerKomponente";
 import Dashboard from "../../pages/Dashboard/Dashboard";
+import AddDevice from "../../pages/AddDevices/AddDevice";
 
 const Layout = ({ isMenuExpanded }) => (
     <div className={classnames('layout', { 'menu-expanded': isMenuExpanded })}>
@@ -17,6 +18,7 @@ const Layout = ({ isMenuExpanded }) => (
                 <Route exact path={RouteLink.Dashboard} component={Dashboard}/>
                 <Route path={RouteLink.Devices} component={Devices}/>
                 <Route path={RouteLink.Test} component={PrimjerKomponente}/>
+                <Route path={RouteLink.AddDevcie} component={AddDevice}/>
             </Switch>
         </div>
     </div>
