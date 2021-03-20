@@ -2,7 +2,9 @@ import { connect } from "react-redux";
 import './Reporting.css';
 
 
-const Reports = () => (
+const Reports = () => {
+
+    return (
     
     <div className='page devices'>
 
@@ -65,6 +67,6 @@ const Reports = () => (
             </div>
         </div>
     </div>
-);
+)};
 
 export default connect(state => ({}), {})(Reports);
