@@ -1,17 +1,11 @@
 import DeviceSubGroup from './DeviceSubGroup/DeviceSubGroup';
 import './DeviceGroup.scss';
 import DeviceTable from '../DeviceTable/DeviceTable';
+import React, { useState } from 'react';
 
-const DeviceGroup = ({grupa}) => {
+const DeviceGroup = ({groups, group}) => {
 
-
-    //Ovdje se sada nalaze Devices nizovi objekata koji su grupisani na osnovu glavnih grupa
-    //Sada je potrebno renderovati u sklopu ove komponente naziv grupe, te subgrupe i unutar subgrupa prikazati zapravo masine
-
-    //Uređaji koji nemaju subgrupu
-    
-    //select * uredjaji where grupaId == grupa.grupaId && grupaParent == grupa.parent
-    // && grupa.parent==null
+   const [hidden, setHidden] = useState(false);
 
     let devicesData = [
         {
@@ -21,7 +15,8 @@ const DeviceGroup = ({grupa}) => {
             locationLongitude: 44.13,
             locationLatitude: 18.2,
             status: true,
-            lastTimeOnline: Date.now()
+            lastTimeOnline: Date.now(),
+            groupId: 1
         },
         {
             deviceId: 2,
@@ -30,7 +25,8 @@ const DeviceGroup = ({grupa}) => {
             locationLongitude: 44.13,
             locationLatitude: 18.2,
             status: true,
-            lastTimeOnline: Date.now()
+            lastTimeOnline: Date.now(),
+            groupId: 2
         },
         {
             deviceId: 3,
@@ -39,46 +35,59 @@ const DeviceGroup = ({grupa}) => {
             locationLongitude: 44.13,
             locationLatitude: 18.2,
             status: true,
-            lastTimeOnline: Date.now()
+            lastTimeOnline: Date.now(),
+            groupId: 4
         },
-
     ]
 
+    const getSubGroups = (groups, groupId) => {
+        const subGroups = [];
 
-    //Subgrupe kojima je parentId jednak proslijedjenom groupId
-
-    //Select * from grupe where parentId == grupa.grupaId
-
-    let subGroupsData = [
-            {
-                grupaid: 4,
-                name: "SubGrupa 1",
-                parentGroup: grupa.grupaid
-            },
-            {
-                grupaid: 5,
-                name: "SubGrupa 2",
-                parentGroup: grupa.grupaid
-            },
-            {
-                grupaid: 6,
-                name: "SubGrupa 3",
-                parentGroup: grupa.grupaid
+        for(let group of groups){
+            if(group.parentGroup === groupId){
+                subGroups.push(group);
             }
-    ];
+        }
 
-    let subGroups = subGroupsData.map(subGrupa => {
-        return <DeviceSubGroup grupa={subGrupa} key={subGrupa.grupaid}/>
+        return subGroups;
+    }
+
+    const getFilterDevices = (devices) => {
+        const filteredDevices = [];
+
+        for(let device of devices){
+            if(device.groupId === group.groupId){
+                filteredDevices.push(device);
+            }
+        }
+
+        return filteredDevices;
+    }
+
+    let subGroups = getSubGroups(groups, group.groupId).map(subGroup => {
+        return <DeviceGroup groups={groups} group={subGroup} key={subGroup.groupId}/>
     });
 
+    let filteredDevices = getFilterDevices(devicesData);
 
+    if(subGroups.length === 0){
+        subGroups = null;
+    }
 
+    let data = null;
+
+    if(!hidden){
+        data = <React.Fragment>
+            {filteredDevices.length != 0 ? <DeviceTable devices={filteredDevices} /> : null}
+            {subGroups}
+        </React.Fragment>   
+    }
 
     return (
         <div className='group'>
-            <h2>{grupa.name}</h2>
-            <DeviceTable devices={devicesData} />
-            {subGroups}
+            <h2>{group.name}</h2>
+            <button onClick={() => setHidden(!hidden)}>Klikni me maco</button>
+            {data}
         </div>
     )
 }
