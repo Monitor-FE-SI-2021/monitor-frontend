@@ -67,7 +67,7 @@ const RemoteControl =  () => {
         <h1>IWM Remote Access/Control</h1>
         
         <div>
-        <p class="paragraph">Quick example</p>
+        <p class="paragraph1">Quick example</p>
             <div>
                 <div class="screenshot">
                 <p>Screenshot</p>
