@@ -21,8 +21,8 @@ class LineChart extends Component{
             options={{
                 maintainAspectRatio: false, 
                 title:{
-                    display: 'CPU usage',
-                    text:'CPU uage',
+                    display: 'Quarterly CPU usage',
+                    text:'Quarterly CPU usage',
                     fontSize: 25
             },           
             }}
