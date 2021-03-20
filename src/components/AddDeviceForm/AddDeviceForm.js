@@ -59,14 +59,14 @@ const AddDeviceForm = () => {
 
         if(values.naziv == "")
             temp.naziv = "This field is required"
-        else if(!values.naziv.match(letterNumber))
+        else if(!values.naziv.match(letterNumber) && !values.naziv.includes(" "))
             temp.naziv = "This field can only contain the following characters: A-Z, a-z, 0-9" 
         else
             temp.naziv=""
         
         if(values.lokacija =="")
             temp.lokacija = "This field is required"
-        else if(!values.lokacija.match(letterNumber))
+        else if(!values.lokacija.match(letterNumber) && !values.lokacija.includes(" "))
             temp.lokacija = "This field can only contain the following characters: A-Z, a-z, 0-9"  
         else
             temp.lokacija = ""
@@ -127,7 +127,7 @@ const AddDeviceForm = () => {
                 
             </TextField>
             {errors.grupa && <FormHelperText className="groupError" style={{color:"red"}}>{errors.grupa}</FormHelperText>} 
-            
+
             <Button type = "submit" onClick={onClick} variant="contained">Dodaj mašinu</Button>
         </form>
     );
