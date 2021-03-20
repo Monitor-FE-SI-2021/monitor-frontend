@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from "react-redux";
 import {makeStyles, TextField, MenuItem, Button} from '@material-ui/core';
 import {useState} from 'react'
 
@@ -33,9 +34,8 @@ const groups = [
     },
 ]
 
-export default function AddDeviceForm() {
+const AddDeviceForm = () => {
     const classes = useStyles();
-
     const [selectedGroup, setSelectedGroup] = useState('')
 
     const onClick = () => {
@@ -49,7 +49,7 @@ export default function AddDeviceForm() {
     return (
         <form className={classes.root}>
             <TextField label="Naziv" />
-            <TextField label="Adresa" />
+            <TextField label="Lokacija" />
             <TextField label="Geografska širina" type='number'/>
             <TextField label="Geografska visina" type='number'/>
             <TextField
@@ -68,3 +68,5 @@ export default function AddDeviceForm() {
         </form>
     );
 }
+
+export default connect(state => ({}), {})(AddDeviceForm);
