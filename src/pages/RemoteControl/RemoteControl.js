@@ -1,7 +1,6 @@
 import { connect } from "react-redux";
 import { useState } from "react";
-
-
+import './RemoteControl.css' 
 
 
 const RemoteControl =  () => {
@@ -68,11 +67,10 @@ const RemoteControl =  () => {
         <h1>IWM Remote Access/Control</h1>
         
         <div>
+        <p class="paragraph">Quick example</p>
             <div>
-            
-            </div>
-            <div>
-                <div>
+                <div class="screenshot">
+                <p>Screenshot</p>
                     <img src={`data:image/jpeg;base64,${url}`} />
                 </div>
             </div>
@@ -81,7 +79,6 @@ const RemoteControl =  () => {
         <button type="button" onClick = {handleClick}>
             Get Screenshot
         </button>    
-
         </div>
     );
 }
