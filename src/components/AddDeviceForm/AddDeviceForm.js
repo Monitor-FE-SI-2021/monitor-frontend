@@ -55,7 +55,6 @@ const AddDeviceForm = () => {
 
     const validate = () => {
         let temp = {}
-       // temp.naziv = ""
         let letterNumber = /^[0-9a-zA-Z]+$/
 
         if(values.naziv == "")
@@ -65,7 +64,6 @@ const AddDeviceForm = () => {
         else
             temp.naziv=""
         
-        temp.lokacija = ""
         if(values.lokacija =="")
             temp.lokacija = "This field is required"
         else if(!values.lokacija.match(letterNumber))
@@ -73,8 +71,8 @@ const AddDeviceForm = () => {
         else
             temp.lokacija = ""
 
-        temp.gSirina = values.gSirina.length==6?"":"Latitude should consist of exactly 6 numbers!"
-        temp.gDuzina = values.gDuzina.length==6?"":"Longitude should consist of exactly 6 numbers!"
+        temp.gSirina = values.gSirina.length==6 ? "" : "Latitude should consist of exactly 6 numbers!"
+        temp.gDuzina = values.gDuzina.length==6 ? "" : "Longitude should consist of exactly 6 numbers!"
         temp.grupa = selectedGroup ? "" : "This field is required!"
         setErrors(temp)
 
@@ -103,12 +101,16 @@ const AddDeviceForm = () => {
         <form className={classes.root} onSubmit={handleSubmit}>
             <TextField label="Naziv" name="naziv" value={values.naziv} onChange={handleInputChange} 
                 {...(errors.naziv && {error:true, helperText: errors.naziv})} />
+
             <TextField label="Lokacija" name="lokacija" value={values.lokacija} onChange={handleInputChange}
                 {...(errors.lokacija && {error:true, helperText: errors.lokacija})} />
+
             <TextField label="Geografska širina" type='number' name="gSirina" value={values.gSirina} onChange={handleInputChange} 
                 {...(errors.gSirina && {error:true, helperText: errors.gSirina})}/>
+
             <TextField label="Geografska visina" type='number' name="gDuzina" value={values.gDuzina} onChange={handleInputChange} 
                 {...(errors.gDuzina && {error:true, helperText: errors.gDuzina})}/>
+
             <TextField
                 select
                 value={selectedGroup}
@@ -125,6 +127,7 @@ const AddDeviceForm = () => {
                 
             </TextField>
             {errors.grupa && <FormHelperText className="groupError" style={{color:"red"}}>{errors.grupa}</FormHelperText>} 
+            
             <Button type = "submit" onClick={onClick} variant="contained">Dodaj mašinu</Button>
         </form>
     );
