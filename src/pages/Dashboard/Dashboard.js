@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import ActiveMachine from "../../components/Layout/components/ActiveMachine";
 import PieChart from "../../components/Layout/components/charts/PieChart.js";
+import LineChart from "../../components/Layout/components/charts/LineChart.js";
 
 function createActiveMachineCard(machine) {
     return (
@@ -16,7 +17,7 @@ function createActiveMachineCard(machine) {
 // Api get may or may not be called here. 
 // The data is an example of how the data structure should look like
 
-let chartDataExample = {
+let chartPieDataExample = {
         labels: ['Used', 'Not used'],
         datasets:[
           {
@@ -37,6 +38,25 @@ let chartDataExample = {
           }
         ]
       }
+
+let chartLineDataExample = {
+    labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+    datasets:[
+      {
+        label:'CPU usage',
+        data:[
+          60,
+          65,
+          80,
+          70
+        ],
+        backgroundColor:[
+          'rgba(255, 206, 86, 0.6)',
+          'rgba(255, 99, 132, 0.6)'    
+        ]
+      }
+    ]
+  }
 
 
 const machines = [
@@ -62,7 +82,8 @@ const Dashboard = () => (
         <h1>List of active machines</h1>
         {machines.map(createActiveMachineCard)}
 
-        <PieChart chartData={chartDataExample}/>
+        <PieChart chartData={chartPieDataExample}/>
+        <LineChart chartData={chartLineDataExample}/>
     </div>
 );
 
