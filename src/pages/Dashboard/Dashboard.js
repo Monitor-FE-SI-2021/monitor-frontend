@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import ActiveMachine from "../../components/Layout/components/ActiveMachine";
 import PieChart from "../../components/Layout/components/charts/PieChart.js";
 import LineChart from "../../components/Layout/components/charts/LineChart.js";
-
+import ChartDonut from "../../components/Layout/components/charts/ChartDonut.js";
 function createActiveMachineCard(machine) {
     return (
         <ActiveMachine
@@ -52,12 +52,29 @@ let chartLineDataExample = {
         ],
         backgroundColor:[
           'rgba(255, 206, 86, 0.6)',
-          'rgba(255, 99, 132, 0.6)'    
+          'rgba(255, 99, 132, 0.6)'
         ]
       }
     ]
   }
-
+let chartDonutDataExample = {
+    labels: ['Q1', 'Q2', 'Q3'],
+    datasets:[
+        {
+            label:'GPU usage',
+            data:[
+                60,
+                65,
+                80
+            ],
+            backgroundColor:[
+                'rgba(255, 206, 86, 0.6)',
+                'rgba(255, 99, 132, 0.6)',
+                'rgba(257, 102, 90, 0.6)'
+            ]
+        }
+    ]
+}
 
 const machines = [
     {
@@ -84,6 +101,7 @@ const Dashboard = () => (
 
         <PieChart chartData={chartPieDataExample}/>
         <LineChart chartData={chartLineDataExample}/>
+        <ChartDonut chartData={chartDonutDataExample}/>
     </div>
 );
 
