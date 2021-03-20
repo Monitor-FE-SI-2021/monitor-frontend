@@ -1,0 +1,35 @@
+import React, {Component} from 'react';
+import { Line } from 'react-chartjs-2';
+
+class LineChart extends Component{
+  constructor(props){
+    super(props);
+    this.state = {
+      chartData:props.chartData
+    }
+  }
+
+  render(){
+    return (
+      <div className="chart">
+        <Line
+            data={this.state.chartData}
+
+            height={'300px'}
+            width={'100px'}
+                
+            options={{
+                maintainAspectRatio: false, 
+                title:{
+                    display: 'CPU usage',
+                    text:'CPU uage',
+                    fontSize: 25
+            },           
+            }}
+        />
+      </div>
+    )
+  }
+}
+
+export default LineChart
