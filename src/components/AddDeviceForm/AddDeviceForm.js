@@ -46,12 +46,38 @@ const AddDeviceForm = () => {
         setSelectedGroup(value)
     }
 
+    const initialValues = {
+        naziv: "",
+        lokacija: "",
+        gSirina: "",
+        gDuzina: ""
+    }
+
+    const validate = () => {
+        let temp = {}
+        temp.naziv = values.naziv?"":"This field is required!"
+        temp.lokacija = values.lokacija?"":"This field is required!"
+        temp.gSirina = values.gSirina?"":"This field is required!"
+        temp.gDuzina = values.naziv?"":"This field is required!"
+    }
+
+    const [values, setValues] = useState(initialValues)
+
+    const handleInputChange = e => {
+        const {name, value} = e.target
+        setValues({
+            ...values,
+            [name]:value
+        })
+        //console.log(values)
+    }
+
     return (
         <form className={classes.root}>
-            <TextField label="Naziv" />
-            <TextField label="Lokacija" />
-            <TextField label="Geografska širina" type='number'/>
-            <TextField label="Geografska visina" type='number'/>
+            <TextField label="Naziv" name="naziv" value={values.naziv} onChange={handleInputChange} error helperText="greska"/>
+            <TextField label="Lokacija" name="lokacija" value={values.lokacija} onChange={handleInputChange} />
+            <TextField label="Geografska širina" type='number' name="gSirina" value={values.gSirina} onChange={handleInputChange} />
+            <TextField label="Geografska visina" type='number' name="gDuzina" value={values.gDuzina} onChange={handleInputChange} />
             <TextField
                 select
                 value={selectedGroup}
@@ -63,6 +89,8 @@ const AddDeviceForm = () => {
                     {group.name}
                   </MenuItem>
                 ))}
+
+                
             </TextField>
             <Button onClick={onClick} variant="contained">Dodaj mašinu</Button>
         </form>
