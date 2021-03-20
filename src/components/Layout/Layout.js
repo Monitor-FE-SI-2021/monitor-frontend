@@ -18,7 +18,7 @@ const Layout = ({ isMenuExpanded }) => (
                 <Route exact path={RouteLink.Dashboard} component={Dashboard}/>
                 <Route path={RouteLink.Devices} component={Devices}/>
                 <Route path={RouteLink.Test} component={PrimjerKomponente}/>
-                <Route path={RouteLink.AddDevcie} component={AddDevice}/>
+                <Route path={RouteLink.AddDevice} component={AddDevice}/>
             </Switch>
         </div>
     </div>
