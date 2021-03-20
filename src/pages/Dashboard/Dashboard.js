@@ -4,6 +4,7 @@ import ActiveMachine from "../../components/Layout/components/ActiveMachine";
 import PieChart from "../../components/Layout/components/charts/PieChart.js";
 import LineChart from "../../components/Layout/components/charts/LineChart.js";
 import ChartDonut from "../../components/Layout/components/charts/ChartDonut.js";
+import BarChart from "../../components/Layout/components/charts/BarChart.js";
 function createActiveMachineCard(machine) {
     return (
         <ActiveMachine
@@ -75,6 +76,25 @@ let chartDonutDataExample = {
         }
     ]
 }
+let currentTime = new Date().getHours();
+
+let chartBarDataExample = {
+  
+  labels: [currentTime+':10', currentTime+':20', currentTime+':30', currentTime+':40', currentTime+':50'],
+  datasets:[
+    {
+      label:"Disk utilization percentage",
+      data:[
+        10,
+        20,
+        30,
+        40,
+        50
+      ],
+      backgroundColor:'rgba(75, 192, 192, 0.6)'
+    }
+  ]
+}
 
 const machines = [
     {
@@ -102,6 +122,7 @@ const Dashboard = () => (
         <PieChart chartData={chartPieDataExample}/>
         <LineChart chartData={chartLineDataExample}/>
         <ChartDonut chartData={chartDonutDataExample}/>
+        <BarChart chartData={chartBarDataExample}/>
     </div>
 );
 
