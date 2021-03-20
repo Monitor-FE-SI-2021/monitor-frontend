@@ -57,11 +57,17 @@ const AddDeviceForm = () => {
         let temp = {}
         temp.naziv = values.naziv?"":"This field is required!"
         temp.lokacija = values.lokacija?"":"This field is required!"
-        temp.gSirina = values.gSirina?"":"This field is required!"
-        temp.gDuzina = values.naziv?"":"This field is required!"
+        temp.gSirina = values.gSirina.length==6?"":"Latitude should consist of exactly 6 numbers!"
+        temp.gDuzina = values.gDuzina.length==6?"":"Longitude should consist of exactly 6 numbers!"
+        setErrors({
+            ...temp
+        })
+
+        return Object.values(temp).every(x => x=="")
     }
 
     const [values, setValues] = useState(initialValues)
+    const [errors, setErrors] = useState({})
 
     const handleInputChange = e => {
         const {name, value} = e.target
@@ -72,8 +78,14 @@ const AddDeviceForm = () => {
         //console.log(values)
     }
 
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        if(validate())
+            alert("radi")
+    }
+
     return (
-        <form className={classes.root}>
+        <form className={classes.root} onSubmit={handleSubmit}>
             <TextField label="Naziv" name="naziv" value={values.naziv} onChange={handleInputChange} error helperText="greska"/>
             <TextField label="Lokacija" name="lokacija" value={values.lokacija} onChange={handleInputChange} />
             <TextField label="Geografska širina" type='number' name="gSirina" value={values.gSirina} onChange={handleInputChange} />
@@ -92,7 +104,7 @@ const AddDeviceForm = () => {
 
                 
             </TextField>
-            <Button onClick={onClick} variant="contained">Dodaj mašinu</Button>
+            <Button type = "submit" onClick={onClick} variant="contained">Dodaj mašinu</Button>
         </form>
     );
 }
