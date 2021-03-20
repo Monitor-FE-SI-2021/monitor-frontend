@@ -86,10 +86,14 @@ const AddDeviceForm = () => {
 
     return (
         <form className={classes.root} onSubmit={handleSubmit}>
-            <TextField label="Naziv" name="naziv" value={values.naziv} onChange={handleInputChange} error helperText="greska"/>
-            <TextField label="Lokacija" name="lokacija" value={values.lokacija} onChange={handleInputChange} />
-            <TextField label="Geografska širina" type='number' name="gSirina" value={values.gSirina} onChange={handleInputChange} />
-            <TextField label="Geografska visina" type='number' name="gDuzina" value={values.gDuzina} onChange={handleInputChange} />
+            <TextField label="Naziv" name="naziv" value={values.naziv} onChange={handleInputChange} 
+                {...(errors.naziv && {error:true, helperText: errors.naziv})} />
+            <TextField label="Lokacija" name="lokacija" value={values.lokacija} onChange={handleInputChange}
+                {...(errors.lokacija && {error:true, helperText: errors.lokacija})} />
+            <TextField label="Geografska širina" type='number' name="gSirina" value={values.gSirina} onChange={handleInputChange} 
+                {...(errors.gSirina && {error:true, helperText: errors.gSirina})}/>
+            <TextField label="Geografska visina" type='number' name="gDuzina" value={values.gDuzina} onChange={handleInputChange} 
+                {...(errors.gDuzina && {error:true, helperText: errors.gDuzina})}/>
             <TextField
                 select
                 value={selectedGroup}
