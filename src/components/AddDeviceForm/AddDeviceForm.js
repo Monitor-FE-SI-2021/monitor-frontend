@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from "react-redux";
-import {makeStyles, TextField, MenuItem, Button} from '@material-ui/core';
+import {makeStyles, TextField, MenuItem, Button, FormHelperText} from '@material-ui/core';
 import {useState} from 'react'
 
 const useStyles = makeStyles((theme) => ({
@@ -59,6 +59,7 @@ const AddDeviceForm = () => {
         temp.lokacija = values.lokacija?"":"This field is required!"
         temp.gSirina = values.gSirina.length==6?"":"Latitude should consist of exactly 6 numbers!"
         temp.gDuzina = values.gDuzina.length==6?"":"Longitude should consist of exactly 6 numbers!"
+        temp.grupa = selectedGroup ? "" : "This field is required!"
         setErrors({
             ...temp
         })
@@ -99,6 +100,7 @@ const AddDeviceForm = () => {
                 value={selectedGroup}
                 label="Odaberite grupu"
                 onChange={(e) => (changeSelectedGroup(e.target.value))}
+                {...errors.grupa && {error:true}}
             >
                 {groups.map((group) => (
                   <MenuItem key={group.id} value={group.name}>
@@ -108,6 +110,7 @@ const AddDeviceForm = () => {
 
                 
             </TextField>
+            {errors.grupa && <FormHelperText>{errors.grupa}</FormHelperText>} 
             <Button type = "submit" onClick={onClick} variant="contained">Dodaj mašinu</Button>
         </form>
     );
