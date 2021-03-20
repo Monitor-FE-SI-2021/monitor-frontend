@@ -3,103 +3,53 @@ import "./Devices.scss";
 import DeviceGroup from "../../components/DeviceGroup/DeviceGroup";
 import React from 'react';
 
-const devices = [
+const groups = [
     {
-        id: 1,
-        name: "Uređaj 1",
-        location: "Sarajevo",
-        longitude: "014013430",
-        latitude: "64354354",
-        status: true,
-        LastTimeOnline: Date.now(),
-        group: {
-            id: 2,
-            name: "Nadgrupa1",
-            subGroup: {
-                id: 3,
-                name: "Subgrupa1",
-                subGroup: null,
-            },
-        },
-    },
-    {
-        id: 4,
-        name: "Uređaj 2",
-        location: "Travnik",
-        longitude: "014013430",
-        latitude: "64354354",
-        status: true,
-        LastTimeOnline: Date.now(),
-        group: {
-            id: 2,
-            name: "Nadgrupa1",
-            subGroup: {
-                id: 6,
-                name: "Subgrupa2",
-                subGroup: null,
-            },
-        },
-    },
-    {
-        id: 10,
-        name: "Uređaj 2",
-        location: "Travnik",
-        longitude: "014013430",
-        latitude: "64354354",
-        status: true,
-        LastTimeOnline: Date.now(),
-        group: {
-            id: 2,
-            name: "Nadgrupa1",
-            subGroup: {
-                id: 12,
-                name: "Subgrupa2",
-                subGroup: null,
-            },
-        },
-    },
-    {
-        id: 7,
-        name: "Uređaj 3",
-        location: "Bugojno",
-        longitude: "014013430",
-        latitude: "64354354",
-        status: false,
-        LastTimeOnline: Date.now(),
-        group: {
-            id: 8,
-            name: "Nadgrupa2",
-            subGroup: null,
-        },
-    },
-];
-
-const grupe = [
-    {
-        grupaid: 1,
+        groupId: 1,
         name: "Grupa 1",
         parentGroup: null,
     },
     {
-        grupaid: 2,
+        groupId: 2,
         name: "Grupa 2",
-        parentGroup: null,
+        parentGroup: 1,
     },
     {
-        grupaid: 3,
+        groupId: 3,
         name: "Grupa 3",
         parentGroup: null,
     },
+    {
+        groupId: 4,
+        name: "Grupa 4",
+        parentGroup: 2
+    },
+    {
+        groupId: 5,
+        name: "Grupa 5",
+        parentGroup: 3
+    }
 ];
 
+const getParentGroups = (groups) => {
+    const parentGroups = []
 
+    for(let group of groups){
+        if(group.parentGroup === null){
+            parentGroups.push(group)
+        }
+    }
+
+    return parentGroups
+}
 
 const Devices = () => {
 
 
-    const deviceGroups = grupe.map((grupa) => {
+
+    const deviceGroups = getParentGroups(groups).map((grupa) => {
         return (
-                <DeviceGroup grupa={grupa} key={grupa.grupaid}/>
+                <DeviceGroup groups={groups} group={grupa} key={grupa.groupId}/>
         );
     });
 
@@ -107,7 +57,7 @@ const Devices = () => {
         <div className="page devices">
             <div className="top">
                 <h1> Pregled mašina </h1>
-                <button>Kreiraj mašinu</button>
+                <button className="create">Kreiraj mašinu</button>
             </div>
             {deviceGroups}
         </div>
