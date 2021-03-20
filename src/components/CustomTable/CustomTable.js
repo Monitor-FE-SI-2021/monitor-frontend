@@ -13,6 +13,11 @@ const useStyles = makeStyles({
     table: {
         minWidth: 650,
     },
+    header: {
+        backgroundColor:'#404040',
+        color: 'white',
+        fontWeight: 700
+    }
 });
 
 export function TableSlot({ slot, render }) {
@@ -50,10 +55,10 @@ export default function CustomTable({ data, fields, children }) {
     return (
         <TableContainer component={Paper} className={'custom-table'}>
             <Table className={classes.table}>
-                <TableHead>
-                    <TableRow key={'header-row'}>
+                <TableHead >
+                    <TableRow className={classes.header} key={'header-row'}>
                         {activeFields.map(field => (
-                            <TableCell key={field.name}
+                            <TableCell className={classes.header} key={field.name}
                                        align={field.align}
                                        style={{ width: field.width || 'initial' }}>
                                 {field.title}
