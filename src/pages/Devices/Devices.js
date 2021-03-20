@@ -92,9 +92,10 @@ const grupe = [
     },
 ];
 
+
+
 const Devices = () => {
-    //Ovdje dohvatiti sve uređaje i grupisati ih na osnovu glavnih grupa
-    //Tako grupisan niz poslati mapirati u DeviceGroup-e
+
 
     const deviceGroups = grupe.map((grupa) => {
         return (

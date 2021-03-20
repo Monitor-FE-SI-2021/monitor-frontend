@@ -5,9 +5,6 @@ import DeviceTable from '../DeviceTable/DeviceTable';
 const DeviceGroup = ({grupa}) => {
 
 
-    //Ovdje se sada nalaze Devices nizovi objekata koji su grupisani na osnovu glavnih grupa
-    //Sada je potrebno renderovati u sklopu ove komponente naziv grupe, te subgrupe i unutar subgrupa prikazati zapravo masine
-
     //Uređaji koji nemaju subgrupu
     
     //select * uredjaji where grupaId == grupa.grupaId && grupaParent == grupa.parent
