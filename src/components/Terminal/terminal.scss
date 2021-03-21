@@ -12,6 +12,11 @@
     border: none;
     display: flex;
     white-space: nowrap;
+
+    &:focus {
+        background-color: #012456;
+        border: 0px;
+    }
 }
 
 .input-console {
@@ -32,10 +37,5 @@
     box-sizing: border-box;
     display: inline;
     outline: none;
-}
-
-input:focus {
-    background-color: #012456;
-    border: 0px;
 }
 

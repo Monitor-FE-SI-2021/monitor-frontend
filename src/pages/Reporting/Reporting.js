@@ -3,15 +3,13 @@ import request from "../../service";
 import './Reporting.css';
 
 /*push test*/
-
-
 window.addEventListener('load', (event) => {
     //document.getElementById('time1').style.visibility = "hidden";
 
     //Getting token manually is only for testing
 
     //Fetching user's groups and updating token
-    request("GET", "https://si-2021.167.99.244.168.nip.io/api/group/MyAssignedGroups").then((r) => {
+    request("https://si-2021.167.99.244.168.nip.io/api/group/MyAssignedGroups").then((r) => {
         window.localStorage.setItem("authorization", r.data.newAccessToken);
 
         var groups = [];
@@ -32,7 +30,6 @@ window.addEventListener('load', (event) => {
         console.log("Unauthorized. Check the token");
     });
 });
-
 
 function handleClick(e) {
     var div = document.createElement("div");
@@ -93,12 +90,11 @@ function handleChange1(e) {
             <option value="less">&lt;</option>
             <option value="greaterEqual">&gt;=</option>
             <option value="lessEqual">&lt;=</option>
-        ` ;
+        `;
 
         document.getElementsByClassName('typeOfAnswerId').type = 'number';
         document.getElementById('typeOfComparison1').appendChild(inp);
-    }
-    else if (selected1 == 'name' || selected1 == 'location') {
+    } else if (selected1 == 'name' || selected1 == 'location') {
         const inp = document.createElement('select');
 
         inp.id = "typeOfCompId";
@@ -106,13 +102,12 @@ function handleChange1(e) {
         inp.innerHTML = `
             <option value="equal">Equal</option>
             <option value="conatins">Contains</option>
-        ` ;
+        `;
 
         document.getElementsByClassName('typeOfAnswerId').type = 'text';
         document.getElementById('typeOfComparison1').appendChild(inp);
 
-    }
-    else if (selected1 == 'status') {
+    } else if (selected1 == 'status') {
         const inp = document.createElement('select');
 
         inp.id = "typeOfCompId";
@@ -121,12 +116,11 @@ function handleChange1(e) {
         inp.innerHTML = `
             <option value="yes">On</option>
             <option value="no">Off</option>
-        ` ;
+        `;
 
         document.getElementsByClassName('typeOfAnswerId').disabled = "true";
         document.getElementById('typeOfComparison1').appendChild(inp);
-    }
-    else if (selected1 == 'lastTimeOnline') {
+    } else if (selected1 == 'lastTimeOnline') {
         const inp = document.createElement('select');
 
         inp.id = "typeOfCompId";
@@ -138,7 +132,7 @@ function handleChange1(e) {
             <option value="less">&lt;</option>
             <option value="greaterEqual">&gt;=</option>
             <option value="lessEqual">&lt;=</option>
-        ` ;
+        `;
 
         document.getElementsByClassName('typeOfAnswerId').type = 'datetime-local';
         document.getElementById('typeOfComparison1').appendChild(inp);
@@ -152,16 +146,13 @@ function handleChange(e) {
     if (selected == 'daily') {
         document.getElementById('update-time').type = 'time';
         document.getElementById('time1').style.visibility = "visible";
-    }
-    else if (selected == 'weekly') {
+    } else if (selected == 'weekly') {
         document.getElementById('update-time').type = 'datetime-local';
         document.getElementById('time1').style.visibility = "visible";
-    }
-    else if (selected == 'monthly') {
+    } else if (selected == 'monthly') {
         document.getElementById('update-time').type = 'datetime-local';
         document.getElementById('time1').style.visibility = "visible";
-    }
-    else if (selected == 'yearly') {
+    } else if (selected == 'yearly') {
         document.getElementById('update-time').type = 'datetime-local';
         document.getElementById('time1').style.visibility = "visible";
     } else if (selected == 'nothing') {
@@ -178,22 +169,22 @@ const Reports = () => {
 
             <h1> Reporting </h1>
             <h2>Query Builder</h2>
-            <br />
+            <br/>
             <div>
                 <p id="often"> How often do you want reports to be sent to you? </p>
                 <select id="email" onChange={handleChange}>
-                    <option value="nothing"> I don't want you to email me reports </option>
-                    <option value="daily"> Daily </option>
-                    <option value="weekly"> Weekly </option>
-                    <option value="monthly"> Monthly </option>
-                    <option value="yearly"> Yearly </option>
+                    <option value="nothing"> I don't want you to email me reports</option>
+                    <option value="daily"> Daily</option>
+                    <option value="weekly"> Weekly</option>
+                    <option value="monthly"> Monthly</option>
+                    <option value="yearly"> Yearly</option>
                 </select>
             </div>
 
             <div id="time1">
                 {/* ovdje ce trebati ogranicenja u odnosu na to sta se odabere iznad, ali za to moramo sacekati BE */}
                 <p id="timePar"> At what time do you want an email to be sent? </p>
-                <input type="datetime-local" id="update-time" name="update-time" />
+                <input type="datetime-local" id="update-time" name="update-time"/>
             </div>
 
             <div class="groups">
