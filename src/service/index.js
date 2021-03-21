@@ -9,7 +9,7 @@ const request = async (
   let response = null;
   let config = {
     headers: {
-      Authorization: window.localStorage.getItem("token")
+      Authorization: "Bearer " + window.localStorage.getItem("authorization")
     }
   };
 
@@ -70,7 +70,7 @@ const request = async (
           .delete(url, {
             headers: {
               "Content-Type": "application/json",
-              Authorization: window.localStorage.getItem("token")
+              Authorization: window.localStorage.getItem("authorization")
             },
             data: bodyReq
           })
