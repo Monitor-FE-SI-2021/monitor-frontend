@@ -12,6 +12,8 @@ html, body, #app, #root {
     margin: 0;
     height: 100%;
     background: $pageBg;
+    display: flex;
+    flex-direction: column;
 }
 
 * {

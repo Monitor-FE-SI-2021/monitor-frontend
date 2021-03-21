@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Header from './components/Header';
 import { RouteLink } from "../../store/modules/menu/menu";
@@ -9,23 +9,38 @@ import Dashboard from "../../pages/Dashboard/Dashboard";
 import Reporting from "../../pages/Reporting/Reporting";
 import AddDevice from "../../pages/AddDevices/AddDevice";
 import Terminal from "../Terminal/Terminal";
+import { Spinner } from "../Spinner/Spinner";
 
-const Layout = ({ isMenuExpanded }) => (
-    <div className={classnames('layout', { 'menu-expanded': isMenuExpanded })}>
-        <Header/>
+const Layout = ({ isMenuExpanded, loginAsync, userAsync, user }) => {
 
-        <div className='main-view'>
-            <Switch>
-                <Route exact path={RouteLink.Dashboard} component={Dashboard}/>
-                <Route path={RouteLink.Devices} component={Devices}/>
-                <Route path={RouteLink.Reporting} component={Reporting} />
-                <Route path={RouteLink.AddDevice} component={AddDevice}/>
-                <Route path={RouteLink.Terminal} component={Terminal}/>
-            </Switch>
+    if (loginAsync || userAsync) {
+        return <Spinner/>
+    }
+
+    if (!user) {
+        return null;
+    }
+
+    return (
+        <div className={classnames('layout', { 'menu-expanded': isMenuExpanded })}>
+            <Header/>
+
+            <div className='main-view'>
+                <Switch>
+                    <Route exact path={RouteLink.Dashboard} component={Dashboard}/>
+                    <Route path={RouteLink.Devices} component={Devices}/>
+                    <Route path={RouteLink.Reporting} component={Reporting}/>
+                    <Route path={RouteLink.AddDevice} component={AddDevice}/>
+                    <Route path={RouteLink.Terminal} component={Terminal}/>
+                </Switch>
+            </div>
         </div>
-    </div>
-);
+    )
+};
 
 export default connect(state => ({
-    isMenuExpanded: state.menu.isMenuExpanded
+    isMenuExpanded: state.menu.isMenuExpanded,
+    loginAsync: state.login.loginAsync,
+    userAsync: state.login.userAsync,
+    user: state.login.user,
 }), {})(Layout);
