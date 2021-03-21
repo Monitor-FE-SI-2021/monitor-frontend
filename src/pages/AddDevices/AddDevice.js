@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import AddDeviceForm from "../../components/AddDeviceForm/AddDeviceForm";
-import { Paper,makeStyles } from '@material-ui/core';
+import { Paper, makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -13,9 +13,9 @@ const AddDevice = () => {
     const classes = useStyles();
 
     return (
-        <div className='page devices'>
+        <div className='page manage-device'>
             <Paper className={classes.pageContent}>
-                <AddDeviceForm />
+                <AddDeviceForm/>
             </Paper>
         </div>
     )
