@@ -2,10 +2,11 @@ import axios from "axios";
 
 export const login = 'http://167.99.244.168:3333/login';
 export const endpoint = 'https://si-2021.167.99.244.168.nip.io/api';
+export const wsEndpoint = 'http://109.237.36.76:25565/api';
 export const devices = `${endpoint}/device`
 export const groups = `${endpoint}/group`
 
-const testToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiZW1haWwiOiJvc29iYTVAZW1haWwuY29tIiwicm9sZUlkIjoxLCJncm91cElkIjoyLCJpYXQiOjE2MTYzNDYzODgsImV4cCI6MTYxNjM0ODE4OH0.y8wXOOYQTYXbYNLfWLfl925vF-Z-04TM51A1ojVxkUI';
+const testToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiZW1haWwiOiJvc29iYTVAZW1haWwuY29tIiwicm9sZUlkIjoxLCJncm91cElkIjoyLCJpYXQiOjE2MTYzNTQ1NTcsImV4cCI6MTYxNjM1NjM1N30.9cIQxEKbBho1u7ID9U0dV6ZdyR48Q2F1_CPoreIy0xM';
 
 const request = async (
     url,
