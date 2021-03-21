@@ -5,6 +5,7 @@ import PieChart from "../../components/Layout/components/charts/PieChart.js";
 import LineChart from "../../components/Layout/components/charts/LineChart.js";
 import ChartDonut from "../../components/Layout/components/charts/ChartDonut.js";
 import BarChart from "../../components/Layout/components/charts/BarChart.js";
+import MachineAvatar from "../../assets/icons/machine.png";
 function createActiveMachineCard(machine) {
     return (
         <ActiveMachine
@@ -98,17 +99,17 @@ let chartBarDataExample = {
 
 const machines = [
     {
-        img: "https://brain-images-ssl.cdn.dixons.com/3/6/10208063/u_10208063.jpg",
+        img: MachineAvatar,
         name: "Machine 1",
         info: "This machine is used for something"
     },
     {
-        img: "https://brain-images-ssl.cdn.dixons.com/3/6/10208063/u_10208063.jpg",
+        img: MachineAvatar,
         name: "Machine 4",
         info: "This machine is used for something"
     },
     {
-        img: "https://brain-images-ssl.cdn.dixons.com/3/6/10208063/u_10208063.jpg",
+        img: MachineAvatar,
         name: "Machine 9",
         info: "This machine is used for something"
     }
