@@ -9,12 +9,13 @@ import MachineAvatar from "../../assets/icons/machine.png";
 function createActiveMachineCard(machine) {
     return (
         <ActiveMachine
-            img={machine.img}
+            img={MachineAvatar}
             name={machine.name}
-            info={machine.info}
+            info={new Date(machine.lastTimeOnline).toGMTString()}
         />
     );
 }
+
 
 // Api get may or may not be called here. 
 // The data is an example of how the data structure should look like
@@ -97,34 +98,54 @@ let chartBarDataExample = {
   ]
 }
 
-const machines = [
-    {
-        img: MachineAvatar,
-        name: "Machine 1",
-        info: "This machine is used for something"
-    },
-    {
-        img: MachineAvatar,
-        name: "Machine 4",
-        info: "This machine is used for something"
-    },
-    {
-        img: MachineAvatar,
-        name: "Machine 9",
-        info: "This machine is used for something"
-    }
-];
+const Dashboard = () => {
+  const [allLogs, setAllLogs] = React.useState([])
+  const [machines, setMachines] = React.useState([])  
 
-const Dashboard = () => (
+  const groupId = 2
+  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiZW1haWwiOiJvc29iYTVAZW1haWwuY29tIiwicm9sZUlkIjoxLCJncm91cElkIjoyLCJpYXQiOjE2MTYzNTgzMTEsImV4cCI6MTYxNjM2MDExMX0.MULFWmvlFhF_hPD1xbTZupgfTYCFZT-STzvyLdp8Td8"
+
+  React.useEffect(() => {
+    fetch("https://si-2021.167.99.244.168.nip.io/api/device/AllDevicesForGroup?groupId=" + groupId,
+        {
+          method:"GET", 
+          headers: {
+            "Authorization" : "Bearer " + token
+          }
+        })
+      .then((resp) => resp.json())
+      .then((machines) => setMachines(machines.data))
+      .catch((err) => console.log(err))
+  }, [])
+
+  React.useEffect(() => {
+    fetch("http://si-2021.167.99.244.168.nip.io/api/device/GetAllDeviceLogs", 
+        {
+          method:"GET", 
+          headers: {
+            "Authorization" : "Bearer " + token
+          }
+        })
+      .then((resp) => resp.json())
+      .then((logs) => {
+        setAllLogs(logs.data)
+        /*setMachines(smtn.data.filter((value, index, self) => {
+          return self.findIndex(v => v.deviceId === value.deviceId) === index
+        }))*/
+      })
+      .catch((err) => console.log(err))
+  }, [])
+
+  return (
     <div className='page dashboard'>
         <h1>List of active machines</h1>
         {machines.map(createActiveMachineCard)}
-
         <PieChart chartData={chartPieDataExample}/>
         <LineChart chartData={chartLineDataExample}/>
         <ChartDonut chartData={chartDonutDataExample}/>
         <BarChart chartData={chartBarDataExample}/>
     </div>
-);
+  );
+}
 
 export default connect(state => ({}), {})(Dashboard)
