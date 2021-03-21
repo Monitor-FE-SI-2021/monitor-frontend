@@ -284,6 +284,7 @@ const Reports = () => {
                 </section>
             </div>
         </div>
+        <button id="btn" type="submit" value="Submit">Submit</button>
     </div>
 )};
 

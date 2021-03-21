@@ -99,3 +99,10 @@ button{
     width: 100px;
 }
 
+
+#btn{
+    margin-bottom: 30px;
+    height: 30px;
+    width: 70px;
+    background: gray;
+}
