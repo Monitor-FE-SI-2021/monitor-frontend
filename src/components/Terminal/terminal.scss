@@ -1,0 +1,41 @@
+.terminal {
+    background: #012456;
+    padding: 10px 22px;
+    width: 100%;
+    min-height: 400px;
+    max-height: 100%;
+}
+
+.input-prompt {
+    background-color: #012456;
+    color: white;
+    border: none;
+    display: flex;
+    white-space: nowrap;
+}
+
+.input-console {
+    background-color: #012456;
+    color: white;
+    border: none;
+    width: 80%;
+    box-sizing: border-box;
+    display: inline;
+    outline: none;
+}
+
+.console-output {
+    background-color: #012456;
+    color: white;
+    border: none;
+    width: 80%;
+    box-sizing: border-box;
+    display: inline;
+    outline: none;
+}
+
+input:focus {
+    background-color: #012456;
+    border: 0px;
+}
+

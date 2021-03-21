@@ -8,6 +8,7 @@ import Devices from "../../pages/Devices/Devices";
 import Dashboard from "../../pages/Dashboard/Dashboard";
 import Reporting from "../../pages/Reporting/Reporting";
 import AddDevice from "../../pages/AddDevices/AddDevice";
+import Terminal from "../Terminal/Terminal";
 
 const Layout = ({ isMenuExpanded }) => (
     <div className={classnames('layout', { 'menu-expanded': isMenuExpanded })}>
@@ -19,6 +20,7 @@ const Layout = ({ isMenuExpanded }) => (
                 <Route path={RouteLink.Devices} component={Devices}/>
                 <Route path={RouteLink.Reporting} component={Reporting} />
                 <Route path={RouteLink.AddDevice} component={AddDevice}/>
+                <Route path={RouteLink.Terminal} component={Terminal}/>
             </Switch>
         </div>
     </div>
