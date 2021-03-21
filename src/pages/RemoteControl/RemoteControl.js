@@ -36,7 +36,7 @@ const RemoteControl =  () => {
             };
     
             var odgovor = await 
-            fetch('https://si-grupa5.herokuapp.com/',
+            fetch('https://si-grupa5.herokuapp.com/api/screenshot',
             requestOptions2,
             );
             var slika = await odgovor.json();
