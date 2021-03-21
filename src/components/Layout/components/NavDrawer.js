@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import menuIcon from '../../../assets/icons/menu.png';
-import { setMenuExpanded } from "../../../store/modules/menu";
+import { setMenuExpanded } from "../../../store/modules/menu/menu";
 
 function NavDrawer({ push, menuItems, isMenuExpanded, setMenuExpanded }) {
 
