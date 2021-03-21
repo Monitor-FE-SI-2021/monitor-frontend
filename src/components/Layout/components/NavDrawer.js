@@ -3,8 +3,14 @@ import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import menuIcon from '../../../assets/icons/menu.png';
 import { setMenuExpanded } from "../../../store/modules/menu/menu";
+import { STORAGE_KEY } from "../../../utils/consts";
 
 function NavDrawer({ push, menuItems, isMenuExpanded, setMenuExpanded }) {
+
+    const doLogout = () => {
+        localStorage.removeItem(STORAGE_KEY);
+        push('/login');
+    }
 
     const switchRoute = (link) => {
         push(link);
@@ -28,6 +34,9 @@ function NavDrawer({ push, menuItems, isMenuExpanded, setMenuExpanded }) {
                             </div>
                         );
                     })}
+            </div>
+            <div onClick={doLogout} className='menu-item' style={{marginTop: 'auto'}}>
+                Logout
             </div>
         </div>
     );
