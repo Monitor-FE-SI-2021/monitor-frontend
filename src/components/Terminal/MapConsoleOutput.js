@@ -28,8 +28,9 @@ if(consoleOutput.length>1){
                     "Authorization" : "Bearer "+ token,
                   },
                   body: JSON.stringify({
-                    name: 'jasmin',
-                    location: 'sarajevo',
+                    "name": "DESKTOP-SCC",
+                    "keepAlive": 5,
+                    "location": "Sarajevo - SCC",
                     command: command
                 })
                 })
