@@ -14,9 +14,10 @@ const useStyles = makeStyles({
         minWidth: 650,
     },
     header: {
-        backgroundColor:'#404040',
+        backgroundColor: '#404040',
         color: 'white',
-        fontWeight: 700
+        fontWeight: 600,
+        padding: '5px 20px'
     }
 });
 
@@ -35,7 +36,7 @@ export default function CustomTable({ data, fields, children }) {
         let renderedCell = null;
 
         if (field.slot) {
-            const tableSlot = (Array.isArray(children) ? children : [children]).find(c => c?.props?.slot);
+            const tableSlot = (Array.isArray(children) ? children : [children]).find(c => c?.props?.slot === field.status);
             renderedCell = tableSlot?.props?.render(item);
         } else {
             renderedCell = field.accessor ? getDeepProp(item, field.accessor) : item[field.name];
@@ -55,7 +56,7 @@ export default function CustomTable({ data, fields, children }) {
     return (
         <TableContainer component={Paper} className={'custom-table'}>
             <Table className={classes.table}>
-                <TableHead >
+                <TableHead>
                     <TableRow className={classes.header} key={'header-row'}>
                         {activeFields.map(field => (
                             <TableCell className={classes.header} key={field.name}

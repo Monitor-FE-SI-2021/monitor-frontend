@@ -1,1 +1,2 @@
 export const SET_DEVICES = 'SET_DEVICES';
+export const SET_DEVICES_ASYNC = 'SET_DEVICES_ASYNC';

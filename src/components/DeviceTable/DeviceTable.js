@@ -2,7 +2,7 @@ import CustomTable, { TableSlot } from '../CustomTable/CustomTable';
 import { useState } from "react";
 import { Delete } from "@material-ui/icons";
 
-const DeviceTable = ({devices}) => {
+const DeviceTable = ({ devices }) => {
     const [tableData, setTableData] = useState(devices);
 
     const deleteTableRow = (tableRow) => {
@@ -21,6 +21,7 @@ const DeviceTable = ({devices}) => {
         {
             name: 'status',
             title: 'Status',
+            slot: 'status'
         },
         {
             name: 'lastTimeOnline',
@@ -39,11 +40,15 @@ const DeviceTable = ({devices}) => {
     return (
         <CustomTable data={tableData} fields={tableFields}>
 
-                    <TableSlot slot='actions' render={dataRow => (
-                        <Delete onClick={() => deleteTableRow(dataRow)}/>
-                    )}/>
+            <TableSlot slot='actions' render={dataRow => (
+                <Delete onClick={() => deleteTableRow(dataRow)}/>
+            )}/>
 
-            </CustomTable>  
+            <TableSlot slot='status' render={dataRow => (
+                <span>{dataRow.status === true ? 'Online' : 'Offline'}</span>
+            )}/>
+
+        </CustomTable>
     )
 }
 

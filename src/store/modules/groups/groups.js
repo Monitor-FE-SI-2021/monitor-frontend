@@ -1,19 +1,19 @@
-import { SET_DEVICES, SET_DEVICES_ASYNC } from "./types";
+import { SET_GROUPS, SET_GROUPS_ASYNC } from "./types";
 
 const initialState = {
     async: false,
-    devices: []
+    groups: []
 }
 
 const ACTION_HANDLERS = {
-    [SET_DEVICES]: (state, action) => {
+    [SET_GROUPS]: (state, action) => {
         return {
             ...state,
             async: false,
-            devices: action.devices
+            groups: action.groups
         }
     },
-    [SET_DEVICES_ASYNC]: (state, action) => {
+    [SET_GROUPS_ASYNC]: (state, action) => {
         return {
             ...state,
             async: action.async
@@ -21,7 +21,8 @@ const ACTION_HANDLERS = {
     }
 }
 
-export default function devices(state = initialState, action) {
+
+export default function groups(state = initialState, action) {
 
     const handler = ACTION_HANDLERS[action.type];
 

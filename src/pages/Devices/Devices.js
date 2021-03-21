@@ -1,41 +1,15 @@
 import { connect } from "react-redux";
 import "./Devices.scss";
 import DeviceGroup from "../../components/DeviceGroup/DeviceGroup";
-import React from 'react';
+import React, { useEffect } from 'react';
+import { fetchAllDevices } from "../../store/modules/devices/actions";
+import { fetchAllGroups } from "../../store/modules/groups/actions";
 
-const groups = [
-    {
-        groupId: 1,
-        name: "Grupa 1",
-        parentGroup: null,
-    },
-    {
-        groupId: 2,
-        name: "Grupa 2",
-        parentGroup: 1,
-    },
-    {
-        groupId: 3,
-        name: "Grupa 3",
-        parentGroup: null,
-    },
-    {
-        groupId: 4,
-        name: "Grupa 4",
-        parentGroup: 2
-    },
-    {
-        groupId: 5,
-        name: "Grupa 5",
-        parentGroup: 3
-    }
-];
-
-const getParentGroups = (groups) => {
+const getRootGroups = (groups) => {
     const parentGroups = []
 
-    for(let group of groups){
-        if(group.parentGroup === null){
+    for (let group of groups) {
+        if (group.parentGroup === null) {
             parentGroups.push(group)
         }
     }
@@ -43,13 +17,17 @@ const getParentGroups = (groups) => {
     return parentGroups
 }
 
-const Devices = () => {
+const Devices = ({ allGroups, fetchAllDevices, fetchAllGroups }) => {
 
+    useEffect(() => {
+        fetchAllDevices();
+        fetchAllGroups();
+    }, [])
 
-
-    const deviceGroups = getParentGroups(groups).map((grupa) => {
+    const rootGroups = getRootGroups(allGroups).map((grupa) => {
         return (
-                <DeviceGroup groups={groups} group={grupa} key={grupa.groupId}/>
+            <DeviceGroup group={grupa}
+                         key={grupa.groupId}/>
         );
     });
 
@@ -59,9 +37,12 @@ const Devices = () => {
                 <h1> Pregled mašina </h1>
                 <button className="create">Kreiraj mašinu</button>
             </div>
-            {deviceGroups}
+            {rootGroups}
         </div>
     );
 };
 
-export default connect((state) => ({}), {})(Devices);
+export default connect((state) => ({
+    allDevices: state.devices.devices,
+    allGroups: state.groups.groups,
+}), { fetchAllDevices, fetchAllGroups })(Devices);

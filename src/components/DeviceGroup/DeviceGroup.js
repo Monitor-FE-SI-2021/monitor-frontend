@@ -1,49 +1,17 @@
 import './DeviceGroup.scss';
 import DeviceTable from '../DeviceTable/DeviceTable';
 import React, { useState } from 'react';
+import { connect } from "react-redux";
 
-const DeviceGroup = ({groups, group}) => {
+const DeviceGroup = ({ group, allGroups, allDevices }) => {
 
-   const [hidden, setHidden] = useState(true);
-
-    let devicesData = [
-        {
-            deviceId: 1,
-            name: "Uredjaj 1",
-            location: 'Sarajevo',
-            locationLongitude: 44.13,
-            locationLatitude: 18.2,
-            status: true,
-            lastTimeOnline: Date.now(),
-            groupId: 1
-        },
-        {
-            deviceId: 2,
-            name: "Uredjaj 2",
-            location: 'Sarajevo',
-            locationLongitude: 44.13,
-            locationLatitude: 18.2,
-            status: true,
-            lastTimeOnline: Date.now(),
-            groupId: 2
-        },
-        {
-            deviceId: 3,
-            name: "Uredjaj 3",
-            location: 'Sarajevo',
-            locationLongitude: 44.13,
-            locationLatitude: 18.2,
-            status: true,
-            lastTimeOnline: Date.now(),
-            groupId: 4
-        },
-    ]
+    const [hidden, setHidden] = useState(true);
 
     const getSubGroups = (groups, groupId) => {
         const subGroups = [];
 
-        for(let group of groups){
-            if(group.parentGroup === groupId){
+        for (let group of groups) {
+            if (group.parentGroup === groupId) {
                 subGroups.push(group);
             }
         }
@@ -54,8 +22,8 @@ const DeviceGroup = ({groups, group}) => {
     const getFilterDevices = (devices) => {
         const filteredDevices = [];
 
-        for(let device of devices){
-            if(device.groupId === group.groupId){
+        for (let device of devices) {
+            if (device.groupId === group.groupId) {
                 filteredDevices.push(device);
             }
         }
@@ -63,23 +31,24 @@ const DeviceGroup = ({groups, group}) => {
         return filteredDevices;
     }
 
-    let subGroups = getSubGroups(groups, group.groupId).map(subGroup => {
-        return <DeviceGroup groups={groups} group={subGroup} key={subGroup.groupId}/>
+    let subGroups = getSubGroups(allGroups, group.groupId).map(subGroup => {
+        return <ConnectedDeviceGroup group={subGroup}
+                                     key={subGroup.groupId}/>
     });
 
-    let filteredDevices = getFilterDevices(devicesData);
+    let filteredDevices = getFilterDevices(allDevices);
 
-    if(subGroups.length === 0){
+    if (subGroups.length === 0) {
         subGroups = null;
     }
 
     let data = null;
 
-    if(!hidden){
+    if (!hidden) {
         data = <React.Fragment>
-            {filteredDevices.length != 0 ? <DeviceTable devices={filteredDevices} /> : null}
+            {filteredDevices.length !== 0 ? <DeviceTable devices={filteredDevices}/> : null}
             {subGroups}
-        </React.Fragment>   
+        </React.Fragment>
     }
 
 
@@ -90,8 +59,8 @@ const DeviceGroup = ({groups, group}) => {
 
     return (
         <div className='group'>
-            <div className='tab'>
-                <button className={hidden? 'collapsed' : 'expanded'} onClick={toggleArrow}></button>
+            <div className='tab' onClick={toggleArrow}>
+                <button className={hidden ? 'collapsed' : 'expanded'}/>
                 <h2>{group.name}</h2>
             </div>
             {data}
@@ -99,4 +68,9 @@ const DeviceGroup = ({groups, group}) => {
     )
 }
 
-export default DeviceGroup;
+const ConnectedDeviceGroup = connect(state => ({
+    allDevices: state.devices.devices,
+    allGroups: state.groups.groups,
+}), {})(DeviceGroup);
+
+export default ConnectedDeviceGroup;

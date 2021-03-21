@@ -3,7 +3,7 @@ export const SET_MENU_EXPANDED = 'SET_MENU_EXPANDED';
 export const RouteLink = {
     Dashboard: '/',
     Login: "/login",
-    Devices: "/devices",
+    Devices: "/groups",
     Test: '/test'
 }
 
