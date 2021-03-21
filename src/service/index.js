@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const login = 'http://167.99.244.168:3333/login';
 export const endpoint = 'https://si-2021.167.99.244.168.nip.io/api';
-export const wsEndpoint = 'http://109.237.36.76:25565/api';
+export const wsEndpoint = 'https://si-grupa5.herokuapp.com/api';
 export const devices = `${endpoint}/device`
 export const groups = `${endpoint}/group`
 

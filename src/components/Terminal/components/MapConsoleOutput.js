@@ -13,7 +13,11 @@ const MapConsoleOutput = ({ consoleOutput, updateConsoleOutput, token }) => {
 
     if (consoleOutput.length > 1) {
 
-        let item = consoleOutput[consoleOutput.length - 1].toString();
+        let item = consoleOutput[consoleOutput.length - 1]?.toString();
+
+        if (!item) {
+            return null;
+        }
 
         const isCommandValid = item.includes("Valid Command!");
         if (isCommandValid) {
