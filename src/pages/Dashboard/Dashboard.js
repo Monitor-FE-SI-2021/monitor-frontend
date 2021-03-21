@@ -7,36 +7,75 @@ import ChartDonut from "../../components/Layout/components/charts/ChartDonut.js"
 import BarChart from "../../components/Layout/components/charts/BarChart.js";
 import MachineAvatar from "../../assets/icons/machine.png";
 
-const Dashboard = () => (
-    <div className='page dashboard'>
+const Dashboard = () => {
+    const [allLogs, setAllLogs] = React.useState([])
+    const [machines, setMachines] = React.useState([])
 
-        <div className='row machine-cards'>
-            <h1>List of active machines</h1>
-            <div className='scrollable'>
-                {machines.map(createActiveMachineCard)}
+    const groupId = 2
+    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiZW1haWwiOiJvc29iYTVAZW1haWwuY29tIiwicm9sZUlkIjoxLCJncm91cElkIjoyLCJpYXQiOjE2MTYzNjI5NTMsImV4cCI6MTYxNjM2NDc1M30.EDggNNkFxX40ivgbqntHmaUawxZoDPe_6YNNt3e4CHw"
+
+    React.useEffect(() => {
+        fetch("https://si-2021.167.99.244.168.nip.io/api/device/AllDevicesForGroup?groupId=" + groupId,
+            {
+                method:"GET",
+                headers: {
+                    "Authorization" : "Bearer " + token
+                }
+            })
+            .then((resp) => resp.json())
+            .then((machines) => setMachines(machines.data))
+            .catch((err) => console.log(err))
+    }, [])
+
+        React.useEffect(() => {
+fetch("http://si-2021.167.99.244.168.nip.io/api/device/GetAllDeviceLogs",
+    {
+        method:"GET",
+        headers: {
+            "Authorization" : "Bearer " + token
+        }
+    })
+.then((resp) => resp.json())
+.then((logs) => {
+setAllLogs(logs.data)
+    /*setMachines(smtn.data.filter((value, index, self) => {
+      return self.findIndex(v => v.deviceId === value.deviceId) === index
+    }))*/
+})
+.catch((err) => console.log(err))
+}, [])
+
+return (
+        <div className='page dashboard'>
+
+            <div className='row machine-cards'>
+                <h1>List of active machines</h1>
+                <div className='scrollable'>
+                    {machines.map(createActiveMachineCard)}
+                </div>
             </div>
-        </div>
 
-        <div className='row'>
-            <PieChart chartData={chartPieDataExample}/>
-            <LineChart chartData={chartLineDataExample}/>
-        </div>
+            <div className='row'>
+                <PieChart chartData={chartPieDataExample}/>
+                <LineChart chartData={chartLineDataExample}/>
+            </div>
 
-        <div className='row'>
-            <ChartDonut chartData={chartDonutDataExample}/>
-            <BarChart chartData={chartBarDataExample}/>
-        </div>
+            <div className='row'>
+                <ChartDonut chartData={chartDonutDataExample}/>
+                <BarChart chartData={chartBarDataExample}/>
+            </div>
 
-    </div>
-);
+        </div>
+    );
+}
 
 
 function createActiveMachineCard(machine) {
     return (
         <ActiveMachine
-            img={machine.img}
+            img={MachineAvatar}
             name={machine.name}
-            info={machine.info}
+            info={new Date(machine.lastTimeOnline).toGMTString()}
         />
     );
 }
