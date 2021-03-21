@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import './assets/style/index.scss';
-import { ConnectedRouter } from "connected-react-router";
+import { ConnectedRouter, push } from "connected-react-router";
 import { connect, Provider } from "react-redux";
 import store, { history } from './store/store'
 import { Route, Switch } from 'react-router-dom';
@@ -11,9 +11,11 @@ import { STORAGE_KEY } from "./utils/consts";
 import { RouteLink } from "./store/modules/menu/menu";
 import { getMe } from "./store/modules/login/login";
 
-const App = ({ user, getMe }) => {
+const App = ({ user, getMe, push }) => {
 
     useEffect(() => {
+
+        const route = window.location.pathname;
 
         const token = localStorage.getItem(STORAGE_KEY);
 
@@ -23,7 +25,9 @@ const App = ({ user, getMe }) => {
         }
 
         if (!user) {
-            getMe();
+            getMe().then(() => {
+                push(route);
+            })
         }
 
     }, [])
@@ -40,7 +44,7 @@ const App = ({ user, getMe }) => {
 
 const ConnectedApp = connect(state => ({
     user: state.login.user,
-}), { getMe })(App);
+}), { getMe, push})(App);
 
 ReactDOM.render(
     <Provider store={store}>

@@ -11,33 +11,44 @@ const MapConsoleOutput = ({ consoleOutput, updateConsoleOutput, token }) => {
             scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     });
 
-    if (consoleOutput.length > 1) {
+    if(consoleOutput.length>1){
+        //console.log( consoleOutput[consoleOutput.length-1])
+        if(consoleOutput[consoleOutput.length-1]){
+            let item = consoleOutput[consoleOutput.length-1].toString();
 
-        let item = consoleOutput[consoleOutput.length - 1]?.toString();
+            const isCommandValid = item.includes("Valid Command!");
+            if(isCommandValid ){
+                const itemString = item.toString().split("!");
 
-        if (!item) {
-            return null;
-        }
+                const command =  itemString[1]
 
-        const isCommandValid = item.includes("Valid Command!");
-        if (isCommandValid) {
-            const itemString = item.toString().split("!");
-
-            const command = itemString[1]
-
-            request(wsEndpoint + '/command', "POST",
-                {
-                    "name": "DESKTOP-SCC",
-                    "keepAlive": 5,
-                    "location": "Sarajevo - SCC",
-                    command: command
-                }
-            ).then(res => {
-                token = res.token;
-                const clone = [...consoleOutput]
-                clone[clone.length - 1] = res.message;
-                updateConsoleOutput(clone)
-            })
+                fetch('https://si-grupa5.herokuapp.com/api/command', {
+                    method: 'POST',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                        "Authorization" : "Bearer "+ token,
+                    },
+                    body: JSON.stringify({
+                        "name": "DESKTOP-SCC",
+                        "keepAlive": 5,
+                        "location": "Sarajevo - SCC",
+                        command: command
+                    })
+                })
+                    .then(res => res.json())
+                    .then(res => {
+                        token = res.token;
+                        const clone = [...consoleOutput]
+                        clone[clone.length-1] = res.message;
+                        updateConsoleOutput(clone)
+                    }).catch(function (e){
+                    console.log(e)
+                    const clone = [...consoleOutput]
+                    clone[clone.length-1] = "Poziv nije uspio";
+                    updateConsoleOutput(clone)
+                })
+            }
         }
     }
 

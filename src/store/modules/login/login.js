@@ -48,7 +48,9 @@ export const doLogin = ({ email, password }) => {
             if (res.status === 200) {
                 localStorage.setItem(STORAGE_KEY, res.data.accessToken);
 
-                dispatch(getMe());
+                dispatch(getMe()).then(() => {
+                    history.push('/')
+                });
 
                 return res;
             } else {
@@ -79,8 +81,6 @@ export const getMe = () => {
                         type: SET_USER,
                         user: r.data.data,
                     })
-
-                    history.push('/');
                 }
             }).finally(() => {
                 return dispatch({

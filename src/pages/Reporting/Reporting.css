@@ -86,13 +86,6 @@ section{
     border-left: 2px solid seagreen;
 }
 
-button{
-    margin-right: 10px;
-    background-color:seagreen;
-    height: 30px;
-    width: 60px;
-}
-
 #typeOfCompId{
     height: 30px;
     margin-right: 15px;
