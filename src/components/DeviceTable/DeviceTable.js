@@ -1,6 +1,7 @@
 import CustomTable, { TableSlot } from '../CustomTable/CustomTable';
 import { useState } from "react";
 import { Delete } from "@material-ui/icons";
+import dayjs from 'dayjs';
 
 const DeviceTable = ({ devices }) => {
     const [tableData, setTableData] = useState(devices);
@@ -26,7 +27,8 @@ const DeviceTable = ({ devices }) => {
         {
             name: 'lastTimeOnline',
             title: 'Posljednji put online',
-            width: '20%',
+            width: '30%',
+            slot: 'lastTimeOnline'
         },
         {
             name: 'actions',
@@ -42,6 +44,12 @@ const DeviceTable = ({ devices }) => {
 
             <TableSlot slot='actions' render={dataRow => (
                 <Delete onClick={() => deleteTableRow(dataRow)}/>
+            )}/>
+
+            <TableSlot slot='lastTimeOnline' render={dataRow => (
+                <span>
+                    {dayjs(dataRow.lastTimeOnline).format('DD.MM.YYYY HH:mm:ss')}
+                </span>
             )}/>
 
             <TableSlot slot='status' render={dataRow => (

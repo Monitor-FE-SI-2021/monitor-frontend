@@ -11,6 +11,7 @@
     "axios": "^0.21.1",
     "classnames": "^2.2.6",
     "connected-react-router": "^6.9.1",
+    "dayjs": "^1.10.4",
     "history": "^4.0.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",

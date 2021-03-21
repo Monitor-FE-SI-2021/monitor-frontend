@@ -1,43 +1,22 @@
 import { SET_GROUPS, SET_GROUPS_ASYNC } from "./types";
-import request, { endpoint } from "../../../service";
-
-const groups = [
-    {
-        groupId: 1,
-        name: "Grupa 1",
-        parentGroup: null,
-    },
-    {
-        groupId: 2,
-        name: "Grupa 2",
-        parentGroup: 1,
-    },
-    {
-        groupId: 3,
-        name: "Grupa 3",
-        parentGroup: null,
-    },
-    {
-        groupId: 4,
-        name: "Grupa 4",
-        parentGroup: 2
-    },
-    {
-        groupId: 5,
-        name: "Grupa 5",
-        parentGroup: 3
-    }
-];
+import request, { groups } from "../../../service";
 
 export const fetchAllGroups = () => {
 
-    // request('GET', endpoint + '/hello-world');
-
     return dispatch => {
-        return dispatch({
-            type: SET_GROUPS,
-            groups
-        })
+
+        dispatch({ type: SET_GROUPS_ASYNC, async: false });
+
+        return request(groups + '/MyAssignedGroups').then(response => response.data)
+            .then(r => {
+
+                return dispatch({
+                    type: SET_GROUPS,
+                    groups: r.data
+                })
+            }).finally(() => {
+                dispatch({ type: SET_GROUPS_ASYNC, async: false });
+            })
     }
 }
 

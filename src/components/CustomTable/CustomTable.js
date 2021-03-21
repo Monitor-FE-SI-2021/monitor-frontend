@@ -36,7 +36,7 @@ export default function CustomTable({ data, fields, children }) {
         let renderedCell = null;
 
         if (field.slot) {
-            const tableSlot = (Array.isArray(children) ? children : [children]).find(c => c?.props?.slot === field.status);
+            const tableSlot = (Array.isArray(children) ? children : [children]).find(c => c?.props?.slot === field.slot);
             renderedCell = tableSlot?.props?.render(item);
         } else {
             renderedCell = field.accessor ? getDeepProp(item, field.accessor) : item[field.name];

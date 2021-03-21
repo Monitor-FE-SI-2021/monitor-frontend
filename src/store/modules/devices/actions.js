@@ -1,57 +1,27 @@
-import { SET_DEVICES } from "./types";
-import request, { endpoint } from "../../../service";
+import { SET_DEVICES, SET_DEVICES_ASYNC } from "./types";
+import request, { devices } from "../../../service";
 
-let devicesData = [
-    {
-        deviceId: 1,
-        name: "Uredjaj 1",
-        location: 'Sarajevo',
-        locationLongitude: 44.13,
-        locationLatitude: 18.2,
-        status: true,
-        lastTimeOnline: Date.now(),
-        groupId: 1
-    },
-    {
-        deviceId: 2,
-        name: "Uredjaj 2",
-        location: 'Sarajevo',
-        locationLongitude: 44.13,
-        locationLatitude: 18.2,
-        status: true,
-        lastTimeOnline: Date.now(),
-        groupId: 2
-    },
-    {
-        deviceId: 3,
-        name: "Uredjaj 3",
-        location: 'Sarajevo',
-        locationLongitude: 44.13,
-        locationLatitude: 18.2,
-        status: true,
-        lastTimeOnline: Date.now(),
-        groupId: 4
-    },
-    {
-        deviceId: 4,
-        name: "Uredjaj 4",
-        location: 'Mostar',
-        locationLongitude: 44.13,
-        locationLatitude: 18.2,
-        status: true,
-        lastTimeOnline: Date.now(),
-        groupId: 3
-    },
-]
-
-export const fetchAllDevices = () => {
-
-    // const groups = await request('GET', endpoint + '/groups');
+export function fetchAllDevices() {
 
     return dispatch => {
-        return dispatch({
-            type: SET_DEVICES,
-            devices: devicesData
-        })
+        dispatch({ type: SET_DEVICES_ASYNC, async: true });
+        return request(devices + '/AllDevices').then(response => response.data)
+            .then(r => {
+
+                const devices = r.data;
+
+                // Transform data a little bit
+                devices.forEach(d => {
+                    d.groupId = d.deviceGroups[0].groupId;
+                    delete d.deviceGroups;
+                })
+
+                return dispatch({
+                    type: SET_DEVICES,
+                    devices: devices
+                })
+            }).finally(() => {
+                dispatch({ type: SET_DEVICES_ASYNC, async: false });
+            })
     }
 }
