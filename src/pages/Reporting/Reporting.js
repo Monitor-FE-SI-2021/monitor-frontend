@@ -1,6 +1,8 @@
 import { connect } from "react-redux";
 import './Reporting.css';
 
+/*push test*/
+
 
 window.addEventListener('load', (event) => {
     //document.getElementById('time1').style.visibility = "hidden";
