@@ -19,7 +19,9 @@ const request = async (
     let response = null;
     let config = {
         headers: {
-            Authorization: "Bearer " + window.localStorage.getItem(STORAGE_KEY)
+            Authorization: "Bearer " + window.localStorage.getItem(STORAGE_KEY),
+            Accept: "application/json",
+            // "Content-Type": 'application/json'
         }
     };
 

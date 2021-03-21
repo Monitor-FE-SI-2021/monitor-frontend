@@ -5,9 +5,10 @@ export const RouteLink = {
     Login: "/login",
     Devices: "/devices",
     Reporting: "/reporting",
-    Test: '/test',
     AddDevice: '/manage-device',
-    Terminal: '/terminal'
+    Terminal: '/terminal',
+    Test: '/test',
+    RemoteControl: '/remotecontrol'
 }
 
 const initialState = {
@@ -33,6 +34,11 @@ const initialState = {
             name: "Test ruta",
             icon: "",
         },
+        {
+            link: RouteLink.RemoteControl,
+            name: 'Remote Control',
+            icon: ""
+        }
     ],
 }
 

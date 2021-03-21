@@ -1,0 +1,28 @@
+.paragraph1 {
+    color: black;
+    background-color: gray;
+    padding: 12px;
+}
+
+button {
+    width: fit-content;
+    padding: 10px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.screenshot {
+    /*background-color: #e3dddc;*/
+    padding-bottom: 10px;
+    max-width: 80%;
+    margin-bottom: 20px;
+}
+
+.screenshot-img {
+    width: 100%;
+}
