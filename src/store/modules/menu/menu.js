@@ -5,7 +5,8 @@ export const RouteLink = {
     Login: "/login",
     Devices: "/devices",
     Reporting: "/reporting",
-    Test: '/test'
+    Test: '/test',
+    AddDevice: '/manage-device'
 }
 
 const initialState = {

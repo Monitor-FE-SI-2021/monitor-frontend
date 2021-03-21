@@ -1,5 +1,10 @@
 import axios from "axios";
 
+export const login = 'http://167.99.244.168:3333/login';
+export const endpoint = 'https://si-2021.167.99.244.168.nip.io/api';
+export const devices = `${endpoint}/device`
+export const groups = `${endpoint}/group`
+
 const request = async (
   typeOfReq,
   url,

@@ -1,0 +1,35 @@
+.group {
+    margin-left: 40px;
+}
+
+.tab {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-right: 10px;
+    margin-left: -20px;
+
+    .collapsed,
+    .expanded {
+        background-color: inherit;
+        cursor: pointer;
+        border: none;
+        outline: none;
+        margin-right: 5px;
+    }
+
+    .collapsed:hover,
+    .expanded:hover {
+        background-color: #eee;
+    }
+
+    .collapsed:after {
+        content: "\25B8";
+        font-size: 15px;
+    }
+
+    .expanded:after {
+        content: "\25BE";
+        font-size: 15px;
+    }
+}
