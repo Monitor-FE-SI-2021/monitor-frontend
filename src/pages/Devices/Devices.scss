@@ -1,0 +1,45 @@
+.devices {
+    .groups-list {
+        padding: 5px 10px;
+    }
+
+    .top {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid black;
+    }
+
+    .create {
+        border: none;
+        background: rgba(64, 64, 64, 0.9);
+        font-weight: 100;
+        padding: 10px 20px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        border-radius: 6px;
+        display: inline-block;
+        transition: all 0.3s ease 0s;
+        color: #fff;
+
+        &:hover {
+            font-weight: 500;
+            letter-spacing: 2px;
+            background: rgba(64, 64, 64, 1);
+            cursor: pointer;
+            -webkit-box-shadow: 0px 5px 40px -10px rgba(0, 0, 0, 0.57);
+            -moz-box-shadow: 0px 5px 40px -10px rgba(0, 0, 0, 0.57);
+            transition: all 0.3s ease 0s;
+        }
+    }
+
+    .group {
+
+        .tab {
+            cursor: pointer;
+        }
+    }
+}
+
+

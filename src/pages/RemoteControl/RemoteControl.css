@@ -1,9 +1,10 @@
-.paragraph1{
+.paragraph1 {
     color: black;
     background-color: gray;
     padding: 12px;
 }
-button{
+
+button {
     width: fit-content;
     padding: 10px 25px;
     text-align: center;
@@ -14,8 +15,14 @@ button{
     cursor: pointer;
     font-weight: bold;
 }
-.screenshot{
-    background-color: #e3dddc;
+
+.screenshot {
+    /*background-color: #e3dddc;*/
     padding-bottom: 10px;
-    
+    max-width: 80%;
+    margin-bottom: 20px;
+}
+
+.screenshot-img {
+    width: 100%;
 }

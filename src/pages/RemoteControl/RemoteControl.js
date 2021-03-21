@@ -1,78 +1,46 @@
 import { connect } from "react-redux";
 import { useState } from "react";
-import './RemoteControl.css' 
+import './RemoteControl.css'
+import request from "../../service";
 
+const RemoteControl = () => {
 
-const RemoteControl =  () => {
+    const [url, setUrl] = useState("slkadhjaksl");
 
-    const [url, setUrl] = useState("slkadhjaksl"); 
-   
-    const handleClick = async ()  =>  {
-        
-        
-       const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: 'whoso@whoso.com', password:  'sifra123'})
-        };
+    const handleClick = async () => {
 
         try {
-            var response = await fetch('http://167.99.244.168:3333/login', requestOptions);
-            
-            var x = await response.json();
-            if(x.status === 200)
-            {
-                console.log("all good");
-            }
-            //console.log(x.accessToken);
 
-            const requestOptions2 = {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 
-                "Authorization" : "Bearer "+ x.accessToken, 
-                Accept:"application/json"
-                },
-                body: JSON.stringify({ name: 'DESKTOP-SCC', location: 'Sarajevo - SCC'}),
-            };
-    
-            var odgovor = await 
-            fetch('https://si-grupa5.herokuapp.com/api/screenshot',
-            requestOptions2,
-            );
-            var slika = await odgovor.json();
-            console.log(slika.message);
-            
-            x.accessToken = slika.token;
+            var odgovor = await request('https://si-grupa5.herokuapp.com/api/screenshot',
+                "post",
+                { name: 'DESKTOP-SCC', location: 'Sarajevo - SCC' });
 
-            console.log(x.accessToken);
+            setUrl(odgovor.data.message);
 
-            setUrl(slika.message);
-        }
-        catch(err) {
+        } catch (err) {
 
         }
     }
 
-    
-    
-
     return (
         <div className='page dashboard'>
-        <h1>IWM Remote Access/Control</h1>
-          
-        <div>
-        <p class="paragraph1">Quick example</p>
+            <h1>IWM Remote Access/Control</h1>
+
             <div>
-                <div class="screenshot">
-                <p>Screenshot</p>
-                    <img alt="Asked image will appear here."  src={`data:image/jpeg;base64,${url}`} />
+                <p className="paragraph1">Quick example</p>
+                <div>
+                    <div className="screenshot">
+                        <p>Screenshot</p>
+                        <img alt="Asked image will appear here."
+                             className='screenshot-img'
+                             src={`data:image/jpeg;base64,${url}`}/>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <button type="button" onClick = {handleClick}>
-            Get Screenshot
-        </button>    
+            <button type="button" onClick={handleClick}>
+                Get Screenshot
+            </button>
         </div>
     );
 }
