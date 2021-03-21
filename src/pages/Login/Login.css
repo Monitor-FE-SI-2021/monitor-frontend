@@ -2,16 +2,19 @@
     margin: auto;
     width: 30%;
 }
+
 #login-form {
-    max-width: 320;
-    margin: 0 auto;
+    max-width: 320px;
+    margin: auto;
     padding: 20px;
     background: #fafafa;
     border: 1px solid #ccc;
 }
+
 #login-form h1 {
     margin: 0 0 20px 0;
 }
+
 #login-form input {
     box-sizing: border-box;
     width: 100%;
@@ -20,6 +23,7 @@
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
 }
+
 #login-form input[type="submit"] {
     border: 0;
     padding: 15px;
@@ -27,6 +31,7 @@
     color: #fff;
     cursor: pointer;
 }
+
 html,
 body {
     font-family: arial, sans-serif;

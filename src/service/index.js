@@ -1,12 +1,14 @@
 import axios from "axios";
+import { STORAGE_KEY } from "../utils/consts";
+import { history } from "../store/store";
 
 export const login = 'http://167.99.244.168:3333/login';
 export const endpoint = 'https://si-2021.167.99.244.168.nip.io/api';
 export const wsEndpoint = 'https://si-grupa5.herokuapp.com/api';
+export const authEndpoint = 'http://167.99.244.168:3333';
 export const devices = `${endpoint}/device`
 export const groups = `${endpoint}/group`
-
-const testToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiZW1haWwiOiJvc29iYTVAZW1haWwuY29tIiwicm9sZUlkIjoxLCJncm91cElkIjoyLCJpYXQiOjE2MTYzNTYzNzksImV4cCI6MTYxNjM1ODE3OX0.E5F4y0dk80L7id32RzfBsRQK3xp6fIs98wQUpD-8EPg';
+export const users = `${endpoint}/user`
 
 const request = async (
     url,
@@ -14,12 +16,10 @@ const request = async (
     bodyReq = {}
 ) => {
 
-    window.localStorage.setItem('authorization', testToken);
-
     let response = null;
     let config = {
         headers: {
-            Authorization: "Bearer " + window.localStorage.getItem("authorization")
+            Authorization: "Bearer " + window.localStorage.getItem(STORAGE_KEY)
         }
     };
 
@@ -30,12 +30,10 @@ const request = async (
             response = await axios
                 .get(url, config)
                 .catch(e => {
-                    console.log("Request error: ", e)
                     if (e.message.includes('401')) {
                         removeAllData();
-                    } else if (e.message.includes('403')) {
-                        removeAllData();
                     }
+                    throw e;
                 });
             return response;
         } catch (error) {
@@ -52,6 +50,7 @@ const request = async (
                     if (e.message.includes('401')) {
                         removeAllData();
                     }
+                    throw e;
                 });
             return response;
         } catch (error) {
@@ -68,6 +67,7 @@ const request = async (
                     if (e.message.includes('401')) {
                         removeAllData();
                     }
+                    throw e;
                 });
             return response;
         } catch (error) {
@@ -91,6 +91,7 @@ const request = async (
                         if (e.message.includes('401')) {
                             removeAllData();
                         }
+                        throw e;
                     });
                 return response;
             } else {
@@ -128,6 +129,7 @@ const request = async (
 
 const removeAllData = () => {
     window.localStorage.clear();
+    history.push('/login');
 }
 
 export default request;

@@ -188,7 +188,7 @@ const Reports = () => {
             </div>
 
             <div class="groups">
-                <label for="groups" id="groupsLabel">Choose a group:</label>
+                <label htmlFor="groups" id="groupsLabel">Choose a group:</label>
 
                 <select name="groups" id="groups">
 
@@ -263,35 +263,35 @@ const Reports = () => {
                     {/* ovo je prvi primjer reporta, nakon sto dobijemo dodatne informacije bit ce nam lako promijeniti */}
                     <h3> Device data </h3>
                     <section>
-                        <label for="device-name"> Name: </label>
+                        <label htmlFor="device-name"> Name: </label>
                         <input type="checkbox" id="device-name" name="device-name"></input>
                     </section>
                     <section>
-                        <label for="device-location"> Location: </label>
+                        <label htmlFor="device-location"> Location: </label>
                         <input type="checkbox" id="device-location" name="device-location"></input>
                     </section>
                     <section>
-                        <label for="device-longitude"> Longitude: </label>
+                        <label htmlFor="device-longitude"> Longitude: </label>
                         <input type="checkbox" id="device-longitude" name="device-longitude"></input>
                     </section>
                     <section>
-                        <label for="device-latitude"> Latitude: </label>
+                        <label htmlFor="device-latitude"> Latitude: </label>
                         <input type="checkbox" id="device-latitude" name="device-latitude"></input>
                     </section>
                     <section>
-                        <label for="device-status"> Status: </label>
+                        <label htmlFor="device-status"> Status: </label>
                         <input type="checkbox" id="device-status" name="device-status"></input>
                     </section>
                     <section>
-                        <label for="device-online"> Last time online: </label>
+                        <label htmlFor="device-online"> Last time online: </label>
                         <input type="checkbox" id="device-online" name="device-online"></input>
                     </section>
                     <section>
-                        <label for="device-log"> Time log for selected period: </label>
+                        <label htmlFor="device-log"> Time log for selected period: </label>
                         <input type="checkbox" id="device-log" name="device-log"></input>
                     </section>
                     <section>
-                        <label for="device-group"> Group name: </label>
+                        <label htmlFor="device-group"> Group name: </label>
                         <input type="checkbox" id="device-group" name="device-group"></input>
                     </section>
                 </div>
