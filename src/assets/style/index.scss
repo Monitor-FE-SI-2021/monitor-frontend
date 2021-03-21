@@ -7,11 +7,13 @@ html {
     font-family: Roboto, sans-serif;
 }
 
-html, body, #app {
+html, body, #app, #root {
     padding: 0;
     margin: 0;
     height: 100%;
     background: $pageBg;
+    display: flex;
+    flex-direction: column;
 }
 
 * {
@@ -38,6 +40,7 @@ html, body, #app {
         padding-left: $menuWidth;
         //padding-top: $headerHeight;
         transition: all 250ms ease-in-out;
+        overflow: hidden;
     }
 
     .page {
