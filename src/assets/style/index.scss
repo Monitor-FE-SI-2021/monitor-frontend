@@ -1,5 +1,6 @@
 @import "variables";
 @import "menu";
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&family=Roboto&display=swap');
 
 html {
     box-sizing: border-box;
@@ -12,6 +13,7 @@ html, body, #app {
     margin: 0;
     height: 100%;
     background: $pageBg;
+    font-family: 'Montserrat', sans-serif;
 }
 
 * {
@@ -40,14 +42,38 @@ html, body, #app {
         transition: all 250ms ease-in-out;
     }
 
+    .scrollable{
+        overflow-y: auto;
+        padding: 5%;
+    }
+
     .page {
         display: flex;
-        flex-direction: column;
-        padding: 10px 22px;
+        flex-direction: row;
         width: 100%;
-        flex: 1;
-        max-height: 100%;
+        max-height: 75vh;
+        margin: 1% 0;
+        justify-content: space-around;
     }
+
+    .row{
+        display: flex;
+        flex-direction: column;
+    }
+
+    .row h1{
+        color: #353535;
+    }
+
+    .machine-cards{
+        width: 30%;
+    }
+
+    .chart{
+        width: 100%;
+        margin: 7%;
+    }
+
 
     &.menu-expanded {
 
@@ -65,26 +91,38 @@ html, body, #app {
     }
 }
 .card {
+    display: flex;
     border-radius: 10px;
-    height: 170px;
+    height: 140px;
     box-shadow: 0 2px 5px #ccc;
     text-align: left;
+    width: 100%;
+    margin: 30px 0 30px 0;
+}
+.card-img {
+    padding: 5%;
     width: 30%;
-    margin: 20px 0 0 0
 }
-.card .card-img {
-    float: left;
-    width: 50%
-    
+.card-img img {
+    height: 100%;
 }
-.card .card-img img {
+.card-info{
+    padding: 5% 5%;
     width: 70%;
-    margin: 30px 0px 0px 20px
+}
+.card-info h3{
+    margin: 0;
+}
+.card-info p{
+    font-family: 'Roboto', sans-serif;
 }
 
-.card .card-info h3,p{
-    margin: 0 0 20px 0
+.page-devices{
+    margin: 20px;
 }
-.card .card-info {
-    margin: 30px 0 0 0
+
+.page-primjer-komponente{
+    display: flex;
+    flex-direction: row;
+    margin: 40px;
 }

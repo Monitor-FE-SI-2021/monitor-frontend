@@ -6,60 +6,86 @@ import LineChart from "../../components/Layout/components/charts/LineChart.js";
 import ChartDonut from "../../components/Layout/components/charts/ChartDonut.js";
 import BarChart from "../../components/Layout/components/charts/BarChart.js";
 import MachineAvatar from "../../assets/icons/machine.png";
+
+const Dashboard = () => (
+    <div className='page dashboard'>
+
+        <div className='row machine-cards'>
+            <h1>List of active machines</h1>
+            <div className='scrollable'>
+                {machines.map(createActiveMachineCard)}
+            </div>
+        </div>
+
+        <div className='row'>
+            <PieChart chartData={chartPieDataExample}/>
+            <LineChart chartData={chartLineDataExample}/>
+        </div>
+
+        <div className='row'>
+            <ChartDonut chartData={chartDonutDataExample}/>
+            <BarChart chartData={chartBarDataExample}/>
+        </div>
+
+    </div>
+);
+
+
 function createActiveMachineCard(machine) {
     return (
         <ActiveMachine
-            img={MachineAvatar}
+            img={machine.img}
             name={machine.name}
-            info={new Date(machine.lastTimeOnline).toGMTString()}
+            info={machine.info}
         />
     );
 }
 
+// DUMMY DATA
 
-// Api get may or may not be called here. 
+// Api get may or may not be called here.
 // The data is an example of how the data structure should look like
 
 let chartPieDataExample = {
-        labels: ['Used', 'Not used'],
-        datasets:[
-          {
+    labels: ['Used', 'Not used'],
+    datasets:[
+        {
             label:'Average RAM usage',
             data:[
-              80,
-              20
+                80,
+                20
             ],
             backgroundColor:[
-              'rgba(75, 192, 192, 0.6)',
-              'rgba(54, 162, 235, 0.6)',
-/*            'rgba(255, 206, 86, 0.6)',
-              'rgba(255, 99, 132, 0.6)',
-              'rgba(153, 102, 255, 0.6)',
-              'rgba(255, 159, 64, 0.6)',
-              'rgba(255, 99, 132, 0.6)'*/
+                'rgba(75, 192, 192, 0.6)',
+                'rgba(54, 162, 235, 0.6)',
+                /*            'rgba(255, 206, 86, 0.6)',
+                              'rgba(255, 99, 132, 0.6)',
+                              'rgba(153, 102, 255, 0.6)',
+                              'rgba(255, 159, 64, 0.6)',
+                              'rgba(255, 99, 132, 0.6)'*/
             ]
-          }
-        ]
-      }
+        }
+    ]
+}
 
 let chartLineDataExample = {
     labels: ['Q1', 'Q2', 'Q3', 'Q4'],
     datasets:[
-      {
-        label:'CPU usage',
-        data:[
-          60,
-          65,
-          80,
-          70
-        ],
-        backgroundColor:[
-          'rgba(255, 206, 86, 0.6)',
-          'rgba(255, 99, 132, 0.6)'
-        ]
-      }
+        {
+            label:'CPU usage',
+            data:[
+                60,
+                65,
+                80,
+                70
+            ],
+            backgroundColor:[
+                'rgba(255, 206, 86, 0.6)',
+                'rgba(255, 99, 132, 0.6)'
+            ]
+        }
     ]
-  }
+}
 let chartDonutDataExample = {
     labels: ['Q1', 'Q2', 'Q3'],
     datasets:[
@@ -81,71 +107,39 @@ let chartDonutDataExample = {
 let currentTime = new Date().getHours();
 
 let chartBarDataExample = {
-  
-  labels: [currentTime+':10', currentTime+':20', currentTime+':30', currentTime+':40', currentTime+':50'],
-  datasets:[
+
+    labels: [currentTime+':10', currentTime+':20', currentTime+':30', currentTime+':40', currentTime+':50'],
+    datasets:[
+        {
+            label:"Disk utilization percentage",
+            data:[
+                10,
+                20,
+                30,
+                40,
+                50
+            ],
+            backgroundColor:'rgba(75, 192, 192, 0.6)'
+        }
+    ]
+}
+
+const machines = [
     {
-      label:"Disk utilization percentage",
-      data:[
-        10,
-        20,
-        30,
-        40,
-        50
-      ],
-      backgroundColor:'rgba(75, 192, 192, 0.6)'
+        img: MachineAvatar,
+        name: "Machine 1",
+        info: "This machine is used for something"
+    },
+    {
+        img: MachineAvatar,
+        name: "Machine 4",
+        info: "This machine is used for something"
+    },
+    {
+        img: MachineAvatar,
+        name: "Machine 9",
+        info: "This machine is used for something"
     }
-  ]
-}
-
-const Dashboard = () => {
-  const [allLogs, setAllLogs] = React.useState([])
-  const [machines, setMachines] = React.useState([])  
-
-  const groupId = 2
-  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiZW1haWwiOiJvc29iYTVAZW1haWwuY29tIiwicm9sZUlkIjoxLCJncm91cElkIjoyLCJpYXQiOjE2MTYzNTgzMTEsImV4cCI6MTYxNjM2MDExMX0.MULFWmvlFhF_hPD1xbTZupgfTYCFZT-STzvyLdp8Td8"
-
-  React.useEffect(() => {
-    fetch("https://si-2021.167.99.244.168.nip.io/api/device/AllDevicesForGroup?groupId=" + groupId,
-        {
-          method:"GET", 
-          headers: {
-            "Authorization" : "Bearer " + token
-          }
-        })
-      .then((resp) => resp.json())
-      .then((machines) => setMachines(machines.data))
-      .catch((err) => console.log(err))
-  }, [])
-
-  React.useEffect(() => {
-    fetch("http://si-2021.167.99.244.168.nip.io/api/device/GetAllDeviceLogs", 
-        {
-          method:"GET", 
-          headers: {
-            "Authorization" : "Bearer " + token
-          }
-        })
-      .then((resp) => resp.json())
-      .then((logs) => {
-        setAllLogs(logs.data)
-        /*setMachines(smtn.data.filter((value, index, self) => {
-          return self.findIndex(v => v.deviceId === value.deviceId) === index
-        }))*/
-      })
-      .catch((err) => console.log(err))
-  }, [])
-
-  return (
-    <div className='page dashboard'>
-        <h1>List of active machines</h1>
-        {machines.map(createActiveMachineCard)}
-        <PieChart chartData={chartPieDataExample}/>
-        <LineChart chartData={chartLineDataExample}/>
-        <ChartDonut chartData={chartDonutDataExample}/>
-        <BarChart chartData={chartBarDataExample}/>
-    </div>
-  );
-}
+];
 
 export default connect(state => ({}), {})(Dashboard)

@@ -8,12 +8,12 @@ import { increment } from "../store/modules/counter";
 
 function PrimjerKomponente({ push, brojac, increment, proizvoljanParametar }) {
     return (
-        <div className="page primjer-komponente">
+        <div className="page-primjer-komponente">
             <h1>
                 Trenutni broj: {brojac}
             </h1>
 
-            <button style={{ width: 'fit-content' }} onClick={increment}>Povecaj broj</button>
+            <button style={{ width: 'fit-content', padding: '15px', margin: '22px' }} onClick={increment}>Povecaj broj</button>
         </div>
     );
 }
