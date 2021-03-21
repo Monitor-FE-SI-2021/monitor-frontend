@@ -92,11 +92,11 @@ let chartBarDataExample = {
     ]
 }
 
-const Dashboard = () => {
+const Dashboard = ({ user }) => {
     const [allLogs, setAllLogs] = React.useState([])
     const [machines, setMachines] = React.useState([])
 
-    const groupId = 2
+    const groupId = user?.userGroups[0]?.groupId || 2;
 
     React.useEffect(() => {
         request(devices + "/AllDevicesForGroup?groupId=" + groupId)
@@ -153,4 +153,6 @@ function createActiveMachineCard(machine) {
     );
 }
 
-export default connect(state => ({}), {})(Dashboard)
+export default connect(state => ({
+    user: state.login.user,
+}), {})(Dashboard)

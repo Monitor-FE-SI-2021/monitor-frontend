@@ -74,7 +74,7 @@ export const getMe = () => {
             async: true
         });
 
-        return request(users + '/Me')
+        return request(users + '/MeExtendedInfo')
             .then(r => {
                 if (r.status === 200) {
                     dispatch({
