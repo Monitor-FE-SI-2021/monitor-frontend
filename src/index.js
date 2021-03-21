@@ -12,8 +12,8 @@ ReactDOM.render(
     <Provider store={store}>
         <ConnectedRouter history={history}>
             <div id='app'>
-                <Route path='/' component={Layout}/>
                 <Route path='/login' component={Login}/>
+                <Route path='/' component={Layout}/>
             </div>
         </ConnectedRouter>
     </Provider>,
