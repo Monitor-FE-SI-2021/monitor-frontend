@@ -35,8 +35,9 @@ section{
 }
 
 
-.email, #update-time{
+#email, #update-time,#groups {
     height: 30px;
+    width: 233px;
 }
 
 #update-time{
@@ -46,9 +47,22 @@ section{
 
 
 
-#often, #time1, select{
+#often, #time1, select, #groups, #timePar, #comparison, #column, #typeOfAnswerId{
     display:inline;
     margin-bottom: 30px;
+}
+
+#comparison, #column, .typeOfAnswerId{
+    margin-right: 15px;
+    height: 30px;
+}
+
+.queries{
+    height: 30px;
+}
+
+#groups{
+    margin-left: 236px;
 }
 
 .table{
@@ -58,6 +72,37 @@ section{
 .device_data{
     border: 1px solid grey;
     padding: 10px 10px 10px 10px;
+    margin-bottom: 20px;
     width: 300px;
-    border-radius: 25px;
+    border-radius: 15px;
+}
+
+#typeOfComparison1, .queries, .typeOfAnswer{
+    display: inline;
+}
+
+#queriesManipulation{
+    padding: 10px 10px 10px 10px;
+    border-left: 2px solid seagreen;
+}
+
+button{
+    margin-right: 10px;
+    background-color:seagreen;
+    height: 30px;
+    width: 60px;
+}
+
+#typeOfCompId{
+    height: 30px;
+    margin-right: 15px;
+    width: 100px;
+}
+
+
+#btn{
+    margin-bottom: 30px;
+    height: 30px;
+    width: 70px;
+    background: gray;
 }
