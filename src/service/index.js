@@ -2,10 +2,9 @@ import axios from "axios";
 import { STORAGE_KEY } from "../utils/consts";
 import { history } from "../store/store";
 
-export const login = 'http://167.99.244.168:3333/login';
 export const endpoint = 'https://si-2021.167.99.244.168.nip.io/api';
 export const wsEndpoint = 'https://si-grupa5.herokuapp.com/api';
-export const authEndpoint = 'http://167.99.244.168:3333';
+export const authEndpoint = 'https://167.99.244.168:3333';
 export const devices = `${endpoint}/device`
 export const groups = `${endpoint}/group`
 export const users = `${endpoint}/user`
@@ -35,7 +34,7 @@ const request = async (
                     if (e.message.includes('401')) {
                         removeAllData();
                     }
-                    throw e;
+                    return response;
                 });
             return response;
         } catch (error) {
@@ -52,7 +51,7 @@ const request = async (
                     if (e.message.includes('401')) {
                         removeAllData();
                     }
-                    throw e;
+                    return response;
                 });
             return response;
         } catch (error) {
@@ -69,7 +68,7 @@ const request = async (
                     if (e.message.includes('401')) {
                         removeAllData();
                     }
-                    throw e;
+                    return response;
                 });
             return response;
         } catch (error) {
@@ -93,7 +92,7 @@ const request = async (
                         if (e.message.includes('401')) {
                             removeAllData();
                         }
-                        throw e;
+                        return response;
                     });
                 return response;
             } else {

@@ -45,7 +45,7 @@ export const doLogin = ({ email, password }) => {
             email,
             password
         }).then(res => {
-            if (res.status === 200) {
+            if (res && res.status === 200) {
                 localStorage.setItem(STORAGE_KEY, res.data.accessToken);
 
                 dispatch(getMe()).then(() => {
@@ -53,8 +53,6 @@ export const doLogin = ({ email, password }) => {
                 });
 
                 return res;
-            } else {
-                throw res;
             }
         }).finally(() => {
             return dispatch({
@@ -74,7 +72,7 @@ export const getMe = () => {
             async: true
         });
 
-        return request(users + '/Me')
+        return request(users + '/MeExtendedInfo')
             .then(r => {
                 if (r.status === 200) {
                     dispatch({
