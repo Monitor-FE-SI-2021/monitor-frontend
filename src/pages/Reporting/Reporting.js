@@ -20,6 +20,7 @@ const Reports = () => {
     const [selectedGroup, setSelectedGroup] = useState("");
     const [groups, setGroups] = useState([]);
     const [queryValue, setQueryValue] = useState("");
+    const [title, setTitle] = useState("");
 
     const setData = async () => {
         const res = await request("https://si-2021.167.99.244.168.nip.io/api/group/MyAssignedGroups");
@@ -30,6 +31,10 @@ const Reports = () => {
     useEffect(() => {
         setData();
     }, []);
+
+    const changeTitle = (event) => {
+        setTitle(event.target.value);
+    };
     
     const changeFrequency = (event) => {
         setSelectedFrequency(event.target.value);
@@ -48,7 +53,7 @@ const Reports = () => {
     };
 
     const checkQuery = () => {
-        if(queryValue?.rules?.length <= 0 || selectedFrequency === "noEmail") return true;
+        if(queryValue?.rules?.length <= 0) return true;
         return false;
     }
 
@@ -62,6 +67,11 @@ const Reports = () => {
             <h1> Reporting </h1>
 
             <div className="reportingInput">
+                <div className="inputWrapper">
+                    <InputLabel className="inputLabelWrapper" id="frequencyLabel"> Report title:  </InputLabel>
+                        <TextField labelId="frequencyLabel" value={title} className="select" onChange={changeTitle} autoFocus/>
+                </div>
+
                 <div className="inputWrapper">
                     <InputLabel className="inputLabelWrapper" id="frequencyLabel"> How often do you want a report to be sent to you? </InputLabel>
                     {frequencies.length > 0 && 
