@@ -1,0 +1,111 @@
+.reportingWrapper {
+    padding-left: 20px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.reportingInput {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.inputWrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 10px;
+}
+
+.inputLabelWrapper {
+    width: 370px;
+}
+
+.select {
+    width: 200px;
+    margin-left: 50px;
+}
+
+.MuiInputBase-root.MuiInput-root.MuiInput-underline {
+    width: 210px;
+}
+
+.MuiFormControl-root.MuiTextField-root {
+    width: 210px;
+    margin-left: 50px;
+}
+
+.queryBuilderWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.queryBuilderTitle {
+    margin: 50px 0px 50px 0px;
+}
+
+.MuiButtonBase-root.MuiButton-root.MuiButton-contained {
+    margin-top: 50px;
+}
+
+.ruleGroup {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.ruleGroup-combinators {
+    width: 200px;
+    height: 40px;
+}
+
+.rule-fields {
+    width: 180px;
+    height: 40px;
+    margin-left: 20px;
+}
+
+.rule-operators {
+    display: none;
+}
+
+.rule-value {
+    display: none;
+}
+
+.ruleGroup-addRule {
+    font-weight: normal;
+    border: none;
+    background-color: lightgrey;
+}
+
+.ruleGroup-addGroup {
+    font-weight: normal;
+    border: none;
+    background-color: lightgrey;
+}
+
+.rule-remove {
+    font-weight: normal;
+    border: none;
+    border-radius: 20px;
+    background-color: #F8FAFB;
+    padding: 0px;
+    margin: 0px 0px 0px 10px;
+}
+
+.ruleGroup-remove {
+    font-weight: normal;
+    border: none;
+    border-radius: 50px;
+    background-color: #F8FAFB;
+    padding: 0px;
+    margin: 0px 0px 0px 10px;
+}
