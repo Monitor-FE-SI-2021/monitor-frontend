@@ -37,10 +37,6 @@ const groups = [
 const AddDeviceForm = () => {
     const classes = useStyles();
 
-    const onClick = () => {
-        console.log('Click')
-    }
-
     const initialValues = {
         name: "",
         location: "",
@@ -129,7 +125,7 @@ const AddDeviceForm = () => {
                 ))}
             </TextField>
 
-            <Button type = "submit" onClick={onClick} variant="contained">Dodaj mašinu</Button>
+            <Button type = "submit" variant="contained">Dodaj mašinu</Button>
         </form>
     );
 }
