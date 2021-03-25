@@ -3,6 +3,7 @@ import Prompt from "./components/Prompt";
 import UseOnEnter from "./components/UseOnEnter";
 import MapConsoleOutput from "./components/MapConsoleOutput";
 import './terminal.scss'
+//merge
 
 var counterOfSavedLogs = 0;
 
