@@ -34,10 +34,10 @@ const groups = [
     },
 ]
 
-const AddDeviceForm = () => {
+const AddDeviceForm = ({fieldValues}) => {
     const classes = useStyles();
 
-    const initialValues = {
+    let initialValues = {
         name: "",
         location: "",
         latitude: "",
@@ -73,7 +73,13 @@ const AddDeviceForm = () => {
         return Object.values(temp).every(x => x=="")
     }
 
-    const [values, setValues] = useState(initialValues)
+    const getInitialValues = () => {
+        if (fieldValues !== undefined)
+            initialValues = fieldValues
+        return initialValues
+    }
+
+    const [values, setValues] = useState(getInitialValues)
     const [errors, setErrors] = useState({})
 
     const handleInputChange = e => {
