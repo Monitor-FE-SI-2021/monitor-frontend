@@ -34,9 +34,13 @@ const groups = [
     },
 ]
 
+// fieldValues is a prop for passing the field values for a machine which is being edited
+// the required form is
+// {name: "value", location: "value", latitude: "value", longitude: "value", installationCode: "value", group: "value"}
 const AddDeviceForm = ({fieldValues}) => {
     const classes = useStyles();
 
+    // initial values for when the form isn't opened in edit mode
     let initialValues = {
         name: "",
         location: "",
@@ -73,6 +77,7 @@ const AddDeviceForm = ({fieldValues}) => {
         return Object.values(temp).every(x => x=="")
     }
 
+    // if the form is opened in edit mode we shall obtain the passed values
     const getInitialValues = () => {
         if (fieldValues !== undefined)
             initialValues = fieldValues
@@ -88,7 +93,6 @@ const AddDeviceForm = ({fieldValues}) => {
             ...values,
             [name]:value
         })
-        
     }
 
     const handleSubmit = (e) => {
