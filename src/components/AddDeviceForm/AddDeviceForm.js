@@ -34,8 +34,8 @@ const groups = [
     },
 ]
 
-// fieldValues is a prop for passing the field values for a machine which is being edited
-// the required form is
+// fieldValues is a prop for passing the field values for when the form is opened in edit mode
+// the required form of the object is
 // {name: "value", location: "value", latitude: "value", longitude: "value", installationCode: "value", group: "value"}
 const AddDeviceForm = ({fieldValues}) => {
     const classes = useStyles();
