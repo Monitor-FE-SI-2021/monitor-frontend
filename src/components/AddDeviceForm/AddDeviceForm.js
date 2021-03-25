@@ -91,8 +91,10 @@ const AddDeviceForm = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        if(validate())
+        if(validate()) {
             alert("Validno")
+            setValues(initialValues)
+        }
     }
 
     return (
