@@ -36,14 +36,9 @@ const groups = [
 
 const AddDeviceForm = () => {
     const classes = useStyles();
-    const [selectedGroup, setSelectedGroup] = useState('')
 
     const onClick = () => {
         console.log('Click')
-    }
-
-    const changeSelectedGroup = (value) => {
-        setSelectedGroup(value)
     }
 
     const initialValues = {
