@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 import { useState } from "react";
 import './RemoteControl.css'
-import request from "../../service";
+import request, { wsEndpoint } from "../../service";
 
 const RemoteControl = () => {
 
@@ -11,7 +11,7 @@ const RemoteControl = () => {
 
         try {
 
-            var odgovor = await request('https://si-grupa5.herokuapp.com/api/screenshot',
+            var odgovor = await request(wsEndpoint + '/screenshot',
                 "post",
                 { name: 'DESKTOP-SCC', location: 'Sarajevo - SCC' });
 

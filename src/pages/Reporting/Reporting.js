@@ -3,33 +3,33 @@ import request from "../../service";
 import './Reporting.css';
 
 /*push test*/
-window.addEventListener('load', (event) => {
-    //document.getElementById('time1').style.visibility = "hidden";
-
-    //Getting token manually is only for testing
-
-    //Fetching user's groups and updating token
-    request("https://si-2021.167.99.244.168.nip.io/api/group/MyAssignedGroups").then((r) => {
-        window.localStorage.setItem("authorization", r.data.newAccessToken);
-
-        var groups = [];
-        r.data.data.forEach(element => {
-            groups.push({ id: element["groupId"], name: element["name"] });
-        });
-
-        var listGroups = document.getElementById("groups");
-
-        groups.forEach(element => {
-            let opt = document.createElement('option');
-            opt.appendChild(document.createTextNode(element["name"]));
-            opt.value = element["id"];
-            listGroups.appendChild(opt);
-        });
-
-    }).catch(() => {
-        console.log("Unauthorized. Check the token");
-    });
-});
+// window.addEventListener('load', (event) => {
+//     //document.getElementById('time1').style.visibility = "hidden";
+//
+//     //Getting token manually is only for testing
+//
+//     //Fetching user's groups and updating token
+//     request("https://si-2021.167.99.244.168.nip.io/api/group/MyAssignedGroups").then((r) => {
+//         window.localStorage.setItem("authorization", r.data.newAccessToken);
+//
+//         var groups = [];
+//         r.data.data.forEach(element => {
+//             groups.push({ id: element["groupId"], name: element["name"] });
+//         });
+//
+//         var listGroups = document.getElementById("groups");
+//
+//         groups.forEach(element => {
+//             let opt = document.createElement('option');
+//             opt.appendChild(document.createTextNode(element["name"]));
+//             opt.value = element["id"];
+//             listGroups.appendChild(opt);
+//         });
+//
+//     }).catch(() => {
+//         console.log("Unauthorized. Check the token");
+//     });
+// });
 
 function handleClick(e) {
     var div = document.createElement("div");
