@@ -50,7 +50,9 @@ const AddDeviceForm = () => {
         name: "",
         location: "",
         latitude: "",
-        longitude: ""
+        longitude: "",
+        installationCode: "",
+        group: ""
     }
 
     const validate = () => {
@@ -73,7 +75,8 @@ const AddDeviceForm = () => {
 
         temp.latitude = values.latitude.length==6 ? "" : "Latitude should consist of exactly 6 numbers!"
         temp.longitude = values.longitude.length==6 ? "" : "Longitude should consist of exactly 6 numbers!"
-        temp.group = selectedGroup ? "" : "This field is required!"
+        temp.group = values.group ? "" : "This field is required!"
+        temp.installationCode = values.installationCode ? "" : "This field is required!"
         setErrors(temp)
 
         return Object.values(temp).every(x => x=="")
@@ -111,22 +114,23 @@ const AddDeviceForm = () => {
             <TextField label="Geografska visina" type='number' name="longitude" value={values.longitude} onChange={handleInputChange}
                        {...(errors.longitude && {error:true, helperText: errors.longitude})}/>
 
+            <TextField label="Instalacijski kod" name="installationCode" value={values.installationCode} onChange={handleInputChange}
+                       {...(errors.installationCode && {error:true, helperText: errors.installationCode})}/>
+
             <TextField
                 select
-                value={selectedGroup}
+                name="group"
+                value={values.group}
                 label="Odaberite grupu"
-                onChange={(e) => (changeSelectedGroup(e.target.value))}
-                {...errors.group && {error:true}}
+                onChange={handleInputChange}
+                {...(errors.group && {error:true, helperText: errors.group})}
             >
                 {groups.map((group) => (
                   <MenuItem key={group.id} value={group.name}>
                     {group.name}
                   </MenuItem>
                 ))}
-
-                
             </TextField>
-            {errors.group && <FormHelperText className="groupError" style={{color:"red"}}>{errors.group}</FormHelperText>}
 
             <Button type = "submit" onClick={onClick} variant="contained">Dodaj mašinu</Button>
         </form>
