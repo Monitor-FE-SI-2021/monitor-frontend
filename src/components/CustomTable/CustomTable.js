@@ -7,6 +7,8 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import UpArrow from '@material-ui/icons/ArrowDropUp';
+import DownArrow from '@material-ui/icons/ArrowDropDown';
 import { getDeepProp } from "../../utils/utils";
 
 const useStyles = makeStyles({
@@ -25,7 +27,7 @@ export function TableSlot({ slot, render }) {
     return <div></div>
 }
 
-export default function CustomTable({ data, fields, children }) {
+export default function CustomTable({ data, fields, children, handleSort, sortDirection, columnToSort }) {
 
     const classes = useStyles();
 
@@ -62,7 +64,22 @@ export default function CustomTable({ data, fields, children }) {
                             <TableCell className={classes.header} key={field.name}
                                        align={field.align}
                                        style={{ width: field.width || 'initial' }}>
-                                {field.title}
+                                <div
+                                    style={{
+                                        display: "flex",
+                                        alignItems: "center"
+                                    }}
+                                    onClick={() => handleSort(field.prop)}
+                                    >
+                                    <span>{field.title}</span>
+                                    {columnToSort === field.prop ? (
+                                        sortDirection === "asc" ? (
+                                        <UpArrow />
+                                        ) : (
+                                        <DownArrow />
+                                        )
+                                    ) : null}
+                                </div>
                             </TableCell>
                         ))}
                     </TableRow>
