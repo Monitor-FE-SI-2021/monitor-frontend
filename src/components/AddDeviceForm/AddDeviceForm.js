@@ -136,7 +136,7 @@ const AddDeviceForm = ({fieldValues}) => {
             </TextField>
 
             <Button type = "submit" variant="contained">
-                {fieldValues !== undefined ? "Create Machine" : "Edit Machine"}
+                {fieldValues !== undefined ? "Edit Machine" : "Create Machine"}
             </Button>
         </form>
     );
