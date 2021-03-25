@@ -47,33 +47,33 @@ const AddDeviceForm = () => {
     }
 
     const initialValues = {
-        naziv: "",
-        lokacija: "",
-        gSirina: "",
-        gDuzina: ""
+        name: "",
+        location: "",
+        latitude: "",
+        longitude: ""
     }
 
     const validate = () => {
         let temp = {}
         let letterNumber = /^[0-9a-zA-Z]+$/
 
-        if(values.naziv == "")
-            temp.naziv = "This field is required"
-        else if(!values.naziv.match(letterNumber) && !values.naziv.includes(" "))
-            temp.naziv = "This field can only contain the following characters: A-Z, a-z, 0-9" 
+        if(values.name == "")
+            temp.name = "This field is required"
+        else if(!values.name.match(letterNumber) && !values.name.includes(" "))
+            temp.name = "This field can only contain the following characters: A-Z, a-z, 0-9"
         else
-            temp.naziv=""
+            temp.name=""
         
-        if(values.lokacija =="")
-            temp.lokacija = "This field is required"
-        else if(!values.lokacija.match(letterNumber) && !values.lokacija.includes(" "))
-            temp.lokacija = "This field can only contain the following characters: A-Z, a-z, 0-9"  
+        if(values.location =="")
+            temp.location = "This field is required"
+        else if(!values.location.match(letterNumber) && !values.location.includes(" "))
+            temp.location = "This field can only contain the following characters: A-Z, a-z, 0-9"
         else
-            temp.lokacija = ""
+            temp.location = ""
 
-        temp.gSirina = values.gSirina.length==6 ? "" : "Latitude should consist of exactly 6 numbers!"
-        temp.gDuzina = values.gDuzina.length==6 ? "" : "Longitude should consist of exactly 6 numbers!"
-        temp.grupa = selectedGroup ? "" : "This field is required!"
+        temp.latitude = values.latitude.length==6 ? "" : "Latitude should consist of exactly 6 numbers!"
+        temp.longitude = values.longitude.length==6 ? "" : "Longitude should consist of exactly 6 numbers!"
+        temp.group = selectedGroup ? "" : "This field is required!"
         setErrors(temp)
 
         return Object.values(temp).every(x => x=="")
@@ -99,24 +99,24 @@ const AddDeviceForm = () => {
 
     return (
         <form className={classes.root} onSubmit={handleSubmit}>
-            <TextField label="Naziv" name="naziv" value={values.naziv} onChange={handleInputChange} 
-                {...(errors.naziv && {error:true, helperText: errors.naziv})} />
+            <TextField label="Naziv" name="name" value={values.name} onChange={handleInputChange}
+                       {...(errors.name && {error:true, helperText: errors.name})} />
 
-            <TextField label="Lokacija" name="lokacija" value={values.lokacija} onChange={handleInputChange}
-                {...(errors.lokacija && {error:true, helperText: errors.lokacija})} />
+            <TextField label="Lokacija" name="location" value={values.location} onChange={handleInputChange}
+                       {...(errors.location && {error:true, helperText: errors.location})} />
 
-            <TextField label="Geografska širina" type='number' name="gSirina" value={values.gSirina} onChange={handleInputChange} 
-                {...(errors.gSirina && {error:true, helperText: errors.gSirina})}/>
+            <TextField label="Geografska širina" type='number' name="latitude" value={values.latitude} onChange={handleInputChange}
+                       {...(errors.latitude && {error:true, helperText: errors.latitude})}/>
 
-            <TextField label="Geografska visina" type='number' name="gDuzina" value={values.gDuzina} onChange={handleInputChange} 
-                {...(errors.gDuzina && {error:true, helperText: errors.gDuzina})}/>
+            <TextField label="Geografska visina" type='number' name="longitude" value={values.longitude} onChange={handleInputChange}
+                       {...(errors.longitude && {error:true, helperText: errors.longitude})}/>
 
             <TextField
                 select
                 value={selectedGroup}
                 label="Odaberite grupu"
                 onChange={(e) => (changeSelectedGroup(e.target.value))}
-                {...errors.grupa && {error:true}}
+                {...errors.group && {error:true}}
             >
                 {groups.map((group) => (
                   <MenuItem key={group.id} value={group.name}>
@@ -126,7 +126,7 @@ const AddDeviceForm = () => {
 
                 
             </TextField>
-            {errors.grupa && <FormHelperText className="groupError" style={{color:"red"}}>{errors.grupa}</FormHelperText>} 
+            {errors.group && <FormHelperText className="groupError" style={{color:"red"}}>{errors.group}</FormHelperText>}
 
             <Button type = "submit" onClick={onClick} variant="contained">Dodaj mašinu</Button>
         </form>
