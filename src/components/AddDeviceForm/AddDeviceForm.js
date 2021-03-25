@@ -94,33 +94,33 @@ const AddDeviceForm = ({fieldValues}) => {
     const handleSubmit = (e) => {
         e.preventDefault()
         if(validate()) {
-            alert("Validno")
+            alert("Valid")
             setValues(initialValues)
         }
     }
 
     return (
         <form className={classes.root} onSubmit={handleSubmit}>
-            <TextField label="Naziv" name="name" value={values.name} onChange={handleInputChange}
+            <TextField label="Name" name="name" value={values.name} onChange={handleInputChange}
                        {...(errors.name && {error:true, helperText: errors.name})} />
 
-            <TextField label="Lokacija" name="location" value={values.location} onChange={handleInputChange}
+            <TextField label="Location" name="location" value={values.location} onChange={handleInputChange}
                        {...(errors.location && {error:true, helperText: errors.location})} />
 
-            <TextField label="Geografska širina" type='number' name="latitude" value={values.latitude} onChange={handleInputChange}
+            <TextField label="Latitude" type='number' name="latitude" value={values.latitude} onChange={handleInputChange}
                        {...(errors.latitude && {error:true, helperText: errors.latitude})}/>
 
-            <TextField label="Geografska visina" type='number' name="longitude" value={values.longitude} onChange={handleInputChange}
+            <TextField label="Longitude" type='number' name="longitude" value={values.longitude} onChange={handleInputChange}
                        {...(errors.longitude && {error:true, helperText: errors.longitude})}/>
 
-            <TextField label="Instalacijski kod" name="installationCode" value={values.installationCode} onChange={handleInputChange}
+            <TextField label="Installation code" name="installationCode" value={values.installationCode} onChange={handleInputChange}
                        {...(errors.installationCode && {error:true, helperText: errors.installationCode})}/>
 
             <TextField
                 select
                 name="group"
                 value={values.group}
-                label="Odaberite grupu"
+                label="Group"
                 onChange={handleInputChange}
                 {...(errors.group && {error:true, helperText: errors.group})}
             >
@@ -131,7 +131,9 @@ const AddDeviceForm = ({fieldValues}) => {
                 ))}
             </TextField>
 
-            <Button type = "submit" variant="contained">Dodaj mašinu</Button>
+            <Button type = "submit" variant="contained">
+                {fieldValues !== undefined ? "Create Machine" : "Edit Machine"}
+            </Button>
         </form>
     );
 }
