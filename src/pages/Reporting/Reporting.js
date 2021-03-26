@@ -25,8 +25,10 @@ const Reports = () => {
 
     const setData = async () => {
         const res = await request("https://si-2021.167.99.244.168.nip.io/api/group/MyAssignedGroups");
-        setGroups(res.data.data);
+        setGroups(res.data.data.subGroups); // Temp fix just to tech data
         setSelectedGroup(res.data.data[0]?.name)
+            
+        console.log(res.data.data);
     };
 
     useEffect(() => {
