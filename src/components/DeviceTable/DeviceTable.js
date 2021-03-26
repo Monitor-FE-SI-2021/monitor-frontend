@@ -1,6 +1,6 @@
 import CustomTable, { TableSlot } from '../CustomTable/CustomTable';
 import { useState } from "react";
-import { Delete } from "@material-ui/icons";
+import { CastConnected, Delete } from "@material-ui/icons";
 import dayjs from 'dayjs';
 
 const DeviceTable = ({ devices }) => {
@@ -8,6 +8,10 @@ const DeviceTable = ({ devices }) => {
 
     const deleteTableRow = (tableRow) => {
         console.log(tableRow);
+    }
+
+    const connectDevice = (tableRow) => {
+        console.log(tableRow)
     }
 
     const [tableFields, setTableFields] = useState([
@@ -31,6 +35,12 @@ const DeviceTable = ({ devices }) => {
             slot: 'lastTimeOnline'
         },
         {
+            name: 'connection',
+            title: 'Konekcija',
+            align: 'center',
+            slot: 'connection'
+        },
+        {
             name: 'actions',
             title: 'Akcije',
             width: '20%',
@@ -44,6 +54,7 @@ const DeviceTable = ({ devices }) => {
 
             <TableSlot slot='actions' render={dataRow => (
                 <Delete onClick={() => deleteTableRow(dataRow)}/>
+               /*  <Button onClick={( )=> connectDevice(dataRow)}/> */
             )}/>
 
             <TableSlot slot='lastTimeOnline' render={dataRow => (
@@ -55,7 +66,10 @@ const DeviceTable = ({ devices }) => {
             <TableSlot slot='status' render={dataRow => (
                 <span>{dataRow.status === true ? 'Online' : 'Offline'}</span>
             )}/>
-
+            
+            <TableSlot slot='connection' render={dataRow => (
+                <CastConnected onClick={() => connectDevice(dataRow)}/>
+            )}/>  
         </CustomTable>
     )
 }
