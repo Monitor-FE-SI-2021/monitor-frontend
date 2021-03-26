@@ -18,15 +18,17 @@ import './Reporting.scss';
 const Reports = () => {
     const [selectedFrequency, setSelectedFrequency] = useState(frequencies[0].name);
     const [selectedDateTime, setSelectedDateTime] = useState("");
-    const [selectedGroup, setSelectedGroup] = useState("");
+    const [selectedGroup, setSelectedGroup] = useState({group : null, parent: null});
     const [groups, setGroups] = useState([]);
     const [queryValue, setQueryValue] = useState("");
     const [title, setTitle] = useState("");
 
+
     const setData = async () => {
         const res = await request("https://si-2021.167.99.244.168.nip.io/api/group/MyAssignedGroups");
-        setGroups(res.data.data.subGroups); // Temp fix just to tech data
-        setSelectedGroup(res.data.data[0]?.name)
+        setGroups(res.data.data.subGroups);
+        setSelectedGroup({group : {name : null, subGroups : res.data.data.subGroups}, parent: null});
+        //setSelectedGroup(res.data.data[0]?.name)
             
         console.log(res.data.data);
     };
@@ -48,7 +50,8 @@ const Reports = () => {
     };
 
     const changeGroup = (event) => {
-        setSelectedGroup(event.target.value);
+        setSelectedGroup({group : event.target.value, parent : selectedGroup});
+        setGroups(event.target.value.subGroups);
     };
 
     const changeQuery = query => {
@@ -65,8 +68,17 @@ const Reports = () => {
         console.log("Final query: ", selectedFrequency, selectedDateTime, selectedGroup, queryValue);
         //console.log(formatQuery(queryValue, 'sql'));
         //console.log(formatQuery(queryValue, 'parametrised')); 
-        
     };
+
+    const groupBacktrack = e => {
+        if(selectedGroup.parent == null) return;
+        console.log("ima li undoooooooooo");
+        console.log("za njuuuuuuuuuuuuuuu");
+        var newGroups = selectedGroup.parent.group.subGroups;
+        console.log(selectedGroup);
+        setSelectedGroup(selectedGroup.parent);
+        setGroups(newGroups);
+    }
 
     return (
         <div className="reportingWrapper">
@@ -101,12 +113,17 @@ const Reports = () => {
                 </div>
 
                 <div className="inputWrapper">
-                    <InputLabel className="inputLabelWrapper" id="groupLabel"> Choose a group: </InputLabel>
+                    <InputLabel className="inputLabelWrapper" id="groupLabel"> Choose a {selectedGroup.parent == null ? "group" : "subgroup"} </InputLabel>
                     <Select className="select" labelId="groupLabel" value={selectedGroup} onChange={changeGroup}>
-                        {groups.map(el => <MenuItem key={el.groupId} value={el.name}> {el.name} </MenuItem>)}
+                        {groups.map(el => <MenuItem key={el.groupId} value={el}> {el.name} </MenuItem>)}
                     </Select>
                 </div>
                 
+                <div className="inputWrapper">
+                    <InputLabel className="inputLabelWrapper">{selectedGroup.parent == null ? "No group is selected" : "You selected the group: " + selectedGroup.group.name}</InputLabel>
+                    <Button onClick={groupBacktrack}>Undo</Button>
+                </div>
+
                 <div className="queryBuilderWrapper">
                     <h3 className="queryBuilderTitle"> What do you want in your report? </h3>
                     <QueryBuilder 
