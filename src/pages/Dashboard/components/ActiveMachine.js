@@ -9,6 +9,7 @@ function ActiveMachine(props) {
             </div>
             <div className="card-info">
             <h3>{props.name}</h3>
+            <p>{props.location}</p>
             <p>{props.info}</p>
             </div>
         </div>
