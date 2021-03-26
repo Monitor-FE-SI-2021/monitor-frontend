@@ -51,6 +51,27 @@ const DeviceGroup = ({ group,fetchDevicesForGroup, allGroups, allDevices }) => {
 
     let filteredDevices = getFilterDevices(group.devices);
 
+    filteredDevices = [
+        {
+            name: 'DESKTOP-1',
+            location: 'Sarajevo',
+            status: true,
+            lastTimeOnline: Date.now()
+        },
+        {
+            name: 'DESKTOP-2',
+            location: 'Goražde',
+            status: true,
+            lastTimeOnline: Date.now()
+        },
+        {
+            name: 'DESKTOP-3',
+            location: 'Bugojno',
+            status: true,
+            lastTimeOnline: Date.now()
+        }
+    ]
+
     if (subGroups.length === 0) {
         subGroups = null;
     }

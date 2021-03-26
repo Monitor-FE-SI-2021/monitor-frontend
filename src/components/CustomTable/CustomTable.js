@@ -34,6 +34,7 @@ export function TableSlot({ slot, render }) {
 export default function CustomTable({ data, fields, children }) {
 
     const [tableData, setTableData] = useState(data);
+    const [allData, setAllData] = useState(data);
     const [open, setOpen] = React.useState(false);
     const [filter, setFilter] = useState([]);
 
@@ -66,9 +67,22 @@ export default function CustomTable({ data, fields, children }) {
     }
 
     useEffect(() => {
-        console.log("TEST FILTER ");
-        //Funkciaj za filtriranje...
+        if(filter.length !== 0){
+            let oldData = JSON.parse(JSON.stringify(allData));
+            let newData = [];
+            for(let data of oldData){
+                if(filter[0] === true && data.status === true){
+                    newData.push(data);
+                } else if (filter[0] === false && data.status === false){
+                    newData.push(data);
+                }
+            }
+            setTableData(newData);
+        } else {
+            setTableData(allData);
+        }
     }, [filter]);
+
 
     const handleChange = (event) => {
         if(filter[0] === event.target.value) {
@@ -106,31 +120,31 @@ export default function CustomTable({ data, fields, children }) {
 
     return (
         <React.Fragment>
-            <FilterList onClick={handleOpen}/>
-                <FormControl >
-                    <Select
-                        labelId="demo-controlled-open-select-label"
-                        id="demo-controlled-open-select"
-                        open={open}
-                        onClose={handleClose}
-                        onOpen={handleOpen}
-                        value={filter}
-                        input={<Input />}
-                        onChange={handleChange}
-                    >
-                        <MenuItem value="" disabled>
-                            <em>Status</em>
-                        </MenuItem>
-                        <MenuItem value={true}>
-                            <Checkbox checked={filter.indexOf(true) > -1} />
-                            <ListItemText primary="Active" />
-                        </MenuItem>
-                        <MenuItem value={false}>
-                            <Checkbox checked={filter.indexOf(false) > -1} />
-                            <ListItemText primary="Inactive" />
-                        </MenuItem>
-                    </Select>
-                </FormControl>
+            <FilterList style={{float:'right', marginRight:'10px'}} onClick={handleOpen}/>
+            <FormControl style={{float:'right'}} >
+                <Select
+                    labelId="demo-controlled-open-select-label"
+                    id="demo-controlled-open-select"
+                    open={open}
+                    onClose={handleClose}
+                    onOpen={handleOpen}
+                    value={filter}
+                    input={<Input />}
+                    onChange={handleChange}
+                >
+                    <MenuItem value="" disabled>
+                        <em>Status</em>
+                    </MenuItem>
+                    <MenuItem value={true}>
+                        <Checkbox checked={filter.indexOf(true) > -1} />
+                        <ListItemText primary="Active" />
+                    </MenuItem>
+                    <MenuItem value={false}>
+                        <Checkbox checked={filter.indexOf(false) > -1} />
+                        <ListItemText primary="Inactive" />
+                    </MenuItem>
+                </Select>
+            </FormControl>
             <TableContainer component={Paper} className={'custom-table'}>
                 <Table className={classes.table}>
                     <TableHead>

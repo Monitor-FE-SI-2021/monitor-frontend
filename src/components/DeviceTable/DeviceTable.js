@@ -42,11 +42,6 @@ const DeviceTable = ({ devices }) => {
     )
 
 
-
-
-
-    //data={orderBy(tableData, this.state.columnToSort, this.state.sortDirection)}
-
     return (
         <CustomTable data={tableData}  fields={tableFields}>
             <TableSlot slot='actions' render={dataRow => (
