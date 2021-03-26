@@ -1,11 +1,16 @@
 import './DeviceGroup.scss';
 import DeviceTable from '../DeviceTable/DeviceTable';
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { connect } from "react-redux";
+import {fetchDevicesForGroup} from "../../store/modules/devices/actions";
 
-const DeviceGroup = ({ group, allGroups, allDevices }) => {
+const DeviceGroup = ({ group,fetchDevicesForGroup, allGroups, allDevices }) => {
 
     const [hidden, setHidden] = useState(true);
+
+    // useEffect(() => {
+    //     fetchDevicesForGroup(group.groupId)
+    // })
 
     const getSubGroups = (groups, groupId) => {
         const subGroups = [];
@@ -31,12 +36,20 @@ const DeviceGroup = ({ group, allGroups, allDevices }) => {
         return filteredDevices;
     }
 
-    let subGroups = getSubGroups(allGroups, group.groupId).map(subGroup => {
-        return <ConnectedDeviceGroup group={subGroup}
-                                     key={subGroup.groupId}/>
-    });
+    // let subGroups = getSubGroups(allGroups, group.groupId).map(subGroup => {
+    //     return <ConnectedDeviceGroup group={subGroup}
+    //                                  key={subGroup.groupId}/>
+    // });
 
-    let filteredDevices = getFilterDevices(allDevices);
+    console.log(group);
+    let subGroups = group.subGroups.map(subGroup => {
+        return <ConnectedDeviceGroup group={subGroup}
+                                          key={subGroup.groupId}/>
+    })
+
+    //let filteredDevices = getFilterDevices(devices);
+
+    let filteredDevices = getFilterDevices(group.devices);
 
     if (subGroups.length === 0) {
         subGroups = null;
@@ -71,6 +84,6 @@ const DeviceGroup = ({ group, allGroups, allDevices }) => {
 const ConnectedDeviceGroup = connect(state => ({
     allDevices: state.devices.devices,
     allGroups: state.groups.groups,
-}), {})(DeviceGroup);
+}), {fetchDevicesForGroup})(DeviceGroup);
 
 export default ConnectedDeviceGroup;

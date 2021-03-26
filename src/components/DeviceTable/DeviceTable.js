@@ -5,16 +5,8 @@ import dayjs from 'dayjs';
 import orderBy from "lodash/orderBy";
 
 
-const invertDirection = {
-    asc: "desc",
-    desc: "asc"
-  };
-
-
 const DeviceTable = ({ devices }) => {
     const [tableData, setTableData] = useState(devices);
-    const [columnToSort, setColumnToSort] = useState("");
-    const [sortDirection, setSortDirection] = useState("desc");
 
     const deleteTableRow = (tableRow) => {
         console.log(tableRow);
@@ -49,19 +41,14 @@ const DeviceTable = ({ devices }) => {
         }]
     )
 
-    const handleSort = columnName => {
-        this.setState(state => ({
-          columnToSort: columnName,
-          sortDirection:
-            state.columnToSort === columnName
-              ? invertDirection[state.sortDirection]
-              : "asc"
-        }));
-    };
+
+
+
+
+    //data={orderBy(tableData, this.state.columnToSort, this.state.sortDirection)}
 
     return (
-        <CustomTable data={orderBy(tableData, this.state.columnToSort, this.state.sortDirection)} fields={tableFields}>
-            handleSort={this.handleSort}
+        <CustomTable data={tableData}  fields={tableFields}>
             <TableSlot slot='actions' render={dataRow => (
                 <Delete onClick={() => deleteTableRow(dataRow)}/>
             )}/>
