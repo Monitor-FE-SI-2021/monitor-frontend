@@ -138,14 +138,19 @@ const Dashboard = ({ user }) => {
         return existingMachine
     })
 
-
     return (
         <div className='page'>
             <div className='dashboard'>
                 <div className='row machine-cards'>
                     <h1>List of active machines</h1>
                     <div className='scrollable'>
-                        {activeMachines.map(createActiveMachineCard)}
+                        { activeMachines.map((machine, id) => (
+                            <ActiveMachine
+                                key={id}
+                                data={machine}
+                                img={MachineIcon}
+                            />
+                        )) }
                     </div>
                 </div>
 
@@ -162,21 +167,6 @@ const Dashboard = ({ user }) => {
         </div>
     );
 }
-
-
-function createActiveMachineCard(machine) {
-    return (
-        <ActiveMachine
-            key={machine.deviceId}
-            img={MachineIcon}
-            name={machine.name}
-            location={machine.location}
-            info={new Date(machine.lastTimeOnline).toGMTString()}
-            machine={machine}
-        />
-    );
-}
-
 
 export default connect(state => ({
     user: state.login.user,
