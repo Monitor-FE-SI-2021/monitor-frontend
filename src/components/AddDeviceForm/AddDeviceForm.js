@@ -41,7 +41,7 @@ const AddDeviceForm = ({fieldValues}) => {
     const classes = useStyles();
 
     // initial values for when the form isn't opened in edit mode
-    let initialValues = {
+    const initialValues = {
         name: "",
         location: "",
         latitude: "",
@@ -80,7 +80,7 @@ const AddDeviceForm = ({fieldValues}) => {
     // if the form is opened in edit mode we shall obtain the passed values
     const getInitialValues = () => {
         if (fieldValues !== undefined)
-            initialValues = fieldValues
+            return fieldValues
         return initialValues
     }
 
@@ -98,8 +98,13 @@ const AddDeviceForm = ({fieldValues}) => {
     const handleSubmit = (e) => {
         e.preventDefault()
         if(validate()) {
-            alert("Valid")
-            setValues(initialValues)
+            if (fieldValues === undefined) {
+                alert("Created machine successfully!")
+                setValues(initialValues)
+            }
+            else {
+                alert("Edited machine successfully!")
+            }
         }
     }
 
