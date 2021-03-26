@@ -29,13 +29,13 @@ const ActiveMachine = ({ data, img }) => {
             </div>
 
             { terminalOpen && (
-                <NewWindow>
+                <NewWindow onUnload={() => setTerminalOpen(false)}>
                     <Terminal machine={data} />
                 </NewWindow>
             ) }
 
             { remoteControlOpen && (
-                <NewWindow>
+                <NewWindow onUnload={() => setRemoteControlOpen(false)}>
                     <RemoteControl machine={data} />
                 </NewWindow>
             ) }
