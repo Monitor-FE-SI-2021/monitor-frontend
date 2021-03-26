@@ -1,6 +1,7 @@
 import React from 'react';
 import './FileManagerTable.css';
 import RenamePopup from "../Popups/RenapePopup";
+import DeletePopup from "../Popups/DeletePopup";
 
 class FileManagerTable extends React.Component {
     constructor(props) {
@@ -52,13 +53,22 @@ class FileManagerTable extends React.Component {
                     fileName: "Sprint 1",
                     link: 'treciLink'
                 }
-            ], showPopup: false, globalId: -1
+            ], showRenamePopup: false, showDeletePopup: false, globalId: -1
         }
     }
 
-    togglePopup(resetId) {
+    toggleRenamePopup(resetId) {
         this.setState({
-            showPopup: !this.state.showPopup
+            showRenamePopup: !this.state.showRenamePopup
+        });
+        if(resetId) {
+            this.state.globalId = -1;
+        }
+    }
+
+    toggleDeletePopup(resetId) {
+        this.setState({
+            showDeletePopup: !this.state.showDeletePopup
         });
         if(resetId) {
             this.state.globalId = -1;
@@ -66,13 +76,18 @@ class FileManagerTable extends React.Component {
     }
 
     sendChangeRequest() {
-        let formField = document.getElementsByClassName('wrapper')[0].children[0].value;
+        let formField = document.getElementsByClassName('rename-wrapper')[0].children[0].value;
         if(formField.length === 0) {
             console.log("Ne možete poslati prazan string!")
         } else {
             console.log("Naziv: " + formField + ", ID: " + this.state.globalId);
         }
-        this.togglePopup(true);
+        this.toggleRenamePopup(true);
+    }
+
+    sendDeleteRequest() {
+        console.log("Delete, ID: " + this.state.globalId);
+        this.toggleDeletePopup(true);
     }
 
     renderTableHeader() {
@@ -104,13 +119,13 @@ class FileManagerTable extends React.Component {
     }
 
     handleDelete(id) {
-        console.log("Delete file with id " + id);
+        this.state.globalId = id;
+        this.toggleDeletePopup(false);
     }
 
     handleRename(id) {
         this.state.globalId = id;
-        this.togglePopup(false);
-        console.log("rename " + id);
+        this.toggleRenamePopup(false);
     }
 
 
@@ -123,14 +138,21 @@ class FileManagerTable extends React.Component {
                         {this.renderTableData()}
                     </tbody>
                 </table>
-                {this.state.showPopup ?
+                {this.state.showRenamePopup ?
                     <RenamePopup className="popup"
-                        text='Click "Close Button" to hide popup'
-                        closePopupButton={this.togglePopup.bind(this)}
+                        closePopupButton={this.toggleRenamePopup.bind(this)}
                            changeName={this.sendChangeRequest.bind(this)}
                     />
                     : null
                 }
+                {this.state.showDeletePopup ?
+                    <DeletePopup className="popup"
+                        closeDeletePopupButton={this.toggleDeletePopup.bind(this)}
+                           changeName={this.sendDeleteRequest.bind(this)}
+                    />
+                    : null
+                }
+                
             </div>
         )
     }

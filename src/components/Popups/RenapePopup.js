@@ -7,8 +7,8 @@ class RenamePopup extends React.Component {
             <div className='popup'>
                 <div className='popup-inner'>
                     <div className="upper-button"><button onClick={this.props.closePopupButton}>x</button></div>
-                    <div className="wrapper"><input type="text"/></div>
-                    <div className="wrapper"><button onClick={this.props.changeName}>Promijeni naziv</button></div>
+                    <div className="rename-wrapper"><input type="text"/></div>
+                    <div className="rename-wrapper"><button onClick={this.props.changeName}>Promijeni naziv</button></div>
                 </div>
             </div>
         );

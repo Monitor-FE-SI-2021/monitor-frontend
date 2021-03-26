@@ -14,45 +14,31 @@
     position: absolute;
     left: 40%;
     right: 40%;
-    top: 30%;
-    bottom: 30%;
+    top: 40%;
+    bottom: 45%;
     margin: auto;
     padding: 20px;
     display: flex;
-    flex-direction: column;
     border-radius: 20px;
     background: white;
     min-width: 300px;
-    min-height: 120px;
 }
 
-input {
-    line-height: 30px;
-    font-size: 18px;
-    margin-bottom: 10px;
-    width: 60%;
-}
-
-.rename-wrapper {
-    width: 100%;
+.wrapper {
+    width: 50%;
     text-align: center;
 }
 
-.rename-wrapper > button {
+.wrapper > button {
     align-content: center;
     width: 60%;
+    cursor: pointer;
     border: 1px solid #3f3f3f;
     border-radius: 10px;
-    cursor: pointer;
+    text-transform: uppercase;
 }
 
-.upper-button > button {
-    width: 0;
-    height: 0;
-    right: 25px;
-    top: 10px;
-    position: absolute;
-    background-color: transparent;
-    border: none;
-    font-size: 1.5em;
+.inner-wrapper {
+    display: flex;
+    flex-direction: row;
 }
