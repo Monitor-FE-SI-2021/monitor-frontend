@@ -2,7 +2,7 @@ import { connect } from "react-redux";
 import React, { useState } from "react";
 import "./RemoteControl.css";
 import Tabs from "../../components/Tabs/Tabs";
-import "react-dropdown/style.css";
+// import "react-dropdown/style.css";
 import { Route, useParams } from "react-router-dom";
 
 const RemoteControl = (props) => {

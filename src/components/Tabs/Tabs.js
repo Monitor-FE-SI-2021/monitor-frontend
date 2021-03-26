@@ -7,6 +7,7 @@ import { useDropzone } from "react-dropzone";
 import React, { useCallback } from "react";
 import Swal from "sweetalert2";
 import { Route, Switch, useParams } from "react-router";
+import FileManagerTable from "../FileManagerTable/FileManagerTable";
 
 const Tabs = (props) => {
   const machines = ["DESKTOP-SCC", "DESKTOP-SCC3", "DESKTOP-SCC5"];
@@ -139,6 +140,7 @@ const Tabs = (props) => {
             tab === "filemanager" ? "content  active-content" : "content"
           }
         >
+          <FileManagerTable></FileManagerTable>
           <div className="uploadArea">
             <div {...getRootProps({ style })}>
               <input {...getInputProps()} />
