@@ -1,6 +1,7 @@
 import { connect } from "react-redux";
 import React, { useState, useEffect } from 'react';
 import QueryBuilder from 'react-querybuilder';
+import { formatQuery } from 'react-querybuilder';
 
 import request from "../../service";
 
@@ -60,6 +61,9 @@ const Reports = () => {
     const submitReportForm = e => {
         e.preventDefault();
         console.log("Final query: ", selectedFrequency, selectedDateTime, selectedGroup, queryValue);
+        //console.log(formatQuery(queryValue, 'sql'));
+        //console.log(formatQuery(queryValue, 'parametrised')); 
+        
     };
 
     return (
@@ -107,7 +111,8 @@ const Reports = () => {
                         title="reportBuilder"
                         fields={fields}
                         onQueryChange={changeQuery}
-                        combinators={devices}
+                        showNotToggle={true}
+                        //combinators={devices}
                     />
                 </div>
 
