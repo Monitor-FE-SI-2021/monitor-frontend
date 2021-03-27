@@ -4,7 +4,18 @@ import UseOnEnter from "./components/UseOnEnter";
 import MapConsoleOutput from "./components/MapConsoleOutput";
 import './terminal.scss'
 //merge
+import firebase from 'firebase/app'
+import 'firebase/firestore'
+import HistoryLogs from "./components/SavedLogs"
 
+firebase.initializeApp({
+    apiKey: "AIzaSyB71JM4NoSKQX57Hn8ObOCGA8tOjtHJG_Q",
+    authDomain: "monitor-6194b.firebaseapp.com",
+    projectId: "monitor-6194b",
+    storageBucket: "monitor-6194b.appspot.com",
+    messagingSenderId: "706187243221",
+    appId: "1:706187243221:web:e563e287d01a93afcf3c5c"
+})
 var counterOfSavedLogs = 0;
 
 const Terminal = () => {
@@ -45,6 +56,7 @@ const Terminal = () => {
     return (
         <div className="page">
             <div className={'terminal'}>
+                <HistoryLogs/>
                 <MapConsoleOutput consoleOutput={consoleOutput} updateConsoleOutput={updateConsoleOutput} token={token}/>
                 <div className="input-prompt">
                     <Prompt/>
