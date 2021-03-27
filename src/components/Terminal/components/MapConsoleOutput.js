@@ -42,7 +42,9 @@ const MapConsoleOutput = ({ consoleOutput, updateConsoleOutput, token }) => {
                         token = res.token;
                         const clone = [...consoleOutput]
                         clone[clone.length - 1] = res.message;
-                        updateConsoleOutput(clone)
+                        if(clone != "" || clone != null)
+                            updateConsoleOutput(clone)
+                        else updateConsoleOutput("Server Response error")
                         updateNewLog(clone, "DESKTOP-SCC")
                     }).catch(function (e) {
                     console.log(e)
@@ -68,7 +70,7 @@ const MapConsoleOutput = ({ consoleOutput, updateConsoleOutput, token }) => {
                     return (
                         <div key={index}>
                             <Prompt/>
-                            <span>{item}</span>
+                            <span>{item || 'Server Response error'}</span>
                         </div>
                     )
                 }

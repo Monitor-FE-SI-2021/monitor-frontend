@@ -11,4 +11,7 @@ export default function addNewLog(log, comp_name) {
                 response: log.response,
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             })
+        .catch((error) => {
+            console.log("Error adding documents: ", error);
+        });
 }
