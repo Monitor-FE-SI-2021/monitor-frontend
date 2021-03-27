@@ -36,14 +36,14 @@ export default function EditDevice({data}) {
                     </a>
                     <div className="header"> Ažuriranje mašine </div>
                     <div className="content">
-                        <form>
+                        <form className="forma">
                             <TextField label="Naziv" name="naziv" defaultValue={data.name} onChange={handleInputChange} />
                             <br></br>
                             <TextField label="Lokacija" name="lokacija" defaultValue={data.location} onChange={handleInputChange} />
                             <br></br>
-                            <Button type = "submit" onClick={onClick} variant="contained">Ažuriraj</Button>
                             <br></br>
-                            <Button onClick={() => {close();}} variant="contained">Odustani</Button>
+                            <Button type = "submit" onClick={onClick} className="button1" variant="contained">Ažuriraj</Button>
+                            <Button className="button2" onClick={() => {close();}} variant="contained">Odustani</Button>
                         </form> 
                     </div>
                 </div>
