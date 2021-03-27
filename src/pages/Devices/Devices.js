@@ -98,7 +98,7 @@ const Devices = ({ allGroups, fetchAllDevices, fetchAllGroups, push, devicesAsyn
     const rootGroups = getRootGroups(allGroups).map((grupa) => {
         return (
             <DeviceGroup group={grupa}
-                         key={grupa.groupId}/>
+                         key={grupa.groupId} push={push}/>
         );
     });
 

@@ -3,11 +3,10 @@ import CustomTable, { TableSlot } from '../CustomTable/CustomTable';
 import { useState } from "react";
 import dayjs from 'dayjs';
 import { Edit } from "@material-ui/icons";
-import orderBy from "lodash/orderBy";
-import EditDevice from "../EditDevice/EditDevice.js";
+import { RouteLink } from "../../store/modules/menu/menu";
 
 
-const DeviceTable = ({ devices }) => {
+const DeviceTable = ({ devices, push }) => {
     const [tableData, setTableData] = useState(devices);
 
     const editTableRow = (tableRow) => {
@@ -47,7 +46,9 @@ const DeviceTable = ({ devices }) => {
         <CustomTable data={tableData} fields={tableFields}>
 
             <TableSlot slot='actions' render={dataRow => (
-                <EditDevice data={dataRow}/>
+                <Edit onClick={() => {
+                    push(RouteLink.AddDevice)
+                }}/>
             )}/>
 
             <TableSlot slot='lastTimeOnline' render={dataRow => (

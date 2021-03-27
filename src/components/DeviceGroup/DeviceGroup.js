@@ -81,7 +81,7 @@ import React, {useEffect, useState} from 'react';
 import { connect } from "react-redux";
 import {fetchDevicesForGroup} from "../../store/modules/devices/actions";
 
-const DeviceGroup = ({ group,fetchDevicesForGroup, allGroups, allDevices }) => {
+const DeviceGroup = ({ group,fetchDevicesForGroup, allGroups, allDevices, push}) => {
 
     const [hidden, setHidden] = useState(true);
 
@@ -158,7 +158,7 @@ const DeviceGroup = ({ group,fetchDevicesForGroup, allGroups, allDevices }) => {
 
     if (!hidden) {
         data = <React.Fragment>
-            {filteredDevices.length !== 0 ? <DeviceTable devices={filteredDevices}/> : null}
+            {filteredDevices.length !== 0 ? <DeviceTable devices={filteredDevices}  push={push}/> : null}
             {subGroups}
         </React.Fragment>
     }
