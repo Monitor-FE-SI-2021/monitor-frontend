@@ -3,6 +3,7 @@ import addNewLog from "./SaveLogToFirebase";
 
 var token;
 
+const config = require('../config');
 const commands = {
   cd: 1,
   clear: 0,
@@ -31,11 +32,11 @@ const UseOnEnter = () => {
     const requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: 'whoso@whoso.com', password:  'sifra123'})
+      body: JSON.stringify({ email: config.email, password:  config.password})
   };
 
   try {
-      var response = await fetch('http://167.99.244.168:3333/login', requestOptions);
+      var response = await fetch(config.url, requestOptions);
      //console.log(response.status)
       
       //console.log(x);

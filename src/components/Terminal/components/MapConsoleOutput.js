@@ -2,6 +2,7 @@ import React from "react";
 import Prompt from "./Prompt";
 import request, { wsEndpoint } from "../../../service";
 import updateNewLog from "./UpdateLogInFirebase";
+import config from "../config";
 
 const MapConsoleOutput = ({ consoleOutput, updateConsoleOutput, token }) => {
 
@@ -32,7 +33,7 @@ const MapConsoleOutput = ({ consoleOutput, updateConsoleOutput, token }) => {
                     },
                     body: JSON.stringify({
                         "name": "DESKTOP-SCC",
-                        "keepAlive": 5,
+                        "keepAlive": config.keepAlive,
                         "location": "Sarajevo - SCC",
                         command: command
                     })

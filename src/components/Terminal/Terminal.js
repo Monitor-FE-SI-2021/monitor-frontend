@@ -7,14 +7,14 @@ import './terminal.scss'
 import firebase from 'firebase/app'
 import 'firebase/firestore'
 import HistoryLogs from "./components/SavedLogs"
-
+const config = require('./config');
 firebase.initializeApp({
-    apiKey: "AIzaSyB71JM4NoSKQX57Hn8ObOCGA8tOjtHJG_Q",
-    authDomain: "monitor-6194b.firebaseapp.com",
-    projectId: "monitor-6194b",
-    storageBucket: "monitor-6194b.appspot.com",
-    messagingSenderId: "706187243221",
-    appId: "1:706187243221:web:e563e287d01a93afcf3c5c"
+    apiKey: config.apiKey,
+    authDomain: config.authDomain,
+    projectId: config.projectId,
+    storageBucket: config.storageBucket,
+    messagingSenderId: config.messagingSenderId,
+    appId: config.appId
 })
 var counterOfSavedLogs = 0;
 
