@@ -22,8 +22,6 @@ const Terminal = () => {
 
     const inputText = React.useRef();
 
-    // const result = SavedLogs("DESKTOP-SCC");
-
     const [consoleOutput, savedLogs, counter, onEnter, updateConsoleOutput, token] = UseOnEnter();
 
     counterOfSavedLogs = counter;
