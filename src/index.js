@@ -7,6 +7,7 @@ import store, { history } from './store/store'
 import { Route, Switch } from 'react-router-dom';
 import Layout from "./components/Layout/Layout";
 import Login from "./pages/Login/Login";
+import ForgotPassword from "./pages/Login/ForgotPassword";
 import { STORAGE_KEY } from "./utils/consts";
 import { RouteLink } from "./store/modules/menu/menu";
 import { getMe } from "./store/modules/login/login";
@@ -18,6 +19,11 @@ const App = ({ user, getMe, push }) => {
         const route = window.location.pathname;
 
         const token = localStorage.getItem(STORAGE_KEY);
+
+        if(route == RouteLink.ForgotPassword) {
+            console.log("kdjaw");
+            return;
+        }
 
         if (!token) {
             history.push(RouteLink.Login);
@@ -36,6 +42,7 @@ const App = ({ user, getMe, push }) => {
         <div id='app'>
             <Switch>
                 <Route path='/login' component={Login}/>
+                <Route path={RouteLink.ForgotPassword} component={ForgotPassword}/>
                 <Route path='/' component={Layout}/>
             </Switch>
         </div>

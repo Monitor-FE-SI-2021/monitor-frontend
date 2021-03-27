@@ -2,9 +2,14 @@ import React from 'react';
 import './Login.css';
 import { connect } from "react-redux";
 import { doLogin } from "../../store/modules/login/login";
+import { RouteLink } from "../../store/modules/menu/menu";
+import { push } from "connected-react-router";
 
 function Login({ doLogin }) {
 
+    const switchRoute = (link) => {
+        push(link);
+    };
 
     const initialFormData = {
         email: "",
@@ -34,6 +39,13 @@ function Login({ doLogin }) {
         })
     };
 
+    const handleForgot = (e) => {
+
+        e.preventDefault();
+        switchRoute(RouteLink.ForgotPassword);
+        console.log("lasdj");
+    };
+
     return (
         <div className="formDiv">
             <form id="login-form">
@@ -43,7 +55,8 @@ function Login({ doLogin }) {
                        placeholder="Password"
                        value={formData.password}
                        onChange={handleChange}/>
-                <input type="submit" value="LOG IN" onClick={handleSubmit}/>
+                <input id = "submitButton" type="submit" value="LOG IN" onClick={handleSubmit}/>
+                <input id = "forgotPasswordButton" type="submit" value="Forgot password?" onClick={handleForgot}/>
             </form>
         </div>
     );

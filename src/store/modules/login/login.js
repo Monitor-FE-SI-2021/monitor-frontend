@@ -6,6 +6,7 @@ export const SET_USER = 'SET_USER';
 export const SET_LOGIN_ASYNC = 'SET_LOGIN_ASYNC';
 export const SET_USER_ASYNC = 'SET_USER_ASYNC';
 
+
 const initialState = {
     loginAsync: false,
     userAsync: false,
