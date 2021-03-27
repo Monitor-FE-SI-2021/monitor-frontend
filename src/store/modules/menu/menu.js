@@ -7,8 +7,7 @@ export const RouteLink = {
     Reporting: "/reporting",
     AddDevice: '/manage-device',
     Terminal: '/terminal',
-    RemoteControl: '/remotecontrol',
-    ForgotPassword: '/forgot-password'
+    RemoteControl: '/remotecontrol'
 }
 
 const initialState = {

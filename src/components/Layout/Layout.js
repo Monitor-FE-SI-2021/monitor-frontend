@@ -9,6 +9,7 @@ import Dashboard from "../../pages/Dashboard/Dashboard";
 import Reporting from "../../pages/Reporting/Reporting";
 import AddDevice from "../../pages/AddDevices/AddDevice";
 import ForgotPassword from "../../pages/Login/ForgotPassword";
+import PasswordReset from "../../pages/Login/PasswordReset";
 import Terminal from "../Terminal/Terminal";
 import RemoteControl from "../../pages/RemoteControl/RemoteControl"
 import { Spinner } from "../Spinner/Spinner";
@@ -34,7 +35,6 @@ const Layout = ({ isMenuExpanded, loginAsync, userAsync, user }) => {
                     <Route path={RouteLink.Reporting} component={Reporting}/>
                     <Route path={RouteLink.AddDevice} component={AddDevice}/>
                     <Route path={RouteLink.Terminal} component={Terminal}/>
-                    <Route path={RouteLink.ForgotPassword} component={ForgotPassword}/>
                     <Route path={RouteLink.RemoteControl} component={RemoteControl}/>
                 </Switch>
             </div>
