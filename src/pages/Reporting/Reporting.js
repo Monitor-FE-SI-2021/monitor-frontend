@@ -27,7 +27,7 @@ const Reports = () => {
     const setData = async () => {
         const res = await request("https://si-2021.167.99.244.168.nip.io/api/group/MyAssignedGroups");
         setGroups(res.data.data.subGroups);
-        setSelectedGroup({group : {name : null, subGroups : res.data.data.subGroups}, parent: null});
+        setSelectedGroup({group : res.data.data, parent: null});
         //setSelectedGroup(res.data.data[0]?.name)
             
         console.log(res.data.data);
@@ -50,6 +50,7 @@ const Reports = () => {
     };
 
     const changeGroup = (event) => {
+        if(event.target.value == null) {console.log("yeet");return;}
         setSelectedGroup({group : event.target.value, parent : selectedGroup});
         setGroups(event.target.value.subGroups);
     };
@@ -66,8 +67,7 @@ const Reports = () => {
     const submitReportForm = e => {
         e.preventDefault();
         console.log("Final query: ", selectedFrequency, selectedDateTime, selectedGroup, queryValue);
-        //console.log(formatQuery(queryValue, 'sql'));
-        //console.log(formatQuery(queryValue, 'parametrised')); 
+        console.log("( " + formatQuery(queryValue, 'sql') + " ) and groupId = " + selectedGroup.group.groupId);
     };
 
     const groupBacktrack = e => {
