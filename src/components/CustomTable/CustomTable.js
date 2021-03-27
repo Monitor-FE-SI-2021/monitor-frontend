@@ -12,6 +12,7 @@ import DownArrow from '@material-ui/icons/ArrowDropDown';
 import FilterList from '@material-ui/icons/FilterList'
 import { getDeepProp } from "../../utils/utils";
 import {Checkbox, FormControl, Input, ListItemText, MenuItem, Select} from "@material-ui/core";
+import {If, Then} from 'react-if';
 
 const useStyles = makeStyles({
     table: {
@@ -38,6 +39,7 @@ export default function CustomTable({ data, fields, children }) {
     const [open, setOpen] = React.useState(false);
     const [filter, setFilter] = useState([]);
 
+    
     const handleClose = () => {
         setOpen(false);
     };
@@ -121,30 +123,34 @@ export default function CustomTable({ data, fields, children }) {
     return (
         <React.Fragment>
             <FilterList style={{float:'right', marginRight:'10px'}} onClick={handleOpen}/>
-            <FormControl style={{float:'right'}} >
-                <Select
-                    labelId="demo-controlled-open-select-label"
-                    id="demo-controlled-open-select"
-                    open={open}
-                    onClose={handleClose}
-                    onOpen={handleOpen}
-                    value={filter}
-                    input={<Input />}
-                    onChange={handleChange}
-                >
-                    <MenuItem value="" disabled>
-                        <em>Status</em>
-                    </MenuItem>
-                    <MenuItem value={true}>
-                        <Checkbox checked={filter.indexOf(true) > -1} />
-                        <ListItemText primary="Active" />
-                    </MenuItem>
-                    <MenuItem value={false}>
-                        <Checkbox checked={filter.indexOf(false) > -1} />
-                        <ListItemText primary="Inactive" />
-                    </MenuItem>
-                </Select>
-            </FormControl>
+            <If condition={open === true || filter.length > 0}>
+                <Then>
+                <FormControl style={{float:'right'}} >
+                    <Select
+                        labelId="demo-controlled-open-select-label"
+                        id="demo-controlled-open-select"
+                        open={open}
+                        onClose={handleClose}
+                        onOpen={handleOpen}
+                        value={filter}
+                        input={<Input />}
+                        onChange={handleChange}
+                    >
+                        <MenuItem value="" disabled>
+                            <em>Status</em>
+                        </MenuItem>
+                        <MenuItem value={true}>
+                            <Checkbox checked={filter.indexOf(true) > -1} />
+                            <ListItemText primary="Active" />
+                        </MenuItem>
+                        <MenuItem value={false}>
+                            <Checkbox checked={filter.indexOf(false) > -1} />
+                            <ListItemText primary="Inactive" />
+                        </MenuItem>
+                    </Select>
+                </FormControl>
+                </Then>
+                </If>
             <TableContainer component={Paper} className={'custom-table'}>
                 <Table className={classes.table}>
                     <TableHead>
@@ -157,7 +163,7 @@ export default function CustomTable({ data, fields, children }) {
                                         <span>{field.title}</span>
                                         {field.name === 'location' || field.name === 'name' ?
                                             <div style={{ display: "flex", alignItems: "center", flexDirection: "column"}}>
-                                                <UpArrow onClick={() => handleSort(field.name,"asc")}/>
+                                                <UpArrow onClick={() => {handleSort(field.name,"asc")}} />
                                                 <DownArrow onClick={() => handleSort(field.name,"desc")}/>
                                             </div>
                                             : null
