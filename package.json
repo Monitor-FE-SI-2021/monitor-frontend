@@ -24,6 +24,7 @@
     "react-scripts": "4.0.3",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
+    "sweetalert2": "^10.15.7",
     "typeface-roboto": "^1.1.13",
     "web-vitals": "^1.0.1"
   },

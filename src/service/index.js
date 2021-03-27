@@ -2,6 +2,7 @@ import axios from "axios";
 import { STORAGE_KEY } from "../utils/consts";
 import { history } from "../store/store";
 import { merge } from "lodash";
+import { showSwalToast } from "../utils/utils";
 
 export const endpoint = 'http://si-2021.167.99.244.168.nip.io/api';
 export const wsEndpoint = 'http://si-grupa5.herokuapp.com/api';
@@ -42,13 +43,20 @@ const request = async (
     return new Promise((resolve, reject) => {
         return axios.request(fullConfig)
             .then(r => {
-                console.log(r);
                 resolve(r);
             })
             .catch(ex => {
-                if (ex.status === 401) {
+
+                const response = ex.response;
+
+                if (response.status === 401) {
                     removeAllData();
                 }
+
+                const errMessage = response?.data?.message || response?.data?.title || response?.statusText;
+
+                showSwalToast(errMessage)
+
                 reject(ex);
             })
     });
