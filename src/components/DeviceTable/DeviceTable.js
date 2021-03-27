@@ -2,6 +2,8 @@ import CustomTable, { TableSlot } from '../CustomTable/CustomTable';
 import { useState } from "react";
 import { Delete } from "@material-ui/icons";
 import dayjs from 'dayjs';
+import orderBy from "lodash/orderBy";
+
 
 const DeviceTable = ({ devices }) => {
     const [tableData, setTableData] = useState(devices);
@@ -9,7 +11,7 @@ const DeviceTable = ({ devices }) => {
     const deleteTableRow = (tableRow) => {
         console.log(tableRow);
     }
-
+    
     const [tableFields, setTableFields] = useState([
         {
             name: 'name',
@@ -36,12 +38,12 @@ const DeviceTable = ({ devices }) => {
             width: '20%',
             align: 'right',
             slot: 'actions'
-        }
-    ])
+        }]
+    )
+
 
     return (
-        <CustomTable data={tableData} fields={tableFields}>
-
+        <CustomTable data={tableData}  fields={tableFields}>
             <TableSlot slot='actions' render={dataRow => (
                 <Delete onClick={() => deleteTableRow(dataRow)}/>
             )}/>
