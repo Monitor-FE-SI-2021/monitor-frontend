@@ -34,6 +34,25 @@
         }
     }
 
+    .search {
+        margin-top: 2.5%;
+        margin-left: 25%;
+        margin-right: 25%;
+        text-indent: 5px;
+        font-size: 12.6pt;
+        border-radius: 5px;
+        border: solid 1.5px #030000;
+        -webkit-transition: 1s; /* Safari */
+        transition: 1s;
+      }
+      input[type=text]:hover{
+        box-shadow: 0 0 5pt 0.2pt #030000;
+      }
+      input[type=text]:focus {
+        box-shadow: 0 0 5pt 2pt #030000;
+        outline-width: 0px;
+      }
+
     .group {
 
         .tab {

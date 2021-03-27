@@ -24,10 +24,11 @@ const getRootGroups = (groups) => {
     return parentGroups
 }
 
-const Devices = ({ allGroups, fetchAllDevices, fetchAllGroups, push, devicesAsync, groupsAsync }) => {
+const Devices = ({ allDevices, allGroups, fetchAllDevices, fetchAllGroups, push, devicesAsync, groupsAsync }) => {
 
     const async = devicesAsync || groupsAsync;
 
+    
     useEffect(() => {
         fetchAllDevices();
         fetchAllGroups();
@@ -40,17 +41,25 @@ const Devices = ({ allGroups, fetchAllDevices, fetchAllGroups, push, devicesAsyn
         );
     });
 
+
     return (
         <div className="page devices">
             <div className="top">
                 <h1> Pregled mašina </h1>
                 <button className="create" onClick={() => push(RouteLink.AddDevice)}>Kreiraj mašinu</button>
             </div>
+            <input id='searchInput' className='search' type='text' placeholder='Search..' onChange={searchDevice}></input>
             <div className={'groups-list'}>
                 {async ? <Spinner color={'inherit'}/> : rootGroups}
             </div>
         </div>
     );
+    function searchDevice(){
+        var search = document.getElementById('searchInput').value
+        if(search.length>=3){
+        allDevices = allDevices.filter(device =>device.name.includes(search))
+        }
+    };
 };
 
 export default connect((state) => ({
@@ -59,3 +68,4 @@ export default connect((state) => ({
     devicesAsync: state.devices.async,
     groupsAsync: state.groups.async
 }), { fetchAllDevices, fetchAllGroups, push })(Devices);
+
