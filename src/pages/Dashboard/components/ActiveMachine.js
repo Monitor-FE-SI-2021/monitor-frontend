@@ -5,13 +5,13 @@ import Avatar from './MachineAvatar.js';
 import Terminal from '../../../components/Terminal/Terminal';
 import RemoteControl from '../../RemoteControl/RemoteControl';
 
-const ActiveMachine = ({ data, img }) => {
+const ActiveMachine = ({ data, img, fun, set }) => {
     const [terminalOpen, setTerminalOpen] = useState(false);
     const [remoteControlOpen, setRemoteControlOpen] = useState(false);
 
     return (
         <>
-            <div className='card'>
+            <div className='card' onFocus={console.log("RADI")}>
                 <div className='card-img'>
                     <Avatar img={img} />
                 </div>
@@ -25,6 +25,9 @@ const ActiveMachine = ({ data, img }) => {
                 <div className='card-actions'>
                     <button onClick={() => setTerminalOpen(true)}>Terminal</button>
                     <button onClick={() => setRemoteControlOpen(true)}>Remote Control</button>
+                    <button onClick={() => {
+                        fun(data)
+                    }}>Disconnect</button>
                 </div>
             </div>
 
