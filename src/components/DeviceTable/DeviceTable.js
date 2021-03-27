@@ -54,7 +54,6 @@ const DeviceTable = ({ devices }) => {
 
             <TableSlot slot='actions' render={dataRow => (
                 <Delete onClick={() => deleteTableRow(dataRow)}/>
-               /*  <Button onClick={( )=> connectDevice(dataRow)}/> */
             )}/>
 
             <TableSlot slot='lastTimeOnline' render={dataRow => (
