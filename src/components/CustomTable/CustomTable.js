@@ -12,7 +12,6 @@ import DownArrow from '@material-ui/icons/ArrowDropDown';
 import FilterList from '@material-ui/icons/FilterList'
 import { getDeepProp } from "../../utils/utils";
 import {Checkbox, FormControl, Input, ListItemText, MenuItem, Select} from "@material-ui/core";
-import {If, Then} from 'react-if';
 
 const useStyles = makeStyles({
     table: {
@@ -123,8 +122,7 @@ export default function CustomTable({ data, fields, children }) {
     return (
         <React.Fragment>
             <FilterList style={{float:'right', marginRight:'10px'}} onClick={handleOpen}/>
-            <If condition={open === true}>
-                <Then>
+            {open ? 
                 <FormControl style={{float:'right'}} >
                     <Select
                         labelId="demo-controlled-open-select-label"
@@ -149,8 +147,7 @@ export default function CustomTable({ data, fields, children }) {
                         </MenuItem>
                     </Select>
                 </FormControl>
-                </Then>
-                </If>
+            : null}
             <TableContainer component={Paper} className={'custom-table'}>
                 <Table className={classes.table}>
                     <TableHead>
