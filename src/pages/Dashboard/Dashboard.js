@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import MachineIcon from '../../assets/icons/machine.png'
 import PieChart from "./components/charts/PieChart";
 import LineChart from "./components/charts/LineChart";
-import ChartDonut from "./components/charts/ChartDonut";
+import DonutChart from "./components/charts/DonutChart";
 import BarChart from "./components/charts/BarChart";
 import ActiveMachine from "./components/ActiveMachine";
 import request, { devices } from "../../service";
@@ -56,19 +56,17 @@ let chartLineDataExample = {
     ]
 }
 let chartDonutDataExample = {
-    labels: ['Q1', 'Q2', 'Q3'],
+    labels: ['Used', 'Not used'],
     datasets: [
         {
             label: 'GPU usage',
             data: [
                 60,
-                65,
-                80
+                40
             ],
             backgroundColor: [
-                'rgba(255, 206, 86, 0.6)',
-                'rgba(255, 99, 132, 0.6)',
-                'rgba(257, 102, 90, 0.6)'
+                'rgba(75, 192, 192, 0.6)',
+                'rgba(54, 162, 235, 0.6)'
             ]
         }
     ]
@@ -176,13 +174,13 @@ const Dashboard = ({ user }) => {
                 </div>
 
                 <div className='row'>
-                    <PieChart chartData={chartPieDataExample}/>
-                    <LineChart chartData={chartLineDataExample}/>
+                    <DonutChart displayTitle = "Average RAM usage" chartData={chartDonutDataExample}/>
+                    <DonutChart displayTitle = "Average CPU usage" chartData={chartDonutDataExample}/>
                 </div>
 
                 <div className='row'>
-                    <ChartDonut chartData={chartDonutDataExample}/>
-                    <BarChart chartData={chartBarDataExample}/>
+                    <DonutChart displayTitle = "Average GPU usage" chartData={chartDonutDataExample}/>
+                    <DonutChart displayTitle = "Average disk utilization last hour" chartData={chartDonutDataExample}/>
                 </div>
             </div>
         </div>
