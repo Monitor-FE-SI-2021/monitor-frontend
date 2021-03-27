@@ -123,7 +123,7 @@ export default function CustomTable({ data, fields, children }) {
     return (
         <React.Fragment>
             <FilterList style={{float:'right', marginRight:'10px'}} onClick={handleOpen}/>
-            <If condition={open === true || filter.length > 0}>
+            <If condition={open === true}>
                 <Then>
                 <FormControl style={{float:'right'}} >
                     <Select
