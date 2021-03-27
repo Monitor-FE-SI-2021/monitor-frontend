@@ -1,6 +1,7 @@
 import React from "react";
 import Prompt from "./Prompt";
 import request, { wsEndpoint } from "../../../service";
+import updateNewLog from "./UpdateLogInFirebase";
 
 const MapConsoleOutput = ({ consoleOutput, updateConsoleOutput, token }) => {
 
@@ -42,9 +43,11 @@ const MapConsoleOutput = ({ consoleOutput, updateConsoleOutput, token }) => {
                         const clone = [...consoleOutput]
                         clone[clone.length - 1] = res.message;
                         updateConsoleOutput(clone)
+                        updateNewLog(clone)
                     }).catch(function (e) {
                     console.log(e)
                     const clone = [...consoleOutput]
+                    updateNewLog("Poziv nije uspio", "DESKTOP-SCC")
                     clone[clone.length - 1] = "Poziv nije uspio";
                     updateConsoleOutput(clone)
                 })

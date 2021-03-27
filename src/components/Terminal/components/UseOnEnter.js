@@ -1,4 +1,5 @@
 import React from "react";
+import addNewLog from "./SaveLogToFirebase";
 
 var token;
 
@@ -73,10 +74,21 @@ const UseOnEnter = () => {
       )}
 
       if(args.length>1){
+        addNewLog({
+          command_type: args[0].toString(),
+          args: args[1].toString(),
+          response: ""
+        }, "DESKTOP-SCC")
         return updateConsoleOutput(consoleOutput => consoleOutput.concat("Valid Command!" + args[0].toString() + " " + args[1].toString() + "!")),setCounter(counter=>counter+1); 
       }
-      else
-       return updateConsoleOutput(consoleOutput => consoleOutput.concat("Valid Command!" + args[0].toString() + "!")),setCounter(counter=>counter+1); 
+      else {
+        addNewLog({
+          command_type: args[0].toString(),
+          args: "",
+          response: ""
+        }, "DESKTOP-SCC")
+        return updateConsoleOutput(consoleOutput => consoleOutput.concat("Valid Command!" + args[0].toString() + "!")),setCounter(counter=>counter+1); 
+      }
     }
   };
 
