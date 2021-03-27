@@ -10,7 +10,7 @@ const DeviceGroup = ({ group,fetchDevicesForGroup, allGroups, allDevices }) => {
 
     // useEffect(() => {
     //     fetchDevicesForGroup(group.groupId)
-    // })
+    // },[]);
 
     const getSubGroups = (groups, groupId) => {
         const subGroups = [];
