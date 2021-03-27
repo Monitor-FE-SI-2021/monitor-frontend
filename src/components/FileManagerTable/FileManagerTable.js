@@ -139,14 +139,14 @@ class FileManagerTable extends React.Component {
                     </tbody>
                 </table>
                 {this.state.showRenamePopup ?
-                    <RenamePopup className="popup"
+                    <RenamePopup className="rename-popup"
                         closePopupButton={this.toggleRenamePopup.bind(this)}
                            changeName={this.sendChangeRequest.bind(this)}
                     />
                     : null
                 }
                 {this.state.showDeletePopup ?
-                    <DeletePopup className="popup"
+                    <DeletePopup className="delete-popup"
                         closeDeletePopupButton={this.toggleDeletePopup.bind(this)}
                            changeName={this.sendDeleteRequest.bind(this)}
                     />
