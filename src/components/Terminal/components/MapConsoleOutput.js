@@ -43,7 +43,7 @@ const MapConsoleOutput = ({ consoleOutput, updateConsoleOutput, token }) => {
                         const clone = [...consoleOutput]
                         clone[clone.length - 1] = res.message;
                         updateConsoleOutput(clone)
-                        updateNewLog(clone)
+                        updateNewLog(clone, "DESKTOP-SCC")
                     }).catch(function (e) {
                     console.log(e)
                     const clone = [...consoleOutput]

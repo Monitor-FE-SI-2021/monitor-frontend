@@ -18,5 +18,8 @@ export default function updateNewLog(response, comp_name) {
             .collection("commands")
             .doc(id)
             .update({response: response});
+        })
+        .catch((error) => {
+            console.log("Error getting documents: ", error);
         });
 }
