@@ -1,12 +1,16 @@
+import React from 'react';
 import CustomTable, { TableSlot } from '../CustomTable/CustomTable';
 import { useState } from "react";
-import { Delete } from "@material-ui/icons";
 import dayjs from 'dayjs';
+import { Edit } from "@material-ui/icons";
+import orderBy from "lodash/orderBy";
+import EditDevice from "../EditDevice/EditDevice.js";
+
 
 const DeviceTable = ({ devices }) => {
     const [tableData, setTableData] = useState(devices);
 
-    const deleteTableRow = (tableRow) => {
+    const editTableRow = (tableRow) => {
         console.log(tableRow);
     }
 
@@ -43,7 +47,7 @@ const DeviceTable = ({ devices }) => {
         <CustomTable data={tableData} fields={tableFields}>
 
             <TableSlot slot='actions' render={dataRow => (
-                <Delete onClick={() => deleteTableRow(dataRow)}/>
+                <EditDevice data={dataRow}/>
             )}/>
 
             <TableSlot slot='lastTimeOnline' render={dataRow => (
