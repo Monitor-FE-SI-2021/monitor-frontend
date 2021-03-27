@@ -5,6 +5,7 @@ export const RouteLink = {
     Login: "/login",
     Devices: "/devices",
     Reporting: "/reporting",
+    ReportList: "/report-list",
     AddDevice: '/manage-device',
     Terminal: '/terminal',
     RemoteControl: '/remotecontrol'
@@ -24,7 +25,7 @@ const initialState = {
             icon: "",
         },
         {
-            link: RouteLink.Reporting,
+            link: RouteLink.ReportList,
             name: "Reporting",
             icon: "",
         },
