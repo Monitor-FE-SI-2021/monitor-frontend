@@ -9,6 +9,7 @@ import Dashboard from "../../pages/Dashboard/Dashboard";
 import Reporting from "../../pages/Reporting/Reporting";
 import AddDevice from "../../pages/AddDevices/AddDevice";
 import Terminal from "../Terminal/Terminal";
+import TwoFactorAuthentication from "../TwoFactorAuthentication/TwoFactorAuthentication";
 import RemoteControl from "../../pages/RemoteControl/RemoteControl"
 import { Spinner } from "../Spinner/Spinner";
 
@@ -34,6 +35,7 @@ const Layout = ({ isMenuExpanded, loginAsync, userAsync, user }) => {
                     <Route path={RouteLink.AddDevice} component={AddDevice}/>
                     <Route path={RouteLink.Terminal} component={Terminal}/>
                     <Route path={RouteLink.RemoteControl} component={RemoteControl}/>
+                    <Route path={RouteLink.TwoFactorAuthentication} component={TwoFactorAuthentication}/>
                 </Switch>
             </div>
         </div>

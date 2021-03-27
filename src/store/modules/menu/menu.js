@@ -1,3 +1,5 @@
+import TwoFactorAuthentication from "../../../components/TwoFactorAuthentication/TwoFactorAuthentication";
+
 export const SET_MENU_EXPANDED = 'SET_MENU_EXPANDED';
 
 export const RouteLink = {
@@ -7,7 +9,8 @@ export const RouteLink = {
     Reporting: "/reporting",
     AddDevice: '/manage-device',
     Terminal: '/terminal',
-    RemoteControl: '/remotecontrol'
+    RemoteControl: '/remotecontrol',
+    TwoFactorAuthentication: '/security'
 }
 
 const initialState = {
@@ -38,6 +41,11 @@ const initialState = {
             name: 'Remote Control',
             icon: ""
         },
+        {
+            link: RouteLink.TwoFactorAuthentication,
+            name: 'Two Factor Authentication',
+            icon: ""
+        }
     ],
 }
 
