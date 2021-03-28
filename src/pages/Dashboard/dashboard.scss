@@ -2,6 +2,14 @@
   display: flex;
 }
 
+.chartContainer {
+  display: flex;
+}
+
+.machineName {
+  text-align: center;
+}
+
 .row {
   display: flex;
   flex-direction: column;
@@ -24,6 +32,11 @@
   border-radius: 10px;
   box-shadow: 0 2px 5px #ccc;
   height: 200px;
+  margin-bottom: 10px;
+}
+
+.card:hover {
+  background-color: #F0F0F0;
 }
 
 .img-info {
@@ -104,3 +117,5 @@
   width: 24px;
   height: 24px;
 }
+
+

@@ -256,29 +256,33 @@ const Dashboard = ({user}) => {
                         ))}
                     </div>
                 </div>
-
+                
                 {showCharts && (
-                    <div className="row">
-                        <DonutChart
-                            displayTitle="Average RAM usage"
-                            chartData={ramUsageChart}
-                        />
-                        <DonutChart
-                            displayTitle="Average CPU usage"
-                            chartData={cpuUsageChart}
-                        />
-                    </div>
-                )}
-                {showCharts && (
-                    <div className="row">
-                        <DonutChart
-                            displayTitle="Average GPU usage"
-                            chartData={gpuUsageChart}
-                        />
-                        <DonutChart
-                            displayTitle="Average disk usage"
-                            chartData={hddUsageChart}
-                        />
+                    <div>
+                        <h2 className="machineName">{clickedMachine.name}</h2>
+                        <div className="chartContainer">
+                            
+                            <div className="row">
+                                <DonutChart
+                                    displayTitle="Average RAM usage"
+                                    chartData={ramUsageChart}
+                                />
+                                <DonutChart
+                                    displayTitle="Average CPU usage"
+                                    chartData={cpuUsageChart}
+                                />
+                            </div>
+                            <div className="row">
+                                <DonutChart
+                                    displayTitle="Average GPU usage"
+                                    chartData={gpuUsageChart}
+                                />
+                                <DonutChart
+                                    displayTitle="Average disk usage"
+                                    chartData={hddUsageChart}
+                                />
+                            </div>
+                        </div>
                     </div>
                 )}
             </div>
