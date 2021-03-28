@@ -12,7 +12,7 @@
 }
 
 .machine-cards {
-  width: 30%;
+  width: 40%;
 }
 
 .chart {
@@ -21,18 +21,35 @@
 }
 
 .card {
-  display: flex;
   border-radius: 10px;
-  height: 140px;
   box-shadow: 0 2px 5px #ccc;
-  text-align: left;
-  width: 100%;
-  margin: 30px 0 30px 0;
+  height: 200px;
 }
 
+.img-info {
+  display: flex;
+  height: 140px;
+  text-align: left;
+  width: 100%;
+}
+.card-actions {
+  height: 40px;
+  border-radius: 10px;
+}
+.card-actions button {
+  border-radius: 10px;
+  background-color: transparent;
+  box-shadow: 0 2px 5px #ccc;
+  width: 95%;
+  height: 100%;
+  margin: 0 0 0 2.5%;
+  border: #ccc;
+  font-size: 14px;
+}
 .card-img {
   padding: 5%;
   width: 30%;
+  height: 100%;
 }
 
 .card-img img {
@@ -54,11 +71,6 @@
 
 .page-devices {
   margin: 20px;
-}
-
-.page-primjer-komponente {
-  flex-direction: row;
-  margin: 40px;
 }
 
 .scrollable {
