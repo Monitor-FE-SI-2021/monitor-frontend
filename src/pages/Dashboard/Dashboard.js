@@ -7,6 +7,7 @@ import DonutChart from "./components/charts/DonutChart";
 import BarChart from "./components/charts/BarChart";
 import ActiveMachine from "./components/ActiveMachine";
 import request, { devices } from "../../service";
+
 import './dashboard.scss'
 import {act} from "@testing-library/react";
 
@@ -150,7 +151,7 @@ const Dashboard = ({ user }) => {
     const disconnectMachine = (machine) => {
         const index = active.indexOf(machine)
         const cloned = active.slice(0)
-        if (index >= 0) {
+        if (index >= 0 && window.confirm('Are you sure you wish to disconnect this machine?')) {
             cloned.splice(index, 1)
             setActive(cloned)
         }
