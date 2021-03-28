@@ -24,8 +24,8 @@ const Reports = () => {
 
     const setData = async () => {
         const res = await request("https://si-2021.167.99.244.168.nip.io/api/group/MyAssignedGroups");
-        setGroups(res.data.data);
-        setSelectedGroup(res.data.data[0]?.name)
+        setGroups(res.data.data.subGroups);
+        setSelectedGroup(res.data.data.subGroups[0]?.name)
     };
 
     useEffect(() => {

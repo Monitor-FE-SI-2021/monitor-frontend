@@ -1,12 +1,12 @@
 import CustomTable, { TableSlot } from '../CustomTable/CustomTable';
 import { useState } from "react";
-import { Delete } from "@material-ui/icons";
+import GetAppIcon from '@material-ui/icons/GetApp';
 import dayjs from 'dayjs';
 
 const ReportTable = ({ reports }) => {
     const [tableData, setTableData] = useState(reports);
 
-    const deleteTableRow = (tableRow) => {
+    const downloadTableRow = (tableRow) => {
         console.log(tableRow);
     }
 
@@ -16,25 +16,18 @@ const ReportTable = ({ reports }) => {
             title: 'Report name',
         },
         {
-            name: 'date',
+            name: 'startDate',
             title: 'Date',
         },
-        // {
-        //     name: 'status',
-        //     title: 'Status',
-        //     slot: 'status'
-        // },
-        // {
-        //     name: 'lastTimeOnline',
-        //     title: 'Posljednji put online',
-        //     width: '30%',
-        //     slot: 'lastTimeOnline'
-        // },
+        {
+            name: 'frequency',
+            title: 'Frequency',
+        },
         {
             name: 'actions',
-            title: 'Akcije',
+            title: 'Download',
             width: '20%',
-            align: 'right',
+            align: 'left',
             slot: 'actions'
         }
     ])
@@ -43,19 +36,14 @@ const ReportTable = ({ reports }) => {
         <CustomTable data={tableData} fields={tableFields}>
 
             <TableSlot slot='actions' render={dataRow => (
-                <Delete onClick={() => deleteTableRow(dataRow)}/>
+                <GetAppIcon onClick={() => downloadTableRow(dataRow)}/>
             )}/>
 
-            <TableSlot slot='date' render={dataRow => (
+            <TableSlot slot='startDate' render={dataRow => (
                 <span>
-                    {dayjs(dataRow.date).format('DD.MM.YYYY HH:mm:ss')}
+                    {dayjs(dataRow.startDate).format('DD.MM.YYYY')}
                 </span>
             )}/>
-
-            {/* <TableSlot slot='status' render={dataRow => (
-                <span>{dataRow.status === true ? 'Online' : 'Offline'}</span>
-            )}/> */}
-
         </CustomTable>
     )
 }
