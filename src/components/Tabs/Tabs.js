@@ -16,7 +16,7 @@ const Tabs = (props) => {
 
   const toggleTab = (tab) => {
     props.history.push(
-      "/remotecontrol/" + (name == undefined ? machines[0] : name) + "/" + tab
+      "/remotecontrol/" + (name == undefined ? "0" : name) + "/" + tab
     );
   };
 
@@ -94,10 +94,14 @@ const Tabs = (props) => {
       <div className="bloc-tabs">
         <button
           className={
-            tab == undefined || tab === "screenshot"
-              ? "tabs active-tabs"
-              : "tabs"
+            tab == undefined || tab === "terminal" ? "tabs active-tabs" : "tabs"
           }
+          onClick={() => toggleTab("terminal")}
+        >
+          Terminal
+        </button>
+        <button
+          className={tab === "screenshot" ? "tabs active-tabs" : "tabs"}
           onClick={() => toggleTab("screenshot")}
         >
           Screenshot
@@ -112,9 +116,28 @@ const Tabs = (props) => {
       <div className="content-tabs">
         <div
           className={
-            tab == undefined || tab === "screenshot"
+            tab == undefined || tab === "terminal"
               ? "content  active-content"
               : "content"
+          }
+        >
+          <div>
+            <p className="paragraph1">Quick example</p>
+            <div>
+              <div className="screenshot">
+                <p>Terminal</p>
+                <img
+                  alt="Asked image will appear here."
+                  className="screenshot-img"
+                  src={`data:image/jpeg;base64,${url}`}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          className={
+            tab === "screenshot" ? "content  active-content" : "content"
           }
         >
           <div>

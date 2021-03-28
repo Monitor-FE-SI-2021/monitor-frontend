@@ -15,11 +15,20 @@ function ActiveMachine(props) {
       </div>
       <br></br>
       <br />
-      <div id="card-buttons">
+      {/* <div id="card-buttons">
+        <img
+          id="term"
+          src={SS}
+          alt="Terminal"
+          onClick={() =>
+            window.open("/remotecontrol/" + props.name + "/terminal", "_blank")
+          }
+        />
+
         <img
           id="ss"
           src={SS}
-          alt="SS"
+          alt="Screenshot"
           onClick={() =>
             window.open(
               "/remotecontrol/" + props.name + "/screenshot",
@@ -31,7 +40,7 @@ function ActiveMachine(props) {
         <img
           id="fm"
           src={FM}
-          alt="FM"
+          alt="File Manager"
           onClick={() =>
             window.open(
               "/remotecontrol/" + props.name + "/filemanager",
@@ -39,7 +48,7 @@ function ActiveMachine(props) {
             )
           }
         />
-      </div>
+      </div> */}
     </div>
   );
 }

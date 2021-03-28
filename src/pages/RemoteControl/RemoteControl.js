@@ -4,11 +4,22 @@ import "./RemoteControl.css";
 import Tabs from "../../components/Tabs/Tabs";
 // import "react-dropdown/style.css";
 import { Route, useParams } from "react-router-dom";
+import request, { devices } from "../../service";
 
-const RemoteControl = (props) => {
-  const machines = ["DESKTOP-SCC", "DESKTOP-SCC3", "DESKTOP-SCC5"];
+const RemoteControl = (props, { user }) => {
+  const [machines, setMachines] = React.useState([]);
 
-  let { name, tab } = useParams();
+  let { currentMachineName, tab } = useParams();
+
+  const groupId = user?.userGroups[0]?.groupId || 2;
+
+  React.useEffect(() => {
+    request(devices + "/AllDevicesForGroup?groupId=" + groupId)
+      .then((res) => {
+        setMachines(res.data.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   const switchMachine = (machine) => {
     props.history.push(
@@ -19,21 +30,35 @@ const RemoteControl = (props) => {
     );
   };
 
+  const machineList = [];
+  let machine =
+    currentMachineName == "0" || currentMachineName == undefined
+      ? machines[0]
+      : machines.find((value) => value.name == currentMachineName);
+
+  for (const [index, value] of machines.entries()) {
+    machineList.push(<option value={value.name}>{value.name}</option>);
+  }
+
   return (
     <div className="page dashboard">
       <h1>IWM Remote Access/Control</h1>
       <div>
-        <select
+        {/* <select
           onChange={(event) => switchMachine(event.target.value)}
-          value={name}
+          value={currentMachineName}
         >
-          <option value="DESKTOP-SCC">DESKTOP-SCC</option>
-          <option value="DESKTOP-SCC2">DESKTOP-SCC2</option>
-        </select>
-        <Route component={Tabs}></Route>
+          {machineList}
+        </select> */}
+        <Tabs history={props.history} machine={machine}></Tabs>
       </div>
     </div>
   );
 };
 
-export default connect((state) => ({}), {})(RemoteControl);
+export default connect(
+  (state) => ({
+    user: state.login.user,
+  }),
+  {}
+)(RemoteControl);
