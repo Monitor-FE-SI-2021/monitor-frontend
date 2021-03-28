@@ -1,9 +1,10 @@
 import React from "react";
 import Prompt from "./Prompt";
 import request, { wsEndpoint } from "../../../service";
+import updateNewLog from "./UpdateLogInFirebase";
+import config from "../config";
 
-const MapConsoleOutput = ({ consoleOutput, updateConsoleOutput, token }) => {
-
+const MapConsoleOutput = ({ consoleOutput, updateConsoleOutput, token, path, name, location, ip }) => {
     const scrollRef = React.useRef();
 
     React.useEffect(() => {
@@ -20,8 +21,16 @@ const MapConsoleOutput = ({ consoleOutput, updateConsoleOutput, token }) => {
             if (isCommandValid) {
                 const itemString = item.toString().split("!");
 
-                const command = itemString[1]
+                let args = itemString[1].toString().split(" ");
 
+                const command = args[0]
+                
+                let argumenti = [];
+                if(args.length>1){
+                    argumenti.push(args[1]);
+                }
+
+                console.log(name + " " + location + " " + ip + " " + command + " " + argumenti + " " + config.email)
                 fetch(wsEndpoint + '/command', {
                     method: 'POST',
                     headers: {
@@ -30,21 +39,28 @@ const MapConsoleOutput = ({ consoleOutput, updateConsoleOutput, token }) => {
                         "Authorization": "Bearer " + token,
                     },
                     body: JSON.stringify({
-                        "name": "DESKTOP-SCC",
-                        "keepAlive": 5,
-                        "location": "Sarajevo - SCC",
-                        command: command
+                        "name": name,
+                        "location": location,
+                        "ip": ip,
+                        command: command,
+                        parameters: argumenti,
+                        user: config.email
                     })
                 })
                     .then(res => res.json())
                     .then(res => {
+                        console.log(res)
                         token = res.token;
                         const clone = [...consoleOutput]
                         clone[clone.length - 1] = res.message;
-                        updateConsoleOutput(clone)
+                        if(clone != "" || clone != null)
+                            updateConsoleOutput(clone)
+                        else updateConsoleOutput("Server Response error")
+                        updateNewLog(clone, name)
                     }).catch(function (e) {
                     console.log(e)
                     const clone = [...consoleOutput]
+                    updateNewLog("Poziv nije uspio", name)
                     clone[clone.length - 1] = "Poziv nije uspio";
                     updateConsoleOutput(clone)
                 })
@@ -64,8 +80,8 @@ const MapConsoleOutput = ({ consoleOutput, updateConsoleOutput, token }) => {
                 } else {
                     return (
                         <div key={index}>
-                            <Prompt/>
-                            <span>{item}</span>
+                            <Prompt path={path}/>
+                            <span>{item || 'Server Response error'}</span>
                         </div>
                     )
                 }

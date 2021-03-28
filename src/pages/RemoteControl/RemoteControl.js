@@ -6,6 +6,27 @@ import Tabs from "../../components/Tabs/Tabs";
 import { Route, useParams } from "react-router-dom";
 import request, { devices } from "../../service";
 
+let activeMachines = [
+  {
+    name: "Desktop PC 1",
+    location: "Sarajevo - BBI",
+    ip: "255.255.255.0",
+    path: "C:/user/programfiles",
+  },
+  {
+    name: "Desktop PC 2",
+    location: "Sarajevo - BBI",
+    ip: "255.255.255.0",
+    path: "C:/user/programfiles",
+  },
+  {
+    name: "Desktop",
+    location: "Mostar - Mepas Mall",
+    ip: "255.255.255.0",
+    path: "C:/user/programfiles",
+  },
+];
+
 const RemoteControl = (props, { user }) => {
   const [machines, setMachines] = React.useState([]);
 
@@ -33,13 +54,12 @@ const RemoteControl = (props, { user }) => {
   const machineList = [];
   let machine =
     name == "0" || name == undefined
-      ? machines[0]
-      : machines.find((value) => value.name == name);
+      ? activeMachines[0]
+      : activeMachines.find((value) => value.name == name);
 
-  for (const [index, value] of machines.entries()) {
-    machineList.push(<option value={value.name}>{value.name}</option>);
-  }
-
+  // for (const [index, value] of machines.entries()) {
+  //   machineList.push(<option value={value.name}>{value.name}</option>);
+  // }
   return (
     <div className="page dashboard">
       <h1>IWM Remote Access/Control</h1>

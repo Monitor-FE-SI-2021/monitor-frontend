@@ -84,7 +84,7 @@ const Tabs = (props, machine) => {
     }),
     [isDragActive, isDragReject, isDragAccept]
   );
-
+  console.log(props.machine.name);
   return (
     <div className="container">
       <div className="bloc-tabs">
@@ -118,12 +118,11 @@ const Tabs = (props, machine) => {
           }
         >
           <div>
-            <p className="paragraph1">Quick example</p>
             <div>
               <div className="screenshot">
                 <p>Terminal</p>
 
-                <Terminal machine={machine} />
+                <Terminal machine={props.machine} />
               </div>
             </div>
           </div>
@@ -134,7 +133,6 @@ const Tabs = (props, machine) => {
           }
         >
           <div>
-            <p className="paragraph1">Quick example</p>
             <div>
               <div className="screenshot">
                 <p>Screenshot</p>
