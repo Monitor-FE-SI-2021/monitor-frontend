@@ -15,7 +15,7 @@
   flex-direction: column;
 }
 
-.row h1 {
+h1, h2, h3, h4 {
   color: #353535;
 }
 
@@ -36,7 +36,7 @@
 }
 
 .card:hover {
-  background-color: #F0F0F0;
+  background-color:#ffffff;
 }
 
 .img-info {
@@ -75,11 +75,12 @@
 }
 
 .card-info h3 {
-  margin: 0;
+  margin: 3px;
 }
 
 .card-info p {
   font-family: "Roboto", sans-serif;
+  padding: 5px
 }
 
 .page-devices {
