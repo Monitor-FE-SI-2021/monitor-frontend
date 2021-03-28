@@ -6,56 +6,45 @@ import Tabs from "../../components/Tabs/Tabs";
 import { Route, useParams } from "react-router-dom";
 import request, { devices } from "../../service";
 
-let activeMachines = [
-  {
-    name: "Desktop PC 1",
-    location: "Sarajevo - BBI",
-    ip: "255.255.255.0",
-    path: "C:/user/programfiles",
-  },
-  {
-    name: "Desktop PC 2",
-    location: "Sarajevo - BBI",
-    ip: "255.255.255.0",
-    path: "C:/user/programfiles",
-  },
-  {
-    name: "Desktop",
-    location: "Mostar - Mepas Mall",
-    ip: "255.255.255.0",
-    path: "C:/user/programfiles",
-  },
-];
-
 const RemoteControl = (props, { user }) => {
-  const [machines, setMachines] = React.useState([]);
+  const [machines, setMachines] = React.useState();
 
   let { name, tab } = useParams();
 
   const groupId = user?.userGroups[0]?.groupId || 2;
 
-  React.useEffect(() => {
-    request(devices + "/AllDevicesForGroup?groupId=" + groupId)
+  if (machines == undefined) {
+    request("https://si-grupa5.herokuapp.com/api/agent/online")
       .then((res) => {
-        setMachines(res.data.data);
+        console.log("testee" + JSON.stringify(res));
+        setMachines(res?.data);
       })
-      .catch((err) => console.log(err));
-  }, []);
+      .catch((error) => {
+        console.log("Vazan error");
+        console.log(error);
+      });
 
-  const switchMachine = (machine) => {
-    props.history.push(
-      "/remotecontrol/" +
-        machine +
-        "/" +
-        (tab == undefined ? "screenshot" : tab)
-    );
-  };
+    return <div className="page dashboard"></div>;
+  }
 
-  const machineList = [];
+  // const switchMachine = (machine) => {
+  //   props.history.push(
+  //     "/remotecontrol/" +
+  //       machine +
+  //       "/" +
+  //       (tab == undefined ? "screenshot" : tab)
+  //   );
+  // };
+
+  //const machineList = [];
   let machine =
     name == "0" || name == undefined
-      ? activeMachines[0]
-      : activeMachines.find((value) => value.name == name);
+      ? machines.find((value) => value.status !== "Disconnected")
+      : machines.find(
+          (value) => value.name == name && value.status !== "Disconnected"
+        );
+
+  if (machine == undefined) return <div className="page dashboard"></div>;
 
   // for (const [index, value] of machines.entries()) {
   //   machineList.push(<option value={value.name}>{value.name}</option>);
