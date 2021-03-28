@@ -64,11 +64,7 @@ const ACTION_HANDLERS = {
     [UPDATE_DEVICES_TABLE_FOR_GROUP]: (state, action) => {            // Genericka akcija za updateovanje jedne tabele uredjaja ( per group )
         const { groupId, data } = action;
 
-        console.log(data);
-
         const updatedDeviceTables = getUpdatedDeviceTables(state.deviceTables, groupId, data);
-
-        console.log(updatedDeviceTables);
 
         return {
             ...state,

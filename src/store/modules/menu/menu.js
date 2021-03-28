@@ -5,40 +5,40 @@ export const RouteLink = {
     Login: "/login",
     Devices: "/devices",
     Reporting: "/reporting",
-    AddDevice: '/manage-device',
+    ManageDevice: '/manage-device',
     Terminal: '/terminal',
     RemoteControl: '/remotecontrol'
 }
 
 const initialState = {
-  isMenuExpanded: true,
-  items: [
-    {
-      link: RouteLink.Dashboard,
-      name: "Dashboard",
-      icon: "",
-    },
-    {
-      link: RouteLink.Devices,
-      name: "Mašine",
-      icon: "",
-    },
-    {
-      link: RouteLink.Reporting,
-      name: "Reporting",
-      icon: "",
-    },
-    // {
-    //     link: RouteLink.Terminal,
-    //     name: 'Terminal',
-    //     icon: ""
-    // },
-    // {
-    //     link: RouteLink.RemoteControl,
-    //     name: 'Remote Control',
-    //     icon: ""
-    // },
-  ],
+    isMenuExpanded: true,
+    items: [
+        {
+            link: RouteLink.Dashboard,
+            name: "Dashboard",
+            icon: "",
+        },
+        {
+            link: RouteLink.Devices,
+            name: "Mašine",
+            icon: "",
+        },
+        {
+            link: RouteLink.Reporting,
+            name: "Reporting",
+            icon: "",
+        },
+        // {
+        //     link: RouteLink.Terminal,
+        //     name: 'Terminal',
+        //     icon: ""
+        // },
+        // {
+        //     link: RouteLink.RemoteControl,
+        //     name: 'Remote Control',
+        //     icon: ""
+        // },
+    ],
 };
 
 const ACTION_HANDLERS = {
