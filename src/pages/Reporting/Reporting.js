@@ -12,8 +12,11 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
 import TextField from '@material-ui/core/TextField';
+import Checkbox from '@material-ui/core/Checkbox';
 
 import './Reporting.scss';
+
+
 
 const Reports = () => {
     const [selectedFrequency, setSelectedFrequency] = useState(frequencies[0].name);
@@ -22,6 +25,8 @@ const Reports = () => {
     const [groups, setGroups] = useState([]);
     const [queryValue, setQueryValue] = useState("");
     const [title, setTitle] = useState("");
+    const [selectedColumns, setSelectedColumns] = useState([]);
+    
 
 
     const setData = async () => {
@@ -80,6 +85,16 @@ const Reports = () => {
         setGroups(newGroups);
     }
 
+    const changeSelectedColumns = (event) => {
+        if (event.target.checked) {
+            setSelectedColumns([...selectedColumns, event.target.value]); 
+        }
+        else {
+            setSelectedColumns(selectedColumns.filter(col => col !== event.target.value));
+        }
+        
+    };
+
     return (
         <div className="reportingWrapper">
             <h1> Reporting </h1>
@@ -103,7 +118,7 @@ const Reports = () => {
                     <InputLabel className="inputLabelWrapper"> At what time do you want an email to be sent? </InputLabel>
                     <TextField
                         id="date"
-                        type={selectedFrequency === "day" ? "time" : "datetime-local"}
+                        type="datetime-local"
                         className="dateTimePicker"
                         InputLabelProps={{
                             shrink: true,
@@ -131,9 +146,29 @@ const Reports = () => {
                         fields={fields}
                         onQueryChange={changeQuery}
                         showNotToggle={true}
-                        //combinators={devices}
                     />
                 </div>
+                <div>
+                <h3 className="queryBuilderTitle"> Which columns do you want in your report? </h3>
+                
+                    { fields.map(inputField => (
+                        <div>
+                        <Checkbox 
+                            value={inputField.name}
+                            onChange={changeSelectedColumns}
+                        />
+                        <InputLabel className="selectCol">
+                            {inputField.label}
+                        </InputLabel>
+                        </div>
+
+
+                    ))
+
+                    }
+                </div>
+
+
 
                 <Button onClick={submitReportForm} variant="contained" color="default" disabled={checkQuery()}> Submit </Button>
             </div>
