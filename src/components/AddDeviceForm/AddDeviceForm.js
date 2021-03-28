@@ -34,52 +34,57 @@ const groups = [
     },
 ]
 
-const AddDeviceForm = () => {
+// fieldValues is a prop for passing the field values for when the form is opened in edit mode
+// the required form of the object is
+// {name: "value", location: "value", latitude: "value", longitude: "value", installationCode: "value", group: "value"}
+const AddDeviceForm = ({fieldValues}) => {
     const classes = useStyles();
-    const [selectedGroup, setSelectedGroup] = useState('')
 
-    const onClick = () => {
-        console.log('Click')
-    }
-
-    const changeSelectedGroup = (value) => {
-        setSelectedGroup(value)
-    }
-
+    // initial values for when the form isn't opened in edit mode
     const initialValues = {
-        naziv: "",
-        lokacija: "",
-        gSirina: "",
-        gDuzina: ""
+        name: "",
+        location: "",
+        latitude: "",
+        longitude: "",
+        installationCode: "",
+        group: ""
     }
 
     const validate = () => {
         let temp = {}
         let letterNumber = /^[0-9a-zA-Z]+$/
 
-        if(values.naziv == "")
-            temp.naziv = "This field is required"
-        else if(!values.naziv.match(letterNumber) && !values.naziv.includes(" "))
-            temp.naziv = "This field can only contain the following characters: A-Z, a-z, 0-9" 
+        if(values.name == "")
+            temp.name = "This field is required"
+        else if(!values.name.match(letterNumber) && !values.name.includes(" "))
+            temp.name = "This field can only contain the following characters: A-Z, a-z, 0-9"
         else
-            temp.naziv=""
+            temp.name=""
         
-        if(values.lokacija =="")
-            temp.lokacija = "This field is required"
-        else if(!values.lokacija.match(letterNumber) && !values.lokacija.includes(" "))
-            temp.lokacija = "This field can only contain the following characters: A-Z, a-z, 0-9"  
+        if(values.location =="")
+            temp.location = "This field is required"
+        else if(!values.location.match(letterNumber) && !values.location.includes(" "))
+            temp.location = "This field can only contain the following characters: A-Z, a-z, 0-9"
         else
-            temp.lokacija = ""
+            temp.location = ""
 
-        temp.gSirina = values.gSirina.length==6 ? "" : "Latitude should consist of exactly 6 numbers!"
-        temp.gDuzina = values.gDuzina.length==6 ? "" : "Longitude should consist of exactly 6 numbers!"
-        temp.grupa = selectedGroup ? "" : "This field is required!"
+        temp.latitude = values.latitude.length==6 ? "" : "Latitude should consist of exactly 6 numbers!"
+        temp.longitude = values.longitude.length==6 ? "" : "Longitude should consist of exactly 6 numbers!"
+        temp.group = values.group ? "" : "This field is required!"
+        temp.installationCode = values.installationCode ? "" : "This field is required!"
         setErrors(temp)
 
         return Object.values(temp).every(x => x=="")
     }
 
-    const [values, setValues] = useState(initialValues)
+    // if the form is opened in edit mode we shall obtain the passed values
+    const getInitialValues = () => {
+        if (fieldValues !== undefined)
+            return fieldValues
+        return initialValues
+    }
+
+    const [values, setValues] = useState(getInitialValues)
     const [errors, setErrors] = useState({})
 
     const handleInputChange = e => {
@@ -88,47 +93,56 @@ const AddDeviceForm = () => {
             ...values,
             [name]:value
         })
-        
     }
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        if(validate())
-            alert("Validno")
+        if(validate()) {
+            if (fieldValues === undefined) {
+                alert("Created machine successfully!")
+                setValues(initialValues)
+            }
+            else {
+                alert("Edited machine successfully!")
+            }
+        }
     }
 
     return (
         <form className={classes.root} onSubmit={handleSubmit}>
-            <TextField label="Naziv" name="naziv" value={values.naziv} onChange={handleInputChange} 
-                {...(errors.naziv && {error:true, helperText: errors.naziv})} />
+            <TextField label="Name" name="name" value={values.name} onChange={handleInputChange}
+                       {...(errors.name && {error:true, helperText: errors.name})} />
 
-            <TextField label="Lokacija" name="lokacija" value={values.lokacija} onChange={handleInputChange}
-                {...(errors.lokacija && {error:true, helperText: errors.lokacija})} />
+            <TextField label="Location" name="location" value={values.location} onChange={handleInputChange}
+                       {...(errors.location && {error:true, helperText: errors.location})} />
 
-            <TextField label="Geografska širina" type='number' name="gSirina" value={values.gSirina} onChange={handleInputChange} 
-                {...(errors.gSirina && {error:true, helperText: errors.gSirina})}/>
+            <TextField label="Latitude" type='number' name="latitude" value={values.latitude} onChange={handleInputChange}
+                       {...(errors.latitude && {error:true, helperText: errors.latitude})}/>
 
-            <TextField label="Geografska visina" type='number' name="gDuzina" value={values.gDuzina} onChange={handleInputChange} 
-                {...(errors.gDuzina && {error:true, helperText: errors.gDuzina})}/>
+            <TextField label="Longitude" type='number' name="longitude" value={values.longitude} onChange={handleInputChange}
+                       {...(errors.longitude && {error:true, helperText: errors.longitude})}/>
+
+            <TextField label="Installation code" name="installationCode" value={values.installationCode} onChange={handleInputChange}
+                       {...(errors.installationCode && {error:true, helperText: errors.installationCode})}/>
 
             <TextField
                 select
-                value={selectedGroup}
-                label="Odaberite grupu"
-                onChange={(e) => (changeSelectedGroup(e.target.value))}
-                {...errors.grupa && {error:true}}
+                name="group"
+                value={values.group}
+                label="Group"
+                onChange={handleInputChange}
+                {...(errors.group && {error:true, helperText: errors.group})}
             >
                 {groups.map((group) => (
                   <MenuItem key={group.id} value={group.name}>
                     {group.name}
                   </MenuItem>
                 ))}
-
-                
             </TextField>
-            {errors.grupa && <FormHelperText className="groupError" style={{color:"red"}}>{errors.grupa}</FormHelperText>} 
 
-            <Button type = "submit" onClick={onClick} variant="contained">Dodaj mašinu</Button>
+            <Button type = "submit" variant="contained">
+                {fieldValues !== undefined ? "Edit Machine" : "Create Machine"}
+            </Button>
         </form>
     );
 }
