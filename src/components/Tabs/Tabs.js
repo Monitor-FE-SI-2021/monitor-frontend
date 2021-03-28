@@ -9,6 +9,7 @@ import Swal from "sweetalert2";
 import { Route, Switch, useParams } from "react-router";
 import FileManagerTable from "../FileManagerTable/FileManagerTable";
 import Terminal from "../Terminal/Terminal";
+const config = require("../Terminal/config");
 
 const Tabs = (props, machine) => {
   let { name, tab } = useParams();
@@ -23,10 +24,51 @@ const Tabs = (props, machine) => {
 
   const handleClick = async () => {
     try {
-      var odgovor = await request(wsEndpoint + "/screenshot", "post", machine);
+      try {
+        const requestOptions = {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: config.email,
+            password: config.password,
+          }),
+        };
 
-      setUrl(odgovor.data.message);
-    } catch (err) {}
+        var response = await fetch(config.url, requestOptions);
+        //console.log(response.status)
+
+        //console.log(x);
+        if (response.status == 200) {
+          var x = await response.json();
+          //console.log(JSON.stringify(x.accessToken));
+          const token = x.accessToken;
+          console.log(JSON.stringify(props.machine));
+          var odgovor = await fetch(wsEndpoint + "/screenshot", {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + token,
+            },
+            body: JSON.stringify({
+              name: props.machine.name,
+              location: props.machine.location,
+              ip: props.machine.ip,
+              user: "test",
+            }),
+          }).then((r) => r.json());
+
+          console.log(odgovor);
+          setUrl(odgovor.message);
+        } else {
+          //console.log("Error");
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const baseStyle = {
