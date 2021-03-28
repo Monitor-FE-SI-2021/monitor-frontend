@@ -1,3 +1,4 @@
+import axios from "axios";
 import request, { authEndpoint, users } from "../../../service";
 import { STORAGE_KEY } from "../../../utils/consts";
 import { history } from "../../store";
@@ -53,6 +54,24 @@ export const doLogin = ({ email, password }) => {
                 });
 
                 return res;
+            } else if (res && res.status === 202) {
+                let kod = prompt('Unesi Two Factor Authentication kod');
+                localStorage.setItem(STORAGE_KEY, res.data.accessToken);
+                let noviAccessToken = request(authEndpoint + '/QRcode/verify', "POST",
+                    {
+                        "token": kod
+                    }).then(re => {
+                        if (re && re.status === 200) {
+                            localStorage.setItem(STORAGE_KEY, re.data.accessToken);
+                            dispatch(getMe()).then(() => {
+                                history.push('/')
+                            });
+                            return re;
+                        }
+                    });
+
+
+                return noviAccessToken;
             }
         }).finally(() => {
             return dispatch({
@@ -74,7 +93,7 @@ export const getMe = () => {
 
         return request(users + '/MeExtendedInfo')
             .then(r => {
-                if (r.status === 200) {
+                if (r && r.status === 200) {
                     dispatch({
                         type: SET_USER,
                         user: r.data.data,
