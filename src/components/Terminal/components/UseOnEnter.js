@@ -25,7 +25,7 @@ const UseOnEnter = () => {
   const [savedLogs, setSavedLogs] = React.useState([]);
   const [counter, setCounter] = React.useState(0);
 
-  const onEnter = async (value, key) => {
+  const onEnter = async (value, key, name) => {
     
     if (key === "Enter") {
       //console.log("Proba")
@@ -73,13 +73,13 @@ const UseOnEnter = () => {
       return updateConsoleOutput(consoleOutput =>
         consoleOutput.concat("Invalid Command"), setCounter(brojac=>brojac+1)
       )}
-
+        console.log("Name ", name)
       if(args.length>1){
         addNewLog({
           command_type: args[0].toString(),
           args: args[1].toString(),
           response: ""
-        }, "DESKTOP-SCC")
+        }, name)
         return updateConsoleOutput(consoleOutput => consoleOutput.concat("Valid Command!" + args[0].toString() + " " + args[1].toString() + "!")),setCounter(counter=>counter+1); 
       }
       else {
@@ -87,7 +87,7 @@ const UseOnEnter = () => {
           command_type: args[0].toString(),
           args: "",
           response: ""
-        }, "DESKTOP-SCC")
+        }, name)
         return updateConsoleOutput(consoleOutput => consoleOutput.concat("Valid Command!" + args[0].toString() + "!")),setCounter(counter=>counter+1); 
       }
     }

@@ -64,13 +64,13 @@ componentDidMount() {
 
 renderLogs = async() => {
     try {
-        var res = await retrieveDataFromFirebase("DESKTOP-SCC")
+        var res = await retrieveDataFromFirebase(this.props.name)
         console.log("data "+ JSON.stringify(res, null, 4));
         // this will re render the view with new data
         this.setState({
             Logs: res.map((log) => (
                 <div key={Math.random()}>
-                    <Prompt/>
+                    <Prompt path={this.props.path}/>
                     <span>{log.command_type} {log.args}</span>
                     <br/>
                     <span>{log.response}</span>

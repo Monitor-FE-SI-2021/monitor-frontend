@@ -8,6 +8,7 @@ import BarChart from "./components/charts/BarChart";
 import ActiveMachine from "./components/ActiveMachine";
 import request, { devices } from "../../service";
 import './dashboard.scss'
+import {act} from "@testing-library/react";
 
 // DUMMY DATA
 
@@ -20,8 +21,8 @@ let chartPieDataExample = {
         {
             label: 'Average RAM usage',
             data: [
-                80,
-                20
+                0.80,
+                0.20
             ],
             backgroundColor: [
                 'rgba(75, 192, 192, 0.6)',
@@ -93,29 +94,51 @@ let chartBarDataExample = {
 }
 
 const Dashboard = ({ user }) => {
-    const [allLogs, setAllLogs] = React.useState([])
+    let activeMachines = [
+        {
+            name: "Desktop PC 1",
+            location: "Sarajevo - BBI",
+            ip: "255.255.255.0",
+            path: "C:/user/programfiles"
+        },
+        {
+            name: "Desktop PC 2",
+            location: "Sarajevo - BBI",
+            ip: "255.255.255.0",
+            path: "C:/user/programfiles"
+        },
+        {
+            name: "Desktop PC 1",
+            location: "Mostar - Mepas Mall",
+            ip: "255.255.255.0",
+            path: "C:/user/programfiles"
+        }
+    ]
+    /*const date = new Date()
+    date.setFullYear(date.getFullYear() - 1)*/
     const [machines, setMachines] = React.useState([])
 
-    const groupId = user?.userGroups[0]?.groupId || 2;
-
     React.useEffect(() => {
-        request(devices + "/AllDevicesForGroup?groupId=" + groupId)
-            .then((res) => {
-                setMachines(res.data.data)
-            })
+        request(devices + "/AllDevices")
+            .then((res) => setMachines(res.data.data))
             .catch((err) => console.log(err))
-
-        request(devices + "/GetAllDeviceLogs")
-            .then((resp) => resp.data)
-            .then((logs) => {
-                setAllLogs(logs.data)
-                /*setMachines(smtn.data.filter((value, index, self) => {
-                  return self.findIndex(v => v.deviceId === value.deviceId) === index
-                }))*/
-            })
-            .catch((err) => console.log(err))
-
+       /* request(devices + "/GetDeviceLogs?deviceId=" + 15 + "&startDate=" + date.toISOString() + "&endDate=")
+            .then((res) => console.log(res))
+            .catch((err) => console.log(err))*/
     }, [])
+
+    //setMachines(activeMachines)
+
+    activeMachines = activeMachines.filter((machine) => {
+        const existingMachine = machines.find(({name, location}) => {
+            return name === machine.name && location === machine.location
+        })
+        if (existingMachine) {
+            machine.deviceId = existingMachine.deviceId
+            machine.lastTimeOnline = existingMachine.lastTimeOnline
+        }
+        return existingMachine
+    })
 
     return (
         <div className='page'>
@@ -123,7 +146,13 @@ const Dashboard = ({ user }) => {
                 <div className='row machine-cards'>
                     <h1>List of active machines</h1>
                     <div className='scrollable'>
-                        {machines.map(createActiveMachineCard)}
+                        { activeMachines.map((machine, id) => (
+                            <ActiveMachine
+                                key={id}
+                                data={machine}
+                                img={MachineIcon}
+                            />
+                        )) }
                     </div>
                 </div>
 
@@ -138,18 +167,6 @@ const Dashboard = ({ user }) => {
                 </div>
             </div>
         </div>
-    );
-}
-
-
-function createActiveMachineCard(machine) {
-    return (
-        <ActiveMachine
-            key={machine.name}
-            img={MachineIcon}
-            name={machine.name}
-            info={new Date(machine.lastTimeOnline).toGMTString()}
-        />
     );
 }
 
