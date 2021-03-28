@@ -13,6 +13,7 @@ const ActiveMachine = ({ data, img, fun, set }) => {
     return (
         <>
             <div className='card' id={data.deviceId} onDoubleClick={() => setTerminalOpen(true)}>
+               <div className='img-info'>
                 <div className='card-img'>
                     <Avatar img={img} />
                 </div>
@@ -22,14 +23,14 @@ const ActiveMachine = ({ data, img, fun, set }) => {
                     <h3>{ data.location }</h3>
                     <p>{ new Date(data.lastTimeOnline).toGMTString() }</p>
                 </div>
-
+                </div>
                 <div className='card-actions'>
                     <button onClick={() => {
                         fun(data)
                     }}>Disconnect</button>
-                </div>
+                </div> 
             </div>
-
+            
             { terminalOpen && (
                 <NewWindow title={data.name} onUnload={() => setTerminalOpen(false)}>
                     <Tabs>
