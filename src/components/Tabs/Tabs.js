@@ -77,10 +77,19 @@ const Tabs = (props, machine) => {
     return base64;
   }
 
+  let [requestMessage, setRequestMessage] = useState({
+      "name": "name",
+      "location": "location",
+      "ip": "string",
+      "fileName": "some file name",
+      "base64Data": "some file data",
+      "user": "username"
+  });
+
   const onDrop = async (acceptedFiles) => {
     const base64file = await handleFileRead(acceptedFiles[0]);
     const base64FileString = base64file.substring(base64file.indexOf(",") + 1);
-    let requestMessage = {
+    let requestMessageJson = {
       "name": "name",
       "location": "location",
       "ip": "string",
@@ -88,9 +97,12 @@ const Tabs = (props, machine) => {
       "base64Data": base64FileString,
       "user": "username"
     }
-    console.log(requestMessage)
+
+    //this is used to re-render table of files with the newly added file
+    setRequestMessage(requestMessageJson);
+
     try {
-      var odgovor = await request(wsEndpoint + "/web/file/put", "post", requestMessage);
+      var odgovor = await request(wsEndpoint + "/web/file/put", "post", requestMessageJson);
       console.log(odgovor.data.message);
     } catch (err) {
       console.log(err);
@@ -119,7 +131,7 @@ const Tabs = (props, machine) => {
     }),
     [isDragActive, isDragReject, isDragAccept]
   );
-  console.log(props.machine.name);
+  
   return (
     <div className="container">
       <div className="bloc-tabs">
@@ -189,7 +201,7 @@ const Tabs = (props, machine) => {
             tab === "filemanager" ? "content  active-content" : "content"
           }
         >
-          <FileManagerTable></FileManagerTable>
+          <FileManagerTable currentFile={requestMessage}></FileManagerTable>
           <div className="uploadArea">
             <div {...getRootProps({ style })}>
               <input {...getInputProps()} />

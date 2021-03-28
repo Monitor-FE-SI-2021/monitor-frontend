@@ -56,6 +56,16 @@ class FileManagerTable extends React.Component {
             ], showRenamePopup: false, showDeletePopup: false, globalId: -1
         }
     }
+    
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.currentFile !== this.props.currentFile) {
+            this.state.responseObject.push({
+                id: this.state.responseObject[this.state.responseObject.length-1].id+1,
+                fileName: nextProps.currentFile.fileName,
+                link: "testLink"
+            });
+        }
+    }
 
     toggleRenamePopup(resetId) {
         this.setState({
@@ -127,7 +137,6 @@ class FileManagerTable extends React.Component {
         this.state.globalId = id;
         this.toggleRenamePopup(false);
     }
-
 
     render() {
         return (

@@ -109,6 +109,6 @@ button {
 }
 
 .uploadArea div {
-  margin-right: 20%;
-  margin-left: 20%;
+  width: 700px;
+  margin: auto;
 }
