@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -11,7 +11,7 @@ import UpArrow from '@material-ui/icons/ArrowDropUp';
 import DownArrow from '@material-ui/icons/ArrowDropDown';
 import FilterList from '@material-ui/icons/FilterList'
 import { getDeepProp } from "../../utils/utils";
-import {Checkbox, FormControl, Input, ListItemText, MenuItem, Select} from "@material-ui/core";
+import { Checkbox, FormControl, Input, ListItemText, MenuItem, Select } from "@material-ui/core";
 
 const useStyles = makeStyles({
     table: {
@@ -26,7 +26,6 @@ const useStyles = makeStyles({
 });
 
 
-
 export function TableSlot({ slot, render }) {
     return <div></div>
 }
@@ -38,7 +37,7 @@ export default function CustomTable({ data, fields, children }) {
     const [open, setOpen] = React.useState(false);
     const [filter, setFilter] = useState([]);
 
-    
+
     const handleClose = () => {
         setOpen(false);
     };
@@ -51,14 +50,14 @@ export default function CustomTable({ data, fields, children }) {
 
         let oldData = JSON.parse(JSON.stringify(tableData));
 
-        if(sortDirection === 'asc'){
-            if(columnName === 'name') {
+        if (sortDirection === 'asc') {
+            if (columnName === 'name') {
                 oldData.sort((a, b) => (a.name > b.name) ? 1 : -1)
             } else if (columnName === 'location') {
                 oldData.sort((a, b) => (a.location > b.location) ? 1 : -1)
             }
         } else {
-            if(columnName === 'name') {
+            if (columnName === 'name') {
                 oldData.sort((a, b) => (a.name > b.name) ? -1 : 1)
             } else if (columnName === 'location') {
                 oldData.sort((a, b) => (a.location > b.location) ? -1 : 1)
@@ -68,13 +67,13 @@ export default function CustomTable({ data, fields, children }) {
     }
 
     useEffect(() => {
-        if(filter.length !== 0){
+        if (filter.length !== 0) {
             let oldData = JSON.parse(JSON.stringify(allData));
             let newData = [];
-            for(let data of oldData){
-                if(filter[0] === true && data.status === true){
+            for (let data of oldData) {
+                if (filter[0] === true && data.status === true) {
                     newData.push(data);
-                } else if (filter[0] === false && data.status === false){
+                } else if (filter[0] === false && data.status === false) {
                     newData.push(data);
                 }
             }
@@ -86,7 +85,7 @@ export default function CustomTable({ data, fields, children }) {
 
 
     const handleChange = (event) => {
-        if(filter[0] === event.target.value) {
+        if (filter[0] === event.target.value) {
             setFilter([]);
         } else {
             setFilter([event.target.value]);
@@ -121,9 +120,9 @@ export default function CustomTable({ data, fields, children }) {
 
     return (
         <React.Fragment>
-            <FilterList style={{float:'right', marginRight:'10px'}} onClick={handleOpen}/>
-            {open ? 
-                <FormControl style={{float:'right'}} >
+            <FilterList style={{ float: 'right', marginRight: '10px' }} onClick={handleOpen}/>
+            {open ?
+                <FormControl style={{ float: 'right' }}>
                     <Select
                         labelId="demo-controlled-open-select-label"
                         id="demo-controlled-open-select"
@@ -131,40 +130,44 @@ export default function CustomTable({ data, fields, children }) {
                         onClose={handleClose}
                         onOpen={handleOpen}
                         value={filter}
-                        input={<Input />}
-                        onChange={handleChange}
-                    >
+                        input={<Input/>}
+                        onChange={handleChange}>
                         <MenuItem value="" disabled>
                             <em>Status</em>
                         </MenuItem>
                         <MenuItem value={true}>
-                            <Checkbox checked={filter.indexOf(true) > -1} />
-                            <ListItemText primary="Active" />
+                            <Checkbox checked={filter.indexOf(true) > -1}/>
+                            <ListItemText primary="Active"/>
                         </MenuItem>
                         <MenuItem value={false}>
-                            <Checkbox checked={filter.indexOf(false) > -1} />
-                            <ListItemText primary="Inactive" />
+                            <Checkbox checked={filter.indexOf(false) > -1}/>
+                            <ListItemText primary="Inactive"/>
                         </MenuItem>
                     </Select>
                 </FormControl>
-            : null}
+                : null}
             <TableContainer component={Paper} className={'custom-table'}>
                 <Table className={classes.table}>
                     <TableHead>
                         <TableRow className={classes.header} key={'header-row'}>
                             {activeFields.map(field => (
-                                <TableCell className={classes.header} key={field.name}
+                                <TableCell className={classes.header}
+                                           key={field.name}
                                            align={field.align}
                                            style={{ width: field.width || 'initial' }}>
-                                    <div style={{ display: "flex", alignItems: "center"}}>
+                                    <div className='header-row-cell'>
                                         <span>{field.title}</span>
-                                        {field.name === 'location' || field.name === 'name' ?
-                                            <div style={{ display: "flex", alignItems: "center", flexDirection: "column"}}>
-                                                <UpArrow onClick={() => {handleSort(field.name,"asc")}} />
-                                                <DownArrow onClick={() => handleSort(field.name,"desc")}/>
+                                        {field.sort === true && (
+                                            <div style={{
+                                                display: "flex",
+                                                alignItems: "center",
+                                            }}>
+                                                <UpArrow onClick={() => {
+                                                    handleSort(field.name, "asc")
+                                                }}/>
+                                                <DownArrow onClick={() => handleSort(field.name, "desc")}/>
                                             </div>
-                                            : null
-                                        }
+                                        )}
                                     </div>
                                 </TableCell>
                             ))}

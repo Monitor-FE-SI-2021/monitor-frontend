@@ -1,5 +1,6 @@
 import CustomTable, { TableSlot } from '../CustomTable/CustomTable';
 import { useState } from "react";
+import { CastConnected } from "@material-ui/icons";
 import { Edit } from "@material-ui/icons";
 import dayjs from 'dayjs';
 import { connect } from "react-redux";
@@ -7,6 +8,7 @@ import { selectDevice } from "../../store/modules/devices/actions";
 import { push } from "connected-react-router";
 import { RouteLink } from "../../store/modules/menu/menu";
 
+import './device_table.scss'
 
 const DeviceTable = ({ devices, selectDevice, push }) => {
     const [tableData, setTableData] = useState(devices);
@@ -14,6 +16,10 @@ const DeviceTable = ({ devices, selectDevice, push }) => {
     const editDevice = (device) => {
         selectDevice(device);
         push(RouteLink.ManageDevice);
+    }
+
+    const connectDevice = (tableRow) => {
+        console.log(tableRow)
     }
 
     const [tableFields, setTableFields] = useState([
@@ -34,6 +40,7 @@ const DeviceTable = ({ devices, selectDevice, push }) => {
             name: 'lastTimeOnline',
             title: 'Posljednji put online',
             width: '30%',
+            sort: true,
             slot: 'lastTimeOnline'
         },
         {
@@ -49,7 +56,10 @@ const DeviceTable = ({ devices, selectDevice, push }) => {
     return (
         <CustomTable data={tableData} fields={tableFields}>
             <TableSlot slot='actions' render={dataRow => (
-                <Edit onClick={() => editDevice(dataRow)}/>
+                <div className='actions'>
+                    <CastConnected onClick={() => connectDevice(dataRow)}/>
+                    <Edit className='edit-btn' onClick={() => editDevice(dataRow)}/>
+                </div>
             )}/>
 
             <TableSlot slot='lastTimeOnline' render={dataRow => (
@@ -61,7 +71,6 @@ const DeviceTable = ({ devices, selectDevice, push }) => {
             <TableSlot slot='status' render={dataRow => (
                 <span>{dataRow.status === true ? 'Online' : 'Offline'}</span>
             )}/>
-
         </CustomTable>
     )
 }
