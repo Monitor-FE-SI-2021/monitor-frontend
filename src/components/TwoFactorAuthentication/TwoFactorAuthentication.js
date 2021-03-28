@@ -5,8 +5,8 @@ import axios from "axios";
 import {STORAGE_KEY} from "../../utils/consts";
 import {Update} from "@material-ui/icons";
 
-const securityLink= "http://167.99.244.168:3333/QRcode";
-const QrSave = "http://167.99.244.168:3333/QRcode/save"
+const securityLink= "https://si-2021.167.99.244.168.nip.io:3333/QRcode";
+const QrSave = "https://si-2021.167.99.244.168.nip.io:3333/QRcode/save"
 
 function TwoFactorAuthentication() {
 

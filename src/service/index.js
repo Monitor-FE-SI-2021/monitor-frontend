@@ -2,9 +2,9 @@ import axios from "axios";
 import { STORAGE_KEY } from "../utils/consts";
 import { history } from "../store/store";
 
-export const endpoint = 'http://si-2021.167.99.244.168.nip.io/api';
-export const wsEndpoint = 'http://si-grupa5.herokuapp.com/api';
-export const authEndpoint = 'http://167.99.244.168:3333';
+export const endpoint = 'https://si-2021.167.99.244.168.nip.io/api';
+export const wsEndpoint = 'https://si-grupa5.herokuapp.com/api';
+export const authEndpoint = 'https://si-2021.167.99.244.168.nip.io:3333';
 export const devices = `${endpoint}/device`
 export const groups = `${endpoint}/group`
 export const users = `${endpoint}/user`
