@@ -43,7 +43,7 @@ const DeviceTable = ({ devices }) => {
 
 
     return (
-        <CustomTable data={tableData}  fields={tableFields}>
+        <CustomTable data={tableData} fields={tableFields}>
             <TableSlot slot='actions' render={dataRow => (
                 <Delete onClick={() => deleteTableRow(dataRow)}/>
             )}/>
