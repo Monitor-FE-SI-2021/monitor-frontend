@@ -10,7 +10,7 @@ const ActiveMachine = ({ data, img, fun, setCharts }) => {
       .then((res) => res.data.data)
       .then((res) => {
         console.log(res);
-        setCharts(res);
+        setCharts(res, data);
       })
       .catch((err) => console.log(err));
   }
