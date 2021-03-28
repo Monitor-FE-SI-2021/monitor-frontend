@@ -58,14 +58,49 @@ const Tabs = (props, machine) => {
     borderColor: "#ff1744",
   };
 
-  const onDrop = useCallback((acceptedFiles) => {
-    //SEND FILES TO SERVER FROM HERE!
+  const convertBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file)
+      fileReader.onload = () => {
+        resolve(fileReader.result);
+      }
+      fileReader.onerror = (error) => {
+        reject(error);
+      }
+    })
+  }
+
+  const handleFileRead = async(sendFile) => {
+    const file = sendFile;
+    const base64 = await convertBase64(file);
+    return base64;
+  }
+
+  const onDrop = async (acceptedFiles) => {
+    const base64file = await handleFileRead(acceptedFiles[0]);
+    const base64FileString = base64file.substring(base64file.indexOf(",") + 1);
+    let requestMessage = {
+      "name": "name",
+      "location": "location",
+      "ip": "string",
+      "fileName": acceptedFiles[0].name,
+      "base64Data": base64FileString,
+      "user": "username"
+    }
+    console.log(requestMessage)
+    try {
+      var odgovor = await request(wsEndpoint + "/web/file/put", "post", requestMessage);
+      console.log(odgovor.data.message);
+    } catch (err) {
+      console.log(err);
+    }
     Swal.fire({
       title: "File manager",
-      text: "You have successfully uploaded your file!",
+      text: "Datoteka uspješno poslana!",
       type: "success",
     });
-  }, []);
+  };
 
   const {
     getRootProps,
