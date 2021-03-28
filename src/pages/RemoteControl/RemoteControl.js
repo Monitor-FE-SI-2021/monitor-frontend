@@ -1,48 +1,76 @@
 import { connect } from "react-redux";
-import { useState } from "react";
-import './RemoteControl.css'
-import request, { wsEndpoint } from "../../service";
+import React, { useState } from "react";
+import "./RemoteControl.css";
+import Tabs from "../../components/Tabs/Tabs";
+// import "react-dropdown/style.css";
+import { Route, useParams } from "react-router-dom";
+import request, { devices } from "../../service";
 
-const RemoteControl = () => {
+const RemoteControl = (props, { user }) => {
+  const [machines, setMachines] = React.useState();
 
-    const [url, setUrl] = useState("slkadhjaksl");
+  let { name, tab } = useParams();
 
-    const handleClick = async () => {
+  const groupId = user?.userGroups[0]?.groupId || 2;
 
-        try {
+  if (machines == undefined) {
+    request("https://si-grupa5.herokuapp.com/api/agent/online")
+      .then((res) => {
+        console.log("testee" + JSON.stringify(res));
+        setMachines(res?.data);
+      })
+      .catch((error) => {
+        console.log("Vazan error");
+        console.log(error);
+      });
 
-            var odgovor = await request(wsEndpoint + '/screenshot',
-                "post",
-                { name: 'DESKTOP-SCC', location: 'Sarajevo - SCC' });
+    return <div className="page dashboard"></div>;
+  }
 
-            setUrl(odgovor.data.message);
+  // const switchMachine = (machine) => {
+  //   props.history.push(
+  //     "/remotecontrol/" +
+  //       machine +
+  //       "/" +
+  //       (tab == undefined ? "screenshot" : tab)
+  //   );
+  // };
 
-        } catch (err) {
+  //const machineList = [];
+  let machine =
+    name == "0" || name == undefined
+      ? machines.find((value) => value.status !== "Disconnected")
+      : machines.find(
+          (value) => value.name == name && value.status !== "Disconnected"
+        );
 
-        }
-    }
+  if (machine == undefined) return <div className="page dashboard"></div>;
 
-    return (
-        <div className='page dashboard'>
-            <h1>IWM Remote Access/Control</h1>
+  // for (const [index, value] of machines.entries()) {
+  //   machineList.push(<option value={value.name}>{value.name}</option>);
+  // }
+  return (
+    <div className="page dashboard">
+      <h1>IWM Remote Access/Control</h1>
+      <br></br>
+      <h2>{name}</h2>
+      <br></br>
+      <div>
+        {/* <select
+          onChange={(event) => switchMachine(event.target.value)}
+          value={name}
+        >
+          {machineList}
+        </select> */}
+        <Tabs history={props.history} machine={machine}></Tabs>
+      </div>
+    </div>
+  );
+};
 
-            <div>
-                <p className="paragraph1">Quick example</p>
-                <div>
-                    <div className="screenshot">
-                        <p>Screenshot</p>
-                        <img alt="Asked image will appear here."
-                             className='screenshot-img'
-                             src={`data:image/jpeg;base64,${url}`}/>
-                    </div>
-                </div>
-            </div>
-
-            <button type="button" onClick={handleClick}>
-                Get Screenshot
-            </button>
-        </div>
-    );
-}
-
-export default connect(state => ({}), {})(RemoteControl);
+export default connect(
+  (state) => ({
+    user: state.login.user,
+  }),
+  {}
+)(RemoteControl);

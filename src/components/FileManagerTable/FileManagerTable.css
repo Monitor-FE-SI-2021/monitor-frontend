@@ -1,0 +1,57 @@
+.table-wrapper {
+    margin: 0 auto;
+    width: 700px;
+    height: 400px;
+    overflow-y: scroll;
+    border-bottom: 2px solid black;
+    margin-bottom: 10px;
+}
+
+table {
+    background-color: white;
+    width: 100%;
+    border-collapse: collapse;
+    border-top: 2px solid black;
+    border-left: 2px solid black;
+}
+
+th, tr {
+    border-bottom: 1px solid black;
+    text-align: center;
+}
+
+th {
+    background-color: #f9f9f9;
+    font-size: 18px;
+    height: 50px;
+    text-transform: uppercase;
+}
+
+td {
+    height: 50px;
+    border-right: 2px solid black;
+}
+
+th {
+    border-bottom: 2px solid black;
+    border-right: 2px solid black;
+}
+
+.file-download, .file-rename, .file-delete {
+    transition: 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+.file-manipulation {
+    cursor: pointer;
+    width: 14%;
+}
+
+.file-delete:hover {
+    transition: 0.2s ease-in-out;
+    color: #d21d1d;
+}
+
+.id {
+    width: 5%;
+}
