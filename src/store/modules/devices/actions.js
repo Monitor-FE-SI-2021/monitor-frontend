@@ -1,4 +1,10 @@
-import { SET_DEVICES, SET_DEVICES_ASYNC, SET_DEVICES_ASYNC_FOR_GROUP, SET_DEVICES_FOR_GROUP } from "./types";
+import {
+    SELECT_DEVICE,
+    SET_DEVICES,
+    SET_DEVICES_ASYNC,
+    SET_DEVICES_ASYNC_FOR_GROUP,
+    SET_DEVICES_FOR_GROUP
+} from "./types";
 import request, { devices } from "../../../service";
 
 export function fetchAllDevices() {
@@ -47,5 +53,14 @@ export function fetchDevicesForGroup(groupId) {
             }).finally(() => {
                 dispatch({ type: SET_DEVICES_ASYNC_FOR_GROUP, groupId: groupId, async: false });
             })
+    }
+}
+
+export function selectDevice(device) {
+    return dispatch => {
+        dispatch({
+            type: SELECT_DEVICE,
+            device
+        })
     }
 }

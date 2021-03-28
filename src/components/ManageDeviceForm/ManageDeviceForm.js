@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from "react-redux";
-import {makeStyles, TextField, MenuItem, Button, FormHelperText} from '@material-ui/core';
-import {useState} from 'react';
+import { makeStyles, TextField, MenuItem, Button } from '@material-ui/core';
+import { useState } from 'react';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -37,7 +37,7 @@ const groups = [
 // fieldValues is a prop for passing the field values for when the form is opened in edit mode
 // the required form of the object is
 // {name: "value", location: "value", latitude: "value", longitude: "value", installationCode: "value", group: "value"}
-const AddDeviceForm = ({fieldValues}) => {
+const ManageDeviceForm = ({ fieldValues }) => {
     const classes = useStyles();
 
     // initial values for when the form isn't opened in edit mode
@@ -54,27 +54,27 @@ const AddDeviceForm = ({fieldValues}) => {
         let temp = {}
         let letterNumber = /^[0-9a-zA-Z]+$/
 
-        if(values.name == "")
+        if (values.name == "")
             temp.name = "This field is required"
-        else if(!values.name.match(letterNumber) && !values.name.includes(" "))
+        else if (!values.name.match(letterNumber) && !values.name.includes(" "))
             temp.name = "This field can only contain the following characters: A-Z, a-z, 0-9"
         else
-            temp.name=""
-        
-        if(values.location =="")
+            temp.name = ""
+
+        if (values.location == "")
             temp.location = "This field is required"
-        else if(!values.location.match(letterNumber) && !values.location.includes(" "))
+        else if (!values.location.match(letterNumber) && !values.location.includes(" "))
             temp.location = "This field can only contain the following characters: A-Z, a-z, 0-9"
         else
             temp.location = ""
 
-        temp.latitude = values.latitude.length==6 ? "" : "Latitude should consist of exactly 6 numbers!"
-        temp.longitude = values.longitude.length==6 ? "" : "Longitude should consist of exactly 6 numbers!"
+        temp.latitude = values.latitude.length == 6 ? "" : "Latitude should consist of exactly 6 numbers!"
+        temp.longitude = values.longitude.length == 6 ? "" : "Longitude should consist of exactly 6 numbers!"
         temp.group = values.group ? "" : "This field is required!"
         temp.installationCode = values.installationCode ? "" : "This field is required!"
         setErrors(temp)
 
-        return Object.values(temp).every(x => x=="")
+        return Object.values(temp).every(x => x == "")
     }
 
     // if the form is opened in edit mode we shall obtain the passed values
@@ -88,21 +88,20 @@ const AddDeviceForm = ({fieldValues}) => {
     const [errors, setErrors] = useState({})
 
     const handleInputChange = e => {
-        const {name, value} = e.target
+        const { name, value } = e.target
         setValues({
             ...values,
-            [name]:value
+            [name]: value
         })
     }
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        if(validate()) {
+        if (validate()) {
             if (fieldValues === undefined) {
                 alert("Created machine successfully!")
                 setValues(initialValues)
-            }
-            else {
+            } else {
                 alert("Edited machine successfully!")
             }
         }
@@ -111,19 +110,22 @@ const AddDeviceForm = ({fieldValues}) => {
     return (
         <form className={classes.root} onSubmit={handleSubmit}>
             <TextField label="Name" name="name" value={values.name} onChange={handleInputChange}
-                       {...(errors.name && {error:true, helperText: errors.name})} />
+                       {...(errors.name && { error: true, helperText: errors.name })} />
 
             <TextField label="Location" name="location" value={values.location} onChange={handleInputChange}
-                       {...(errors.location && {error:true, helperText: errors.location})} />
+                       {...(errors.location && { error: true, helperText: errors.location })} />
 
-            <TextField label="Latitude" type='number' name="latitude" value={values.latitude} onChange={handleInputChange}
-                       {...(errors.latitude && {error:true, helperText: errors.latitude})}/>
+            <TextField label="Latitude" type='number' name="latitude" value={values.latitude}
+                       onChange={handleInputChange}
+                       {...(errors.latitude && { error: true, helperText: errors.latitude })}/>
 
-            <TextField label="Longitude" type='number' name="longitude" value={values.longitude} onChange={handleInputChange}
-                       {...(errors.longitude && {error:true, helperText: errors.longitude})}/>
+            <TextField label="Longitude" type='number' name="longitude" value={values.longitude}
+                       onChange={handleInputChange}
+                       {...(errors.longitude && { error: true, helperText: errors.longitude })}/>
 
-            <TextField label="Installation code" name="installationCode" value={values.installationCode} onChange={handleInputChange}
-                       {...(errors.installationCode && {error:true, helperText: errors.installationCode})}/>
+            <TextField label="Installation code" name="installationCode" value={values.installationCode}
+                       onChange={handleInputChange}
+                       {...(errors.installationCode && { error: true, helperText: errors.installationCode })}/>
 
             <TextField
                 select
@@ -131,20 +133,20 @@ const AddDeviceForm = ({fieldValues}) => {
                 value={values.group}
                 label="Group"
                 onChange={handleInputChange}
-                {...(errors.group && {error:true, helperText: errors.group})}
+                {...(errors.group && { error: true, helperText: errors.group })}
             >
                 {groups.map((group) => (
-                  <MenuItem key={group.id} value={group.name}>
-                    {group.name}
-                  </MenuItem>
+                    <MenuItem key={group.id} value={group.name}>
+                        {group.name}
+                    </MenuItem>
                 ))}
             </TextField>
 
-            <Button type = "submit" variant="contained">
+            <Button type="submit" variant="contained">
                 {fieldValues !== undefined ? "Edit Machine" : "Create Machine"}
             </Button>
         </form>
     );
 }
 
-export default connect(state => ({}), {})(AddDeviceForm);
+export default connect(state => ({}), {})(ManageDeviceForm);

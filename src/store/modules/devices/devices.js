@@ -1,10 +1,17 @@
-import { SET_DEVICES, SET_DEVICES_ASYNC, SET_DEVICES_ASYNC_FOR_GROUP, SET_DEVICES_FOR_GROUP } from "./types";
+import {
+    SET_DEVICES,
+    SET_DEVICES_ASYNC,
+    SET_DEVICES_ASYNC_FOR_GROUP,
+    SET_DEVICES_FOR_GROUP,
+    SELECT_DEVICE
+} from "./types";
 import { cloneDeep } from "lodash";
 
 const initialState = {
     async: false,
     allDevices: [],     //  Ako zatreba slucajno...\
     deviceTables: {},   // Mapa gdje je ključ groupId a vrijednost tabela uredjaja te grupe uz dodatne informacije (paginacija, filteri i slicno)
+    selectedDevice: null,
 }
 
 const ACTION_HANDLERS = {
@@ -19,6 +26,12 @@ const ACTION_HANDLERS = {
         return {
             ...state,
             async: action.async
+        }
+    },
+    [SELECT_DEVICE]: (state, action) => {
+        return {
+            ...state,
+            selectedDevice: action.device
         }
     },
     [SET_DEVICES_FOR_GROUP]: (state, action) => {
@@ -53,7 +66,8 @@ const ACTION_HANDLERS = {
             ...state,
             deviceTables: newDeviceTables
         }
-    }
+    },
+
 }
 
 export default function devices(state = initialState, action) {

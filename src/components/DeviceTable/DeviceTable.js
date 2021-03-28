@@ -1,17 +1,21 @@
 import CustomTable, { TableSlot } from '../CustomTable/CustomTable';
 import { useState } from "react";
-import { Delete } from "@material-ui/icons";
+import { Edit } from "@material-ui/icons";
 import dayjs from 'dayjs';
-import orderBy from "lodash/orderBy";
+import { connect } from "react-redux";
+import { selectDevice } from "../../store/modules/devices/actions";
+import { push } from "connected-react-router";
+import { RouteLink } from "../../store/modules/menu/menu";
 
 
-const DeviceTable = ({ devices }) => {
+const DeviceTable = ({ devices, selectDevice, push }) => {
     const [tableData, setTableData] = useState(devices);
 
-    const deleteTableRow = (tableRow) => {
-        console.log(tableRow);
+    const editDevice = (device) => {
+        selectDevice(device);
+        push(RouteLink.ManageDevice);
     }
-    
+
     const [tableFields, setTableFields] = useState([
         {
             name: 'name',
@@ -45,7 +49,7 @@ const DeviceTable = ({ devices }) => {
     return (
         <CustomTable data={tableData} fields={tableFields}>
             <TableSlot slot='actions' render={dataRow => (
-                <Delete onClick={() => deleteTableRow(dataRow)}/>
+                <Edit onClick={() => editDevice(dataRow)}/>
             )}/>
 
             <TableSlot slot='lastTimeOnline' render={dataRow => (
@@ -62,4 +66,4 @@ const DeviceTable = ({ devices }) => {
     )
 }
 
-export default DeviceTable;
+export default connect(null, { selectDevice, push })(DeviceTable);
