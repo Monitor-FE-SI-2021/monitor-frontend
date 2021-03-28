@@ -34,7 +34,7 @@ const UseOnEnter = () => {
   };
 
   try {
-      var response = await fetch('http://167.99.244.168:3333/login', requestOptions);
+      var response = await fetch('https://si-2021.167.99.244.168.nip.io:3333', requestOptions);
      //console.log(response.status)
       
       //console.log(x);

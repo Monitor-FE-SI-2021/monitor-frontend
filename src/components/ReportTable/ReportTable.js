@@ -18,6 +18,7 @@ const ReportTable = ({ reports }) => {
         {
             name: 'startDate',
             title: 'Date',
+            slot: 'startDate',
         },
         {
             name: 'frequency',
@@ -28,22 +29,25 @@ const ReportTable = ({ reports }) => {
             title: 'Download',
             width: '20%',
             align: 'left',
-            slot: 'actions'
+            slot: 'actions',
         }
     ])
 
     return (
         <CustomTable data={tableData} fields={tableFields}>
 
-            <TableSlot slot='actions' render={dataRow => (
-                <GetAppIcon onClick={() => downloadTableRow(dataRow)}/>
+            <TableSlot slot='startDate' render={(dataRow) => (
+                <div>
+                    {dayjs(dataRow.startDate).format('DD.MM.YYYY.')}
+                </div>
             )}/>
 
-            <TableSlot slot='startDate' render={dataRow => (
-                <span>
-                    {dayjs(dataRow.startDate).format('DD.MM.YYYY')}
-                </span>
+            <TableSlot slot='actions' render={dataRow => (
+                <div>
+                    <GetAppIcon onClick={() => downloadTableRow(dataRow)}/>
+                </div>
             )}/>
+
         </CustomTable>
     )
 }
