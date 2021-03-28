@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -12,18 +11,9 @@ import DownArrow from '@material-ui/icons/ArrowDropDown';
 import FilterList from '@material-ui/icons/FilterList'
 import { getDeepProp } from "../../utils/utils";
 import { Checkbox, FormControl, Input, ListItemText, MenuItem, Select } from "@material-ui/core";
+import classnames from 'classnames';
 
-const useStyles = makeStyles({
-    table: {
-        minWidth: 650,
-    },
-    header: {
-        backgroundColor: '#404040',
-        color: 'white',
-        fontWeight: 600,
-        padding: '5px 20px'
-    }
-});
+import './custom_table.scss'
 
 
 export function TableSlot({ slot, render }) {
@@ -91,7 +81,6 @@ export default function CustomTable({ data, fields, children }) {
             setFilter([event.target.value]);
         }
     };
-    const classes = useStyles();
 
     const activeFields = (fields || []).filter(field => field.disabled !== undefined ? !field.disabled : true);
 
@@ -119,8 +108,8 @@ export default function CustomTable({ data, fields, children }) {
 
 
     return (
-        <React.Fragment>
-            <FilterList style={{ float: 'right', marginRight: '10px' }} onClick={handleOpen}/>
+        <TableContainer component={Paper} className={'custom-table-container'}>
+            <FilterList className='filter-btn' onClick={handleOpen}/>
             {open ?
                 <FormControl style={{ float: 'right' }}>
                     <Select
@@ -146,44 +135,42 @@ export default function CustomTable({ data, fields, children }) {
                     </Select>
                 </FormControl>
                 : null}
-            <TableContainer component={Paper} className={'custom-table'}>
-                <Table className={classes.table}>
-                    <TableHead>
-                        <TableRow className={classes.header} key={'header-row'}>
-                            {activeFields.map(field => (
-                                <TableCell className={classes.header}
-                                           key={field.name}
-                                           align={field.align}
-                                           style={{ width: field.width || 'initial' }}>
-                                    <div className='header-row-cell'>
-                                        <span>{field.title}</span>
-                                        {field.sort === true && (
-                                            <div style={{
-                                                display: "flex",
-                                                alignItems: "center",
-                                            }}>
-                                                <UpArrow onClick={() => {
-                                                    handleSort(field.name, "asc")
-                                                }}/>
-                                                <DownArrow onClick={() => handleSort(field.name, "desc")}/>
-                                            </div>
-                                        )}
-                                    </div>
-                                </TableCell>
+            <Table className='custom-table'>
+                <TableHead>
+                    <TableRow className={'header-row'} key={'header-row'}>
+                        {activeFields.map(field => (
+                            <TableCell key={field.name}
+                                       className='header-row-cell'
+                                       align={field.align}
+                                       style={{ width: field.width || 'initial' }}>
+                                <div className={classnames('cell-content', [field.align])}>
+                                    <span>{field.title}</span>
+                                    {field.sort === true && (
+                                        <div style={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                        }}>
+                                            <UpArrow onClick={() => {
+                                                handleSort(field.name, "asc")
+                                            }}/>
+                                            <DownArrow onClick={() => handleSort(field.name, "desc")}/>
+                                        </div>
+                                    )}
+                                </div>
+                            </TableCell>
+                        ))}
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {tableData.map((row, rowIndex) => (
+                        <TableRow key={row.id ?? rowIndex}>
+                            {activeFields.map((field, index) => (
+                                renderDataRowCell(row, field, index)
                             ))}
                         </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {tableData.map((row, rowIndex) => (
-                            <TableRow key={row.id ?? rowIndex}>
-                                {activeFields.map((field, index) => (
-                                    renderDataRowCell(row, field, index)
-                                ))}
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-        </React.Fragment>
+                    ))}
+                </TableBody>
+            </Table>
+        </TableContainer>
     );
 }

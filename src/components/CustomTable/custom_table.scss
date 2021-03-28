@@ -1,10 +1,31 @@
-.custom-table {
 
-    .header-row {
+.custom-table-container {
+    min-width: 650px;
 
-        .header-row-cell {
-            display: flex;
-            align-items: center;
+    .filter-btn {
+        float: right;
+        margin: 10px;
+    }
+
+    .custom-table {
+
+        .header-row {
+
+            .header-row-cell {
+                background-color: #404040;
+                color: white;
+                font-weight: 600;
+                padding: 5px 20px;
+
+                .cell-content {
+                    display: flex;
+                    align-items: center;
+
+                    &.right {
+                        justify-content: flex-end;
+                    }
+                }
+            }
         }
     }
 }

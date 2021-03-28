@@ -2,15 +2,17 @@ import './DeviceGroup.scss';
 import DeviceTable from '../DeviceTable/DeviceTable';
 import React, { useEffect, useState } from 'react';
 import { connect } from "react-redux";
-import { fetchDevicesForGroup } from "../../store/modules/devices/actions";
+import { fetchDevicesForGroup, updateDevicesTableForGroup } from "../../store/modules/devices/actions";
 import { Spinner } from "../Spinner/Spinner";
+import CustomPagination from "../CustomTable/components/CustomPagination";
 
 
-const DeviceGroup = ({ group, fetchDevicesForGroup, deviceTable }) => {
+const DeviceGroup = ({ group, deviceTable, fetchDevicesForGroup, updateDevicesTableForGroup }) => {
 
     const [hidden, setHidden] = useState(true);
 
     const devices = deviceTable?.devices ?? [];
+
     const async = deviceTable?.async;
 
     useEffect(() => {
@@ -18,10 +20,10 @@ const DeviceGroup = ({ group, fetchDevicesForGroup, deviceTable }) => {
         const hasNoSubGroups = group.subGroups.length === 0;
 
         if (!hidden && hasNoSubGroups) {
-            fetchDevicesForGroup(group.groupId);
+            fetchDevicesForGroup({ groupId: group.groupId, page: deviceTable.page, perPage: deviceTable.perPage });
         }
 
-    }, [hidden, group]);
+    }, [hidden, group, deviceTable.page, deviceTable.perPage]);
 
     let subGroupsRendered = group.subGroups.map(subGroup => {
         return <ConnectedDeviceGroup group={subGroup}
@@ -33,6 +35,14 @@ const DeviceGroup = ({ group, fetchDevicesForGroup, deviceTable }) => {
         setHidden(newHidden);
     }
 
+    const handleChangePage = (page) => {
+        updateDevicesTableForGroup({ groupId: group.groupId, data: { page } })
+    }
+
+    const handleChangePerPage = (perPage) => {
+        updateDevicesTableForGroup({ groupId: group.groupId, data: { perPage } })
+    }
+
     return (
         <div className='group'>
             <div className='tab' onClick={toggleArrow}>
@@ -41,7 +51,18 @@ const DeviceGroup = ({ group, fetchDevicesForGroup, deviceTable }) => {
             </div>
             {!hidden && (
                 <React.Fragment>
-                    {async ? <Spinner/> : devices.length !== 0 ? <DeviceTable devices={devices}/> : null}
+                    {async ? <Spinner/> : devices.length !== 0 ? (
+                        <React.Fragment>
+                            <DeviceTable devices={devices}/>
+                            <CustomPagination totalCount={deviceTable.totalCount}
+                                              page={deviceTable.page}
+                                              perPage={deviceTable.perPage}
+                                              handleChangePage={handleChangePage}
+                                              handleChangePerPage={handleChangePerPage}
+                            />
+                        </React.Fragment>
+                    ) : null
+                    }
                     {subGroupsRendered || null}
                 </React.Fragment>
             )}
@@ -51,14 +72,20 @@ const DeviceGroup = ({ group, fetchDevicesForGroup, deviceTable }) => {
 
 const ConnectedDeviceGroup = connect((state, ownProps) => {
 
-    const { group } = ownProps;
-    const groupId = group?.groupId || null;
+        const { group } = ownProps;
+        const groupId = group?.groupId || null;
 
-    const deviceTable = state.devices.deviceTables?.[groupId] || {};
+        const deviceTable = state.devices.deviceTables?.[groupId] || {};
 
-    return {
-        deviceTable,
+        return {
+            deviceTable,
+        }
     }
-}, { fetchDevicesForGroup })(DeviceGroup);
+    ,
+    {
+        fetchDevicesForGroup,
+        updateDevicesTableForGroup
+    }
+)(DeviceGroup);
 
 export default ConnectedDeviceGroup;

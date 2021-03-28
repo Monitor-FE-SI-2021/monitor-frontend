@@ -43,6 +43,11 @@ const request = async (
     return new Promise((resolve, reject) => {
         return axios.request(fullConfig)
             .then(r => {
+
+                if (r?.data?.newAccessToken) {      // refresh token ( TODO, this must be more secure )
+                    localStorage.setItem(STORAGE_KEY, r?.data?.newAccessToken);
+                }
+
                 resolve(r);
             })
             .catch(ex => {

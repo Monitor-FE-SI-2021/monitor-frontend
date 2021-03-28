@@ -1,5 +1,5 @@
 import CustomTable, { TableSlot } from '../CustomTable/CustomTable';
-import { useState } from "react";
+import React, { useState } from "react";
 import { CastConnected } from "@material-ui/icons";
 import { Edit } from "@material-ui/icons";
 import dayjs from 'dayjs';
@@ -11,7 +11,6 @@ import { RouteLink } from "../../store/modules/menu/menu";
 import './device_table.scss'
 
 const DeviceTable = ({ devices, selectDevice, push }) => {
-    const [tableData, setTableData] = useState(devices);
 
     const editDevice = (device) => {
         selectDevice(device);
@@ -22,10 +21,11 @@ const DeviceTable = ({ devices, selectDevice, push }) => {
         console.log(tableRow)
     }
 
-    const [tableFields, setTableFields] = useState([
+    const [tableFields] = useState([
         {
             name: 'name',
             title: 'Naziv',
+            sort: true,
         },
         {
             name: 'location',
@@ -54,24 +54,26 @@ const DeviceTable = ({ devices, selectDevice, push }) => {
 
 
     return (
-        <CustomTable data={tableData} fields={tableFields}>
-            <TableSlot slot='actions' render={dataRow => (
-                <div className='actions'>
-                    <CastConnected onClick={() => connectDevice(dataRow)}/>
-                    <Edit className='edit-btn' onClick={() => editDevice(dataRow)}/>
-                </div>
-            )}/>
+        <React.Fragment>
+            <CustomTable data={devices} fields={tableFields}>
+                <TableSlot slot='actions' render={dataRow => (
+                    <div className='actions'>
+                        <CastConnected onClick={() => connectDevice(dataRow)}/>
+                        <Edit className='edit-btn' onClick={() => editDevice(dataRow)}/>
+                    </div>
+                )}/>
 
-            <TableSlot slot='lastTimeOnline' render={dataRow => (
-                <span>
+                <TableSlot slot='lastTimeOnline' render={dataRow => (
+                    <span>
                     {dayjs(dataRow.lastTimeOnline).format('DD.MM.YYYY HH:mm:ss')}
                 </span>
-            )}/>
+                )}/>
 
-            <TableSlot slot='status' render={dataRow => (
-                <span>{dataRow.status === true ? 'Online' : 'Offline'}</span>
-            )}/>
-        </CustomTable>
+                <TableSlot slot='status' render={dataRow => (
+                    <span>{dataRow.status === true ? 'Online' : 'Offline'}</span>
+                )}/>
+            </CustomTable>
+        </React.Fragment>
     )
 }
 

@@ -3,7 +3,8 @@ import {
     SET_DEVICES,
     SET_DEVICES_ASYNC,
     SET_DEVICES_ASYNC_FOR_GROUP,
-    SET_DEVICES_FOR_GROUP
+    SET_DEVICES_FOR_GROUP,
+    UPDATE_DEVICES_TABLE_FOR_GROUP
 } from "./types";
 import request, { devices } from "../../../service";
 
@@ -26,9 +27,9 @@ export function fetchAllDevices() {
     }
 }
 
-export function fetchDevicesForGroup(groupId) {
+export function fetchDevicesForGroup({ groupId, page = 1, perPage = 10 }) {
 
-    const query = `page=1&per_page=10&name=&status=active&groupId=${groupId}&sort_by=name_desc`
+    const query = `page=${page}&per_page=${perPage}&name=&status=active&groupId=${groupId}&sort_by=name_desc`
 
     return (dispatch, getState) => {
 
@@ -43,16 +44,31 @@ export function fetchDevicesForGroup(groupId) {
         return request(devices + `/AllDevicesForGroup?${query}`).then(response => response.data)
             .then(r => {
 
-                const devices = r.data;
+                const { devices, deviceCount } = r.data;
 
                 return dispatch({
-                    type: SET_DEVICES_FOR_GROUP,
+                    type: UPDATE_DEVICES_TABLE_FOR_GROUP,
                     groupId: groupId,
-                    devices: devices
+                    data: {
+                        devices: devices,
+                        totalCount: deviceCount,
+                        page,
+                        perPage,
+                    }
                 })
             }).finally(() => {
                 dispatch({ type: SET_DEVICES_ASYNC_FOR_GROUP, groupId: groupId, async: false });
             })
+    }
+}
+
+export function updateDevicesTableForGroup({ groupId, data }) {
+    return dispatch => {
+        dispatch({
+            type: UPDATE_DEVICES_TABLE_FOR_GROUP,
+            groupId,
+            data
+        })
     }
 }
 
