@@ -1,60 +1,46 @@
 import './DeviceGroup.scss';
 import DeviceTable from '../DeviceTable/DeviceTable';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from "react-redux";
+import { fetchDevicesForGroup, updateDevicesTableForGroup } from "../../store/modules/devices/actions";
+import { Spinner } from "../Spinner/Spinner";
+import CustomPagination from "../CustomTable/components/CustomPagination";
 
-const DeviceGroup = ({ group, allGroups, allDevices }) => {
+
+const DeviceGroup = ({ group, deviceTable, fetchDevicesForGroup, updateDevicesTableForGroup }) => {
 
     const [hidden, setHidden] = useState(true);
 
-    const getSubGroups = (groups, groupId) => {
-        const subGroups = [];
+    const devices = deviceTable?.devices ?? [];
 
-        for (let group of groups) {
-            if (group.parentGroup === groupId) {
-                subGroups.push(group);
-            }
+    const async = deviceTable?.async;
+
+    useEffect(() => {
+
+        const hasNoSubGroups = group.subGroups.length === 0;
+
+        if (!hidden && hasNoSubGroups) {
+            fetchDevicesForGroup({ groupId: group.groupId, page: deviceTable.page, perPage: deviceTable.perPage });
         }
 
-        return subGroups;
-    }
+    }, [hidden, group, deviceTable.page, deviceTable.perPage]);
 
-    const getFilterDevices = (devices) => {
-        const filteredDevices = [];
-
-        for (let device of devices) {
-            if (device.groupId === group.groupId) {
-                filteredDevices.push(device);
-            }
-        }
-
-        return filteredDevices;
-    }
-
-    let subGroups = getSubGroups(allGroups, group.groupId).map(subGroup => {
+    let subGroupsRendered = group.subGroups.map(subGroup => {
         return <ConnectedDeviceGroup group={subGroup}
                                      key={subGroup.groupId}/>
-    });
-
-    let filteredDevices = getFilterDevices(allDevices);
-
-    if (subGroups.length === 0) {
-        subGroups = null;
-    }
-
-    let data = null;
-
-    if (!hidden) {
-        data = <React.Fragment>
-            {filteredDevices.length !== 0 ? <DeviceTable devices={filteredDevices}/> : null}
-            {subGroups}
-        </React.Fragment>
-    }
-
+    })
 
     const toggleArrow = () => {
         let newHidden = !hidden;
         setHidden(newHidden);
+    }
+
+    const handleChangePage = (page) => {
+        updateDevicesTableForGroup({ groupId: group.groupId, data: { page } })
+    }
+
+    const handleChangePerPage = (perPage) => {
+        updateDevicesTableForGroup({ groupId: group.groupId, data: { perPage } })
     }
 
     return (
@@ -63,14 +49,43 @@ const DeviceGroup = ({ group, allGroups, allDevices }) => {
                 <button className={hidden ? 'collapsed' : 'expanded'}/>
                 <h2>{group.name}</h2>
             </div>
-            {data}
+            {!hidden && (
+                <React.Fragment>
+                    {async ? <Spinner/> : devices.length !== 0 ? (
+                        <React.Fragment>
+                            <DeviceTable devices={devices}/>
+                            <CustomPagination totalCount={deviceTable.totalCount}
+                                              page={deviceTable.page}
+                                              perPage={deviceTable.perPage}
+                                              handleChangePage={handleChangePage}
+                                              handleChangePerPage={handleChangePerPage}
+                            />
+                        </React.Fragment>
+                    ) : null
+                    }
+                    {subGroupsRendered || null}
+                </React.Fragment>
+            )}
         </div>
     )
 }
 
-const ConnectedDeviceGroup = connect(state => ({
-    allDevices: state.devices.devices,
-    allGroups: state.groups.groups,
-}), {})(DeviceGroup);
+const ConnectedDeviceGroup = connect((state, ownProps) => {
+
+        const { group } = ownProps;
+        const groupId = group?.groupId || null;
+
+        const deviceTable = state.devices.deviceTables?.[groupId] || {};
+
+        return {
+            deviceTable,
+        }
+    }
+    ,
+    {
+        fetchDevicesForGroup,
+        updateDevicesTableForGroup
+    }
+)(DeviceGroup);
 
 export default ConnectedDeviceGroup;

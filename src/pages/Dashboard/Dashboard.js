@@ -101,7 +101,7 @@ const Dashboard = ({ user }) => {
     React.useEffect(() => {
         request(devices + "/AllDevicesForGroup?groupId=" + groupId)
             .then((res) => {
-                setMachines(res.data.data)
+                setMachines(res.data.data.devices)
             })
             .catch((err) => console.log(err))
 
