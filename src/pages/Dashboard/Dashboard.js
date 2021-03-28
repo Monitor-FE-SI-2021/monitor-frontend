@@ -174,7 +174,7 @@ const Dashboard = ({user}) => {
     const [showCharts, setShowCharts] = React.useState(false);
 
     function filterActive(activeMachines, allMachines) {
-        return activeMachines.filter((machine) => {
+        return activeMachines ? activeMachines.filter((machine) => {
             const existingMachine = allMachines.find(({name, location}) => {
                 return machine.status !== "Disconnected" && name === machine.name && location === machine.location;
             });
@@ -183,7 +183,7 @@ const Dashboard = ({user}) => {
                 machine.lastTimeOnline = existingMachine.lastTimeOnline;
             }
             return existingMachine;
-        });
+        }) : [];
     }
 
     React.useEffect(() => {
