@@ -40,7 +40,7 @@ const ActiveMachine = ({ data, img, fun, set }) => {
           <br></br>
           <br />
 
-          <img
+          {/* <img
             id="term"
             src={Term}
             className="icon"
@@ -72,7 +72,7 @@ const ActiveMachine = ({ data, img, fun, set }) => {
                 "_blank"
               )
             }
-          />
+          /> */}
         </div>
       </div>
     </>
