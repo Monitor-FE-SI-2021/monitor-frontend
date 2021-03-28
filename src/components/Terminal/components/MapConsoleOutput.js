@@ -49,6 +49,7 @@ const MapConsoleOutput = ({ consoleOutput, updateConsoleOutput, token, path, nam
                 })
                     .then(res => res.json())
                     .then(res => {
+                        console.log(res)
                         token = res.token;
                         const clone = [...consoleOutput]
                         clone[clone.length - 1] = res.message;

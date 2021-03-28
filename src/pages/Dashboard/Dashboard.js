@@ -3,10 +3,11 @@ import { connect } from "react-redux";
 import MachineIcon from '../../assets/icons/machine.png'
 import PieChart from "./components/charts/PieChart";
 import LineChart from "./components/charts/LineChart";
-import ChartDonut from "./components/charts/ChartDonut";
+import DonutChart from "./components/charts/DonutChart";
 import BarChart from "./components/charts/BarChart";
 import ActiveMachine from "./components/ActiveMachine";
 import request, { devices } from "../../service";
+
 import './dashboard.scss'
 import {act} from "@testing-library/react";
 
@@ -21,8 +22,8 @@ let chartPieDataExample = {
         {
             label: 'Average RAM usage',
             data: [
-                0.80,
-                0.20
+                80,
+                20
             ],
             backgroundColor: [
                 'rgba(75, 192, 192, 0.6)',
@@ -56,19 +57,17 @@ let chartLineDataExample = {
     ]
 }
 let chartDonutDataExample = {
-    labels: ['Q1', 'Q2', 'Q3'],
+    labels: ['Used', 'Not used'],
     datasets: [
         {
             label: 'GPU usage',
             data: [
                 60,
-                65,
-                80
+                40
             ],
             backgroundColor: [
-                'rgba(255, 206, 86, 0.6)',
-                'rgba(255, 99, 132, 0.6)',
-                'rgba(257, 102, 90, 0.6)'
+                'rgba(75, 192, 192, 0.6)',
+                'rgba(54, 162, 235, 0.6)'
             ]
         }
     ]
@@ -92,53 +91,71 @@ let chartBarDataExample = {
         }
     ]
 }
+let activeMachines = [
+    {
+        name: "Desktop PC 1",
+        location: "Sarajevo - BBI",
+        ip: "255.255.255.0",
+        path: "C:/user/programfiles"
+    },
+    {
+        name: "Desktop PC 2",
+        location: "Sarajevo - BBI",
+        ip: "255.255.255.0",
+        path: "C:/user/programfiles"
+    },
+    {
+        name: "Desktop",
+        location: "Mostar - Mepas Mall",
+        ip: "255.255.255.0",
+        path: "C:/user/programfiles"
+    }
+]
 
 const Dashboard = ({ user }) => {
-    let activeMachines = [
-        {
-            name: "Desktop PC 1",
-            location: "Sarajevo - BBI",
-            ip: "255.255.255.0",
-            path: "C:/user/programfiles"
-        },
-        {
-            name: "Desktop PC 2",
-            location: "Sarajevo - BBI",
-            ip: "255.255.255.0",
-            path: "C:/user/programfiles"
-        },
-        {
-            name: "Desktop PC 1",
-            location: "Mostar - Mepas Mall",
-            ip: "255.255.255.0",
-            path: "C:/user/programfiles"
-        }
-    ]
-    /*const date = new Date()
-    date.setFullYear(date.getFullYear() - 1)*/
+
     const [machines, setMachines] = React.useState([])
+    const [active, setActive] = React.useState([...activeMachines])
+
+    function filterActive(activeMachines, allMachines) {
+        return activeMachines.filter((machine) => {
+            const existingMachine = allMachines.find(({name, location}) => {
+                return name === machine.name && location === machine.location
+            })
+            if (existingMachine) {
+                machine.deviceId = existingMachine.deviceId
+                machine.lastTimeOnline = existingMachine.lastTimeOnline
+            }
+            return existingMachine
+        })
+    }
+
+
 
     React.useEffect(() => {
         request(devices + "/AllDevices")
-            .then((res) => setMachines(res.data.data))
+            .then((res) => {
+                const allMachines = res.data.data
+                setMachines(allMachines)
+                setActive(filterActive(activeMachines, allMachines))
+            })
             .catch((err) => console.log(err))
-       /* request(devices + "/GetDeviceLogs?deviceId=" + 15 + "&startDate=" + date.toISOString() + "&endDate=")
-            .then((res) => console.log(res))
-            .catch((err) => console.log(err))*/
+
+        request("https://si-grupa5.herokuapp.com/api/agent/online")
+            .then((res) => {
+                console.log(res)
+            })
     }, [])
 
-    //setMachines(activeMachines)
 
-    activeMachines = activeMachines.filter((machine) => {
-        const existingMachine = machines.find(({name, location}) => {
-            return name === machine.name && location === machine.location
-        })
-        if (existingMachine) {
-            machine.deviceId = existingMachine.deviceId
-            machine.lastTimeOnline = existingMachine.lastTimeOnline
+    const disconnectMachine = (machine) => {
+        const index = active.indexOf(machine)
+        const cloned = active.slice(0)
+        if (index >= 0 && window.confirm('Are you sure you wish to disconnect this machine?')) {
+            cloned.splice(index, 1)
+            setActive(cloned)
         }
-        return existingMachine
-    })
+    }
 
     return (
         <div className='page'>
@@ -146,24 +163,25 @@ const Dashboard = ({ user }) => {
                 <div className='row machine-cards'>
                     <h1>List of active machines</h1>
                     <div className='scrollable'>
-                        { activeMachines.map((machine, id) => (
+                        { active.map((machine, id) => (
                             <ActiveMachine
                                 key={id}
                                 data={machine}
                                 img={MachineIcon}
+                                fun={disconnectMachine}
                             />
                         )) }
                     </div>
                 </div>
 
                 <div className='row'>
-                    <PieChart chartData={chartPieDataExample}/>
-                    <LineChart chartData={chartLineDataExample}/>
+                    <DonutChart displayTitle = "Average RAM usage" chartData={chartDonutDataExample}/>
+                    <DonutChart displayTitle = "Average CPU usage" chartData={chartDonutDataExample}/>
                 </div>
 
                 <div className='row'>
-                    <ChartDonut chartData={chartDonutDataExample}/>
-                    <BarChart chartData={chartBarDataExample}/>
+                    <DonutChart displayTitle = "Average GPU usage" chartData={chartDonutDataExample}/>
+                    <DonutChart displayTitle = "Average disk utilization last hour" chartData={chartDonutDataExample}/>
                 </div>
             </div>
         </div>
