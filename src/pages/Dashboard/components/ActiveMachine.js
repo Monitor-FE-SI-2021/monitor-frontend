@@ -1,15 +1,31 @@
 import React, { useState } from "react";
+import NewWindow from "react-new-window";
 
 import Avatar from "./MachineAvatar.js";
 import Terminal from "../../../components/Terminal/Terminal";
 import RemoteControl from "../../RemoteControl/RemoteControl";
+import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import request, { devices } from "../../../service";
+import "react-tabs/style/react-tabs.css";
 
-const ActiveMachine = ({ data, img, fun, set }) => {
+const ActiveMachine = ({ data, img, fun, setCharts }) => {
+  //averageCPUUsage, averageGPUUsage, averageHDDUsage, averageRamUsage
+  function getStatistics() {
+    request(devices + "/GetDeviceLogs?deviceId=" + data.deviceId)
+      .then((res) => res.data.data)
+      .then((res) => {
+        console.log(res);
+        setCharts(res);
+      })
+      .catch((err) => console.log(err));
+  }
+
   return (
     <>
       <div
         className="card"
         id={data.deviceId}
+        onClick={() => getStatistics()}
         onDoubleClick={() =>
           window.open("/remotecontrol/" + data.name + "/terminal", "_blank")
         }

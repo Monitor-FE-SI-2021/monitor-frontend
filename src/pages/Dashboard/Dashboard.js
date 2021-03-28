@@ -16,63 +16,128 @@ import { act } from "@testing-library/react";
 // Api get may or may not be called here.
 // The data is an example of how the data structure should look like
 
-let chartPieDataExample = {
+let ramUsageChart = {
   labels: ["Used", "Not used"],
   datasets: [
     {
-      label: "Average RAM usage",
-      data: [80, 20],
-      backgroundColor: [
-        "rgba(75, 192, 192, 0.6)",
-        "rgba(54, 162, 235, 0.6)",
-        /*            'rgba(255, 206, 86, 0.6)',
-                              'rgba(255, 99, 132, 0.6)',
-                              'rgba(153, 102, 255, 0.6)',
-                              'rgba(255, 159, 64, 0.6)',
-                              'rgba(255, 99, 132, 0.6)'*/
-      ],
-    },
-  ],
-};
-
-let chartLineDataExample = {
-  labels: ["Q1", "Q2", "Q3", "Q4"],
-  datasets: [
-    {
-      label: "CPU usage",
-      data: [60, 65, 80, 70],
-      backgroundColor: ["rgba(255, 206, 86, 0.6)", "rgba(255, 99, 132, 0.6)"],
-    },
-  ],
-};
-let chartDonutDataExample = {
-  labels: ["Used", "Not used"],
-  datasets: [
-    {
-      label: "GPU usage",
-      data: [60, 40],
+      label: "RAM usage",
+      data: [],
       backgroundColor: ["rgba(75, 192, 192, 0.6)", "rgba(54, 162, 235, 0.6)"],
     },
   ],
 };
-let currentTime = new Date().getHours();
 
-let chartBarDataExample = {
-  labels: [
-    currentTime + ":10",
-    currentTime + ":20",
-    currentTime + ":30",
-    currentTime + ":40",
-    currentTime + ":50",
-  ],
+let cpuUsageChart = {
+  labels: ["Used", "Not used"],
   datasets: [
     {
-      label: "Disk utilization percentage",
-      data: [10, 20, 30, 40, 50],
-      backgroundColor: "rgba(75, 192, 192, 0.6)",
+      label: "CPU usage",
+      data: [],
+      backgroundColor: ["rgba(75, 192, 192, 0.6)", "rgba(54, 162, 235, 0.6)"],
     },
   ],
 };
+
+let gpuUsageChart = {
+  labels: ["Used", "Not used"],
+  datasets: [
+    {
+      label: "GPU usage",
+      data: [],
+      backgroundColor: ["rgba(75, 192, 192, 0.6)", "rgba(54, 162, 235, 0.6)"],
+    },
+  ],
+};
+
+let hddUsageChart = {
+  labels: ["Used", "Not used"],
+  datasets: [
+    {
+      label: "HDD usage",
+      data: [],
+      backgroundColor: ["rgba(75, 192, 192, 0.6)", "rgba(54, 162, 235, 0.6)"],
+    },
+  ],
+};
+/*
+let chartPieDataExample = {
+    labels: ['Used', 'Not used'],
+    datasets: [
+        {
+            label: 'Average RAM usage',
+            data: [
+                80,
+                20
+            ],
+            backgroundColor: [
+                'rgba(75, 192, 192, 0.6)',
+                'rgba(54, 162, 235, 0.6)',
+                            'rgba(255, 206, 86, 0.6)',
+                              'rgba(255, 99, 132, 0.6)',
+                              'rgba(153, 102, 255, 0.6)',
+                              'rgba(255, 159, 64, 0.6)',
+                              'rgba(255, 99, 132, 0.6)'
+            ]
+        }
+    ]
+}
+
+let chartLineDataExample = {
+    labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+    datasets: [
+        {
+            label: 'CPU usage',
+            data: [
+                60,
+                65,
+                80,
+                70
+            ],
+            backgroundColor: [
+                'rgba(255, 206, 86, 0.6)',
+                'rgba(255, 99, 132, 0.6)'
+            ]
+        }
+    ]
+}
+let chartDonutDataExample = {
+    labels: ['Used', 'Not used'],
+    datasets: [
+        {
+            label: 'GPU usage',
+            data: [
+                60,
+                40
+            ],
+            backgroundColor: [
+                'rgba(75, 192, 192, 0.6)',
+                'rgba(54, 162, 235, 0.6)'
+            ]
+        }
+    ]
+}
+
+let chartBarDataExample = {
+
+    labels: [currentTime + ':10', currentTime + ':20', currentTime + ':30', currentTime + ':40', currentTime + ':50'],
+    datasets: [
+        {
+            label: "Disk utilization percentage",
+            data: [
+                10,
+                20,
+                30,
+                40,
+                50
+            ],
+            backgroundColor: 'rgba(75, 192, 192, 0.6)'
+        }
+    ]
+}
+
+ */
+let currentTime = new Date().getHours();
+
 let activeMachines = [
   {
     name: "Desktop PC 1",
@@ -94,9 +159,14 @@ let activeMachines = [
   },
 ];
 
+function convertStatistics(statistic) {
+  return [Math.round(statistic * 100), Math.round((1 - statistic) * 100)];
+}
+
 const Dashboard = ({ user }) => {
   const [machines, setMachines] = React.useState([]);
   const [active, setActive] = React.useState([...activeMachines]);
+  const [showCharts, setShowCharst] = React.useState(false);
 
   function filterActive(activeMachines, allMachines) {
     return activeMachines.filter((machine) => {
@@ -137,6 +207,20 @@ const Dashboard = ({ user }) => {
     }
   };
 
+  const setCharts = ({
+    averageCPUUsage,
+    averageGPUUsage,
+    averageHDDUsage,
+    averageRamUsage,
+  }) => {
+    cpuUsageChart.datasets[0].data = convertStatistics(averageCPUUsage);
+    gpuUsageChart.datasets[0].data = convertStatistics(averageGPUUsage);
+    hddUsageChart.datasets[0].data = convertStatistics(averageHDDUsage);
+    ramUsageChart.datasets[0].data = convertStatistics(averageRamUsage);
+    setShowCharst(false);
+    setShowCharst(true);
+  };
+
   return (
     <div className="page">
       <div className="dashboard">
@@ -149,32 +233,35 @@ const Dashboard = ({ user }) => {
                 data={machine}
                 img={MachineIcon}
                 fun={disconnectMachine}
+                setCharts={setCharts}
               />
             ))}
           </div>
         </div>
-
-        <div className="row">
-          <DonutChart
-            displayTitle="Average RAM usage"
-            chartData={chartDonutDataExample}
-          />
-          <DonutChart
-            displayTitle="Average CPU usage"
-            chartData={chartDonutDataExample}
-          />
-        </div>
-
-        <div className="row">
-          <DonutChart
-            displayTitle="Average GPU usage"
-            chartData={chartDonutDataExample}
-          />
-          <DonutChart
-            displayTitle="Average disk utilization last hour"
-            chartData={chartDonutDataExample}
-          />
-        </div>
+        {showCharts && (
+          <div className="row">
+            <DonutChart
+              displayTitle="Average RAM usage"
+              chartData={ramUsageChart}
+            />
+            <DonutChart
+              displayTitle="Average CPU usage"
+              chartData={cpuUsageChart}
+            />
+          </div>
+        )}
+        {showCharts && (
+          <div className="row">
+            <DonutChart
+              displayTitle="Average GPU usage"
+              chartData={gpuUsageChart}
+            />
+            <DonutChart
+              displayTitle="Average disk usage"
+              chartData={hddUsageChart}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
