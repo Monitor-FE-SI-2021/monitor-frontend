@@ -1,14 +1,14 @@
 export const SET_MENU_EXPANDED = "SET_MENU_EXPANDED";
 
 export const RouteLink = {
-  Dashboard: "/",
-  Login: "/login",
-  Devices: "/devices",
-  Reporting: "/reporting",
-  AddDevice: "/manage-device",
-  Terminal: "/terminal",
-  RemoteControl: "/remotecontrol",
-};
+    Dashboard: '/',
+    Login: "/login",
+    Devices: "/devices",
+    Reporting: "/reporting",
+    AddDevice: '/manage-device',
+    Terminal: '/terminal',
+    RemoteControl: '/remotecontrol'
+}
 
 const initialState = {
   isMenuExpanded: true,
@@ -42,25 +42,26 @@ const initialState = {
 };
 
 const ACTION_HANDLERS = {
-  [SET_MENU_EXPANDED]: (state, action) => {
-    return {
-      ...state,
-      isMenuExpanded: action.toggle,
-    };
-  },
-};
+    [SET_MENU_EXPANDED]: (state, action) => {
+        return {
+            ...state,
+            isMenuExpanded: action.toggle,
+        }
+    }
+}
 
 export const setMenuExpanded = (toggle) => {
-  return (dispatch) => {
-    dispatch({
-      type: SET_MENU_EXPANDED,
-      toggle,
-    });
-  };
-};
+    return dispatch => {
+        dispatch({
+            type: SET_MENU_EXPANDED,
+            toggle
+        })
+    }
+}
 
 export default function menu(state = initialState, action) {
-  const handler = ACTION_HANDLERS[action.type];
 
-  return handler ? handler(state, action) : state;
+    const handler = ACTION_HANDLERS[action.type];
+
+    return handler ? handler(state, action) : state;
 }

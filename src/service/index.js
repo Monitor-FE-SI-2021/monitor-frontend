@@ -1,121 +1,75 @@
 import axios from "axios";
 import { STORAGE_KEY } from "../utils/consts";
 import { history } from "../store/store";
+import { merge } from "lodash";
+import { showSwalToast } from "../utils/utils";
 
-export const endpoint = 'http://si-2021.167.99.244.168.nip.io/api';
-export const wsEndpoint = 'http://si-grupa5.herokuapp.com/api';
+export const endpoint = 'https://si-2021.167.99.244.168.nip.io/api';
+export const wsEndpoint = 'https://si-grupa5.herokuapp.com/api';
 export const authEndpoint = 'https://si-2021.167.99.244.168.nip.io:3333';
 export const devices = `${endpoint}/device`
 export const groups = `${endpoint}/group`
 export const users = `${endpoint}/user`
 
-const request = async (url, typeOfReq = "GET", bodyReq = {}) => {
-  let response = null;
-  let config = {
-    headers: {
-      Authorization: "Bearer " + window.localStorage.getItem(STORAGE_KEY),
-      Accept: "application/json",
-      // "Content-Type": 'application/json'
-    },
-  };
+const request = async (
+    url = '',
+    method = 'get',
+    data = {},
+    aditionalHeaders = {}
+) => {
 
-  typeOfReq = typeOfReq.toUpperCase();
-
-  if (typeOfReq === "GET") {
-    try {
-      response = await axios.get(url, config).catch((e) => {
-        if (e.message.includes("401")) {
-          removeAllData();
+    let defaultConfig = {
+        headers: {
+            Accept: "application/json",
+            // "Content-Type": 'application/json'
         }
-        return response;
-      });
-      return response;
-    } catch (error) {
-      console.log("GET Error: ", error);
-    }
-  }
+    };
 
-  if (typeOfReq === "POST") {
-    try {
-      response = await axios.post(url, bodyReq, config).catch((e) => {
-        console.log("Request error: ", e);
-        if (e.message.includes("401")) {
-          removeAllData();
-        }
-        return response;
-      });
-      return response;
-    } catch (error) {
-      console.log("POST Error: ", error);
-    }
-  }
+    const token = window.localStorage.getItem(STORAGE_KEY);
 
-  if (typeOfReq === "PUT") {
-    try {
-      response = await axios.put(url, bodyReq, config).catch((e) => {
-        console.log("Request error: ", e);
-        if (e.message.includes("401")) {
-          removeAllData();
-        }
-        return response;
-      });
-      return response;
-    } catch (error) {
-      console.log("PUT Error: ", error);
+    if (token) {
+        defaultConfig.headers.Authorization = "Bearer " + token;
     }
-  }
 
-  if (typeOfReq === "DELETE") {
-    try {
-      if (bodyReq) {
-        response = await axios
-          .delete(url, {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: window.localStorage.getItem("authorization"),
-            },
-            data: bodyReq,
-          })
-          .catch((e) => {
-            console.log("Request error: ", e);
-            if (e.message.includes("401")) {
-              removeAllData();
-            }
-            return response;
-          });
-        return response;
-      } else {
-        response = await axios.delete(url, config).catch((e) => {
-          console.log("Request error: ", e);
-          if (e.message.includes("401")) {
-            removeAllData();
-          }
-        });
-        return response;
-      }
-    } catch (error) {
-      console.log("DELETE Error: ", error);
+    const params = {
+        url,
+        method,
+        data,
+        headers: aditionalHeaders
     }
-  }
 
-  if (typeOfReq === "PATCH") {
-    try {
-      response = await axios.patch(url, bodyReq, config).catch((e) => {
-        console.log("Request error: ", e);
-        if (e.message.includes("401")) {
-          removeAllData();
-        }
-      });
-      return response;
-    } catch (error) {
-      console.log("PATCH Error: ", error);
-    }
-  }
+    const fullConfig = merge(defaultConfig, params);
+
+    return new Promise((resolve, reject) => {
+        return axios.request(fullConfig)
+            .then(r => {
+
+                if (r?.data?.newAccessToken) {      // refresh token ( TODO, this must be more secure )
+                    localStorage.setItem(STORAGE_KEY, r?.data?.newAccessToken);
+                }
+
+                resolve(r);
+            })
+            .catch(ex => {
+
+                const response = ex.response;
+
+                if (response.status === 401) {
+                    removeAllData();
+                }
+
+                const errMessage = response?.data?.message || response?.data?.title || response?.statusText;
+
+                showSwalToast(errMessage)
+
+                reject(ex);
+            })
+    });
 };
 
 const removeAllData = () => {
-  window.localStorage.clear();
-  history.push("/login");
-};
+    window.localStorage.clear();
+    history.push('/login');
+}
 
 export default request;

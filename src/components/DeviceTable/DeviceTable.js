@@ -1,19 +1,31 @@
 import CustomTable, { TableSlot } from '../CustomTable/CustomTable';
-import { useState } from "react";
-import { Delete } from "@material-ui/icons";
+import React, { useState } from "react";
+import { CastConnected } from "@material-ui/icons";
+import { Edit } from "@material-ui/icons";
 import dayjs from 'dayjs';
+import { connect } from "react-redux";
+import { selectDevice } from "../../store/modules/devices/actions";
+import { push } from "connected-react-router";
+import { RouteLink } from "../../store/modules/menu/menu";
 
-const DeviceTable = ({ devices }) => {
-    const [tableData, setTableData] = useState(devices);
+import './device_table.scss'
 
-    const deleteTableRow = (tableRow) => {
-        console.log(tableRow);
+const DeviceTable = ({ devices, selectDevice, push }) => {
+
+    const editDevice = (device) => {
+        selectDevice(device);
+        push(RouteLink.ManageDevice);
     }
 
-    const [tableFields, setTableFields] = useState([
+    const connectDevice = (tableRow) => {
+        console.log(tableRow)
+    }
+
+    const [tableFields] = useState([
         {
             name: 'name',
             title: 'Naziv',
+            sort: true,
         },
         {
             name: 'location',
@@ -28,6 +40,7 @@ const DeviceTable = ({ devices }) => {
             name: 'lastTimeOnline',
             title: 'Posljednji put online',
             width: '30%',
+            sort: true,
             slot: 'lastTimeOnline'
         },
         {
@@ -36,28 +49,32 @@ const DeviceTable = ({ devices }) => {
             width: '20%',
             align: 'right',
             slot: 'actions'
-        }
-    ])
+        }]
+    )
+
 
     return (
-        <CustomTable data={tableData} fields={tableFields}>
+        <React.Fragment>
+            <CustomTable data={devices} fields={tableFields}>
+                <TableSlot slot='actions' render={dataRow => (
+                    <div className='actions'>
+                        <CastConnected onClick={() => connectDevice(dataRow)}/>
+                        <Edit className='edit-btn' onClick={() => editDevice(dataRow)}/>
+                    </div>
+                )}/>
 
-            <TableSlot slot='actions' render={dataRow => (
-                <Delete onClick={() => deleteTableRow(dataRow)}/>
-            )}/>
-
-            <TableSlot slot='lastTimeOnline' render={dataRow => (
-                <span>
+                <TableSlot slot='lastTimeOnline' render={dataRow => (
+                    <span>
                     {dayjs(dataRow.lastTimeOnline).format('DD.MM.YYYY HH:mm:ss')}
                 </span>
-            )}/>
+                )}/>
 
-            <TableSlot slot='status' render={dataRow => (
-                <span>{dataRow.status === true ? 'Online' : 'Offline'}</span>
-            )}/>
-
-        </CustomTable>
+                <TableSlot slot='status' render={dataRow => (
+                    <span>{dataRow.status === true ? 'Online' : 'Offline'}</span>
+                )}/>
+            </CustomTable>
+        </React.Fragment>
     )
 }
 
-export default DeviceTable;
+export default connect(null, { selectDevice, push })(DeviceTable);

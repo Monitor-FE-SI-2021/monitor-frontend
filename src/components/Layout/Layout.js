@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 import Devices from "../../pages/Devices/Devices";
 import Dashboard from "../../pages/Dashboard/Dashboard";
 import Reporting from "../../pages/Reporting/Reporting";
-import AddDevice from "../../pages/AddDevices/AddDevice";
+import AddDevice from "../../pages/ManageDevice/ManageDevice";
 import Terminal from "../Terminal/Terminal";
 import RemoteControl from "../../pages/RemoteControl/RemoteControl";
 import { Spinner } from "../Spinner/Spinner";
