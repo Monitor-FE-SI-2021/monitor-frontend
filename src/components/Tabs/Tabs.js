@@ -11,8 +11,6 @@ import FileManagerTable from "../FileManagerTable/FileManagerTable";
 import Terminal from "../Terminal/Terminal";
 
 const Tabs = (props, machine) => {
-  const machines = ["DESKTOP-SCC", "DESKTOP-SCC3", "DESKTOP-SCC5"];
-
   let { name, tab } = useParams();
 
   const toggleTab = (tab) => {
@@ -25,10 +23,7 @@ const Tabs = (props, machine) => {
 
   const handleClick = async () => {
     try {
-      var odgovor = await request(wsEndpoint + "/screenshot", "post", {
-        name: "DESKTOP-SCC",
-        location: "Sarajevo - SCC",
-      });
+      var odgovor = await request(wsEndpoint + "/screenshot", "post", machine);
 
       setUrl(odgovor.data.message);
     } catch (err) {}

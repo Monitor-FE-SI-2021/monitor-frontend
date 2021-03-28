@@ -9,7 +9,7 @@ import request, { devices } from "../../service";
 const RemoteControl = (props, { user }) => {
   const [machines, setMachines] = React.useState([]);
 
-  let { currentMachineName, tab } = useParams();
+  let { name, tab } = useParams();
 
   const groupId = user?.userGroups[0]?.groupId || 2;
 
@@ -32,9 +32,9 @@ const RemoteControl = (props, { user }) => {
 
   const machineList = [];
   let machine =
-    currentMachineName == "0" || currentMachineName == undefined
+    name == "0" || name == undefined
       ? machines[0]
-      : machines.find((value) => value.name == currentMachineName);
+      : machines.find((value) => value.name == name);
 
   for (const [index, value] of machines.entries()) {
     machineList.push(<option value={value.name}>{value.name}</option>);
@@ -43,10 +43,13 @@ const RemoteControl = (props, { user }) => {
   return (
     <div className="page dashboard">
       <h1>IWM Remote Access/Control</h1>
+      <br></br>
+      <h2>{name}</h2>
+      <br></br>
       <div>
         {/* <select
           onChange={(event) => switchMachine(event.target.value)}
-          value={currentMachineName}
+          value={name}
         >
           {machineList}
         </select> */}

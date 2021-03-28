@@ -1,96 +1,94 @@
 .dashboard {
-    display: flex;
-  }
-  
-  .row {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .row h1 {
-    color: #353535;
-  }
-  
-  .machine-cards {
-    width: 30%;
-  }
-  
-  .chart {
-    width: 100%;
-    margin: 7%;
-  }
-  
-  .card {
-    display: flex;
-    border-radius: 10px;
-    height: 140px;
-    box-shadow: 0 2px 5px #ccc;
-    text-align: left;
-    width: 100%;
-    margin: 30px 0 30px 0;
-  }
-  
-  .card-img {
-    padding: 5%;
-    width: 30%;
-  }
-  
-  .card-img img {
-    height: 100%;
-  }
-  
-  .card-info {
-    padding: 5% 0% 5% 5%;
-    width: 70%;
-  }
-  
-  .card-info h3 {
-    margin: 0;
-  }
-  
-  .card-info p {
-    font-family: "Roboto", sans-serif;
-  }
-  
-  .page-devices {
-    margin: 20px;
-  }
-  
-  .page-primjer-komponente {
-    flex-direction: row;
-    margin: 40px;
-  }
-  
-  .scrollable {
-    overflow: hidden;
-    padding: 5%;
-  }
-  
-  img:first-child {
-    width: 79px;
-    height: 70px;
-    margin-right: 5px;
-  }
-  
-  #fm {
-    width: 22px;
-    height: 30px;
-  }
-  
-  #ss {
-    width: 30px;
-    height: 30px;
-    margin-right: 5px;
-  }
-  
-  .page {
-    overflow-y: scroll;
-  }
-  
-  #card-buttons {
-    padding: 5px;
-    margin-left: auto;
-    margin-top: auto;
-    display: flex;
-  }
-  
+  display: flex;
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+}
+
+.row h1 {
+  color: #353535;
+}
+
+.machine-cards {
+  width: 30%;
+}
+
+.chart {
+  width: 100%;
+  margin: 7%;
+}
+
+.card {
+  display: flex;
+  border-radius: 10px;
+  height: 140px;
+  box-shadow: 0 2px 5px #ccc;
+  text-align: left;
+  width: 100%;
+  margin: 30px 0 30px 0;
+}
+
+.card-img {
+  padding: 5%;
+  width: 30%;
+}
+
+.card-img img {
+  height: 100%;
+}
+
+.card-info {
+  padding: 5% 0% 5% 5%;
+  width: 70%;
+}
+
+.card-info h3 {
+  margin: 0;
+}
+
+.card-info p {
+  font-family: "Roboto", sans-serif;
+}
+
+.page-devices {
+  margin: 20px;
+}
+
+.page-primjer-komponente {
+  flex-direction: row;
+  margin: 40px;
+}
+
+.scrollable {
+  overflow: hidden;
+  padding: 5%;
+}
+
+#fm {
+  width: 22px;
+  height: 30px;
+}
+
+#ss {
+  width: 30px;
+  height: 30px;
+  margin-right: 5px;
+}
+
+.page {
+  overflow-y: scroll;
+}
+
+#card-buttons {
+  padding: 5px;
+  margin-left: auto;
+  margin-top: auto;
+  display: flex;
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+}
