@@ -138,7 +138,7 @@ let chartBarDataExample = {
  */
 let currentTime = new Date().getHours();
 
-let activeMachines = [
+/*let activeMachines = [
     {
         name: "Desktop PC 1",
         location: "Sarajevo - BBI",
@@ -157,7 +157,7 @@ let activeMachines = [
         ip: "255.255.255.0",
         path: "C:/user/programfiles",
     },
-];
+];*/
 
 function convertStatistics(statistic) {
     return [Math.round(statistic * 100), Math.round((1 - statistic) * 100)];
@@ -167,14 +167,16 @@ let removedMachine = null
 let clickedMachine = null
 
 const Dashboard = ({user}) => {
+
+    let activeMachines = []
     const [machines, setMachines] = React.useState([]);
     const [active, setActive] = React.useState([...activeMachines]);
-    const [showCharts, setShowCharst] = React.useState(false);
+    const [showCharts, setShowCharts] = React.useState(false);
 
     function filterActive(activeMachines, allMachines) {
         return activeMachines.filter((machine) => {
             const existingMachine = allMachines.find(({name, location}) => {
-                return name === machine.name && location === machine.location;
+                return machine.status !== "Disconnected" && name === machine.name && location === machine.location;
             });
             if (existingMachine) {
                 machine.deviceId = existingMachine.deviceId;
@@ -189,13 +191,17 @@ const Dashboard = ({user}) => {
             .then((res) => {
                 const allMachines = res.data.data;
                 setMachines(allMachines);
-                setActive(filterActive(activeMachines, allMachines));
+                request("https://si-grupa5.herokuapp.com/api/agent/online")
+                    .then((res) => {
+                        console.log(res)
+                        setActive(filterActive(res?.data, allMachines));
+                    })
             })
             .catch((err) => console.log(err));
 
-        request("https://si-grupa5.herokuapp.com/api/agent/online").then((res) => {
+      /*  request("https://si-grupa5.herokuapp.com/api/agent/online").then((res) => {
             console.log(res);
-        });
+        });*/
     }, []);
 
     const disconnectMachine = (machine) => {
@@ -216,7 +222,7 @@ const Dashboard = ({user}) => {
                 .catch((err) => console.log(err))
             cloned.splice(index, 1);
             if (removedMachine?.deviceId === clickedMachine?.deviceId)
-                setShowCharst(false)
+                setShowCharts(false)
             setActive(cloned);
         }
     };
@@ -228,13 +234,13 @@ const Dashboard = ({user}) => {
                            averageRamUsage,
                        }, machine) => {
         clickedMachine = machine
-        if (removedMachine?.deviceId !== machine.deviceId) {
+        if (removedMachine?.deviceId !== machine?.deviceId) {
             cpuUsageChart.datasets[0].data = convertStatistics(averageCPUUsage);
             gpuUsageChart.datasets[0].data = convertStatistics(averageGPUUsage);
             hddUsageChart.datasets[0].data = convertStatistics(averageHDDUsage);
             ramUsageChart.datasets[0].data = convertStatistics(averageRamUsage);
-            setShowCharst(false)
-            setShowCharst(true)
+            setShowCharts(false)
+            setShowCharts(true)
         }
 
     };
