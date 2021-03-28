@@ -35,11 +35,10 @@ const RemoteControl = (props, { user }) => {
   const groupId = user?.userGroups[0]?.groupId || 2;
 
   React.useEffect(() => {
-    request(devices + "/AllDevicesForGroup?groupId=" + groupId)
-      .then((res) => {
-        setMachines(res.data.data);
-      })
-      .catch((err) => console.log(err));
+    request("https://si-grupa5.herokuapp.com/api/agent/online").then((res) => {
+      console.log(res);
+      setMachines(res?.data);
+    });
   }, []);
 
   const switchMachine = (machine) => {
@@ -54,8 +53,10 @@ const RemoteControl = (props, { user }) => {
   const machineList = [];
   let machine =
     name == "0" || name == undefined
-      ? activeMachines[0]
-      : activeMachines.find((value) => value.name == name);
+      ? activeMachines.find((value) => value.status !== "Disconnected")
+      : activeMachines.find(
+          (value) => value.name == name && value.status !== "Disconnected"
+        );
 
   // for (const [index, value] of machines.entries()) {
   //   machineList.push(<option value={value.name}>{value.name}</option>);
