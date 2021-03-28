@@ -8,8 +8,9 @@ import React, { useCallback } from "react";
 import Swal from "sweetalert2";
 import { Route, Switch, useParams } from "react-router";
 import FileManagerTable from "../FileManagerTable/FileManagerTable";
+import Terminal from "../Terminal/Terminal";
 
-const Tabs = (props) => {
+const Tabs = (props, machine) => {
   const machines = ["DESKTOP-SCC", "DESKTOP-SCC3", "DESKTOP-SCC5"];
 
   let { name, tab } = useParams();
@@ -126,11 +127,8 @@ const Tabs = (props) => {
             <div>
               <div className="screenshot">
                 <p>Terminal</p>
-                <img
-                  alt="Asked image will appear here."
-                  className="screenshot-img"
-                  src={`data:image/jpeg;base64,${url}`}
-                />
+
+                <Terminal machine={machine} />
               </div>
             </div>
           </div>
