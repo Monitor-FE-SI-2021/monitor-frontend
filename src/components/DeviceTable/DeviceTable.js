@@ -1,13 +1,20 @@
 import CustomTable, { TableSlot } from '../CustomTable/CustomTable';
 import { useState } from "react";
 import { CastConnected, Delete } from "@material-ui/icons";
+import { Edit } from "@material-ui/icons";
 import dayjs from 'dayjs';
+import { connect } from "react-redux";
+import { selectDevice } from "../../store/modules/devices/actions";
+import { push } from "connected-react-router";
+import { RouteLink } from "../../store/modules/menu/menu";
 
-const DeviceTable = ({ devices }) => {
+
+const DeviceTable = ({ devices, selectDevice, push }) => {
     const [tableData, setTableData] = useState(devices);
 
-    const deleteTableRow = (tableRow) => {
-        console.log(tableRow);
+    const editDevice = (device) => {
+        selectDevice(device);
+        push(RouteLink.ManageDevice);
     }
 
     const connectDevice = (tableRow) => {
@@ -46,14 +53,14 @@ const DeviceTable = ({ devices }) => {
             width: '20%',
             align: 'right',
             slot: 'actions'
-        }
-    ])
+        }]
+    )
+
 
     return (
         <CustomTable data={tableData} fields={tableFields}>
-
             <TableSlot slot='actions' render={dataRow => (
-                <Delete onClick={() => deleteTableRow(dataRow)}/>
+                <Edit onClick={() => editDevice(dataRow)}/>
             )}/>
 
             <TableSlot slot='lastTimeOnline' render={dataRow => (
@@ -65,12 +72,12 @@ const DeviceTable = ({ devices }) => {
             <TableSlot slot='status' render={dataRow => (
                 <span>{dataRow.status === true ? 'Online' : 'Offline'}</span>
             )}/>
-            
+
             <TableSlot slot='connection' render={dataRow => (
                 <CastConnected onClick={() => connectDevice(dataRow)}/>
-            )}/>  
+            )}/>
         </CustomTable>
     )
 }
 
-export default DeviceTable;
+export default connect(null, { selectDevice, push })(DeviceTable);

@@ -1,131 +1,65 @@
 import axios from "axios";
 import { STORAGE_KEY } from "../utils/consts";
 import { history } from "../store/store";
+import { merge } from "lodash";
+import { showSwalToast } from "../utils/utils";
 
-export const endpoint = 'http://si-2021.167.99.244.168.nip.io/api';
-export const wsEndpoint = 'http://si-grupa5.herokuapp.com/api';
-export const authEndpoint = 'http://167.99.244.168:3333';
+export const endpoint = 'https://si-2021.167.99.244.168.nip.io/api';
+export const wsEndpoint = 'https://si-grupa5.herokuapp.com/api';
+export const authEndpoint = 'https://si-2021.167.99.244.168.nip.io:3333';
 export const devices = `${endpoint}/device`
 export const groups = `${endpoint}/group`
 export const users = `${endpoint}/user`
 
 const request = async (
-    url,
-    typeOfReq = "GET",
-    bodyReq = {}
+    url = '',
+    method = 'get',
+    data = {},
+    aditionalHeaders = {}
 ) => {
 
-    let response = null;
-    let config = {
+    let defaultConfig = {
         headers: {
-            Authorization: "Bearer " + window.localStorage.getItem(STORAGE_KEY),
             Accept: "application/json",
             // "Content-Type": 'application/json'
         }
     };
 
-    typeOfReq = typeOfReq.toUpperCase();
+    const token = window.localStorage.getItem(STORAGE_KEY);
 
-    if (typeOfReq === "GET") {
-        try {
-            response = await axios
-                .get(url, config)
-                .catch(e => {
-                    if (e.message.includes('401')) {
-                        removeAllData();
-                    }
-                    return response;
-                });
-            return response;
-        } catch (error) {
-            console.log("GET Error: ", error);
-        }
+    if (token) {
+        defaultConfig.headers.Authorization = "Bearer " + token;
     }
 
-    if (typeOfReq === "POST") {
-        try {
-            response = await axios
-                .post(url, bodyReq, config)
-                .catch(e => {
-                    console.log("Request error: ", e)
-                    if (e.message.includes('401')) {
-                        removeAllData();
-                    }
-                    return response;
-                });
-            return response;
-        } catch (error) {
-            console.log("POST Error: ", error);
-        }
+    const params = {
+        url,
+        method,
+        data,
+        headers: aditionalHeaders
     }
 
-    if (typeOfReq === "PUT") {
-        try {
-            response = await axios
-                .put(url, bodyReq, config)
-                .catch(e => {
-                    console.log("Request error: ", e)
-                    if (e.message.includes('401')) {
-                        removeAllData();
-                    }
-                    return response;
-                });
-            return response;
-        } catch (error) {
-            console.log("PUT Error: ", error);
-        }
-    }
+    const fullConfig = merge(defaultConfig, params);
 
-    if (typeOfReq === "DELETE") {
-        try {
-            if (bodyReq) {
-                response = await axios
-                    .delete(url, {
-                        headers: {
-                            "Content-Type": "application/json",
-                            Authorization: window.localStorage.getItem("authorization")
-                        },
-                        data: bodyReq
-                    })
-                    .catch(e => {
-                        console.log("Request error: ", e)
-                        if (e.message.includes('401')) {
-                            removeAllData();
-                        }
-                        return response;
-                    });
-                return response;
-            } else {
-                response = await axios
-                    .delete(url, config)
-                    .catch(e => {
-                        console.log("Request error: ", e)
-                        if (e.message.includes('401')) {
-                            removeAllData();
-                        }
-                    });
-                return response;
-            }
-        } catch (error) {
-            console.log("DELETE Error: ", error);
-        }
-    }
+    return new Promise((resolve, reject) => {
+        return axios.request(fullConfig)
+            .then(r => {
+                resolve(r);
+            })
+            .catch(ex => {
 
-    if (typeOfReq === "PATCH") {
-        try {
-            response = await axios
-                .patch(url, bodyReq, config)
-                .catch(e => {
-                    console.log("Request error: ", e)
-                    if (e.message.includes('401')) {
-                        removeAllData();
-                    }
-                });
-            return response;
-        } catch (error) {
-            console.log("PATCH Error: ", error);
-        }
-    }
+                const response = ex.response;
+
+                if (response.status === 401) {
+                    removeAllData();
+                }
+
+                const errMessage = response?.data?.message || response?.data?.title || response?.statusText;
+
+                showSwalToast(errMessage)
+
+                reject(ex);
+            })
+    });
 };
 
 const removeAllData = () => {

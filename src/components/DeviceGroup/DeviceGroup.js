@@ -1,56 +1,32 @@
 import './DeviceGroup.scss';
 import DeviceTable from '../DeviceTable/DeviceTable';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from "react-redux";
+import { fetchDevicesForGroup } from "../../store/modules/devices/actions";
+import { Spinner } from "../Spinner/Spinner";
 
-const DeviceGroup = ({ group, allGroups, allDevices }) => {
+
+const DeviceGroup = ({ group, fetchDevicesForGroup, deviceTable }) => {
 
     const [hidden, setHidden] = useState(true);
 
-    const getSubGroups = (groups, groupId) => {
-        const subGroups = [];
+    const devices = deviceTable?.devices ?? [];
+    const async = deviceTable?.async;
 
-        for (let group of groups) {
-            if (group.parentGroup === groupId) {
-                subGroups.push(group);
-            }
+    useEffect(() => {
+
+        const hasNoSubGroups = group.subGroups.length === 0;
+
+        if (!hidden && hasNoSubGroups) {
+            fetchDevicesForGroup(group.groupId);
         }
 
-        return subGroups;
-    }
+    }, [hidden, group]);
 
-    const getFilterDevices = (devices) => {
-        const filteredDevices = [];
-
-        for (let device of devices) {
-            if (device.groupId === group.groupId) {
-                filteredDevices.push(device);
-            }
-        }
-
-        return filteredDevices;
-    }
-
-    let subGroups = getSubGroups(allGroups, group.groupId).map(subGroup => {
+    let subGroupsRendered = group.subGroups.map(subGroup => {
         return <ConnectedDeviceGroup group={subGroup}
                                      key={subGroup.groupId}/>
-    });
-
-    let filteredDevices = getFilterDevices(allDevices);
-
-    if (subGroups.length === 0) {
-        subGroups = null;
-    }
-
-    let data = null;
-
-    if (!hidden) {
-        data = <React.Fragment>
-            {filteredDevices.length !== 0 ? <DeviceTable devices={filteredDevices}/> : null}
-            {subGroups}
-        </React.Fragment>
-    }
-
+    })
 
     const toggleArrow = () => {
         let newHidden = !hidden;
@@ -63,14 +39,26 @@ const DeviceGroup = ({ group, allGroups, allDevices }) => {
                 <button className={hidden ? 'collapsed' : 'expanded'}/>
                 <h2>{group.name}</h2>
             </div>
-            {data}
+            {!hidden && (
+                <React.Fragment>
+                    {async ? <Spinner/> : devices.length !== 0 ? <DeviceTable devices={devices}/> : null}
+                    {subGroupsRendered || null}
+                </React.Fragment>
+            )}
         </div>
     )
 }
 
-const ConnectedDeviceGroup = connect(state => ({
-    allDevices: state.devices.devices,
-    allGroups: state.groups.groups,
-}), {})(DeviceGroup);
+const ConnectedDeviceGroup = connect((state, ownProps) => {
+
+    const { group } = ownProps;
+    const groupId = group?.groupId || null;
+
+    const deviceTable = state.devices.deviceTables?.[groupId] || {};
+
+    return {
+        deviceTable,
+    }
+}, { fetchDevicesForGroup })(DeviceGroup);
 
 export default ConnectedDeviceGroup;
