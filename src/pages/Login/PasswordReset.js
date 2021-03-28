@@ -2,10 +2,9 @@ import { connect } from "react-redux";
 import React from 'react';
 import './Login.css';
 import { requestResetPassword } from "../../store/modules/login/resetPassword";
-import { RouteLink } from "../../store/modules/menu/menu";
 import { push } from 'connected-react-router';
 
-function NewPassword({requestResetPassword}) {
+function NewPassword({requestResetPassword, push}) {
     const initialFormData = {
         password: "",
         repeatedPassword: ""
@@ -39,7 +38,8 @@ function NewPassword({requestResetPassword}) {
             }
 
             requestResetPassword(data).then(r => {
-                switchRoute(RouteLink.Login)
+                alert("Password changed successfully!");
+                switchRoute('/login');
             })
         }
     };
@@ -53,13 +53,13 @@ function NewPassword({requestResetPassword}) {
                     value={formData.password}
                     onChange={handleChange} />
                 <input name="repeatedPassword" type='password'
-                    placeholder="Confirm password"
+                    placeholder="Confirm password"  
                     value={formData.repeatedPassword}
                     onChange={handleChange} />
-                <input id = "submitButton"  type="submit" value="Reset password" onClick={handleSubmit.bind(this)}  />
+                <input id = "submitButton"  type="submit" value="Reset password" onClick={handleSubmit}  />
             </form>
         </div>
     );
 }
 
-export default connect(state => ({}), {requestResetPassword})(NewPassword);
+export default connect(state => ({}), {requestResetPassword, push})(NewPassword);

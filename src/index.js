@@ -21,7 +21,7 @@ const App = ({ user, getMe, push }) => {
 
         const token = localStorage.getItem(STORAGE_KEY);
 
-        if(route == '/forgot-password' || route.slice(0, route.lastIndexOf('/')) == '/reset-password') {
+        if(route == '/forgot-password' || route.slice(0, route.lastIndexOf('/')) == '/password-reset') {
             return;
         }
 
@@ -43,7 +43,7 @@ const App = ({ user, getMe, push }) => {
             <Switch>
                 <Route path='/login' component={Login}/>
                 <Route path='/forgot-password' component={ForgotPassword}/>
-                <Route path='/reset-password' component={PasswordReset}/>
+                <Route path='/password-reset' component={PasswordReset}/>
                 <Route path='/' component={Layout}/>
             </Switch>
         </div>
