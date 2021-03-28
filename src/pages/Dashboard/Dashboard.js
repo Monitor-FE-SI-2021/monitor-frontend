@@ -174,7 +174,7 @@ const Dashboard = ({user}) => {
     const [showCharts, setShowCharts] = React.useState(false);
 
     function filterActive(activeMachines, allMachines) {
-        return activeMachines.filter((machine) => {
+        return activeMachines ? activeMachines.filter((machine) => {
             const existingMachine = allMachines.find(({name, location}) => {
                 return machine.status !== "Disconnected" && name === machine.name && location === machine.location;
             });
@@ -183,7 +183,7 @@ const Dashboard = ({user}) => {
                 machine.lastTimeOnline = existingMachine.lastTimeOnline;
             }
             return existingMachine;
-        });
+        }) : [];
     }
 
     React.useEffect(() => {
@@ -262,29 +262,33 @@ const Dashboard = ({user}) => {
                         ))}
                     </div>
                 </div>
-
+                
                 {showCharts && (
-                    <div className="row">
-                        <DonutChart
-                            displayTitle="Average RAM usage"
-                            chartData={ramUsageChart}
-                        />
-                        <DonutChart
-                            displayTitle="Average CPU usage"
-                            chartData={cpuUsageChart}
-                        />
-                    </div>
-                )}
-                {showCharts && (
-                    <div className="row">
-                        <DonutChart
-                            displayTitle="Average GPU usage"
-                            chartData={gpuUsageChart}
-                        />
-                        <DonutChart
-                            displayTitle="Average disk usage"
-                            chartData={hddUsageChart}
-                        />
+                    <div>
+                        <h2 className="machineName">{clickedMachine.name}</h2>
+                        <div className="chartContainer">
+                            
+                            <div className="row">
+                                <DonutChart
+                                    displayTitle="Average RAM usage"
+                                    chartData={ramUsageChart}
+                                />
+                                <DonutChart
+                                    displayTitle="Average CPU usage"
+                                    chartData={cpuUsageChart}
+                                />
+                            </div>
+                            <div className="row">
+                                <DonutChart
+                                    displayTitle="Average GPU usage"
+                                    chartData={gpuUsageChart}
+                                />
+                                <DonutChart
+                                    displayTitle="Average disk usage"
+                                    chartData={hddUsageChart}
+                                />
+                            </div>
+                        </div>
                     </div>
                 )}
             </div>

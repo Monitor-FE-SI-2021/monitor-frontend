@@ -2,12 +2,20 @@
   display: flex;
 }
 
+.chartContainer {
+  display: flex;
+}
+
+.machineName {
+  text-align: center;
+}
+
 .row {
   display: flex;
   flex-direction: column;
 }
 
-.row h1 {
+h1, h2, h3, h4 {
   color: #353535;
 }
 
@@ -24,6 +32,11 @@
   border-radius: 10px;
   box-shadow: 0 2px 5px #ccc;
   height: 200px;
+  margin-bottom: 10px;
+}
+
+.card:hover {
+  background-color:#ffffff;
 }
 
 .img-info {
@@ -62,11 +75,12 @@
 }
 
 .card-info h3 {
-  margin: 0;
+  margin: 3px;
 }
 
 .card-info p {
   font-family: "Roboto", sans-serif;
+  padding: 5px
 }
 
 .page-devices {
@@ -104,3 +118,5 @@
   width: 24px;
   height: 24px;
 }
+
+
