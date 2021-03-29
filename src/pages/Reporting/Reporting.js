@@ -21,21 +21,18 @@ import './Reporting.scss';
 const Reports = () => {
     const [selectedFrequency, setSelectedFrequency] = useState(frequencies[0].name);
     const [selectedDateTime, setSelectedDateTime] = useState("");
-    const [selectedGroup, setSelectedGroup] = useState({group : null, parent: null});
+    const [selectedGroup, setSelectedGroup] = useState({ group: null, parent: null });
     const [groups, setGroups] = useState([]);
     const [queryValue, setQueryValue] = useState("");
     const [title, setTitle] = useState("");
     const [selectedColumns, setSelectedColumns] = useState([]);
-    
+
 
 
     const setData = async () => {
         const res = await request("https://si-2021.167.99.244.168.nip.io/api/group/MyAssignedGroups");
         setGroups(res.data.data.subGroups);
-        setSelectedGroup({group : res.data.data, parent: null});
-        //setSelectedGroup(res.data.data[0]?.name)
-            
-        console.log(res.data.data);
+        setSelectedGroup({ group: res.data.data.subGroups[0], parent: null });
     };
 
     useEffect(() => {
@@ -45,7 +42,7 @@ const Reports = () => {
     const changeTitle = (event) => {
         setTitle(event.target.value);
     };
-    
+
     const changeFrequency = (event) => {
         setSelectedFrequency(event.target.value);
     };
@@ -55,8 +52,7 @@ const Reports = () => {
     };
 
     const changeGroup = (event) => {
-        if(event.target.value == null) {console.log("yeet");return;}
-        setSelectedGroup({group : event.target.value, parent : selectedGroup});
+        setSelectedGroup({ group: event.target.value, parent: selectedGroup });
         setGroups(event.target.value.subGroups);
     };
 
@@ -65,20 +61,17 @@ const Reports = () => {
     };
 
     const checkQuery = () => {
-        if(queryValue?.rules?.length <= 0) return true;
+        if (queryValue?.rules?.length <= 0 || title.length < 1) return true;
         return false;
     }
 
     const submitReportForm = e => {
         e.preventDefault();
-        console.log("Final query: ", selectedFrequency, selectedDateTime, selectedGroup, queryValue);
         console.log("( " + formatQuery(queryValue, 'sql') + " ) and groupId = " + selectedGroup.group.groupId);
     };
 
     const groupBacktrack = e => {
-        if(selectedGroup.parent == null) return;
-        console.log("ima li undoooooooooo");
-        console.log("za njuuuuuuuuuuuuuuu");
+        if (selectedGroup.parent == null) return;
         var newGroups = selectedGroup.parent.group.subGroups;
         console.log(selectedGroup);
         setSelectedGroup(selectedGroup.parent);
@@ -87,12 +80,12 @@ const Reports = () => {
 
     const changeSelectedColumns = (event) => {
         if (event.target.checked) {
-            setSelectedColumns([...selectedColumns, event.target.value]); 
+            setSelectedColumns([...selectedColumns, event.target.value]);
         }
         else {
             setSelectedColumns(selectedColumns.filter(col => col !== event.target.value));
         }
-        
+
     };
 
     return (
@@ -102,12 +95,12 @@ const Reports = () => {
             <div className="reportingInput">
                 <div className="inputWrapper">
                     <InputLabel className="inputLabelWrapper" id="frequencyLabel"> Report title:  </InputLabel>
-                        <TextField labelId="frequencyLabel" value={title} className="select" onChange={changeTitle} autoFocus/>
+                    <TextField labelId="frequencyLabel" value={title} className="select" onChange={changeTitle} autoFocus />
                 </div>
 
                 <div className="inputWrapper">
                     <InputLabel className="inputLabelWrapper" id="frequencyLabel"> How often do you want a report to be sent to you? </InputLabel>
-                    {frequencies.length > 0 && 
+                    {frequencies.length > 0 &&
                         <Select className="select" labelId="frequencyLabel" value={selectedFrequency} onChange={changeFrequency}>
                             {frequencies.map(el => <MenuItem key={el.name} value={el.name}> {el.label} </MenuItem>)}
                         </Select>
@@ -129,19 +122,21 @@ const Reports = () => {
 
                 <div className="inputWrapper">
                     <InputLabel className="inputLabelWrapper" id="groupLabel"> Choose a {selectedGroup.parent == null ? "group" : "subgroup"} </InputLabel>
-                    <Select className="select" labelId="groupLabel" value={selectedGroup} onChange={changeGroup}>
+                    <Select className="select" labelId="groupLabel" onChange={changeGroup}>
                         {groups.map(el => <MenuItem key={el.groupId} value={el}> {el.name} </MenuItem>)}
                     </Select>
                 </div>
-                
+
                 <div className="inputWrapper">
                     <InputLabel className="inputLabelWrapper">{selectedGroup.parent == null ? "No group is selected" : "You selected the group: " + selectedGroup.group.name}</InputLabel>
-                    <Button onClick={groupBacktrack}>Undo</Button>
+                    <div className="select">
+                        <Button onClick={groupBacktrack}>Undo</Button> 
+                    </div>
                 </div>
 
                 <div className="queryBuilderWrapper">
                     <h3 className="queryBuilderTitle"> What do you want in your report? </h3>
-                    <QueryBuilder 
+                    <QueryBuilder
                         title="reportBuilder"
                         fields={fields}
                         onQueryChange={changeQuery}
@@ -149,26 +144,20 @@ const Reports = () => {
                     />
                 </div>
                 <div>
-                <h3 className="queryBuilderTitle"> Which columns do you want in your report? </h3>
-                
-                    { fields.map(inputField => (
-                        <div>
-                        <Checkbox 
-                            value={inputField.name}
-                            onChange={changeSelectedColumns}
-                        />
-                        <InputLabel className="selectCol">
-                            {inputField.label}
-                        </InputLabel>
+                    <h3 className="queryBuilderTitle"> Which columns do you want in your report? </h3>
+
+                    {fields.map((inputField, index) => (
+                        <div key={index}>
+                            <Checkbox
+                                value={inputField.name}
+                                onChange={changeSelectedColumns}
+                            />
+                            <InputLabel className="selectCol">
+                                {inputField.label}
+                            </InputLabel>
                         </div>
-
-
-                    ))
-
-                    }
+                    ))}
                 </div>
-
-
 
                 <Button onClick={submitReportForm} variant="contained" color="default" disabled={checkQuery()}> Submit </Button>
             </div>
