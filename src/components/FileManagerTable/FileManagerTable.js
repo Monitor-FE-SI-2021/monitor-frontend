@@ -1,5 +1,5 @@
 import React from 'react';
-import './FileManagerTable.css';
+import './FileManagerTable.scss';
 import RenamePopup from "../Popups/RenapePopup";
 import DeletePopup from "../Popups/DeletePopup";
 
