@@ -1,8 +1,9 @@
 import { connect } from "react-redux";
 import request from "../../service";
 import './Reporting.css';
+import ReportTiming from './ReportTiming'
 
-/*push test*/
+
 // window.addEventListener('load', (event) => {
 //     //document.getElementById('time1').style.visibility = "hidden";
 //
@@ -31,135 +32,137 @@ import './Reporting.css';
 //     });
 // });
 
-function handleClick(e) {
-    var div = document.createElement("div");
-
-    div.innerHTML = `
-    <div>
-    <p>AND</p>
-    <br></br>
-    <div class="queries">
-        <select name="column" id="column" onChange={handleChange1}>
-            <option value="name">Name</option>
-            <option value="location">Location</option>
-            <option value="longitude">Longitude</option>
-            <option value="latitude">Latitude</option>
-            <option value="status">Status</option>
-            <option value="lastTimeOnline">Last time online</option>
-            <option value="timeLog">Time log for selected period</option>
-            <option value="groupName">Group name</option>
-        </select>
-    </div>
-
-    <div id="typeOfComparison1">
-        <select id="typeOfCompId">
-            <option value="equal">Equal</option>
-            <option value="conatins">Conatins</option>
-        </select>
-    </div>
-
-    <div class="typeOfAnswer">
-        <input class="typeOfAnswerId" type="text"></input>
-    </div>
-    </div>
-    `;
-    document.getElementById('queriesManipulation').appendChild(div);
-}
-
-function handleClick1(e) {
-
-}
 
 
-function handleChange1(e) {
-    var e = document.getElementById("typeOfCompId");
-    e.parentElement.removeChild(e);
+// function handleClick(e) {
+//     var div = document.createElement("div");
 
-    var selected1 = document.getElementById("column").value;
+//     div.innerHTML = `
+//     <div>
+//     <p>AND</p>
+//     <br></br>
+//     <div class="queries">
+//         <select name="column" id="column" onChange={handleChange1}>
+//             <option value="name">Name</option>
+//             <option value="location">Location</option>
+//             <option value="longitude">Longitude</option>
+//             <option value="latitude">Latitude</option>
+//             <option value="status">Status</option>
+//             <option value="lastTimeOnline">Last time online</option>
+//             <option value="timeLog">Time log for selected period</option>
+//             <option value="groupName">Group name</option>
+//         </select>
+//     </div>
 
+//     <div id="typeOfComparison1">
+//         <select id="typeOfCompId">
+//             <option value="equal">Equal</option>
+//             <option value="conatins">Conatins</option>
+//         </select>
+//     </div>
 
-    if (selected1 == 'longitude' || selected1 == 'latitude') {
+//     <div class="typeOfAnswer">
+//         <input class="typeOfAnswerId" type="text"></input>
+//     </div>
+//     </div>
+//     `;
+//     document.getElementById('queriesManipulation').appendChild(div);
+// }
 
-        const inp = document.createElement('select');
+// function handleClick1(e) {
 
-        inp.id = "typeOfCompId";
-
-        inp.innerHTML = `
-            <option value="equal">Equal</option>
-            <option value="greater">&gt;</option>
-            <option value="less">&lt;</option>
-            <option value="greaterEqual">&gt;=</option>
-            <option value="lessEqual">&lt;=</option>
-        `;
-
-        document.getElementsByClassName('typeOfAnswerId').type = 'number';
-        document.getElementById('typeOfComparison1').appendChild(inp);
-    } else if (selected1 == 'name' || selected1 == 'location') {
-        const inp = document.createElement('select');
-
-        inp.id = "typeOfCompId";
-
-        inp.innerHTML = `
-            <option value="equal">Equal</option>
-            <option value="conatins">Contains</option>
-        `;
-
-        document.getElementsByClassName('typeOfAnswerId').type = 'text';
-        document.getElementById('typeOfComparison1').appendChild(inp);
-
-    } else if (selected1 == 'status') {
-        const inp = document.createElement('select');
-
-        inp.id = "typeOfCompId";
+// }
 
 
-        inp.innerHTML = `
-            <option value="yes">On</option>
-            <option value="no">Off</option>
-        `;
+// function handleChange1(e) {
+//     var e = document.getElementById("typeOfCompId");
+//     e.parentElement.removeChild(e);
 
-        document.getElementsByClassName('typeOfAnswerId').disabled = "true";
-        document.getElementById('typeOfComparison1').appendChild(inp);
-    } else if (selected1 == 'lastTimeOnline') {
-        const inp = document.createElement('select');
-
-        inp.id = "typeOfCompId";
+//     var selected1 = document.getElementById("column").value;
 
 
-        inp.innerHTML = `
-            <option value="equal">Equal</option>
-            <option value="greater">&gt;</option>
-            <option value="less">&lt;</option>
-            <option value="greaterEqual">&gt;=</option>
-            <option value="lessEqual">&lt;=</option>
-        `;
+//     if (selected1 == 'longitude' || selected1 == 'latitude') {
 
-        document.getElementsByClassName('typeOfAnswerId').type = 'datetime-local';
-        document.getElementById('typeOfComparison1').appendChild(inp);
-    }
-}
+//         const inp = document.createElement('select');
 
-function handleChange(e) {
+//         inp.id = "typeOfCompId";
 
-    var selected = document.getElementById("email").value;
+//         inp.innerHTML = `
+//             <option value="equal">Equal</option>
+//             <option value="greater">&gt;</option>
+//             <option value="less">&lt;</option>
+//             <option value="greaterEqual">&gt;=</option>
+//             <option value="lessEqual">&lt;=</option>
+//         `;
 
-    if (selected == 'daily') {
-        document.getElementById('update-time').type = 'time';
-        document.getElementById('time1').style.visibility = "visible";
-    } else if (selected == 'weekly') {
-        document.getElementById('update-time').type = 'datetime-local';
-        document.getElementById('time1').style.visibility = "visible";
-    } else if (selected == 'monthly') {
-        document.getElementById('update-time').type = 'datetime-local';
-        document.getElementById('time1').style.visibility = "visible";
-    } else if (selected == 'yearly') {
-        document.getElementById('update-time').type = 'datetime-local';
-        document.getElementById('time1').style.visibility = "visible";
-    } else if (selected == 'nothing') {
-        document.getElementById('time1').style.visibility = "hidden";
-    }
+//         document.getElementsByClassName('typeOfAnswerId').type = 'number';
+//         document.getElementById('typeOfComparison1').appendChild(inp);
+//     } else if (selected1 == 'name' || selected1 == 'location') {
+//         const inp = document.createElement('select');
 
-}
+//         inp.id = "typeOfCompId";
+
+//         inp.innerHTML = `
+//             <option value="equal">Equal</option>
+//             <option value="conatins">Contains</option>
+//         `;
+
+//         document.getElementsByClassName('typeOfAnswerId').type = 'text';
+//         document.getElementById('typeOfComparison1').appendChild(inp);
+
+//     } else if (selected1 == 'status') {
+//         const inp = document.createElement('select');
+
+//         inp.id = "typeOfCompId";
+
+
+//         inp.innerHTML = `
+//             <option value="yes">On</option>
+//             <option value="no">Off</option>
+//         `;
+
+//         document.getElementsByClassName('typeOfAnswerId').disabled = "true";
+//         document.getElementById('typeOfComparison1').appendChild(inp);
+//     } else if (selected1 == 'lastTimeOnline') {
+//         const inp = document.createElement('select');
+
+//         inp.id = "typeOfCompId";
+
+
+//         inp.innerHTML = `
+//             <option value="equal">Equal</option>
+//             <option value="greater">&gt;</option>
+//             <option value="less">&lt;</option>
+//             <option value="greaterEqual">&gt;=</option>
+//             <option value="lessEqual">&lt;=</option>
+//         `;
+
+//         document.getElementsByClassName('typeOfAnswerId').type = 'datetime-local';
+//         document.getElementById('typeOfComparison1').appendChild(inp);
+//     }
+// }
+
+// function handleChange(e) {
+
+//     var selected = document.getElementById("email").value;
+
+//     if (selected == 'daily') {
+//         document.getElementById('update-time').type = 'time';
+//         document.getElementById('time1').style.visibility = "visible";
+//     } else if (selected == 'weekly') {
+//         document.getElementById('update-time').type = 'datetime-local';
+//         document.getElementById('time1').style.visibility = "visible";
+//     } else if (selected == 'monthly') {
+//         document.getElementById('update-time').type = 'datetime-local';
+//         document.getElementById('time1').style.visibility = "visible";
+//     } else if (selected == 'yearly') {
+//         document.getElementById('update-time').type = 'datetime-local';
+//         document.getElementById('time1').style.visibility = "visible";
+//     } else if (selected == 'nothing') {
+//         document.getElementById('time1').style.visibility = "hidden";
+//     }
+
+// }
 
 const Reports = () => {
 
@@ -169,7 +172,10 @@ const Reports = () => {
 
             <h1> Reporting </h1>
             <h2>Query Builder</h2>
-            <br/>
+
+            < ReportTiming />
+
+            {/* <br/>
             <div>
                 <p id="often"> How often do you want reports to be sent to you? </p>
                 <select id="email" onChange={handleChange}>
@@ -179,15 +185,17 @@ const Reports = () => {
                     <option value="monthly"> Monthly</option>
                     <option value="yearly"> Yearly</option>
                 </select>
-            </div>
+            </div> */}
 
-            <div id="time1">
-                {/* ovdje ce trebati ogranicenja u odnosu na to sta se odabere iznad, ali za to moramo sacekati BE */}
+
+
+            {/* <div id="time1">
+                komentar: ovdje ce trebati ogranicenja u odnosu na to sta se odabere iznad, ali za to moramo sacekati BE 
                 <p id="timePar"> At what time do you want an email to be sent? </p>
                 <input type="datetime-local" id="update-time" name="update-time"/>
-            </div>
+            </div> */}
 
-            <div class="groups">
+            <div className="groups">
                 <label htmlFor="groups" id="groupsLabel">Choose a group:</label>
 
                 <select name="groups" id="groups">
@@ -195,7 +203,8 @@ const Reports = () => {
                 </select>
             </div>
 
-            <div id="queriesManipulation">
+
+            {/* <div id="queriesManipulation">
                 <p>Select conditions:</p>
                 <button type="button" onClick={handleClick}>AND</button>
                 <button type="button" onClick={handleClick1}>OR</button>
@@ -225,74 +234,46 @@ const Reports = () => {
                 <div class="typeOfAnswer">
                     <input class="typeOfAnswerId" type="text"></input>
                 </div>
-                {/************* */}
-                <div>
-                    <p>AND</p>
-                    <br></br>
-                    <div class="queries">
-                        <select name="column" id="column" onChange={handleChange1}>
-                            <option value="name">Name</option>
-                            <option value="location">Location</option>
-                            <option value="longitude">Longitude</option>
-                            <option value="latitude">Latitude</option>
-                            <option value="status">Status</option>
-                            <option value="lastTimeOnline">Last time online</option>
-                            <option value="timeLog">Time log for selected period</option>
-                            <option value="groupName">Group name</option>
-                        </select>
-                    </div>
-
-                    <div id="typeOfComparison1">
-                        <select id="typeOfCompId">
-                            <option value="equal">Equal</option>
-                            <option value="conatins">Conatins</option>
-                        </select>
-                    </div>
-
-                    <div class="typeOfAnswer">
-                        <input class="typeOfAnswerId" type="text"></input>
-                    </div>
-                </div>
-                {/*************** */}
+                
                 <br></br>
-            </div>
+            </div> */}
 
-            <div class="table">
-                <div class="device_data">
+            <div className="table">
+                <div className="device_data">
                     <p> What do you want to see in your report? </p>
                     {/* ovo je prvi primjer reporta, nakon sto dobijemo dodatne informacije bit ce nam lako promijeniti */}
                     <h3> Device data </h3>
                     <section>
                         <label htmlFor="device-name"> Name: </label>
-                        <input type="checkbox" id="device-name" name="device-name"></input>
+                        <input type="checkbox" id="device-name" name="device-name"/>
                     </section>
                     <section>
                         <label htmlFor="device-location"> Location: </label>
-                        <input type="checkbox" id="device-location" name="device-location"></input>
+                        <input type="checkbox" id="device-location" name="device-location"/>
                     </section>
                     <section>
                         <label htmlFor="device-longitude"> Longitude: </label>
-                        <input type="checkbox" id="device-longitude" name="device-longitude"></input>
+                        <input type="checkbox" id="device-longitude" name="device-longitude"/>
                     </section>
                     <section>
                         <label htmlFor="device-latitude"> Latitude: </label>
-                        <input type="checkbox" id="device-latitude" name="device-latitude"></input>
+                        <input type="checkbox" id="device-latitude" name="device-latitude"/>
                     </section>
                     <section>
                         <label htmlFor="device-status"> Status: </label>
-                        <input type="checkbox" id="device-status" name="device-status"></input>
+                        <input type="checkbox" id="device-status" name="device-status"/>
                     </section>
                     <section>
                         <label htmlFor="device-online"> Last time online: </label>
-                        <input type="checkbox" id="device-online" name="device-online"></input>
+                        <input type="checkbox" id="device-online" name="device-online"/>
                     </section>
                     <section>
                         <label htmlFor="device-log"> Time log for selected period: </label>
-                        <input type="checkbox" id="device-log" name="device-log"></input>
+                        <input type="checkbox" id="device-log" name="device-log"/>
                     </section>
                     <section>
                         <label htmlFor="device-group"> Group name: </label>
-                        <input type="checkbox" id="device-group" name="device-group"></input>
+                        <input type="checkbox" id="device-group" name="device-group"/>
                     </section>
                 </div>
             </div>
