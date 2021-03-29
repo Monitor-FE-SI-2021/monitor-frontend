@@ -3,6 +3,7 @@ import React from 'react';
 import './Login.css';
 import { requestResetPassword } from "../../store/modules/login/login";
 import { push } from 'connected-react-router';
+import { showSwalToast } from "../../utils/utils";
 
 function NewPassword({ requestResetPassword, push }) {
     const initialFormData = {
@@ -29,7 +30,7 @@ function NewPassword({ requestResetPassword, push }) {
         const pathname = window.location.pathname;
 
         if (formData.password !== formData.repeatedPassword)
-            alert("Passwords don't match!");
+            showSwalToast("Passwords don't match!");
 
         else {
             const data = {
@@ -38,7 +39,7 @@ function NewPassword({ requestResetPassword, push }) {
             }
 
             requestResetPassword(data).then(r => {
-                alert("Password changed successfully!");
+                showSwalToast("Password changed successfully!", 'success');
                 switchRoute('/login');
             })
         }
