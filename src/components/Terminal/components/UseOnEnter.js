@@ -1,7 +1,9 @@
 import React from "react";
+import addNewLog from "./SaveLogToFirebase";
 
 var token;
 
+const config = require('../config');
 const commands = {
   cd: 1,
   clear: 0,
@@ -23,18 +25,18 @@ const UseOnEnter = () => {
   const [savedLogs, setSavedLogs] = React.useState([]);
   const [counter, setCounter] = React.useState(0);
 
-  const onEnter = async (value, key) => {
+  const onEnter = async (value, key, name) => {
     
     if (key === "Enter") {
       //console.log("Proba")
     const requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: 'whoso@whoso.com', password:  'sifra123'})
+      body: JSON.stringify({ email: config.email, password:  config.password})
   };
 
   try {
-      var response = await fetch('http://167.99.244.168:3333/login', requestOptions);
+      var response = await fetch(config.url, requestOptions);
      //console.log(response.status)
       
       //console.log(x);
@@ -71,12 +73,23 @@ const UseOnEnter = () => {
       return updateConsoleOutput(consoleOutput =>
         consoleOutput.concat("Invalid Command"), setCounter(brojac=>brojac+1)
       )}
-
+        console.log("Name ", name)
       if(args.length>1){
+        addNewLog({
+          command_type: args[0].toString(),
+          args: args[1].toString(),
+          response: ""
+        }, name)
         return updateConsoleOutput(consoleOutput => consoleOutput.concat("Valid Command!" + args[0].toString() + " " + args[1].toString() + "!")),setCounter(counter=>counter+1); 
       }
-      else
-       return updateConsoleOutput(consoleOutput => consoleOutput.concat("Valid Command!" + args[0].toString() + "!")),setCounter(counter=>counter+1); 
+      else {
+        addNewLog({
+          command_type: args[0].toString(),
+          args: "",
+          response: ""
+        }, name)
+        return updateConsoleOutput(consoleOutput => consoleOutput.concat("Valid Command!" + args[0].toString() + "!")),setCounter(counter=>counter+1); 
+      }
     }
   };
 

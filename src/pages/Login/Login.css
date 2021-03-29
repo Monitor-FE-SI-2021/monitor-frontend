@@ -24,12 +24,18 @@
     -webkit-box-sizing: border-box;
 }
 
-#login-form input[type="submit"] {
+#submitButton {
     border: 0;
     padding: 15px;
     background: #5b77bd;
     color: #fff;
     cursor: pointer;
+}
+
+#forgotPasswordButton {
+    background: #eeebeb;
+    border:#fff;
+    width: 100%;
 }
 
 html,

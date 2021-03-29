@@ -1,11 +1,11 @@
-export const SET_MENU_EXPANDED = 'SET_MENU_EXPANDED';
+export const SET_MENU_EXPANDED = "SET_MENU_EXPANDED";
 
 export const RouteLink = {
     Dashboard: '/',
     Login: "/login",
     Devices: "/devices",
     Reporting: "/reporting",
-    AddDevice: '/manage-device',
+    ManageDevice: '/manage-device',
     Terminal: '/terminal',
     RemoteControl: '/remotecontrol'
 }
@@ -28,18 +28,18 @@ const initialState = {
             name: "Reporting",
             icon: "",
         },
-        {
-            link: RouteLink.Terminal,
-            name: 'Terminal',
-            icon: ""
-        },
-        {
-            link: RouteLink.RemoteControl,
-            name: 'Remote Control',
-            icon: ""
-        },
+        // {
+        //     link: RouteLink.Terminal,
+        //     name: 'Terminal',
+        //     icon: ""
+        // },
+        // {
+        //     link: RouteLink.RemoteControl,
+        //     name: 'Remote Control',
+        //     icon: ""
+        // },
     ],
-}
+};
 
 const ACTION_HANDLERS = {
     [SET_MENU_EXPANDED]: (state, action) => {
