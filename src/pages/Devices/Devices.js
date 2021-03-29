@@ -6,32 +6,29 @@ import { fetchAllDevices } from "../../store/modules/devices/actions";
 import { fetchAllGroups } from "../../store/modules/groups/actions";
 import { push } from "connected-react-router";
 import { RouteLink } from "../../store/modules/menu/menu";
-import { CircularProgress } from "@material-ui/core";
 import { Spinner } from "../../components/Spinner/Spinner";
 
 const getRootGroups = (groups) => {
-    const parentGroups = []
+    const parentGroups = [];
 
-    for (let group of groups) {
-
-        if (group.parentGroup === null) {       // No parent group
-            parentGroups.push(group)
-        } else if (groups.findIndex(g => g.groupId === group.parentGroup) === -1) {   // If not fetched parent group, then its also root
-            parentGroups.push(group);
-        }
+    if (typeof groups.subGroups === "undefined") {
+        return parentGroups
     }
 
-    return parentGroups
+    return groups.subGroups;
+
 }
 
 const Devices = ({ allGroups, fetchAllDevices, fetchAllGroups, push, devicesAsync, groupsAsync }) => {
 
     const async = devicesAsync || groupsAsync;
 
+
     useEffect(() => {
         fetchAllDevices();
         fetchAllGroups();
     }, [fetchAllDevices, fetchAllGroups])
+
 
     const rootGroups = getRootGroups(allGroups).map((grupa) => {
         return (
@@ -44,7 +41,7 @@ const Devices = ({ allGroups, fetchAllDevices, fetchAllGroups, push, devicesAsyn
         <div className="page devices">
             <div className="top">
                 <h1> Pregled mašina </h1>
-                <button className="create" onClick={() => push(RouteLink.AddDevice)}>Kreiraj mašinu</button>
+                <button className="create" onClick={() => push(RouteLink.ManageDevice)}>Kreiraj mašinu</button>
             </div>
             <div className={'groups-list'}>
                 {async ? <Spinner color={'inherit'}/> : rootGroups}

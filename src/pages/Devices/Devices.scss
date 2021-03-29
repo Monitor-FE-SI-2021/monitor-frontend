@@ -1,6 +1,8 @@
 .devices {
+    overflow: auto;
+
     .groups-list {
-        padding: 5px 10px;
+        padding: 10px 30px 10px 10px;
     }
 
     .top {
@@ -38,6 +40,10 @@
 
         .tab {
             cursor: pointer;
+        }
+
+        .custom-table-container {
+            margin-left: 20px;
         }
     }
 }

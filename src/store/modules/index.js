@@ -6,6 +6,7 @@ import groups from "./groups/groups";
 import login from "./login/login";
 
 // Kada napravite reducer (store module), dodajte ga ovdje ispod (counter, menu, noviModul, ...)
+
 const createRootReducer = (history) => combineReducers({
     router: connectRouter(history),
     menu,

@@ -21,7 +21,7 @@ const App = ({ user, getMe, push }) => {
 
         const token = localStorage.getItem(STORAGE_KEY);
 
-        if(route == '/forgot-password' || route.slice(0, route.lastIndexOf('/')) == '/password-reset') {
+        if (route === '/forgot-password' || route.slice(0, route.lastIndexOf('/')) === '/password-reset') {
             return;
         }
 
@@ -52,7 +52,7 @@ const App = ({ user, getMe, push }) => {
 
 const ConnectedApp = connect(state => ({
     user: state.login.user,
-}), { getMe, push})(App);
+}), { getMe, push })(App);
 
 ReactDOM.render(
     <Provider store={store}>
