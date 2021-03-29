@@ -7,8 +7,10 @@ export const RouteLink = {
     Reporting: "/reporting",
     ReportList: "/report-list",
     AddDevice: '/manage-device',
+    ManageDevice: '/manage-device',
     Terminal: '/terminal',
-    RemoteControl: '/remotecontrol'
+    RemoteControl: '/remotecontrol',
+    TwoFactorAuthentication: '/security'
 }
 
 const initialState = {
@@ -30,17 +32,12 @@ const initialState = {
             icon: "",
         },
         {
-            link: RouteLink.Terminal,
-            name: 'Terminal',
+            link: RouteLink.TwoFactorAuthentication,
+            name: 'Two Factor Authentication',
             icon: ""
-        },
-        {
-            link: RouteLink.RemoteControl,
-            name: 'Remote Control',
-            icon: ""
-        },
+        }
     ],
-}
+};
 
 const ACTION_HANDLERS = {
     [SET_MENU_EXPANDED]: (state, action) => {

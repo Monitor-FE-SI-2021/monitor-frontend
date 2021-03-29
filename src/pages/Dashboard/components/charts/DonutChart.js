@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { Doughnut } from 'react-chartjs-2';
 
-class ChartDonut extends Component {
+class DonutChart extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            displayTitle: props.displayTitle,
             chartData: props.chartData
         }
     }
@@ -13,7 +14,8 @@ class ChartDonut extends Component {
         return (
             <div className="chart">
                 <Doughnut
-                    data={this.state.chartData}
+                    data={
+                        this.state.chartData}
 
                     height={300}
                     width={300}
@@ -21,8 +23,8 @@ class ChartDonut extends Component {
                     options={{
                         maintainAspectRatio: false,
                         title: {
-                            display: 'Average GPU usage',
-                            text: 'Average GPU usage',
+                            display: this.state.displayTitle,
+                            text: this.state.displayTitle,
                             fontSize: 25
                         },
                     }}
@@ -32,4 +34,4 @@ class ChartDonut extends Component {
     }
 }
 
-export default ChartDonut
+export default DonutChart

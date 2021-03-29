@@ -1,15 +1,22 @@
-import request, { authEndpoint, users } from "../../../service";
+import request, { authEndpoint, forgotPassword, resetPassword, users } from "../../../service";
 import { STORAGE_KEY } from "../../../utils/consts";
 import { history } from "../../store";
+import { showSwalToast } from "../../../utils/utils";
 
+// Types
 export const SET_USER = 'SET_USER';
 export const SET_LOGIN_ASYNC = 'SET_LOGIN_ASYNC';
 export const SET_USER_ASYNC = 'SET_USER_ASYNC';
+export const SET_RESET_PASSWORD_ASYNC = 'SET_RESET_PASSWORD_ASYNC';
+export const SET_FORGOT_PASSWORD_ASYNC = 'SET_FORGOT_PASSWORD_ASYNC';
+
 
 const initialState = {
     loginAsync: false,
     userAsync: false,
     user: null,
+    resetAsync: false,
+    forgotPasswordAsync: false,
 }
 
 const ACTION_HANDLERS = {
@@ -31,6 +38,18 @@ const ACTION_HANDLERS = {
             user: action.user,
         }
     },
+    [SET_RESET_PASSWORD_ASYNC]: (state, action) => {
+        return {
+            ...state,
+            resetAsync: action.async,
+        }
+    },
+    [SET_FORGOT_PASSWORD_ASYNC]: (state, action) => {
+        return {
+            ...state,
+            forgotPasswordAsync: action.async,
+        }
+    },
 }
 
 export const doLogin = ({ email, password }) => {
@@ -46,6 +65,7 @@ export const doLogin = ({ email, password }) => {
             password
         }).then(res => {
             if (res && res.status === 200) {
+
                 localStorage.setItem(STORAGE_KEY, res.data.accessToken);
 
                 dispatch(getMe()).then(() => {
@@ -53,6 +73,23 @@ export const doLogin = ({ email, password }) => {
                 });
 
                 return res;
+            } else if (res && res.status === 202) {
+                
+                let kod = prompt('Unesi Two Factor Authentication kod');
+                localStorage.setItem(STORAGE_KEY, res.data.accessToken);
+
+                return request(authEndpoint + '/QRcode/verify', "POST",
+                    {
+                        "token": kod
+                    }).then(re => {
+                    if (re && re.status === 200) {
+                        localStorage.setItem(STORAGE_KEY, re.data.accessToken);
+                        dispatch(getMe()).then(() => {
+                            history.push('/')
+                        });
+                        return re;
+                    }
+                });
             }
         }).finally(() => {
             return dispatch({
@@ -86,6 +123,57 @@ export const getMe = () => {
                     async: false
                 })
             })
+    }
+}
+
+export const requestResetPassword = ({ password, token }) => {
+    return dispatch => {
+
+        dispatch({
+            type: SET_RESET_PASSWORD_ASYNC,
+            async: true
+        });
+
+        return request(resetPassword + "/" + token, "PUT", { password }).then(res => {
+            if (res.status === 200) {
+                return res;
+            } else {
+                throw res;
+            }
+        }).finally(() => {
+            return dispatch({
+                type: SET_RESET_PASSWORD_ASYNC,
+                async: false
+            })
+        })
+    }
+}
+
+export const requestForgotPassword = ({ email }) => {
+    return dispatch => {
+
+        console.log(email);
+
+        dispatch({
+            type: SET_FORGOT_PASSWORD_ASYNC,
+            async: true
+        });
+
+        return request(forgotPassword, "PUT", {
+            email
+        }).then(res => {
+            if (res.status === 200) {
+                showSwalToast("We sent a reset link to " + email + ".", 'success');
+                return res;
+            } else {
+                throw res;
+            }
+        }).finally(() => {
+            return dispatch({
+                type: SET_FORGOT_PASSWORD_ASYNC,
+                async: false
+            })
+        })
     }
 }
 

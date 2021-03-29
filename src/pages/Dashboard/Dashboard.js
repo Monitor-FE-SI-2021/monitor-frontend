@@ -1,19 +1,65 @@
 import React from "react";
-import { connect } from "react-redux";
-import MachineIcon from '../../assets/icons/machine.png'
+import {connect} from "react-redux";
+import MachineIcon from "../../assets/icons/machine.png";
 import PieChart from "./components/charts/PieChart";
 import LineChart from "./components/charts/LineChart";
-import ChartDonut from "./components/charts/ChartDonut";
+import DonutChart from "./components/charts/DonutChart";
 import BarChart from "./components/charts/BarChart";
 import ActiveMachine from "./components/ActiveMachine";
-import request, { devices } from "../../service";
-import './dashboard.scss'
+import request, {devices} from "../../service";
+
+import "./dashboard.scss";
+import {act} from "@testing-library/react";
 
 // DUMMY DATA
 
 // Api get may or may not be called here.
 // The data is an example of how the data structure should look like
 
+let ramUsageChart = {
+    labels: ["Used", "Not used"],
+    datasets: [
+        {
+            label: "RAM usage",
+            data: [],
+            backgroundColor: ["rgba(75, 192, 192, 0.6)", "rgba(54, 162, 235, 0.6)"],
+        },
+    ],
+};
+
+let cpuUsageChart = {
+    labels: ["Used", "Not used"],
+    datasets: [
+        {
+            label: "CPU usage",
+            data: [],
+            backgroundColor: ["rgba(75, 192, 192, 0.6)", "rgba(54, 162, 235, 0.6)"],
+        },
+    ],
+};
+
+let gpuUsageChart = {
+    labels: ["Used", "Not used"],
+    datasets: [
+        {
+            label: "GPU usage",
+            data: [],
+            backgroundColor: ["rgba(75, 192, 192, 0.6)", "rgba(54, 162, 235, 0.6)"],
+        },
+    ],
+};
+
+let hddUsageChart = {
+    labels: ["Used", "Not used"],
+    datasets: [
+        {
+            label: "HDD usage",
+            data: [],
+            backgroundColor: ["rgba(75, 192, 192, 0.6)", "rgba(54, 162, 235, 0.6)"],
+        },
+    ],
+};
+/*
 let chartPieDataExample = {
     labels: ['Used', 'Not used'],
     datasets: [
@@ -26,11 +72,11 @@ let chartPieDataExample = {
             backgroundColor: [
                 'rgba(75, 192, 192, 0.6)',
                 'rgba(54, 162, 235, 0.6)',
-                /*            'rgba(255, 206, 86, 0.6)',
+                            'rgba(255, 206, 86, 0.6)',
                               'rgba(255, 99, 132, 0.6)',
                               'rgba(153, 102, 255, 0.6)',
                               'rgba(255, 159, 64, 0.6)',
-                              'rgba(255, 99, 132, 0.6)'*/
+                              'rgba(255, 99, 132, 0.6)'
             ]
         }
     ]
@@ -55,24 +101,21 @@ let chartLineDataExample = {
     ]
 }
 let chartDonutDataExample = {
-    labels: ['Q1', 'Q2', 'Q3'],
+    labels: ['Used', 'Not used'],
     datasets: [
         {
             label: 'GPU usage',
             data: [
                 60,
-                65,
-                80
+                40
             ],
             backgroundColor: [
-                'rgba(255, 206, 86, 0.6)',
-                'rgba(255, 99, 132, 0.6)',
-                'rgba(257, 102, 90, 0.6)'
+                'rgba(75, 192, 192, 0.6)',
+                'rgba(54, 162, 235, 0.6)'
             ]
         }
     ]
 }
-let currentTime = new Date().getHours();
 
 let chartBarDataExample = {
 
@@ -92,67 +135,170 @@ let chartBarDataExample = {
     ]
 }
 
-const Dashboard = ({ user }) => {
-    const [allLogs, setAllLogs] = React.useState([])
-    const [machines, setMachines] = React.useState([])
+ */
+let currentTime = new Date().getHours();
 
-    const groupId = user?.userGroups[0]?.groupId || 2;
+/*let activeMachines = [
+    {
+        name: "Desktop PC 1",
+        location: "Sarajevo - BBI",
+        ip: "255.255.255.0",
+        path: "C:/user/programfiles",
+    },
+    {
+        name: "Desktop PC 2",
+        location: "Sarajevo - BBI",
+        ip: "255.255.255.0",
+        path: "C:/user/programfiles",
+    },
+    {
+        name: "Desktop PC",
+        location: "Mostar - Mepas Mall",
+        ip: "255.255.255.0",
+        path: "C:/user/programfiles",
+    },
+];*/
+
+function convertStatistics(statistic) {
+    return [Math.round(statistic * 100), Math.round((1 - statistic) * 100)];
+}
+
+let removedMachine = null
+let clickedMachine = null
+
+const Dashboard = ({user}) => {
+
+    let activeMachines = []
+    const [machines, setMachines] = React.useState([]);
+    const [active, setActive] = React.useState([...activeMachines]);
+    const [showCharts, setShowCharts] = React.useState(false);
+
+    function filterActive(activeMachines, allMachines) {
+        return activeMachines ? activeMachines.filter((machine) => {
+            const existingMachine = allMachines.find(({name, location}) => {
+                return machine.status !== "Disconnected" && name === machine.name && location === machine.location;
+            });
+            if (existingMachine) {
+                machine.deviceId = existingMachine.deviceId;
+                machine.lastTimeOnline = existingMachine.lastTimeOnline;
+            }
+            return existingMachine;
+        }) : [];
+    }
 
     React.useEffect(() => {
-        request(devices + "/AllDevicesForGroup?groupId=" + groupId)
+        request(devices + "/AllDevices")
             .then((res) => {
-                setMachines(res.data.data)
+                const allMachines = res.data.data;
+                setMachines(allMachines);
+                request("https://si-grupa5.herokuapp.com/api/agent/online")
+                    .then((res) => {
+                        console.log(res)
+                        setActive(filterActive(res?.data, allMachines));
+                    })
             })
-            .catch((err) => console.log(err))
+            .catch((err) => console.log(err));
 
-        request(devices + "/GetAllDeviceLogs")
-            .then((resp) => resp.data)
-            .then((logs) => {
-                setAllLogs(logs.data)
-                /*setMachines(smtn.data.filter((value, index, self) => {
-                  return self.findIndex(v => v.deviceId === value.deviceId) === index
-                }))*/
+      /*  request("https://si-grupa5.herokuapp.com/api/agent/online").then((res) => {
+            console.log(res);
+        });*/
+    }, []);
+
+    const disconnectMachine = (machine) => {
+        removedMachine = machine
+        const index = active.indexOf(machine);
+        const cloned = active.slice(0);
+        if (
+            index >= 0 &&
+            window.confirm("Are you sure you wish to disconnect this machine?")
+        ) {
+            request("https://si-grupa5.herokuapp.com/api/agent/disconnect", "POST", {
+                name: machine.name,
+                location: machine.location,
+                ip: machine.ip,
+                user: user
             })
-            .catch((err) => console.log(err))
+                .then((res) => console.log(res))
+                .catch((err) => console.log(err))
+            cloned.splice(index, 1);
+            if (removedMachine?.deviceId === clickedMachine?.deviceId)
+                setShowCharts(false)
+            setActive(cloned);
+        }
+    };
 
-    }, [])
+    const setCharts = ({
+                           averageCPUUsage,
+                           averageGPUUsage,
+                           averageHDDUsage,
+                           averageRamUsage,
+                       }, machine) => {
+        clickedMachine = machine
+        if (removedMachine?.deviceId !== machine?.deviceId) {
+            cpuUsageChart.datasets[0].data = convertStatistics(averageCPUUsage);
+            gpuUsageChart.datasets[0].data = convertStatistics(averageGPUUsage);
+            hddUsageChart.datasets[0].data = convertStatistics(averageHDDUsage);
+            ramUsageChart.datasets[0].data = convertStatistics(averageRamUsage);
+            setShowCharts(false)
+            setShowCharts(true)
+        }
+
+    };
 
     return (
-        <div className='page'>
-            <div className='dashboard'>
-                <div className='row machine-cards'>
+        <div className="page">
+            <div className="dashboard">
+                <div className="row machine-cards">
                     <h1>List of active machines</h1>
-                    <div className='scrollable'>
-                        {machines.map(createActiveMachineCard)}
+                    <div className="scrollable">
+                        {active.map((machine, id) => (
+                            <ActiveMachine
+                                key={id}
+                                data={machine}
+                                img={MachineIcon}
+                                fun={disconnectMachine}
+                                setCharts={setCharts}
+                            />
+                        ))}
                     </div>
                 </div>
-
-                <div className='row'>
-                    <PieChart chartData={chartPieDataExample}/>
-                    <LineChart chartData={chartLineDataExample}/>
-                </div>
-
-                <div className='row'>
-                    <ChartDonut chartData={chartDonutDataExample}/>
-                    <BarChart chartData={chartBarDataExample}/>
-                </div>
+                
+                {showCharts && (
+                    <div>
+                        <h2 className="machineName">{clickedMachine.name}</h2>
+                        <div className="chartContainer">
+                            
+                            <div className="row">
+                                <DonutChart
+                                    displayTitle="Average RAM usage"
+                                    chartData={ramUsageChart}
+                                />
+                                <DonutChart
+                                    displayTitle="Average CPU usage"
+                                    chartData={cpuUsageChart}
+                                />
+                            </div>
+                            <div className="row">
+                                <DonutChart
+                                    displayTitle="Average GPU usage"
+                                    chartData={gpuUsageChart}
+                                />
+                                <DonutChart
+                                    displayTitle="Average disk usage"
+                                    chartData={hddUsageChart}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );
-}
+};
 
-
-function createActiveMachineCard(machine) {
-    return (
-        <ActiveMachine
-            key={machine.name}
-            img={MachineIcon}
-            name={machine.name}
-            info={new Date(machine.lastTimeOnline).toGMTString()}
-        />
-    );
-}
-
-export default connect(state => ({
-    user: state.login.user,
-}), {})(Dashboard)
+export default connect(
+    (state) => ({
+        user: state.login.user,
+    }),
+    {}
+)(Dashboard);

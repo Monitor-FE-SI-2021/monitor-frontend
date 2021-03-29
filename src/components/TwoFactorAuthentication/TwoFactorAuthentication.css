@@ -1,0 +1,58 @@
+
+.QrMain {
+    margin: auto;
+    margin-top: 5%;
+    width: 315px;
+}
+
+.login-form-security h1{
+    margin: 0 0 20px 0;
+    font-size: 20px;
+    text-align: center;
+}
+
+.login-form-security img{
+    box-sizing: border-box;
+    width: 100%;
+    margin: 0 0 20px 0;
+    padding: 10px;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+.login-form-security {
+    background-color: coral;
+    max-width: 500px;
+    margin: auto;
+    padding: 20px;
+    background: #fafafa;
+    border: 1px solid #ccc;
+}
+
+.login-form-security h1 {
+    margin: 0 0 20px 0;
+}
+
+.login-form-security input {
+    box-sizing: border-box;
+    width: 100%;
+    margin: 0 0 20px 0;
+    padding: 10px;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+.login-form-security input[type="submit"] {
+    border: 0;
+    padding: 15px;
+    background: #5b77bd;
+    color: #fff;
+    cursor: pointer;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+html,
+body {
+    font-family: arial, sans-serif;
+}

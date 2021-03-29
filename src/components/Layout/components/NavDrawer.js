@@ -4,6 +4,7 @@ import { push } from 'connected-react-router';
 import menuIcon from '../../../assets/icons/menu.png';
 import { setMenuExpanded } from "../../../store/modules/menu/menu";
 import { STORAGE_KEY } from "../../../utils/consts";
+import { RouteLink } from "../../../store/modules/menu/menu";
 
 function NavDrawer({ push, menuItems, isMenuExpanded, setMenuExpanded }) {
 
@@ -35,7 +36,7 @@ function NavDrawer({ push, menuItems, isMenuExpanded, setMenuExpanded }) {
                         );
                     })}
             </div>
-            <div onClick={doLogout} className='menu-item' style={{marginTop: 'auto'}}>
+            <div onClick={doLogout} className='menu-item' style={{marginTop: 'auto'}} >
                 Logout
             </div>
         </div>
