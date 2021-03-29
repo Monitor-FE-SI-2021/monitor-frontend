@@ -30,16 +30,6 @@ const initialState = {
             icon: "",
         },
         {
-            link: RouteLink.Terminal,
-            name: 'Terminal',
-            icon: ""
-        },
-        {
-            link: RouteLink.RemoteControl,
-            name: 'Remote Control',
-            icon: ""
-        },
-        {
             link: RouteLink.TwoFactorAuthentication,
             name: 'Two Factor Authentication',
             icon: ""
