@@ -26,7 +26,7 @@ const ReportList = ({push}) => {
     }, []);
 
     return (
-        <div className="reportingWrapper">
+        <div className="reportingWrapper page">
              <div  className="header">
                 <h1> Report List</h1>
                 <button className="createReport" onClick={() => push(RouteLink.Reporting)}>New report</button>

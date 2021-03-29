@@ -31,7 +31,10 @@ const DeviceTable = ({ devices, selectDevice, push, user, activeDevices }) => {
                 user: user,
                 ip: ipAddr,
             }).then(r => {
-                console.log(r);
+                if (r?.data?.type === "Connected") {
+                    showSwalToast("Uređaj je uspješno konektovan.", 'success')
+                    push(RouteLink.Dashboard)
+                }
             })
         } else {
             showSwalToast("Uređaj nije online.");
@@ -39,13 +42,10 @@ const DeviceTable = ({ devices, selectDevice, push, user, activeDevices }) => {
     }
 
     const canConnectToDevice = device => {
-        console.log(activeDevices);
 
         const activeDevice = activeDevices.find(d => (d.name === device.name && d.location === device.location));
 
-        console.log(activeDevice);
-
-        return activeDevice && activeDevice.status === 'Disconnected';
+        return activeDevice && (activeDevice.status === 'Disconnected' || activeDevice.status === 'Online');
     }
 
     const [tableFields] = useState([
