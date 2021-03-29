@@ -99,7 +99,7 @@ const DeviceTable = ({ devices, selectDevice, push, user, activeDevices }) => {
                 )}/>
 
                 <TableSlot slot='status' render={dataRow => (
-                    <span>{dataRow.status === true ? 'Online' : 'Offline'}</span>
+                    <span>{canConnectToDevice(dataRow) ? 'Offline' : 'Online'}</span>
                 )}/>
             </CustomTable>
         </React.Fragment>
