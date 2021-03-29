@@ -20,12 +20,12 @@
     align-content: center;
  }
 
-input {
+/* input {
     line-height: 30px;
     font-size: 18px;
     margin-bottom: 10px;
     width: 60%;
-}
+} */
 
 .rename-wrapper {
     width: 100%;

@@ -1,302 +1,158 @@
 import { connect } from "react-redux";
+import React, { useState, useEffect } from 'react';
+import QueryBuilder from 'react-querybuilder';
+import { formatQuery } from 'react-querybuilder';
+
 import request from "../../service";
-import './Reporting.css';
 
-/*push test*/
-// window.addEventListener('load', (event) => {
-//     //document.getElementById('time1').style.visibility = "hidden";
-//
-//     //Getting token manually is only for testing
-//
-//     //Fetching user's groups and updating token
-//     request("https://si-2021.167.99.244.168.nip.io/api/group/MyAssignedGroups").then((r) => {
-//         window.localStorage.setItem("authorization", r.data.newAccessToken);
-//
-//         var groups = [];
-//         r.data.data.forEach(element => {
-//             groups.push({ id: element["groupId"], name: element["name"] });
-//         });
-//
-//         var listGroups = document.getElementById("groups");
-//
-//         groups.forEach(element => {
-//             let opt = document.createElement('option');
-//             opt.appendChild(document.createTextNode(element["name"]));
-//             opt.value = element["id"];
-//             listGroups.appendChild(opt);
-//         });
-//
-//     }).catch(() => {
-//         console.log("Unauthorized. Check the token");
-//     });
-// });
+import { fields, frequencies, devices } from './constants';
+import ReportTiming from './ReportTiming';
 
-function handleClick(e) {
-    var div = document.createElement("div");
+import Button from '@material-ui/core/Button';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import InputLabel from '@material-ui/core/InputLabel';
+import TextField from '@material-ui/core/TextField';
+import Checkbox from '@material-ui/core/Checkbox';
 
-    div.innerHTML = `
-    <div>
-    <p>AND</p>
-    <br></br>
-    <div class="queries">
-        <select name="column" id="column" onChange={handleChange1}>
-            <option value="name">Name</option>
-            <option value="location">Location</option>
-            <option value="longitude">Longitude</option>
-            <option value="latitude">Latitude</option>
-            <option value="status">Status</option>
-            <option value="lastTimeOnline">Last time online</option>
-            <option value="timeLog">Time log for selected period</option>
-            <option value="groupName">Group name</option>
-        </select>
-    </div>
-
-    <div id="typeOfComparison1">
-        <select id="typeOfCompId">
-            <option value="equal">Equal</option>
-            <option value="conatins">Conatins</option>
-        </select>
-    </div>
-
-    <div class="typeOfAnswer">
-        <input class="typeOfAnswerId" type="text"></input>
-    </div>
-    </div>
-    `;
-    document.getElementById('queriesManipulation').appendChild(div);
-}
-
-function handleClick1(e) {
-
-}
+import './Reporting.scss';
 
 
-function handleChange1(e) {
-    var e = document.getElementById("typeOfCompId");
-    e.parentElement.removeChild(e);
-
-    var selected1 = document.getElementById("column").value;
-
-
-    if (selected1 == 'longitude' || selected1 == 'latitude') {
-
-        const inp = document.createElement('select');
-
-        inp.id = "typeOfCompId";
-
-        inp.innerHTML = `
-            <option value="equal">Equal</option>
-            <option value="greater">&gt;</option>
-            <option value="less">&lt;</option>
-            <option value="greaterEqual">&gt;=</option>
-            <option value="lessEqual">&lt;=</option>
-        `;
-
-        document.getElementsByClassName('typeOfAnswerId').type = 'number';
-        document.getElementById('typeOfComparison1').appendChild(inp);
-    } else if (selected1 == 'name' || selected1 == 'location') {
-        const inp = document.createElement('select');
-
-        inp.id = "typeOfCompId";
-
-        inp.innerHTML = `
-            <option value="equal">Equal</option>
-            <option value="conatins">Contains</option>
-        `;
-
-        document.getElementsByClassName('typeOfAnswerId').type = 'text';
-        document.getElementById('typeOfComparison1').appendChild(inp);
-
-    } else if (selected1 == 'status') {
-        const inp = document.createElement('select');
-
-        inp.id = "typeOfCompId";
-
-
-        inp.innerHTML = `
-            <option value="yes">On</option>
-            <option value="no">Off</option>
-        `;
-
-        document.getElementsByClassName('typeOfAnswerId').disabled = "true";
-        document.getElementById('typeOfComparison1').appendChild(inp);
-    } else if (selected1 == 'lastTimeOnline') {
-        const inp = document.createElement('select');
-
-        inp.id = "typeOfCompId";
-
-
-        inp.innerHTML = `
-            <option value="equal">Equal</option>
-            <option value="greater">&gt;</option>
-            <option value="less">&lt;</option>
-            <option value="greaterEqual">&gt;=</option>
-            <option value="lessEqual">&lt;=</option>
-        `;
-
-        document.getElementsByClassName('typeOfAnswerId').type = 'datetime-local';
-        document.getElementById('typeOfComparison1').appendChild(inp);
-    }
-}
-
-function handleChange(e) {
-
-    var selected = document.getElementById("email").value;
-
-    if (selected == 'daily') {
-        document.getElementById('update-time').type = 'time';
-        document.getElementById('time1').style.visibility = "visible";
-    } else if (selected == 'weekly') {
-        document.getElementById('update-time').type = 'datetime-local';
-        document.getElementById('time1').style.visibility = "visible";
-    } else if (selected == 'monthly') {
-        document.getElementById('update-time').type = 'datetime-local';
-        document.getElementById('time1').style.visibility = "visible";
-    } else if (selected == 'yearly') {
-        document.getElementById('update-time').type = 'datetime-local';
-        document.getElementById('time1').style.visibility = "visible";
-    } else if (selected == 'nothing') {
-        document.getElementById('time1').style.visibility = "hidden";
-    }
-
-}
 
 const Reports = () => {
+    const [selectedFrequency, setSelectedFrequency] = useState(frequencies[0].name);
+    const [selectedDateTime, setSelectedDateTime] = useState("");
+    const [selectedGroup, setSelectedGroup] = useState({ group: null, parent: null });
+    const [groups, setGroups] = useState([]);
+    const [queryValue, setQueryValue] = useState("");
+    const [title, setTitle] = useState("");
+    const [selectedColumns, setSelectedColumns] = useState([]);
+
+
+
+    const setData = async () => {
+        const res = await request("https://si-2021.167.99.244.168.nip.io/api/group/MyAssignedGroups");
+        setGroups(res.data.data.subGroups);
+        setSelectedGroup({ group: res.data.data.subGroups[0], parent: null });
+    };
+
+    useEffect(() => {
+        setData();
+    }, []);
+
+    const changeTitle = (event) => {
+        setTitle(event.target.value);
+    };
+
+    const changeFrequency = (event) => {
+        setSelectedFrequency(event.target.value);
+    };
+
+    const changeDateTime = (event) => {
+        setSelectedDateTime(event.target.value);
+    };
+
+    const changeGroup = (event) => {
+        setSelectedGroup({ group: event.target.value, parent: selectedGroup });
+        setGroups(event.target.value.subGroups);
+    };
+
+    const changeQuery = query => {
+        setQueryValue(query);
+    };
+
+    const checkQuery = () => {
+        if (queryValue?.rules?.length <= 0 || title.length < 1) return true;
+        return false;
+    }
+
+    const submitReportForm = e => {
+        e.preventDefault();
+        console.log("( " + formatQuery(queryValue, 'sql') + " ) and groupId = " + selectedGroup.group.groupId);
+    };
+
+    const groupBacktrack = e => {
+        if (selectedGroup.parent == null) return;
+        var newGroups = selectedGroup.parent.group.subGroups;
+        console.log(selectedGroup);
+        setSelectedGroup(selectedGroup.parent);
+        setGroups(newGroups);
+    }
+
+    const changeSelectedColumns = (event) => {
+        if (event.target.checked) {
+            setSelectedColumns([...selectedColumns, event.target.value]);
+        }
+        else {
+            setSelectedColumns(selectedColumns.filter(col => col !== event.target.value));
+        }
+
+    };
 
     return (
-
-        <div className='page devices'>
-
+        <div className="reportingWrapper">
             <h1> Reporting </h1>
-            <h2>Query Builder</h2>
-            <br/>
-            <div>
-                <p id="often"> How often do you want reports to be sent to you? </p>
-                <select id="email" onChange={handleChange}>
-                    <option value="nothing"> I don't want you to email me reports</option>
-                    <option value="daily"> Daily</option>
-                    <option value="weekly"> Weekly</option>
-                    <option value="monthly"> Monthly</option>
-                    <option value="yearly"> Yearly</option>
-                </select>
-            </div>
 
-            <div id="time1">
-                {/* ovdje ce trebati ogranicenja u odnosu na to sta se odabere iznad, ali za to moramo sacekati BE */}
-                <p id="timePar"> At what time do you want an email to be sent? </p>
-                <input type="datetime-local" id="update-time" name="update-time"/>
-            </div>
-
-            <div class="groups">
-                <label htmlFor="groups" id="groupsLabel">Choose a group:</label>
-
-                <select name="groups" id="groups">
-
-                </select>
-            </div>
-
-            <div id="queriesManipulation">
-                <p>Select conditions:</p>
-                <button type="button" onClick={handleClick}>AND</button>
-                <button type="button" onClick={handleClick1}>OR</button>
-                <br></br>
-                <br></br>
-
-                <div class="queries">
-                    <select name="column" id="column" onChange={handleChange1}>
-                        <option value="name">Name</option>
-                        <option value="location">Location</option>
-                        <option value="longitude">Longitude</option>
-                        <option value="latitude">Latitude</option>
-                        <option value="status">Status</option>
-                        <option value="lastTimeOnline">Last time online</option>
-                        <option value="timeLog">Time log for selected period</option>
-                        <option value="groupName">Group name</option>
-                    </select>
+            <div className="reportingInput">
+                <div className="inputWrapper">
+                    <InputLabel className="inputLabelWrapper" id="frequencyLabel"> Report title:  </InputLabel>
+                    <TextField labelId="frequencyLabel" value={title} className="select" onChange={changeTitle} autoFocus />
                 </div>
 
-                <div id="typeOfComparison1">
-                    <select id="typeOfCompId">
-                        <option value="equal">Equal</option>
-                        <option value="conatins">Conatins</option>
-                    </select>
+                <div className="inputWrapper">
+                    <InputLabel className="inputLabelWrapper" id="frequencyLabel"> How often do you want a report to be sent to you? </InputLabel>
+                    {frequencies.length > 0 &&
+                        <Select className="select" labelId="frequencyLabel" value={selectedFrequency} onChange={changeFrequency}>
+                            {frequencies.map(el => <MenuItem key={el.name} value={el.name}> {el.label} </MenuItem>)}
+                        </Select>
+                    }
                 </div>
 
-                <div class="typeOfAnswer">
-                    <input class="typeOfAnswerId" type="text"></input>
+                <div className="inputWrapper">
+                    <ReportTiming />
                 </div>
-                {/************* */}
+
+                <div className="inputWrapper">
+                    <InputLabel className="inputLabelWrapper" id="groupLabel"> Choose a {selectedGroup.parent == null ? "group" : "subgroup"} </InputLabel>
+                    <Select className="select" labelId="groupLabel" onChange={changeGroup}>
+                        {groups.map(el => <MenuItem key={el.groupId} value={el}> {el.name} </MenuItem>)}
+                    </Select>
+                </div>
+
+                <div className="inputWrapper">
+                    <InputLabel className="inputLabelWrapper">{selectedGroup.parent == null ? "No group is selected" : "You selected the group: " + selectedGroup.group.name}</InputLabel>
+                    <div className="select">
+                        <Button onClick={groupBacktrack}>Undo</Button> 
+                    </div>
+                </div>
+
+                <div className="queryBuilderWrapper">
+                    <h3 className="queryBuilderTitle"> What do you want in your report? </h3>
+                    <QueryBuilder
+                        title="reportBuilder"
+                        fields={fields}
+                        onQueryChange={changeQuery}
+                        showNotToggle={true}
+                    />
+                </div>
                 <div>
-                    <p>AND</p>
-                    <br></br>
-                    <div class="queries">
-                        <select name="column" id="column" onChange={handleChange1}>
-                            <option value="name">Name</option>
-                            <option value="location">Location</option>
-                            <option value="longitude">Longitude</option>
-                            <option value="latitude">Latitude</option>
-                            <option value="status">Status</option>
-                            <option value="lastTimeOnline">Last time online</option>
-                            <option value="timeLog">Time log for selected period</option>
-                            <option value="groupName">Group name</option>
-                        </select>
-                    </div>
+                    <h3 className="queryBuilderTitle"> Which columns do you want in your report? </h3>
 
-                    <div id="typeOfComparison1">
-                        <select id="typeOfCompId">
-                            <option value="equal">Equal</option>
-                            <option value="conatins">Conatins</option>
-                        </select>
-                    </div>
-
-                    <div class="typeOfAnswer">
-                        <input class="typeOfAnswerId" type="text"></input>
-                    </div>
+                    {fields.map((inputField, index) => (
+                        <div key={index}>
+                            <Checkbox
+                                value={inputField.name}
+                                onChange={changeSelectedColumns}
+                            />
+                            <InputLabel className="selectCol">
+                                {inputField.label}
+                            </InputLabel>
+                        </div>
+                    ))}
                 </div>
-                {/*************** */}
-                <br></br>
-            </div>
 
-            <div class="table">
-                <div class="device_data">
-                    <p> What do you want to see in your report? </p>
-                    {/* ovo je prvi primjer reporta, nakon sto dobijemo dodatne informacije bit ce nam lako promijeniti */}
-                    <h3> Device data </h3>
-                    <section>
-                        <label htmlFor="device-name"> Name: </label>
-                        <input type="checkbox" id="device-name" name="device-name"></input>
-                    </section>
-                    <section>
-                        <label htmlFor="device-location"> Location: </label>
-                        <input type="checkbox" id="device-location" name="device-location"></input>
-                    </section>
-                    <section>
-                        <label htmlFor="device-longitude"> Longitude: </label>
-                        <input type="checkbox" id="device-longitude" name="device-longitude"></input>
-                    </section>
-                    <section>
-                        <label htmlFor="device-latitude"> Latitude: </label>
-                        <input type="checkbox" id="device-latitude" name="device-latitude"></input>
-                    </section>
-                    <section>
-                        <label htmlFor="device-status"> Status: </label>
-                        <input type="checkbox" id="device-status" name="device-status"></input>
-                    </section>
-                    <section>
-                        <label htmlFor="device-online"> Last time online: </label>
-                        <input type="checkbox" id="device-online" name="device-online"></input>
-                    </section>
-                    <section>
-                        <label htmlFor="device-log"> Time log for selected period: </label>
-                        <input type="checkbox" id="device-log" name="device-log"></input>
-                    </section>
-                    <section>
-                        <label htmlFor="device-group"> Group name: </label>
-                        <input type="checkbox" id="device-group" name="device-group"></input>
-                    </section>
-                </div>
+                <Button onClick={submitReportForm} variant="contained" color="default" disabled={checkQuery()}> Submit </Button>
             </div>
-            <button id="btn" type="submit" value="Submit">Submit</button>
         </div>
     )
 };
