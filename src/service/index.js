@@ -56,7 +56,7 @@ const request = async (
 
                 const response = ex.response;
 
-                if (response.status === 401) {
+                if (response && response.status === 401) {
                     removeAllData();
                 }
 

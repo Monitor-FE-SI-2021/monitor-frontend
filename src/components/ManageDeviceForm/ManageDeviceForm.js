@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from "react-redux";
 import { makeStyles, TextField, MenuItem, Button } from '@material-ui/core';
 import { useState } from 'react';
+import { cloneDeep } from "lodash";
+import { fetchAllGroups } from "../../store/modules/groups/actions";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -19,36 +21,63 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const groups = [
-    {
-        id: 1,
-        name: 'Grupa 1',
-    },
-    {
-        id: 2,
-        name: 'Grupa 2',
-    },
-    {
-        id: 3,
-        name: 'Grupa 3',
-    },
-]
+const initialValues = {
+    name: "",
+    location: "",
+    latitude: "",
+    longitude: "",
+    installationCode: "",
+    group: ""
+}
 
 // fieldValues is a prop for passing the field values for when the form is opened in edit mode
 // the required form of the object is
 // {name: "value", location: "value", latitude: "value", longitude: "value", installationCode: "value", group: "value"}
-const ManageDeviceForm = ({ fieldValues }) => {
+const ManageDeviceForm = ({ selectedDevice, groupOptions, fetchAllGroups }) => {
+
     const classes = useStyles();
 
-    // initial values for when the form isn't opened in edit mode
-    const initialValues = {
-        name: "",
-        location: "",
-        latitude: "",
-        longitude: "",
-        installationCode: "",
-        group: ""
+    const [editMode, setEditMode] = useState(false);
+    const [values, setValues] = useState(initialValues)
+    const [errors, setErrors] = useState({})
+
+    const transformDeviceToForm = (device) => {
+
+        const form = cloneDeep(device);
+
+        form.latitude = device.locationLatitude;
+        form.longitude = device.locationLongitude;
+
+        return form;
     }
+
+    const transformFormToDevice = (form) => {
+        const deviceData = cloneDeep(form);
+
+        deviceData.locationLatitude = form.latitude;
+        deviceData.locationLongitude = form.longitude;
+
+        delete deviceData.latitude;
+        delete deviceData.longitude;
+
+        return deviceData;
+    }
+
+    useEffect(() => {
+
+        if (!groupOptions?.length) {
+            fetchAllGroups();
+        }
+
+        if (selectedDevice) {
+            setValues(transformDeviceToForm(selectedDevice));
+        }
+
+        setEditMode(Boolean(selectedDevice));
+
+    }, [selectedDevice])
+
+    // initial values for when the form isn't opened in edit mode
 
     const validate = () => {
         let temp = {}
@@ -77,15 +106,6 @@ const ManageDeviceForm = ({ fieldValues }) => {
         return Object.values(temp).every(x => x == "")
     }
 
-    // if the form is opened in edit mode we shall obtain the passed values
-    const getInitialValues = () => {
-        if (fieldValues !== undefined)
-            return fieldValues
-        return initialValues
-    }
-
-    const [values, setValues] = useState(getInitialValues)
-    const [errors, setErrors] = useState({})
 
     const handleInputChange = e => {
         const { name, value } = e.target
@@ -97,12 +117,18 @@ const ManageDeviceForm = ({ fieldValues }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
+
+        const deviceData = transformFormToDevice(values);
+
+        console.log(deviceData);
+
         if (validate()) {
-            if (fieldValues === undefined) {
-                alert("Created machine successfully!")
-                setValues(initialValues)
-            } else {
+
+            if (editMode === true) {
                 alert("Edited machine successfully!")
+            } else {
+                alert("Created machine successfully!")
+
             }
         }
     }
@@ -135,7 +161,7 @@ const ManageDeviceForm = ({ fieldValues }) => {
                 onChange={handleInputChange}
                 {...(errors.group && { error: true, helperText: errors.group })}
             >
-                {groups.map((group) => (
+                {groupOptions.map((group) => (
                     <MenuItem key={group.id} value={group.name}>
                         {group.name}
                     </MenuItem>
@@ -143,10 +169,36 @@ const ManageDeviceForm = ({ fieldValues }) => {
             </TextField>
 
             <Button type="submit" variant="contained">
-                {fieldValues !== undefined ? "Edit Machine" : "Create Machine"}
+                {editMode === true ? "Edit Machine" : "Create Machine"}
             </Button>
         </form>
     );
 }
 
-export default connect(state => ({}), {})(ManageDeviceForm);
+export default connect(state => {
+
+    const groupsTree = state.groups.groups;
+
+    const flatten = data => {
+
+        return data.reduce((acc, group) => {
+            acc.push(group);
+            if (group?.subGroups?.length) {
+                acc.push(...flatten(group.subGroups))
+            }
+            return acc;
+        }, [])
+    }
+
+    const allGroups = groupsTree.subGroups ? flatten(groupsTree.subGroups) : [];
+
+    const groupOptions = allGroups.filter(g => g.subGroups.length === 0).map(g => ({
+        id: g.groupId,
+        name: g.name
+    }))
+
+    return {
+        selectedDevice: state.devices.selectedDevice,
+        groupOptions
+    }
+}, { fetchAllGroups })(ManageDeviceForm);

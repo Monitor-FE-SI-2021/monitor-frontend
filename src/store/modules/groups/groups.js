@@ -2,7 +2,7 @@ import { SET_GROUPS, SET_GROUPS_ASYNC } from "./types";
 
 const initialState = {
     async: false,
-    groups: []
+    groups: {}
 }
 
 const ACTION_HANDLERS = {
