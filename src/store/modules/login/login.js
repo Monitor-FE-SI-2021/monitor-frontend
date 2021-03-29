@@ -65,6 +65,7 @@ export const doLogin = ({ email, password }) => {
             password
         }).then(res => {
             if (res && res.status === 200) {
+
                 localStorage.setItem(STORAGE_KEY, res.data.accessToken);
 
                 dispatch(getMe()).then(() => {
@@ -72,6 +73,23 @@ export const doLogin = ({ email, password }) => {
                 });
 
                 return res;
+            } else if (res && res.status === 202) {
+                
+                let kod = prompt('Unesi Two Factor Authentication kod');
+                localStorage.setItem(STORAGE_KEY, res.data.accessToken);
+
+                return request(authEndpoint + '/QRcode/verify', "POST",
+                    {
+                        "token": kod
+                    }).then(re => {
+                    if (re && re.status === 200) {
+                        localStorage.setItem(STORAGE_KEY, re.data.accessToken);
+                        dispatch(getMe()).then(() => {
+                            history.push('/')
+                        });
+                        return re;
+                    }
+                });
             }
         }).finally(() => {
             return dispatch({
