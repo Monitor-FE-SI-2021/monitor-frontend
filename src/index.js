@@ -7,6 +7,8 @@ import store, { history } from './store/store'
 import { Route, Switch } from 'react-router-dom';
 import Layout from "./components/Layout/Layout";
 import Login from "./pages/Login/Login";
+import ForgotPassword from "./pages/Login/ForgotPassword";
+import PasswordReset from "./pages/Login/PasswordReset";
 import { STORAGE_KEY } from "./utils/consts";
 import { RouteLink } from "./store/modules/menu/menu";
 import { getMe } from "./store/modules/login/login";
@@ -18,6 +20,10 @@ const App = ({ user, getMe, push }) => {
         const route = window.location.pathname;
 
         const token = localStorage.getItem(STORAGE_KEY);
+
+        if (route === '/forgot-password' || route === '/password-reset') {
+            return;
+        }
 
         if (!token) {
             history.push(RouteLink.Login);
@@ -36,6 +42,8 @@ const App = ({ user, getMe, push }) => {
         <div id='app'>
             <Switch>
                 <Route path='/login' component={Login}/>
+                <Route path='/forgot-password' component={ForgotPassword}/>
+                <Route path='/password-reset' component={PasswordReset}/>
                 <Route path='/' component={Layout}/>
             </Switch>
         </div>
@@ -44,7 +52,7 @@ const App = ({ user, getMe, push }) => {
 
 const ConnectedApp = connect(state => ({
     user: state.login.user,
-}), { getMe, push})(App);
+}), { getMe, push })(App);
 
 ReactDOM.render(
     <Provider store={store}>
@@ -54,3 +62,4 @@ ReactDOM.render(
     </Provider>,
     document.getElementById('root')
 );
+

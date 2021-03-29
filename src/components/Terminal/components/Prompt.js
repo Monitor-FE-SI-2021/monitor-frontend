@@ -1,5 +1,6 @@
 import React from "react";
 
-const Prompt = () => <span>PS Command Line&#62; </span>;
+const Prompt = (props) =>{
+    return <span>{props.path}&#62; </span>};
 
 export default Prompt;
