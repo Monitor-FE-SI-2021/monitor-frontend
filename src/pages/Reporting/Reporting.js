@@ -5,6 +5,7 @@ import QueryBuilder from 'react-querybuilder';
 import request from "../../service";
 
 import { fields, frequencies, devices } from './constants';
+import ReportTiming from './ReportTiming';
 
 import Button from '@material-ui/core/Button';
 import Select from '@material-ui/core/Select';
@@ -81,7 +82,7 @@ const Reports = () => {
                     }
                 </div>
 
-                <div className="inputWrapper">
+                {/* <div className="inputWrapper">
                     <InputLabel className="inputLabelWrapper"> At what time do you want an email to be sent? </InputLabel>
                     <TextField
                         id="date"
@@ -92,6 +93,10 @@ const Reports = () => {
                         }}
                         onChange={changeDateTime}
                     />
+                </div> */}
+
+                <div className="inputWrapper">
+                    <ReportTiming />
                 </div>
 
                 <div className="inputWrapper">
