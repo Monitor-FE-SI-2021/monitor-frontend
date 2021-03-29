@@ -48,7 +48,8 @@
 }
 
 .queryBuilderTitle {
-    margin: 50px 0px 50px 0px;
+    display: flex;
+    color: #808080;
 }
 
 .MuiButtonBase-root.MuiButton-root.MuiButton-contained {
@@ -59,36 +60,52 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    padding: 15px;
+    margin: 20px;
+    border: solid;
+    border-width: 1px;
+    border-radius: 15px;
+    background: #f2f2f2;
+    border-color: #808080;
 }
 
 .ruleGroup-combinators {
     width: 200px;
     height: 40px;
+    margin-right: 10px;
+    border-radius: 5px;
 }
 
 .rule-fields {
     width: 180px;
     height: 40px;
     margin-left: 20px;
+    margin-right: 15px;
+    border-width: 1px;
+    border-radius: 5px;
 }
 
 .ruleGroup-addRule {
     font-weight: normal;
     border: none;
     background-color: lightgrey;
+    margin-right: 10px;
+    border-radius: 5px;
 }
 
 .ruleGroup-addGroup {
     font-weight: normal;
     border: none;
     background-color: lightgrey;
+    margin-right: 10px;
+    border-radius: 5px;
 }
 
 .rule-remove {
     font-weight: normal;
     border: none;
     border-radius: 20px;
-    background-color: #F8FAFB;
+    background-color: #f2f2f2;
     padding: 0px;
     margin: 0px 0px 0px 10px;
 }
@@ -97,7 +114,40 @@
     font-weight: normal;
     border: none;
     border-radius: 50px;
-    background-color: #F8FAFB;
+    background-color: #f2f2f2;
     padding: 0px;
     margin: 0px 0px 0px 10px;
 }
+
+.rule-operators {
+    height: 40px;
+    margin-right: 15px;
+    border-width: 1px;
+    border-radius: 5px;
+}
+
+.rule-value {
+    height: 40px;
+    margin-right: 15px;
+    border-width: 1px;
+    border-radius: 5px;
+}
+
+.rule {
+    margin-bottom: 10px;
+}
+
+.ruleGroup-header {
+    margin-bottom: 15px;
+}
+
+.ruleGroup-notToggle {
+    margin-right: 10px;
+}
+
+label.MuiFormLabel-root.MuiInputLabel-root.selectCol.MuiInputLabel-animated {
+    display: inline-block;
+}
+
+
+
