@@ -1,10 +1,10 @@
 import { connect } from "react-redux";
 import React from 'react';
 import './Login.css';
-import { requestResetPassword } from "../../store/modules/login/resetPassword";
+import { requestResetPassword } from "../../store/modules/login/login";
 import { push } from 'connected-react-router';
 
-function NewPassword({requestResetPassword, push}) {
+function NewPassword({ requestResetPassword, push }) {
     const initialFormData = {
         password: "",
         repeatedPassword: ""
@@ -22,13 +22,13 @@ function NewPassword({requestResetPassword, push}) {
             [e.target.name]: e.target.value.trim()
         });
     };
-    
+
     const handleSubmit = (e) => {
 
-        e.preventDefault(); 
+        e.preventDefault();
         const pathname = window.location.pathname;
 
-        if(formData.password != formData.repeatedPassword)
+        if (formData.password !== formData.repeatedPassword)
             alert("Passwords don't match!");
 
         else {
@@ -49,17 +49,17 @@ function NewPassword({requestResetPassword, push}) {
             <form id="login-form">
                 <h3>Reset your password</h3>
                 <input name="password" type='password'
-                    placeholder="New password"
-                    value={formData.password}
-                    onChange={handleChange} />
+                       placeholder="New password"
+                       value={formData.password}
+                       onChange={handleChange}/>
                 <input name="repeatedPassword" type='password'
-                    placeholder="Confirm password"  
-                    value={formData.repeatedPassword}
-                    onChange={handleChange} />
-                <input id = "submitButton"  type="submit" value="Reset password" onClick={handleSubmit}  />
+                       placeholder="Confirm password"
+                       value={formData.repeatedPassword}
+                       onChange={handleChange}/>
+                <input id="submitButton" type="submit" value="Reset password" onClick={handleSubmit}/>
             </form>
         </div>
     );
 }
 
-export default connect(state => ({}), {requestResetPassword, push})(NewPassword);
+export default connect(state => ({}), { requestResetPassword, push })(NewPassword);

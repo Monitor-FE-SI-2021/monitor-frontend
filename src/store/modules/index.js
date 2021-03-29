@@ -12,6 +12,6 @@ const createRootReducer = (history) => combineReducers({
     menu,
     devices,
     groups,
-    login
+    login,
 })
 export default createRootReducer

@@ -1,9 +1,9 @@
 import { connect } from "react-redux";
 import React from 'react';
 import './Login.css';
-import { requestReset } from "../../store/modules/login/forgotPassword";
+import { requestForgotPassword } from "../../store/modules/login/login";
 
-function EmailSubmit({requestReset}) {
+function EmailSubmit({ requestForgotPassword }) {
     const initialFormData = {
         email: ""
     };
@@ -25,8 +25,8 @@ function EmailSubmit({requestReset}) {
             email: formData.email,
         };
 
-        requestReset(user).then(r => {
-            
+        requestForgotPassword(user).then(r => {
+
         })
 
     };
@@ -37,13 +37,13 @@ function EmailSubmit({requestReset}) {
                 <h2>Forgot password?</h2>
                 <p>Enter your email adress:</p>
                 <input name="email" type='email'
-                    placeholder="example@domain.com"
-                    value={formData.email}
-                    onChange={handleChange} />
-                <input id = "submitButton" type="submit" value="Get reset link" onClick={handleSubmit} />
+                       placeholder="example@domain.com"
+                       value={formData.email}
+                       onChange={handleChange}/>
+                <input id="submitButton" type="submit" value="Get reset link" onClick={handleSubmit}/>
             </form>
         </div>
     );
 }
 
-export default connect(state => ({}), {requestReset})(EmailSubmit);
+export default connect(state => ({}), { requestForgotPassword })(EmailSubmit);

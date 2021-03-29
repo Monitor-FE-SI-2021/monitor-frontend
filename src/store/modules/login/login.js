@@ -1,16 +1,22 @@
-import request, { authEndpoint, users } from "../../../service";
+import request, { authEndpoint, forgotPassword, resetPassword, users } from "../../../service";
 import { STORAGE_KEY } from "../../../utils/consts";
 import { history } from "../../store";
+import { showSwalToast } from "../../../utils/utils";
 
+// Types
 export const SET_USER = 'SET_USER';
 export const SET_LOGIN_ASYNC = 'SET_LOGIN_ASYNC';
 export const SET_USER_ASYNC = 'SET_USER_ASYNC';
+export const SET_RESET_PASSWORD_ASYNC = 'SET_RESET_PASSWORD_ASYNC';
+export const SET_FORGOT_PASSWORD_ASYNC = 'SET_FORGOT_PASSWORD_ASYNC';
 
 
 const initialState = {
     loginAsync: false,
     userAsync: false,
     user: null,
+    resetAsync: false,
+    forgotPasswordAsync: false,
 }
 
 const ACTION_HANDLERS = {
@@ -30,6 +36,18 @@ const ACTION_HANDLERS = {
         return {
             ...state,
             user: action.user,
+        }
+    },
+    [SET_RESET_PASSWORD_ASYNC]: (state, action) => {
+        return {
+            ...state,
+            resetAsync: action.async,
+        }
+    },
+    [SET_FORGOT_PASSWORD_ASYNC]: (state, action) => {
+        return {
+            ...state,
+            forgotPasswordAsync: action.async,
         }
     },
 }
@@ -87,6 +105,57 @@ export const getMe = () => {
                     async: false
                 })
             })
+    }
+}
+
+export const requestResetPassword = ({ password, token }) => {
+    return dispatch => {
+
+        dispatch({
+            type: SET_RESET_PASSWORD_ASYNC,
+            async: true
+        });
+
+        return request(resetPassword + "/" + token, "PUT", { password }).then(res => {
+            if (res.status === 200) {
+                return res;
+            } else {
+                throw res;
+            }
+        }).finally(() => {
+            return dispatch({
+                type: SET_RESET_PASSWORD_ASYNC,
+                async: false
+            })
+        })
+    }
+}
+
+export const requestForgotPassword = ({ email }) => {
+    return dispatch => {
+
+        console.log(email);
+
+        dispatch({
+            type: SET_FORGOT_PASSWORD_ASYNC,
+            async: true
+        });
+
+        return request(forgotPassword, "PUT", {
+            email
+        }).then(res => {
+            if (res.status === 200) {
+                showSwalToast("We sent a reset link to " + email + ".", 'success');
+                return res;
+            } else {
+                throw res;
+            }
+        }).finally(() => {
+            return dispatch({
+                type: SET_FORGOT_PASSWORD_ASYNC,
+                async: false
+            })
+        })
     }
 }
 
