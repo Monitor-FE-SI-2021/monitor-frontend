@@ -1,4 +1,4 @@
-export const SET_MENU_EXPANDED = "SET_MENU_EXPANDED";
+export const SET_MENU_EXPANDED = 'SET_MENU_EXPANDED';
 
 export const RouteLink = {
     Dashboard: '/',
@@ -7,7 +7,8 @@ export const RouteLink = {
     Reporting: "/reporting",
     ManageDevice: '/manage-device',
     Terminal: '/terminal',
-    RemoteControl: '/remotecontrol'
+    RemoteControl: '/remotecontrol',
+    TwoFactorAuthentication: '/security'
 }
 
 const initialState = {
@@ -28,16 +29,21 @@ const initialState = {
             name: "Reporting",
             icon: "",
         },
-        // {
-        //     link: RouteLink.Terminal,
-        //     name: 'Terminal',
-        //     icon: ""
-        // },
-        // {
-        //     link: RouteLink.RemoteControl,
-        //     name: 'Remote Control',
-        //     icon: ""
-        // },
+        {
+            link: RouteLink.Terminal,
+            name: 'Terminal',
+            icon: ""
+        },
+        {
+            link: RouteLink.RemoteControl,
+            name: 'Remote Control',
+            icon: ""
+        },
+        {
+            link: RouteLink.TwoFactorAuthentication,
+            name: 'Two Factor Authentication',
+            icon: ""
+        }
     ],
 };
 

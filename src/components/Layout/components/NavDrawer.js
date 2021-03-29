@@ -36,7 +36,7 @@ function NavDrawer({ push, menuItems, isMenuExpanded, setMenuExpanded }) {
                         );
                     })}
             </div>
-            <div onClick={doLogout} className='menu-item' style={{marginTop: 'auto'}}>
+            <div onClick={doLogout} className='menu-item' style={{marginTop: 'auto'}} >
                 Logout
             </div>
         </div>
