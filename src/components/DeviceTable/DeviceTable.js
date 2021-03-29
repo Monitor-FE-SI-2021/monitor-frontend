@@ -9,16 +9,43 @@ import { push } from "connected-react-router";
 import { RouteLink } from "../../store/modules/menu/menu";
 
 import './device_table.scss'
+import request, { wsEndpoint } from "../../service";
+import { showSwalToast } from "../../utils/utils";
 
-const DeviceTable = ({ devices, selectDevice, push }) => {
+const DeviceTable = ({ devices, selectDevice, push, user, activeDevices }) => {
 
     const editDevice = (device) => {
         selectDevice(device);
         push(RouteLink.ManageDevice);
     }
 
-    const connectDevice = (tableRow) => {
-        console.log(tableRow)
+    const connectDevice = (device) => {
+        const ipAddr = activeDevices.find(d => (d.name === device.name && d.location === device.location))?.ip;
+
+        console.log(ipAddr);
+
+        if (ipAddr) {
+            request(wsEndpoint + "/agent/connect", "POST", {
+                name: device.name,
+                location: device.location,
+                user: user,
+                ip: ipAddr,
+            }).then(r => {
+                console.log(r);
+            })
+        } else {
+            showSwalToast("Uređaj nije online.");
+        }
+    }
+
+    const canConnectToDevice = device => {
+        console.log(activeDevices);
+
+        const activeDevice = activeDevices.find(d => (d.name === device.name && d.location === device.location));
+
+        console.log(activeDevice);
+
+        return activeDevice && activeDevice.status === 'Disconnected';
     }
 
     const [tableFields] = useState([
@@ -58,7 +85,9 @@ const DeviceTable = ({ devices, selectDevice, push }) => {
             <CustomTable data={devices} fields={tableFields}>
                 <TableSlot slot='actions' render={dataRow => (
                     <div className='actions'>
-                        <CastConnected onClick={() => connectDevice(dataRow)}/>
+                        {canConnectToDevice(dataRow) && (
+                            <CastConnected onClick={() => connectDevice(dataRow)}/>
+                        )}
                         <Edit className='edit-btn' onClick={() => editDevice(dataRow)}/>
                     </div>
                 )}/>
@@ -77,4 +106,7 @@ const DeviceTable = ({ devices, selectDevice, push }) => {
     )
 }
 
-export default connect(null, { selectDevice, push })(DeviceTable);
+export default connect((state) => ({
+    activeDevices: state.devices.activeDevices,
+    user: state.login.user,
+}), { selectDevice, push })(DeviceTable);
