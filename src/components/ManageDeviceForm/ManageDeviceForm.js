@@ -4,6 +4,10 @@ import { makeStyles, TextField, MenuItem, Button } from '@material-ui/core';
 import { useState } from 'react';
 import { cloneDeep } from "lodash";
 import { fetchAllGroups } from "../../store/modules/groups/actions";
+import request, { devices } from "../../service";
+import { showSwalToast } from "../../utils/utils";
+import { RouteLink } from "../../store/modules/menu/menu";
+import { push } from "connected-react-router";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -33,7 +37,7 @@ const initialValues = {
 // fieldValues is a prop for passing the field values for when the form is opened in edit mode
 // the required form of the object is
 // {name: "value", location: "value", latitude: "value", longitude: "value", installationCode: "value", group: "value"}
-const ManageDeviceForm = ({ selectedDevice, groupOptions, fetchAllGroups }) => {
+const ManageDeviceForm = ({ selectedDevice, groupOptions, fetchAllGroups, push }) => {
 
     const classes = useStyles();
 
@@ -47,20 +51,19 @@ const ManageDeviceForm = ({ selectedDevice, groupOptions, fetchAllGroups }) => {
 
         form.latitude = device.locationLatitude;
         form.longitude = device.locationLongitude;
+        form.group = device.groupId;
 
         return form;
     }
 
     const transformFormToDevice = (form) => {
-        const deviceData = cloneDeep(form);
-
-        deviceData.locationLatitude = form.latitude;
-        deviceData.locationLongitude = form.longitude;
-
-        delete deviceData.latitude;
-        delete deviceData.longitude;
-
-        return deviceData;
+        return {
+            Name: form.name ?? '',
+            Location: form.location ?? '',
+            LocationLongitude: form.longitude ?? '',
+            LocationLatitude: form.latitude ?? '',
+            InstallationCode: form.installationCode ?? '',
+        }
     }
 
     useEffect(() => {
@@ -83,27 +86,27 @@ const ManageDeviceForm = ({ selectedDevice, groupOptions, fetchAllGroups }) => {
         let temp = {}
         let letterNumber = /^[0-9a-zA-Z]+$/
 
-        if (values.name == "")
+        if (values.name === "")
             temp.name = "This field is required"
         else if (!values.name.match(letterNumber) && !values.name.includes(" "))
             temp.name = "This field can only contain the following characters: A-Z, a-z, 0-9"
         else
             temp.name = ""
 
-        if (values.location == "")
+        if (values.location === "")
             temp.location = "This field is required"
         else if (!values.location.match(letterNumber) && !values.location.includes(" "))
             temp.location = "This field can only contain the following characters: A-Z, a-z, 0-9"
         else
             temp.location = ""
 
-        temp.latitude = values.latitude.length == 6 ? "" : "Latitude should consist of exactly 6 numbers!"
-        temp.longitude = values.longitude.length == 6 ? "" : "Longitude should consist of exactly 6 numbers!"
+        temp.latitude = values.latitude.length > 0 ? "" : "This field is required"
+        temp.longitude = values.longitude.length > 0 ? "" : "This field is required"
         temp.group = values.group ? "" : "This field is required!"
         temp.installationCode = values.installationCode ? "" : "This field is required!"
         setErrors(temp)
 
-        return Object.values(temp).every(x => x == "")
+        return Object.values(temp).every(x => x === "")
     }
 
 
@@ -120,14 +123,19 @@ const ManageDeviceForm = ({ selectedDevice, groupOptions, fetchAllGroups }) => {
 
         const deviceData = transformFormToDevice(values);
 
-        console.log(deviceData);
-
         if (validate()) {
 
             if (editMode === true) {
                 alert("Edited machine successfully!")
             } else {
-                alert("Created machine successfully!")
+
+                request(devices + `/CreateDevice?groupId=${values.group}`, 'POST', deviceData)
+                    .then(r => {
+                        console.log(r.data);
+                        showSwalToast(`Uspješno kreirana mašina ${deviceData.Name}`, 'success');
+                        setValues(initialValues);
+                        push(RouteLink.Devices);
+                    })
 
             }
         }
@@ -162,7 +170,7 @@ const ManageDeviceForm = ({ selectedDevice, groupOptions, fetchAllGroups }) => {
                 {...(errors.group && { error: true, helperText: errors.group })}
             >
                 {groupOptions.map((group) => (
-                    <MenuItem key={group.id} value={group.name}>
+                    <MenuItem key={group.id} value={group.id}>
                         {group.name}
                     </MenuItem>
                 ))}
@@ -201,4 +209,4 @@ export default connect(state => {
         selectedDevice: state.devices.selectedDevice,
         groupOptions
     }
-}, { fetchAllGroups })(ManageDeviceForm);
+}, { fetchAllGroups, push })(ManageDeviceForm);
