@@ -48,10 +48,14 @@ const ManageDeviceForm = ({ selectedDevice, groupOptions, fetchAllGroups, push, 
 
         const form = cloneDeep(device);
 
+
+        console.log(device)
+
         form.latitude = device.locationLatitude;
         form.longitude = device.locationLongitude;
         form.group = device.groupId;
 
+        console.log(form)
         return form;
     }
 
@@ -100,8 +104,20 @@ const ManageDeviceForm = ({ selectedDevice, groupOptions, fetchAllGroups, push, 
         else
             temp.location = ""
 
-        temp.latitude = values.latitude.length > 0 ? "" : emptyFieldError
-        temp.longitude = values.longitude.length > 0 ? "" : emptyFieldError
+        if (values.latitude === "")
+            temp.latitude = emptyFieldError
+        else if (Number(values.latitude) < -90 || Number(values.latitude) > 90)
+            temp.latitude = "Geografska širina je broj između -90 i 90"
+        else
+            temp.latitude = ""
+
+        if (values.longitude === "")
+            temp.longitude = emptyFieldError
+        else if (Number(values.longitude) < -180 || Number(values.longitude) > 180)
+            temp.longitude = "Geografska dužina je broj između -180 i 180"
+        else
+            temp.longitude = ""
+
         temp.group = values.group ? "" : emptyFieldError
         temp.installationCode = values.installationCode ? "" : emptyFieldError
         setErrors(temp)
@@ -126,8 +142,8 @@ const ManageDeviceForm = ({ selectedDevice, groupOptions, fetchAllGroups, push, 
         if (validate()) {
 
             if (editMode === true) {
-                alert("Edited machine successfully!")
-                push(RouteLink.Devices); //*****
+                showSwalToast(`Uspješno izmijenjena mašina ${deviceData.Name}`, 'success');
+                //push(RouteLink.Devices);
             } else {
 
                 request(devices + `/CreateDevice?groupId=${values.group}`, 'POST', deviceData)
