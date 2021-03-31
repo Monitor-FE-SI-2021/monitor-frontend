@@ -83,82 +83,55 @@ let chartPieDataExample = {
     ]
 }
 
-let chartLineDataExample = {
-    labels: ['Q1', 'Q2', 'Q3', 'Q4'],
-    datasets: [
-        {
-            label: 'CPU usage',
-            data: [
-                60,
-                65,
-                80,
-                70
-            ],
-            backgroundColor: [
-                'rgba(255, 206, 86, 0.6)',
-                'rgba(255, 99, 132, 0.6)'
-            ]
-        }
-    ]
-}
-let chartDonutDataExample = {
-    labels: ['Used', 'Not used'],
-    datasets: [
-        {
-            label: 'GPU usage',
-            data: [
-                60,
-                40
-            ],
-            backgroundColor: [
-                'rgba(75, 192, 192, 0.6)',
-                'rgba(54, 162, 235, 0.6)'
-            ]
-        }
-    ]
-}
-
-let chartBarDataExample = {
-
-    labels: [currentTime + ':10', currentTime + ':20', currentTime + ':30', currentTime + ':40', currentTime + ':50'],
-    datasets: [
-        {
-            label: "Disk utilization percentage",
-            data: [
-                10,
-                20,
-                30,
-                40,
-                50
-            ],
-            backgroundColor: 'rgba(75, 192, 192, 0.6)'
-        }
-    ]
-}
-
  */
+
+
 let currentTime = new Date().getHours();
 
-/*let activeMachines = [
+let dummyActiveMachines = [
     {
+        deviceId: 1,
+        name: "Desktop PC 1",
+        location: "Sarajevo - BBI",
+        ip: "255.255.255.0",
+        path: "C:/user/programfiles",
+    },
+        {
+        deviceId: 2,
+        name: "Desktop PC 2",
+        location: "Sarajevo - BBI",
+        ip: "255.255.255.0",
+        path: "C:/user/programfiles",
+    }
+];
+
+let dummyMachines = [
+    {
+        deviceId: 1,
         name: "Desktop PC 1",
         location: "Sarajevo - BBI",
         ip: "255.255.255.0",
         path: "C:/user/programfiles",
     },
     {
+        deviceId: 2,
         name: "Desktop PC 2",
         location: "Sarajevo - BBI",
         ip: "255.255.255.0",
         path: "C:/user/programfiles",
     },
     {
+        deviceId: 3,
         name: "Desktop PC",
         location: "Mostar - Mepas Mall",
         ip: "255.255.255.0",
         path: "C:/user/programfiles",
     },
-];*/
+];
+
+
+
+
 
 function convertStatistics(statistic) {
     return [Math.round(statistic * 100), Math.round((1 - statistic) * 100)];
@@ -295,7 +268,10 @@ const Dashboard = ({user}) => {
                 )}
             </div>
             <div className="googleMapMonitors">
-                <GoogleMapMonitors></GoogleMapMonitors>    
+                <GoogleMapMonitors
+                    machines={dummyMachines}
+                    activeMachines={dummyActiveMachines}
+                />  
             </div>
             
         </div>
