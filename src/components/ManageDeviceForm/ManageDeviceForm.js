@@ -8,6 +8,7 @@ import request, { devices } from "../../service";
 import { showSwalToast } from "../../utils/utils";
 import { RouteLink } from "../../store/modules/menu/menu";
 import { push } from "connected-react-router";
+import { selectDevice } from "../../store/modules/devices/actions";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -34,7 +35,7 @@ const initialValues = {
     group: ""
 }
 
-const ManageDeviceForm = ({ selectedDevice, groupOptions, fetchAllGroups, push }) => {
+const ManageDeviceForm = ({ selectedDevice, groupOptions, fetchAllGroups, push, selectDevice }) => {
 
     const classes = useStyles();
 
@@ -74,6 +75,8 @@ const ManageDeviceForm = ({ selectedDevice, groupOptions, fetchAllGroups, push }
         }
 
         setEditMode(Boolean(selectedDevice));
+
+        return () => {selectDevice(null)}
 
     }, [selectedDevice])
 
@@ -123,6 +126,7 @@ const ManageDeviceForm = ({ selectedDevice, groupOptions, fetchAllGroups, push }
 
             if (editMode === true) {
                 alert("Edited machine successfully!")
+                push(RouteLink.Devices); //*****
             } else {
 
                 request(devices + `/CreateDevice?groupId=${values.group}`, 'POST', deviceData)
@@ -205,4 +209,4 @@ export default connect(state => {
         selectedDevice: state.devices.selectedDevice,
         groupOptions
     }
-}, { fetchAllGroups, push })(ManageDeviceForm);
+}, { fetchAllGroups, push, selectDevice })(ManageDeviceForm);
