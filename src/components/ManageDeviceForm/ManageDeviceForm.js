@@ -153,7 +153,7 @@ const ManageDeviceForm = ({ selectedDevice, groupOptions, fetchAllGroups, push }
                        onChange={handleInputChange}
                        {...(errors.longitude && { error: true, helperText: errors.longitude })}/>
 
-            <TextField label="Instalacioni kod" name="installationCode" value={values.installationCode}
+            <TextField disabled={editMode} label="Instalacioni kod" name="installationCode" value={values.installationCode}
                        onChange={handleInputChange}
                        {...(errors.installationCode && { error: true, helperText: errors.installationCode })}/>
 
