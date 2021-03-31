@@ -1,0 +1,10 @@
+.buttons {
+    display: table-row-group;
+    float: right;
+    .buttonCancel {
+        float: left;
+    }
+    .buttonEditAndCreate {
+        float: right;
+    }
+}
