@@ -80,25 +80,26 @@ const ManageDeviceForm = ({ selectedDevice, groupOptions, fetchAllGroups, push }
     const validate = () => {
         let temp = {}
         let letterNumber = /^[0-9a-zA-Z]+$/
+        const emptyFieldError = "Polje je obavezno"
 
         if (values.name === "")
-            temp.name = "This field is required"
+            temp.name = emptyFieldError
         else if (!values.name.match(letterNumber) && !values.name.includes(" "))
-            temp.name = "This field can only contain the following characters: A-Z, a-z, 0-9"
+            temp.name = "Polje smije sadržavati samo karaktere: A-Z, a-z, 0-9"
         else
             temp.name = ""
 
         if (values.location === "")
-            temp.location = "This field is required"
+            temp.location = emptyFieldError
         else if (!values.location.match(letterNumber) && !values.location.includes(" "))
-            temp.location = "This field can only contain the following characters: A-Z, a-z, 0-9"
+            temp.location = "Polje smije sadržavati samo karaktere: A-Z, a-z, 0-9"
         else
             temp.location = ""
 
-        temp.latitude = values.latitude.length > 0 ? "" : "This field is required"
-        temp.longitude = values.longitude.length > 0 ? "" : "This field is required"
-        temp.group = values.group ? "" : "This field is required!"
-        temp.installationCode = values.installationCode ? "" : "This field is required!"
+        temp.latitude = values.latitude.length > 0 ? "" : emptyFieldError
+        temp.longitude = values.longitude.length > 0 ? "" : emptyFieldError
+        temp.group = values.group ? "" : emptyFieldError
+        temp.installationCode = values.installationCode ? "" : emptyFieldError
         setErrors(temp)
 
         return Object.values(temp).every(x => x === "")
@@ -138,21 +139,21 @@ const ManageDeviceForm = ({ selectedDevice, groupOptions, fetchAllGroups, push }
 
     return (
         <form className={classes.root} onSubmit={handleSubmit}>
-            <TextField label="Name" name="name" value={values.name} onChange={handleInputChange}
+            <TextField label="Naziv" name="name" value={values.name} onChange={handleInputChange}
                        {...(errors.name && { error: true, helperText: errors.name })} />
 
-            <TextField label="Location" name="location" value={values.location} onChange={handleInputChange}
+            <TextField label="Lokacija" name="location" value={values.location} onChange={handleInputChange}
                        {...(errors.location && { error: true, helperText: errors.location })} />
 
-            <TextField label="Latitude" type='number' name="latitude" value={values.latitude}
+            <TextField label="Geografska širina" type='number' name="latitude" value={values.latitude}
                        onChange={handleInputChange}
                        {...(errors.latitude && { error: true, helperText: errors.latitude })}/>
 
-            <TextField label="Longitude" type='number' name="longitude" value={values.longitude}
+            <TextField label="Geografska dužina" type='number' name="longitude" value={values.longitude}
                        onChange={handleInputChange}
                        {...(errors.longitude && { error: true, helperText: errors.longitude })}/>
 
-            <TextField label="Installation code" name="installationCode" value={values.installationCode}
+            <TextField label="Instalacioni kod" name="installationCode" value={values.installationCode}
                        onChange={handleInputChange}
                        {...(errors.installationCode && { error: true, helperText: errors.installationCode })}/>
 
@@ -160,7 +161,7 @@ const ManageDeviceForm = ({ selectedDevice, groupOptions, fetchAllGroups, push }
                 select
                 name="group"
                 value={values.group}
-                label="Group"
+                label="Grupa"
                 onChange={handleInputChange}
                 {...(errors.group && { error: true, helperText: errors.group })}
             >
@@ -172,7 +173,7 @@ const ManageDeviceForm = ({ selectedDevice, groupOptions, fetchAllGroups, push }
             </TextField>
 
             <Button type="submit" variant="contained">
-                {editMode === true ? "Edit Machine" : "Create Machine"}
+                {editMode === true ? "Izmijeni mašinu" : "Kreiraj mašinu"}
             </Button>
         </form>
     );
