@@ -34,9 +34,6 @@ const initialValues = {
     group: ""
 }
 
-// fieldValues is a prop for passing the field values for when the form is opened in edit mode
-// the required form of the object is
-// {name: "value", location: "value", latitude: "value", longitude: "value", installationCode: "value", group: "value"}
 const ManageDeviceForm = ({ selectedDevice, groupOptions, fetchAllGroups, push }) => {
 
     const classes = useStyles();
@@ -79,8 +76,6 @@ const ManageDeviceForm = ({ selectedDevice, groupOptions, fetchAllGroups, push }
         setEditMode(Boolean(selectedDevice));
 
     }, [selectedDevice])
-
-    // initial values for when the form isn't opened in edit mode
 
     const validate = () => {
         let temp = {}
