@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { connect } from "react-redux";
-import { makeStyles, TextField, MenuItem, Button } from '@material-ui/core';
+import { TextField, MenuItem, Button } from '@material-ui/core';
 import { useState } from 'react';
 import { cloneDeep } from "lodash";
 import { fetchAllGroups } from "../../store/modules/groups/actions";
@@ -9,22 +9,23 @@ import { showSwalToast } from "../../utils/utils";
 import { RouteLink } from "../../store/modules/menu/menu";
 import { push } from "connected-react-router";
 import { selectDevice } from "../../store/modules/devices/actions";
+import "./ManageDeviceForm.scss"
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        '& .MuiFormControl-root, .MuiButton-root': {
-            display: 'flex',
-            flexWrap: 'wrap',
-            margin: theme.spacing(3),
-        },
-        '& .MuiFormControl-root': {
-            width: '50%',
-        },
-        '.MuiButton-root': {
-            width: '25%',
-        },
-    },
-}));
+// const useStyles = makeStyles((theme) => ({
+//     root: {
+//         '& .MuiFormControl-root, .MuiButton-root': {
+//             display: 'flex',
+//             flexWrap: 'wrap',
+//             margin: theme.spacing(3),
+//         },
+//         '& .MuiFormControl-root': {
+//             width: '50%',
+//         },
+//         '.MuiButton-root': {
+//             width: '25%',
+//         },
+//     },
+// }));
 
 const initialValues = {
     name: "",
@@ -37,7 +38,7 @@ const initialValues = {
 
 const ManageDeviceForm = ({ selectedDevice, groupOptions, fetchAllGroups, push, selectDevice }) => {
 
-    const classes = useStyles();
+    // const classes = useStyles();
 
     const [editMode, setEditMode] = useState(false);
     const [values, setValues] = useState(initialValues)
@@ -142,7 +143,7 @@ const ManageDeviceForm = ({ selectedDevice, groupOptions, fetchAllGroups, push, 
     }
 
     return (
-        <form className={classes.root} onSubmit={handleSubmit}>
+        <form className="manage-device-form" onSubmit={handleSubmit}>
             <TextField label="Naziv" name="name" value={values.name} onChange={handleInputChange}
                        {...(errors.name && { error: true, helperText: errors.name })} />
 
