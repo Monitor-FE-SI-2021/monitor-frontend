@@ -48,14 +48,10 @@ const ManageDeviceForm = ({ selectedDevice, groupOptions, fetchAllGroups, push, 
 
         const form = cloneDeep(device);
 
-
-        console.log(device)
-
         form.latitude = device.locationLatitude;
         form.longitude = device.locationLongitude;
         form.group = device.groupId;
 
-        console.log(form)
         return form;
     }
 
@@ -83,7 +79,7 @@ const ManageDeviceForm = ({ selectedDevice, groupOptions, fetchAllGroups, push, 
 
         return () => {selectDevice(null)}
 
-    }, [selectedDevice])
+    }, [selectedDevice, fetchAllGroups, selectDevice, groupOptions?.length])
 
     const validate = () => {
         let temp = {}
