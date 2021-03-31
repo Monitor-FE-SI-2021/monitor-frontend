@@ -15,7 +15,10 @@
   flex-direction: column;
 }
 
-h1, h2, h3, h4 {
+h1,
+h2,
+h3,
+h4 {
   color: #353535;
 }
 
@@ -36,7 +39,7 @@ h1, h2, h3, h4 {
 }
 
 .card:hover {
-  background-color:#ffffff;
+  background-color: #ffffff;
 }
 
 .img-info {
@@ -80,7 +83,7 @@ h1, h2, h3, h4 {
 
 .card-info p {
   font-family: "Roboto", sans-serif;
-  padding: 5px
+  padding: 5px;
 }
 
 .page-devices {
@@ -119,4 +122,8 @@ h1, h2, h3, h4 {
   height: 24px;
 }
 
-
+.googleMapMonitors {
+  position: absolute;
+  bottom: 30px;
+  width: 100%;
+}

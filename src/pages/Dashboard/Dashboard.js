@@ -7,6 +7,7 @@ import DonutChart from "./components/charts/DonutChart";
 import BarChart from "./components/charts/BarChart";
 import ActiveMachine from "./components/ActiveMachine";
 import request, {devices} from "../../service";
+import GoogleMapMonitors from "./components/GoogleMapMonitors";
 
 import "./dashboard.scss";
 import {act} from "@testing-library/react";
@@ -288,10 +289,15 @@ const Dashboard = ({user}) => {
                                     chartData={hddUsageChart}
                                 />
                             </div>
+                            
                         </div>
                     </div>
                 )}
             </div>
+            <div className="googleMapMonitors">
+                <GoogleMapMonitors></GoogleMapMonitors>    
+            </div>
+            
         </div>
     );
 };
