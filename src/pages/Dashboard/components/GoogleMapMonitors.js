@@ -9,7 +9,7 @@ class GoogleMapMonitors extends Component {
         const MyMapComponent = withGoogleMap((props) =>
             <GoogleMap
                 defaultZoom={8}
-                defaultCenter={{ lat: -34.397, lng: 150.644 }}
+                defaultCenter={{ lat: 43.856, lng: 18.413 }}
             >
             {props.isMarkerShown && <Marker position={{ lat: -34.397, lng: 150.644 }} />}
             <Marker
