@@ -8,12 +8,18 @@ import {
 } from "./types";
 import { cloneDeep, merge } from "lodash";
 
+export const DEVICE_STATUS = {
+    ACTIVE: 'active',
+    INACTIVE: 'notactive'
+}
+
 const defaultDeviceTableInfo = {
     devices: [],
     async: false,
     page: 1,
     perPage: 10,
     totalCount: 10,
+    status: DEVICE_STATUS.ACTIVE
 }
 
 const initialState = {
@@ -38,6 +44,8 @@ const getUpdatedDeviceTables = (currentTables, groupId, data) => {
     }
 
     newDeviceTables[groupId] = Object.assign(newDeviceTables[groupId], data);
+
+    console.log(newDeviceTables[groupId]);
 
     return newDeviceTables;
 }

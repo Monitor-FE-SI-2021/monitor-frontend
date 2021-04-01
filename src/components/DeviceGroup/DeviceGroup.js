@@ -13,17 +13,20 @@ const DeviceGroup = ({ group, deviceTable, fetchDevicesForGroup, updateDevicesTa
 
     const devices = deviceTable?.devices ?? [];
 
-    const async = deviceTable?.async;
-
     useEffect(() => {
 
         const hasNoSubGroups = group.subGroups.length === 0;
 
         if (!hidden && hasNoSubGroups) {
-            fetchDevicesForGroup({ groupId: group.groupId, page: deviceTable.page, perPage: deviceTable.perPage });
+            fetchDevicesForGroup({
+                groupId: group.groupId,
+                page: deviceTable.page,
+                perPage: deviceTable.perPage,
+                status: deviceTable.status
+            });
         }
 
-    }, [hidden, group, deviceTable.page, deviceTable.perPage]);
+    }, [hidden, group, deviceTable.page, deviceTable.perPage, deviceTable.status]);
 
     let subGroupsRendered = group.subGroups.map(subGroup => {
         return <ConnectedDeviceGroup group={subGroup}
@@ -35,13 +38,6 @@ const DeviceGroup = ({ group, deviceTable, fetchDevicesForGroup, updateDevicesTa
         setHidden(newHidden);
     }
 
-    const handleChangePage = (page) => {
-        updateDevicesTableForGroup({ groupId: group.groupId, data: { page } })
-    }
-
-    const handleChangePerPage = (perPage) => {
-        updateDevicesTableForGroup({ groupId: group.groupId, data: { perPage } })
-    }
 
     return (
         <div className='group'>
@@ -51,18 +47,7 @@ const DeviceGroup = ({ group, deviceTable, fetchDevicesForGroup, updateDevicesTa
             </div>
             {!hidden && (
                 <React.Fragment>
-                    {async ? <Spinner/> : devices.length !== 0 ? (
-                        <React.Fragment>
-                            <DeviceTable devices={devices}/>
-                            <CustomPagination totalCount={deviceTable.totalCount}
-                                              page={deviceTable.page}
-                                              perPage={deviceTable.perPage}
-                                              handleChangePage={handleChangePage}
-                                              handleChangePerPage={handleChangePerPage}
-                            />
-                        </React.Fragment>
-                    ) : null
-                    }
+                    {!subGroupsRendered?.length && <DeviceTable devices={devices} group={group}/>}
                     {subGroupsRendered || null}
                 </React.Fragment>
             )}

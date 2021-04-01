@@ -1,10 +1,27 @@
-.actions {
+.device-table {
 
-    svg {
-        cursor: pointer;
+    .actions {
+
+        svg {
+            cursor: pointer;
+        }
+
+        .edit-btn {
+            margin-left: 15px;
+        }
     }
 
-    .edit-btn {
-        margin-left: 15px;
+    .filter-btn {
+        margin: 10px;
+        float: right;
+    }
+
+    .no-results-message {
+        display: flex;
+        justify-content: center;
+        padding: 40px 0;
+        font-weight: 500;
+        font-size: 18px;
     }
 }
+

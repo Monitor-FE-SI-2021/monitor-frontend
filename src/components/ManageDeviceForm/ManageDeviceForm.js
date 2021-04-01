@@ -187,7 +187,7 @@ export default connect(state => {
 
     const groupsTree = state.groups.groups;
 
-    const flatten = data => {
+    const flatten = (data) => {
 
         return data.reduce((acc, group) => {
             acc.push(group);
