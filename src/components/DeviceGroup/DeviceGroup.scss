@@ -12,6 +12,13 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
+
+    button {
+        border-radius: 10px;
+        background: rgba(64, 64, 64, 0.9);
+        color: white;
+        font-weight: normal;
+    }
 }
 
 .title {

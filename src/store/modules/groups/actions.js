@@ -29,12 +29,3 @@ export const setGroupsAsync = (async) => {
         })
     }
 }
-
-export function selectGroup(group) {    
-    return dispatch => {
-        dispatch({
-            type: SELECT_GROUP,
-            group
-        })
-    }
-}

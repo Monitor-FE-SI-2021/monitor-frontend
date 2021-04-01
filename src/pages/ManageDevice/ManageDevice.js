@@ -9,13 +9,13 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-const ManageDevice = () => {
+const ManageDevice = (props) => {
     const classes = useStyles();
 
     return (
         <div className='page manage-device'>
             <Paper className={classes.pageContent}>
-                <ManageDeviceForm/>
+                <ManageDeviceForm group={props?.location?.state?.group}/>
             </Paper>
         </div>
     )

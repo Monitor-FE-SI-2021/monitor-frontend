@@ -13,11 +13,11 @@ import "./ManageGroupForm.scss"
 // fieldValues is a prop for passing the field values for when the form is opened in edit mode
 // the required form of the object is
 // {name: "value", location: "value", latitude: "value", longitude: "value", installationCode: "value", group: "value"}
-const ManageGroupForm = ({ parentGroup, push, groupOptions }) => {
+const ManageGroupForm = ({ parentGroup, push, groupOptions, fetchAllGroups }) => {
 
     const initialValues = {
         name: "",
-        parentGroup: parentGroup?.groupId ?? null
+        parentGroup: parentGroup?.groupId ?? ''
     }
 
     const [values, setValues] = useState(initialValues)
@@ -30,6 +30,14 @@ const ManageGroupForm = ({ parentGroup, push, groupOptions }) => {
             ParentGroup: form.parentGroup ?? ''
         }
     }
+
+    useEffect(() => {
+
+        if (!groupOptions?.length) {
+            fetchAllGroups();
+        }
+
+    }, [fetchAllGroups, groupOptions?.length])
 
     const validate = () => {
         let temp = {}

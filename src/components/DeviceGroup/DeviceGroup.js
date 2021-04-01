@@ -10,15 +10,16 @@ import CustomPagination from "../CustomTable/components/CustomPagination";
 import { RouteLink } from "../../store/modules/menu/menu";
 
 
-const DeviceGroup = ({ group, deviceTable, selectGroup, push, fetchDevicesForGroup, updateDevicesTableForGroup }) => {
+const DeviceGroup = ({ group, deviceTable, push, fetchDevicesForGroup, updateDevicesTableForGroup }) => {
 
     const createDevice = (group) => {
-        selectGroup(group);
-        push(RouteLink.ManageDevice)
+        push({
+            pathname: RouteLink.ManageDevice,
+            state: { group }
+        });
     }
 
     const createGroup = (group) => {
-        selectGroup(group);
         push({
             pathname: RouteLink.ManageGroup,
             state: { group }
@@ -109,7 +110,6 @@ const ConnectedDeviceGroup = connect((state, ownProps) => {
     {
         push,
         fetchDevicesForGroup,
-        selectGroup,
         updateDevicesTableForGroup
     }
 )(DeviceGroup);

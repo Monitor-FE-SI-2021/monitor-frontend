@@ -48,7 +48,10 @@ const Devices = ({ allGroups, fetchAllDevices, fetchAllGroups, push, devicesAsyn
         <div className="page devices">
             <div className="top">
                 <h1> Pregled mašina </h1>
-                <button className="create" onClick={() => push(RouteLink.ManageDevice)}>Kreiraj mašinu</button>
+                <div>
+                    <button className="create" onClick={() => push(RouteLink.ManageGroup)}>Kreiraj grupu</button>
+                    <button className="create" onClick={() => push(RouteLink.ManageDevice)}>Kreiraj mašinu</button>
+                </div>
             </div>
             <div className={'groups-list'}>
                 {async ? <Spinner color={'inherit'}/> : rootGroups}
