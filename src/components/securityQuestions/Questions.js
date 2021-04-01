@@ -1,19 +1,25 @@
 import { connect } from "react-redux";
-import React from 'react';
+import React, { useEffect,useState } from "react";
 import './Login.css';
 import { requestForgotPassword } from "../../store/modules/login/login";
 import { RouteLink } from "../../store/modules/menu/menu";
+import axios from "axios";
+import { STORAGE_KEY } from "../../utils/consts";
 import ReactDOM from 'react-dom';
 import { push } from 'connected-react-router';
+import request from "../../service";
 
 
-const securityQuestions = "https://si-2021.167.99.244.168.nip.io:3333//AllSecurityQuestions"
+const securityQuestions = "http://localhost:3333/AllSecurityQuestions"
 
 function EmailSubmit({ requestForgotPassword }) {
     const initialFormData = {
         email: "",
+        pitanja:[],
         broj : 1
     };
+    const[Questions,setQuestions]=useState([]);
+
  const switchRoute = (link) => {
         push(link);
     };
@@ -54,6 +60,28 @@ ReactDOM.render(myelement,document.getElementById(frr));
 switchRoute('/question');
 };
 
+ useEffect(async () => {
+        const result = await request(
+            securityQuestions,
+        );
+
+   setQuestions(result.data[0].Question);
+       // setQrSecret(result.data.QrSecret)
+        //setImgLink(result.data.QRcode)
+        //formData.pitanja =await result.json();
+        var i;
+        for(i=0;i<result.data.length;i++) {
+                console.log(result.data.length);
+             console.log(result.data[i].Question);
+             setQuestions(result.data[i].Question);
+        }
+ setQuestions(result.data[0].Question);
+        console.log(result.data.Question)
+        console.log(Questions);
+   //     setItems(items);
+        //console.log(formData.pitanja[0]);
+    }, []);
+
 
     return (
         <div className="formDiv" >
@@ -61,7 +89,8 @@ switchRoute('/question');
                 <h2>Security questions?</h2>
                 <p>Quesstion 1:</p>
                 <select id="select">
-                <option>Select1</option>
+                <option>{}</option>
+
                 </select>
                 <input name="email" type='email'
                        />
