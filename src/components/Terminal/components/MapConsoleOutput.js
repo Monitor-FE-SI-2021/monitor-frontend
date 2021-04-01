@@ -100,7 +100,7 @@ const MapConsoleOutput = ({
         } else {
           return (
             <div key={index}>
-              <Prompt path={path} />
+              
               <span>{item || "Server Response error"}</span>
             </div>
           );

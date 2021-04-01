@@ -12,21 +12,21 @@ const RemoteControl = (props, { user }) => {
   let { name, tab } = useParams();
 
   const groupId = user?.userGroups[0]?.groupId || 2;
+//ASIM
+  // if (machines == undefined) {
+  //   request("https://si-grupa5.herokuapp.com/api/agent/online")
+  //     .then((res) => {
+  //       console.log("testee" + JSON.stringify(res));
+  //       setMachines(res?.data);
+  //     })
+  //     .catch((error) => {
+  //       console.log("Vazan error");
+  //       console.log(error);
+  //     });
 
-  if (machines == undefined) {
-    request("https://si-grupa5.herokuapp.com/api/agent/online")
-      .then((res) => {
-        console.log("testee" + JSON.stringify(res));
-        setMachines(res?.data);
-      })
-      .catch((error) => {
-        console.log("Vazan error");
-        console.log(error);
-      });
-
-    return <div className="page dashboard"></div>;
-  }
-
+  //   return <div className="page dashboard"></div>;
+  // }
+//ASIM
   // const switchMachine = (machine) => {
   //   props.history.push(
   //     "/remotecontrol/" +
@@ -37,13 +37,21 @@ const RemoteControl = (props, { user }) => {
   // };
 
   //const machineList = [];
-  let machine =
-    name == "0" || name == undefined
-      ? machines.find((value) => value.status !== "Disconnected")
-      : machines.find(
-          (value) => value.name == name && value.status !== "Disconnected"
-        );
+  //ASIM ZAKOMENTARISO
+  // let machine =
+  //   name == "0" || name == undefined
+  //     ? machines.find((value) => value.status !== "Disconnected")
+  //     : machines.find(
+  //         (value) => value.name == name && value.status !== "Disconnected"
+  //       );
+//DO OVDJE
 
+let machine = {
+  name: "asim",
+  location: "Negdje",
+  ip: "123.123",
+  path: "C://User"
+}
   if (machine == undefined) return <div className="page dashboard"></div>;
 
   // for (const [index, value] of machines.entries()) {

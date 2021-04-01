@@ -25,7 +25,7 @@ const UseOnEnter = () => {
   const [savedLogs, setSavedLogs] = React.useState([]);
   const [counter, setCounter] = React.useState(0);
 
-  const onEnter = async (value, key, name) => {
+  const onEnter = async (value, key, name, path) => {
     
     if (key === "Enter") {
       //console.log("Proba")
@@ -54,16 +54,18 @@ const UseOnEnter = () => {
   }
   
     
-      const newInput = value;
-
+      let newInput = value;
+      
       if(value==="")
       return updateConsoleOutput(consoleOutput => consoleOutput.concat(""))
-        
+      
       setSavedLogs(savedLogs => savedLogs.concat(newInput))
-        
+      let newInput2 = newInput.replace(/ +/g, ' ').trim();
+      newInput=path.concat("> ").concat(value)
       updateConsoleOutput(consoleOutput => consoleOutput.concat(newInput))
-        
-      let args = value.split(" ");
+      
+      console.log(newInput2)
+      let args = newInput2.split(" ");
 
       const argument = String(commands[args[0]]);
 

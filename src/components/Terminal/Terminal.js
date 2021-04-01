@@ -20,7 +20,7 @@ firebase.initializeApp({
 var counterOfSavedLogs = 0;
 
 const Terminal = (props) => {
-  console.log("IP ", props.machine.ip);
+  console.log("IP ", props);
   const inputText = React.useRef();
 
   const [
@@ -65,7 +65,7 @@ const Terminal = (props) => {
     <div className="page">
       <div className={"terminal"}>
         <HistoryLogs
-          path={props.machine.name + " " + props.machine.path}
+          path={props.machine.path}
           name={props.machine.name}
         />
         <MapConsoleOutput
@@ -78,13 +78,13 @@ const Terminal = (props) => {
           token={token}
         />
         <div className="input-prompt">
-          <Prompt path={props.machine.name + " " + props.machine.path} />
+          <Prompt path={props.machine.path} />
           <input
             className="input-console"
             type="text"
             ref={inputText}
             onKeyPress={({ target: { value }, key }) =>
-              onEnter(value, key, props.machine.name)
+              onEnter(value, key, props.machine.name, props.machine.path)
             }
             onKeyDown={logsHistory}
           />
