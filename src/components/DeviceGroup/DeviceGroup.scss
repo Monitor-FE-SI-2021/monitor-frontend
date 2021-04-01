@@ -2,8 +2,19 @@
     margin-left: 25px;
 }
 
-
 .tab {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.buttons {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.title {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -34,3 +45,5 @@
         font-size: 15px;
     }
 }
+
+

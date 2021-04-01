@@ -5,9 +5,10 @@ import { connect } from "react-redux";
 import { fetchDevicesForGroup, updateDevicesTableForGroup } from "../../store/modules/devices/actions";
 import { Spinner } from "../Spinner/Spinner";
 import CustomPagination from "../CustomTable/components/CustomPagination";
+import {RouteLink} from "../../store/modules/menu/menu";
 
 
-const DeviceGroup = ({ group, deviceTable, fetchDevicesForGroup, updateDevicesTableForGroup }) => {
+const DeviceGroup = ({ group, deviceTable, push, fetchDevicesForGroup, updateDevicesTableForGroup }) => {
 
     const [hidden, setHidden] = useState(true);
 
@@ -45,9 +46,17 @@ const DeviceGroup = ({ group, deviceTable, fetchDevicesForGroup, updateDevicesTa
 
     return (
         <div className='group'>
-            <div className='tab' onClick={toggleArrow}>
-                <button className={hidden ? 'collapsed' : 'expanded'}/>
-                <h2>{group.name}</h2>
+            <div className='tab'>
+                <div className='title' onClick={toggleArrow}>
+                    <button className={hidden ? 'collapsed' : 'expanded'}/>
+                    <h2>{group.name}</h2>
+                </div>
+                <div className='buttons'>
+                    {group.subGroups.length === 0 ?
+                        <button onClick={() => push(RouteLink.ManageDevice)}>+ Mašina</button>
+                        : null}
+                    <button>+ Grupa</button>
+                </div>
             </div>
             {!hidden && (
                 <React.Fragment>
