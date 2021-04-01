@@ -76,10 +76,18 @@ class GoogleMapMonitors extends Component {
                 defaultZoom={8}
                 defaultCenter={{ lat: 43.856, lng: 18.413 }}
             >
-            {props.isMarkerShown && <Marker position={{ lat: -34.397, lng: 150.644 }} />}
-            <Marker
-                position={{ lat: -34.397, lng: 150.644}}
-            />
+           {machinesReadyToMark.map(machine => (
+               <Marker
+               key={machine.deviceId}
+               position={{
+                lat: machine.locationLatitude, 
+                lng: machine.locationLongitude 
+               }}
+               icon={{ url: machine.imageURL}}
+               >
+               </Marker>
+           ))
+           }
             </GoogleMap>
         );
 
@@ -90,6 +98,7 @@ class GoogleMapMonitors extends Component {
                 loadingElement={<div style={{ height: `100%` }} />}
                 containerElement={<div style={{ height: `400px` }} />}
                 mapElement={<div style={{ height: `100%`, width:`80%` }} />}
+                
             />
         );
     }
