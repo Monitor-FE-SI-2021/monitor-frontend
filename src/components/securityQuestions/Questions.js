@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import React, { useEffect,useState } from "react";
-import './Login.css';
+import './Questions.css';
 import { requestForgotPassword } from "../../store/modules/login/login";
 import { RouteLink } from "../../store/modules/menu/menu";
 import axios from "axios";
@@ -19,7 +19,7 @@ function EmailSubmit({ requestForgotPassword }) {
         broj : 1
     };
     const[Questions,setQuestions]=useState([]);
-
+    const[JSONQuestions,setJSONQuestions]=useState([]);
  const switchRoute = (link) => {
         push(link);
     };
@@ -60,7 +60,7 @@ ReactDOM.render(myelement,document.getElementById(frr));
 switchRoute('/question');
 };
 
- useEffect(async () => {
+useEffect(async () => {
         const result = await request(
             securityQuestions,
         );
@@ -75,7 +75,7 @@ switchRoute('/question');
              console.log(result.data[i].Question);
              setQuestions(result.data[i].Question);
         }
- setQuestions(result.data[0].Question);
+ setQuestions(result.data[0]);
         console.log(result.data.Question)
         console.log(Questions);
    //     setItems(items);
@@ -83,20 +83,22 @@ switchRoute('/question');
     }, []);
 
 
+
+
     return (
         <div className="formDiv" >
-            <form id="form">
+                    <form id="form">
                 <h2>Security questions?</h2>
                 <p>Quesstion 1:</p>
                 <select id="select">
-                <option>{}</option>
+            <option> {Questions.Question}</option>
 
                 </select>
                 <input name="email" type='email'
                        />
                        <p>Quesstion 2:</p>
                           <select id="select">
-                                       <option>Select1</option>
+                                       <option>Selewcr 1</option>
                                        </select>
                                        <input name="vmdfk" type='email'
                                               />
@@ -115,7 +117,7 @@ switchRoute('/question');
                <div id="root7"> </div>
                <div id="root8"> </div>
                 <div id="root9"> </div>
-
+                <div id="root10"> </div>
               <input id="AddQuestion" type="submit" value="Add more questions" onClick={AddQuestion}/>
             <input id="submitButton" type="submit" value="Submit answers" />
             </form>
