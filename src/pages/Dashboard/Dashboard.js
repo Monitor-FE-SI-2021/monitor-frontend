@@ -1,10 +1,7 @@
 import React from "react";
 import {connect} from "react-redux";
 import MachineIcon from "../../assets/icons/machine.png";
-import PieChart from "./components/charts/PieChart";
-import LineChart from "./components/charts/LineChart";
 import DonutChart from "./components/charts/DonutChart";
-import BarChart from "./components/charts/BarChart";
 import ActiveMachine from "./components/ActiveMachine";
 import request, {devices} from "../../service";
 import GoogleMapMonitors from "./components/GoogleMapMonitors";
@@ -269,8 +266,6 @@ const Dashboard = ({user}) => {
             </div>
             <div className="googleMapMonitors">
                 <GoogleMapMonitors
-                    machines={dummyMachines}
-                    activeMachines={dummyActiveMachines}
                 />  
             </div>
             

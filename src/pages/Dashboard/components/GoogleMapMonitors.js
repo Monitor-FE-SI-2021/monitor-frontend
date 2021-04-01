@@ -1,10 +1,23 @@
 import { render } from '@testing-library/react';
 import React, {Component} from 'react';
 import { withGoogleMap, GoogleMap, Marker } from "react-google-maps"
+import request, { devices } from "../../../service";
 
+    function filterActive(activeMachines, allMachines) {
+        return activeMachines ? activeMachines.filter((machine) => {
+            const existingMachine = allMachines.find(({name, location}) => {
+                return machine.status !== "Disconnected" && name === machine.name && location === machine.location;
+            });
+            if (existingMachine) {
+                machine.deviceId = existingMachine.deviceId;
+                machine.lastTimeOnline = existingMachine.lastTimeOnline;
+            }
+            return existingMachine;
+        }) : [];
+    }
 
     function filterInactiveMachines(machines, activeMachines) {
-        
+        //console.log(machines);
         let result = [];
         
         machines.map((machine) => {
@@ -15,16 +28,16 @@ import { withGoogleMap, GoogleMap, Marker } from "react-google-maps"
                 result.push({
                     deviceId: machine.deviceId, 
                     name: machine.name,
-                    locationLongitude: 1,
-                    locationLatitude: 0,
+                    locationLongitude: machine.locationLongitude,
+                    locationLatitude: machine.locationLatitude,
                     imageURL: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
                 })
             } else {
                     result.push({
                     deviceId: machine.deviceId, 
                     name: machine.name,
-                    locationLongitude: 1,
-                    locationLatitude: 0,
+                    locationLongitude: machine.locationLongitude,
+                    locationLatitude: machine.locationLatitude,
                     imageURL: "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
                 })
             }
@@ -33,26 +46,30 @@ import { withGoogleMap, GoogleMap, Marker } from "react-google-maps"
         return result;
     }
 
-
-
 class GoogleMapMonitors extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            machines: props.machines,
-            activeMachines: props.activeMachines
-        }
+    state = {
+        loading: true,
+        machines: []
+    };
+
+    async componentDidMount(){
+        const response = await request(devices + "/AllDevices");
+        this.setState({machines: response.data.data, loading:false})
     }
-
-
-
-
 
 
     render() {
 
-        filterInactiveMachines(this.state.machines, this.state.activeMachines);
+        let machinesReadyToMark = [];
+
+        if (!this.state.loading) {
+            let activeMachines = filterActive([], this.state.machines)
+            machinesReadyToMark = filterInactiveMachines(this.state.machines, activeMachines);
+            console.log(machinesReadyToMark)
+        }
+
+        //when calling a marker, check if loading is true/false
 
         const MyMapComponent = withGoogleMap((props) =>
             <GoogleMap
