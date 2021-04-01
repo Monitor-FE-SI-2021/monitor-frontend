@@ -90,7 +90,7 @@ const ManageGroupForm = ({ selectedGroup, push }) => {
                 className="group-selector"
                 {...(errors.group && { error: true, helperText: errors.group })}
             >
-                <MenuItem value={selectedGroup.groupId}>{values.parentGroup}</MenuItem>
+                <MenuItem value={selectedGroup.groupId}>{selectedGroup.name}</MenuItem>
             </TextField>
 
             <Button type="cancel" variant="contained" onClick={() => push(RouteLink.Devices)} >Otkaži</Button>
