@@ -4,11 +4,18 @@ import React, { useEffect, useState } from 'react';
 import { connect } from "react-redux";
 import { fetchDevicesForGroup, updateDevicesTableForGroup } from "../../store/modules/devices/actions";
 import { Spinner } from "../Spinner/Spinner";
+import { push } from "connected-react-router";
+import { selectGroup } from "../../store/modules/groups/actions";
 import CustomPagination from "../CustomTable/components/CustomPagination";
 import {RouteLink} from "../../store/modules/menu/menu";
 
 
 const DeviceGroup = ({ group, deviceTable, push, fetchDevicesForGroup, updateDevicesTableForGroup }) => {
+
+    const createDevice = (group) => {
+        selectGroup(group);
+        push(RouteLink.ManageDevice);
+    }
 
     const [hidden, setHidden] = useState(true);
 
@@ -53,7 +60,7 @@ const DeviceGroup = ({ group, deviceTable, push, fetchDevicesForGroup, updateDev
                 </div>
                 <div className='buttons'>
                     {group.subGroups.length === 0 ?
-                        <button onClick={() => push(RouteLink.ManageDevice)}>+ Mašina</button>
+                        <button onClick={() => createDevice(group) }>+ Mašina</button>
                         : null}
                     <button>+ Grupa</button>
                 </div>
@@ -92,6 +99,7 @@ const ConnectedDeviceGroup = connect((state, ownProps) => {
     }
     ,
     {
+        push,
         fetchDevicesForGroup,
         updateDevicesTableForGroup
     }

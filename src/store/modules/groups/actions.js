@@ -1,4 +1,4 @@
-import { SET_GROUPS, SET_GROUPS_ASYNC } from "./types";
+import { SET_GROUPS, SET_GROUPS_ASYNC, SELECT_GROUP } from "./types";
 import request, { groups } from "../../../service";
 
 export const fetchAllGroups = () => {
@@ -26,6 +26,15 @@ export const setGroupsAsync = (async) => {
         return dispatch({
             type: SET_GROUPS_ASYNC,
             async
+        })
+    }
+}
+
+export function selectGroup(group) {    
+    return dispatch => {
+        dispatch({
+            type: SELECT_GROUP,
+            group
         })
     }
 }

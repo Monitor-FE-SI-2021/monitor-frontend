@@ -1,8 +1,9 @@
-import { SET_GROUPS, SET_GROUPS_ASYNC } from "./types";
+import { SELECT_GROUP, SET_GROUPS, SET_GROUPS_ASYNC } from "./types";
 
 const initialState = {
     async: false,
-    groups: {}
+    groups: {},
+    selectedGroup: null
 }
 
 const ACTION_HANDLERS = {
@@ -17,6 +18,12 @@ const ACTION_HANDLERS = {
         return {
             ...state,
             async: action.async
+        }
+    },
+    [SELECT_GROUP]: (state, action) => {
+        return {
+            ...state,
+            selectedGroup: action.group
         }
     }
 }
