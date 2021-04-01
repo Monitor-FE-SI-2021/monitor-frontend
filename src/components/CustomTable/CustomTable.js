@@ -18,7 +18,7 @@ export function TableSlot({ slot, render }) {
     return <div></div>
 }
 
-export default function CustomTable({ data, fields, children }) {
+export default function CustomTable({ data, fields, children, handleSort, activeSortField, activeSortOrder }) {
 
     const [tableData] = useState(data);
 
@@ -46,10 +46,6 @@ export default function CustomTable({ data, fields, children }) {
         );
     }
 
-    const handleSort = (e, drugiParam) => {
-        console.log(e, drugiParam);
-    }
-
     return (
         <TableContainer component={Paper} className={'custom-table-container'}>
             <Table className='custom-table'>
@@ -67,10 +63,20 @@ export default function CustomTable({ data, fields, children }) {
                                             display: "flex",
                                             alignItems: "center",
                                         }}>
-                                            <UpArrow onClick={() => {
-                                                handleSort(field.name, "asc")
-                                            }}/>
-                                            <DownArrow onClick={() => handleSort(field.name, "desc")}/>
+                                            <UpArrow
+                                                className={'sort-icon'}
+                                                style={{
+                                                    color: (activeSortField === field.name && activeSortOrder === 'asc') && "#7777ff"
+                                                }}
+                                                onClick={() => {
+                                                    handleSort(field.name, "asc")
+                                                }}/>
+                                            <DownArrow
+                                                className={'sort-icon'}
+                                                style={{
+                                                    color: (activeSortField === field.name && activeSortOrder === 'desc') && "#7777ff"
+                                                }}
+                                                onClick={() => handleSort(field.name, "desc")}/>
                                         </div>
                                     )}
                                 </div>

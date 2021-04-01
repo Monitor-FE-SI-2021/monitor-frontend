@@ -29,8 +29,16 @@ export function fetchAllDevices() {
     }
 }
 
-export function fetchDevicesForGroup({ groupId, page = 1, perPage = 10, status = DEVICE_STATUS.ACTIVE }) {
-    const query = `page=${page}&per_page=${perPage}&name=&status=${status}&groupId=${groupId}&sort_by=name_desc`
+export function fetchDevicesForGroup({
+                                         groupId,
+                                         page = 1,
+                                         perPage = 10,
+                                         status = DEVICE_STATUS.ACTIVE,
+                                         sortField = 'name',
+                                         sortOrder = 'desc'
+                                     }) {
+
+    const query = `page=${page}&per_page=${perPage}&name=&status=${status}&groupId=${groupId}&sort_by=${sortField}_${sortOrder}`
 
     return (dispatch, getState) => {
 
@@ -55,7 +63,9 @@ export function fetchDevicesForGroup({ groupId, page = 1, perPage = 10, status =
                         totalCount: deviceCount,
                         page,
                         perPage,
-                        status
+                        status,
+                        sortField,
+                        sortOrder
                     }
                 })
             }).finally(() => {

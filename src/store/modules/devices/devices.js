@@ -19,6 +19,8 @@ const defaultDeviceTableInfo = {
     page: 1,
     perPage: 10,
     totalCount: 10,
+    sortField: 'name',
+    sortOrder: 'desc',
     status: DEVICE_STATUS.ACTIVE
 }
 

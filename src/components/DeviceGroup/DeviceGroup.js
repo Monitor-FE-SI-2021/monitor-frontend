@@ -22,11 +22,13 @@ const DeviceGroup = ({ group, deviceTable, fetchDevicesForGroup, updateDevicesTa
                 groupId: group.groupId,
                 page: deviceTable.page,
                 perPage: deviceTable.perPage,
-                status: deviceTable.status
+                status: deviceTable.status,
+                sortField: deviceTable.sortField,
+                sortOrder: deviceTable.sortOrder
             });
         }
 
-    }, [hidden, group, deviceTable.page, deviceTable.perPage, deviceTable.status]);
+    }, [hidden, group, deviceTable.page, deviceTable.perPage, deviceTable.status, deviceTable.sortField, deviceTable.sortOrder]);
 
     let subGroupsRendered = group.subGroups.map(subGroup => {
         return <ConnectedDeviceGroup group={subGroup}

@@ -73,11 +73,13 @@ const DeviceTable = ({
         {
             name: 'location',
             title: 'Lokacija',
+            sort: true,
         },
         {
             name: 'status',
             title: 'Status',
-            slot: 'status'
+            slot: 'status',
+            sort: true,
         },
         {
             name: 'lastTimeOnline',
@@ -113,6 +115,10 @@ const DeviceTable = ({
         updateDevicesTableForGroup({ groupId: group.groupId, data: { perPage } })
     }
 
+    const handleSort = (field, order) => {
+        updateDevicesTableForGroup({ groupId: group.groupId, data: { sortField: field, sortOrder: order } })
+    }
+
     return (
         <div className='device-table'>
             <FilterList className='filter-btn' onClick={() => setStatusFilterOpened(true)}/>
@@ -141,7 +147,11 @@ const DeviceTable = ({
                 : null}
             {async ? <Spinner/> : devices.length !== 0 ? (
                 <React.Fragment>
-                    <CustomTable data={devices} fields={tableFields}>
+                    <CustomTable data={devices}
+                                 fields={tableFields}
+                                 activeSortField={deviceTable.sortField}
+                                 activeSortOrder={deviceTable.sortOrder}
+                                 handleSort={handleSort}>
                         <TableSlot slot='actions' render={dataRow => (
                             <div className='actions'>
                                 {canConnectToDevice(dataRow) && (
