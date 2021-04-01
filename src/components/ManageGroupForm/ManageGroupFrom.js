@@ -1,92 +1,47 @@
 import React, { useEffect } from 'react';
 import { connect } from "react-redux";
-import { makeStyles, TextField, MenuItem, Button } from '@material-ui/core';
+import { TextField, MenuItem, Button } from '@material-ui/core';
 import { useState } from 'react';
-import { cloneDeep } from "lodash";
 import { fetchAllGroups } from "../../store/modules/groups/actions";
-import request, { devices } from "../../service";
+import request, { groups } from "../../service";
 import { showSwalToast } from "../../utils/utils";
 import { RouteLink } from "../../store/modules/menu/menu";
 import { push } from "connected-react-router";
+import { selectDevice } from "../../store/modules/devices/actions";
+import "./ManageGroupForm.scss"
 
 
-const initialValues = {
-    name: "",
-    location: "",
-    latitude: "",
-    longitude: "",
-    installationCode: "",
-    group: ""
-}
+
 
 // fieldValues is a prop for passing the field values for when the form is opened in edit mode
 // the required form of the object is
 // {name: "value", location: "value", latitude: "value", longitude: "value", installationCode: "value", group: "value"}
-const ManageGroupForm = () => {
+const ManageGroupForm = ({ selectedGroup, push }) => {
 
-    const [editMode, setEditMode] = useState(false);
+    const initialValues = {
+        name: "",
+        parentGroup: selectedGroup.groupId
+    }
+
     const [values, setValues] = useState(initialValues)
     const [errors, setErrors] = useState({})
 
-    const transformDeviceToForm = (device) => {
 
-        const form = cloneDeep(device);
-
-        form.latitude = device.locationLatitude;
-        form.longitude = device.locationLongitude;
-        form.group = device.groupId;
-
-        return form;
-    }
-
-    const transformFormToDevice = (form) => {
+    const transformFormToGroup = (form) => {
         return {
             Name: form.name ?? '',
-            Location: form.location ?? '',
-            LocationLongitude: form.longitude ?? '',
-            LocationLatitude: form.latitude ?? '',
-            InstallationCode: form.installationCode ?? '',
+            ParentGroup: form.parentGroup ?? ''
         }
     }
-
-    useEffect(() => {
-
-        if (!groupOptions?.length) {
-            fetchAllGroups();
-        }
-
-        if (selectedDevice) {
-            setValues(transformDeviceToForm(selectedDevice));
-        }
-
-        setEditMode(Boolean(selectedDevice));
-
-    }, [selectedDevice])
-
-    // initial values for when the form isn't opened in edit mode
 
     const validate = () => {
         let temp = {}
-        let letterNumber = /^[0-9a-zA-Z]+$/
 
         if (values.name === "")
             temp.name = "This field is required"
-        else if (!values.name.match(letterNumber) && !values.name.includes(" "))
-            temp.name = "This field can only contain the following characters: A-Z, a-z, 0-9"
         else
             temp.name = ""
 
-        if (values.location === "")
-            temp.location = "This field is required"
-        else if (!values.location.match(letterNumber) && !values.location.includes(" "))
-            temp.location = "This field can only contain the following characters: A-Z, a-z, 0-9"
-        else
-            temp.location = ""
-
-        temp.latitude = values.latitude.length > 0 ? "" : "This field is required"
-        temp.longitude = values.longitude.length > 0 ? "" : "This field is required"
-        temp.group = values.group ? "" : "This field is required!"
-        temp.installationCode = values.installationCode ? "" : "This field is required!"
         setErrors(temp)
 
         return Object.values(temp).every(x => x === "")
@@ -104,66 +59,48 @@ const ManageGroupForm = () => {
     const handleSubmit = (e) => {
         e.preventDefault()
 
-        const deviceData = transformFormToDevice(values);
+        const groupData = transformFormToGroup(values);
+
+        //Šta ako postoji već grupa sa istim imenom?
 
         if (validate()) {
-
-            if (editMode === true) {
-                alert("Edited machine successfully!")
-            } else {
-
-                request(devices + `/CreateDevice?groupId=${values.group}`, 'POST', deviceData)
+                request(groups + `/CreateGroup?parentGroupId=${values.parentGroup}`, 'POST', groupData)
                     .then(r => {
                         console.log(r.data);
-                        showSwalToast(`Uspješno kreirana mašina ${deviceData.Name}`, 'success');
+                        showSwalToast(`Uspješno kreirana grupa ${groupData.Name}`, 'success');
                         setValues(initialValues);
                         push(RouteLink.Devices);
                     })
-
-            }
         }
     }
 
     return (
-        <form className={classes.root} onSubmit={handleSubmit}>
-            <TextField label="Name" name="name" value={values.name} onChange={handleInputChange}
+        <form className="manage-device-form" onSubmit={handleSubmit}>
+            <TextField variant="outlined" label="Naziv" name="name" value={values.name} onChange={handleInputChange}
                        {...(errors.name && { error: true, helperText: errors.name })} />
 
-            <TextField label="Location" name="location" value={values.location} onChange={handleInputChange}
-                       {...(errors.location && { error: true, helperText: errors.location })} />
-
-            <TextField label="Latitude" type='number' name="latitude" value={values.latitude}
-                       onChange={handleInputChange}
-                       {...(errors.latitude && { error: true, helperText: errors.latitude })}/>
-
-            <TextField label="Longitude" type='number' name="longitude" value={values.longitude}
-                       onChange={handleInputChange}
-                       {...(errors.longitude && { error: true, helperText: errors.longitude })}/>
-
-            <TextField label="Installation code" name="installationCode" value={values.installationCode}
-                       onChange={handleInputChange}
-                       {...(errors.installationCode && { error: true, helperText: errors.installationCode })}/>
-
             <TextField
+                variant="outlined"
                 select
-                name="group"
-                value={values.group}
-                label="Group"
+                disabled
+                name="parentGroup"
+                value={selectedGroup.groupId}
+                label="Nadgrupa"
                 onChange={handleInputChange}
+                className="group-selector"
                 {...(errors.group && { error: true, helperText: errors.group })}
             >
-                {groupOptions.map((group) => (
-                    <MenuItem key={group.id} value={group.id}>
-                        {group.name}
-                    </MenuItem>
-                ))}
+                <MenuItem value={selectedGroup.groupId}>{values.parentGroup}</MenuItem>
             </TextField>
 
-            <Button type="submit" variant="contained">
-                {editMode === true ? "Edit Machine" : "Create Machine"}
-            </Button>
+            <Button type="cancel" variant="contained" onClick={() => push(RouteLink.Devices)} >Otkaži</Button>
+            <Button type="submit" variant="contained">Kreiraj grupu</Button>
         </form>
     );
 }
 
-export default ManageGroupForm;
+export default connect(state => {
+    return {
+        selectedGroup: state.groups.selectedGroup
+    }
+}, { fetchAllGroups, push, selectDevice })(ManageGroupForm);

@@ -10,11 +10,16 @@ import CustomPagination from "../CustomTable/components/CustomPagination";
 import {RouteLink} from "../../store/modules/menu/menu";
 
 
-const DeviceGroup = ({ group, deviceTable, push, fetchDevicesForGroup, updateDevicesTableForGroup }) => {
+const DeviceGroup = ({ group, deviceTable, selectGroup, push, fetchDevicesForGroup, updateDevicesTableForGroup }) => {
 
     const createDevice = (group) => {
         selectGroup(group);
         push(RouteLink.ManageDevice);
+    }
+
+    const createMachine = (group) => {
+        selectGroup(group);
+        push(RouteLink.ManageGroup);
     }
 
     const [hidden, setHidden] = useState(true);
@@ -62,7 +67,7 @@ const DeviceGroup = ({ group, deviceTable, push, fetchDevicesForGroup, updateDev
                     {group.subGroups.length === 0 ?
                         <button onClick={() => createDevice(group) }>+ Mašina</button>
                         : null}
-                    <button>+ Grupa</button>
+                    <button onClick={() => createMachine(group)}>+ Grupa</button>
                 </div>
             </div>
             {!hidden && (
@@ -101,6 +106,7 @@ const ConnectedDeviceGroup = connect((state, ownProps) => {
     {
         push,
         fetchDevicesForGroup,
+        selectGroup,
         updateDevicesTableForGroup
     }
 )(DeviceGroup);
