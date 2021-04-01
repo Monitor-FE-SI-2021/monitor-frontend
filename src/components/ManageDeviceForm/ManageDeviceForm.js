@@ -156,30 +156,32 @@ const ManageDeviceForm = ({ selectedDevice, groupOptions, fetchAllGroups, push, 
 
     return (
         <form className="manage-device-form" onSubmit={handleSubmit}>
-            <TextField label="Naziv" name="name" value={values.name} onChange={handleInputChange}
+            <TextField variant="outlined" label="Naziv" name="name" value={values.name} onChange={handleInputChange}
                        {...(errors.name && { error: true, helperText: errors.name })} />
 
-            <TextField label="Lokacija" name="location" value={values.location} onChange={handleInputChange}
+            <TextField variant="outlined" label="Lokacija" name="location" value={values.location} onChange={handleInputChange}
                        {...(errors.location && { error: true, helperText: errors.location })} />
 
-            <TextField label="Geografska širina" type='number' name="latitude" value={values.latitude}
+            <TextField variant="outlined" label="Geografska širina" type='number' name="latitude" value={values.latitude}
                        onChange={handleInputChange}
                        {...(errors.latitude && { error: true, helperText: errors.latitude })}/>
 
-            <TextField label="Geografska dužina" type='number' name="longitude" value={values.longitude}
+            <TextField variant="outlined" label="Geografska dužina" type='number' name="longitude" value={values.longitude}
                        onChange={handleInputChange}
                        {...(errors.longitude && { error: true, helperText: errors.longitude })}/>
 
-            <TextField disabled={editMode} label="Instalacioni kod" name="installationCode" value={values.installationCode}
+            <TextField variant="outlined" disabled={editMode} label="Instalacioni kod" name="installationCode" value={values.installationCode}
                        onChange={handleInputChange}
                        {...(errors.installationCode && { error: true, helperText: errors.installationCode })}/>
 
             <TextField
+                variant="outlined"
                 select
                 name="group"
                 value={values.group}
                 label="Grupa"
                 onChange={handleInputChange}
+                className="group-selector"
                 {...(errors.group && { error: true, helperText: errors.group })}
             >
                 {groupOptions.map((group) => (
@@ -189,6 +191,7 @@ const ManageDeviceForm = ({ selectedDevice, groupOptions, fetchAllGroups, push, 
                 ))}
             </TextField>
 
+            <Button type="cancel" variant="contained" onClick={() => push(RouteLink.Devices)} >Otkaži</Button>
             <Button type="submit" variant="contained">
                 {editMode === true ? "Izmijeni mašinu" : "Kreiraj mašinu"}
             </Button>

@@ -1,16 +1,21 @@
 .manage-device-form {
-  .MuiFormControl-root, .MuiButton-root {
+  .MuiFormControl-root {
     display: flex;
     flex-wrap: wrap;
-    margin-left: 5px;
-    margin-bottom: 15px;
-  }
-  .MuiTextField-root {
     width: 30%;
+    margin-left: 5px;
+    margin-bottom: 20px;
   }
   .MuiButton-root {
-    width: 8%;
+    width: 9%;
+    position: relative;
+    left: 9%;
+    margin-left: 20px;
     text-transform: none;
     font-size: 80%;
+  }
+
+  .group-selector {
+    margin-bottom: -20px;
   }
 }
