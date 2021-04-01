@@ -3,7 +3,7 @@ import Prompt from "./Prompt";
 import request, { wsEndpoint } from "../../../service";
 import updateNewLog from "./UpdateLogInFirebase";
 import config from "../config";
-
+//push
 const MapConsoleOutput = ({
   consoleOutput,
   updateConsoleOutput,
