@@ -7,20 +7,17 @@ import request, { groups } from "../../service";
 import { showSwalToast } from "../../utils/utils";
 import { RouteLink } from "../../store/modules/menu/menu";
 import { push } from "connected-react-router";
-import { selectDevice } from "../../store/modules/devices/actions";
 import "./ManageGroupForm.scss"
-
-
 
 
 // fieldValues is a prop for passing the field values for when the form is opened in edit mode
 // the required form of the object is
 // {name: "value", location: "value", latitude: "value", longitude: "value", installationCode: "value", group: "value"}
-const ManageGroupForm = ({ selectedGroup, push }) => {
+const ManageGroupForm = ({ parentGroup, push, groupOptions }) => {
 
     const initialValues = {
         name: "",
-        parentGroup: selectedGroup.groupId
+        parentGroup: parentGroup?.groupId ?? null
     }
 
     const [values, setValues] = useState(initialValues)
@@ -64,13 +61,13 @@ const ManageGroupForm = ({ selectedGroup, push }) => {
         //Šta ako postoji već grupa sa istim imenom?
 
         if (validate()) {
-                request(groups + `/CreateGroup?parentGroupId=${values.parentGroup}`, 'POST', groupData)
-                    .then(r => {
-                        console.log(r.data);
-                        showSwalToast(`Uspješno kreirana grupa ${groupData.Name}`, 'success');
-                        setValues(initialValues);
-                        push(RouteLink.Devices);
-                    })
+            request(groups + `/CreateGroup?parentGroupId=${values.parentGroup}`, 'POST', groupData)
+                .then(r => {
+                    console.log(r.data);
+                    showSwalToast(`Uspješno kreirana grupa ${groupData.Name}`, 'success');
+                    setValues(initialValues);
+                    push(RouteLink.Devices);
+                })
         }
     }
 
@@ -82,25 +79,49 @@ const ManageGroupForm = ({ selectedGroup, push }) => {
             <TextField
                 variant="outlined"
                 select
-                disabled
                 name="parentGroup"
-                value={selectedGroup.groupId}
+                value={values.parentGroup}
                 label="Nadgrupa"
                 onChange={handleInputChange}
                 className="group-selector"
                 {...(errors.group && { error: true, helperText: errors.group })}
             >
-                <MenuItem value={selectedGroup.groupId}>{selectedGroup.name}</MenuItem>
+                {groupOptions.map((group) => (
+                    <MenuItem key={group.id} value={group.id}>
+                        {group.name}
+                    </MenuItem>
+                ))}
             </TextField>
 
-            <Button type="cancel" variant="contained" onClick={() => push(RouteLink.Devices)} >Otkaži</Button>
+            <Button type="cancel" variant="contained" onClick={() => push(RouteLink.Devices)}>Otkaži</Button>
             <Button type="submit" variant="contained">Kreiraj grupu</Button>
         </form>
     );
 }
 
 export default connect(state => {
-    return {
-        selectedGroup: state.groups.selectedGroup
+
+    const groupsTree = state.groups.groups;
+
+    const flatten = data => {
+
+        return data.reduce((acc, group) => {
+            acc.push(group);
+            if (group?.subGroups?.length) {
+                acc.push(...flatten(group.subGroups))
+            }
+            return acc;
+        }, [])
     }
-}, { fetchAllGroups, push, selectDevice })(ManageGroupForm);
+
+    const allGroups = groupsTree.subGroups ? flatten(groupsTree.subGroups) : [];
+
+    const groupOptions = allGroups.map(g => ({
+        id: g.groupId,
+        name: g.name
+    }))
+
+    return {
+        groupOptions
+    }
+}, { fetchAllGroups, push })(ManageGroupForm);

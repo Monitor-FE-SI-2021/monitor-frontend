@@ -7,19 +7,22 @@ import { Spinner } from "../Spinner/Spinner";
 import { push } from "connected-react-router";
 import { selectGroup } from "../../store/modules/groups/actions";
 import CustomPagination from "../CustomTable/components/CustomPagination";
-import {RouteLink} from "../../store/modules/menu/menu";
+import { RouteLink } from "../../store/modules/menu/menu";
 
 
 const DeviceGroup = ({ group, deviceTable, selectGroup, push, fetchDevicesForGroup, updateDevicesTableForGroup }) => {
 
     const createDevice = (group) => {
         selectGroup(group);
-        push(RouteLink.ManageDevice);
+        push(RouteLink.ManageDevice)
     }
 
-    const createMachine = (group) => {
+    const createGroup = (group) => {
         selectGroup(group);
-        push(RouteLink.ManageGroup);
+        push({
+            pathname: RouteLink.ManageGroup,
+            state: { group }
+        });
     }
 
     const [hidden, setHidden] = useState(true);
@@ -65,9 +68,9 @@ const DeviceGroup = ({ group, deviceTable, selectGroup, push, fetchDevicesForGro
                 </div>
                 <div className='buttons'>
                     {group.subGroups.length === 0 ?
-                        <button onClick={() => createDevice(group) }>+ Mašina</button>
+                        <button onClick={() => createDevice(group)}>+ Mašina</button>
                         : null}
-                    <button onClick={() => createMachine(group)}>+ Grupa</button>
+                    <button onClick={() => createGroup(group)}>+ Grupa</button>
                 </div>
             </div>
             {!hidden && (

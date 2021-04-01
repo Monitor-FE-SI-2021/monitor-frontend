@@ -1,6 +1,7 @@
 import { connect } from "react-redux";
 import { Paper, makeStyles } from '@material-ui/core';
 import ManageGroupForm from "../../components/ManageGroupForm/ManageGroupFrom";
+import { useEffect } from "react";
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -9,13 +10,13 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-const ManageGroup = () => {
+const ManageGroup = (props) => {
     const classes = useStyles();
 
     return (
         <div className='page manage-device'>
             <Paper className={classes.pageContent}>
-                <ManageGroupForm/>
+                <ManageGroupForm parentGroup={props?.location?.state?.group}/>
             </Paper>
         </div>
     )
