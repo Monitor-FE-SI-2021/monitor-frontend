@@ -210,3 +210,14 @@ export default connect(state => {
         groupOptions
     }
 }, { fetchAllGroups, push })(ManageDeviceForm);
+
+export const flattenGroup = data => {
+
+    return data.reduce((acc, group) => {
+        acc.push(group);
+        if (group?.subGroups?.length) {
+            acc.push(...flattenGroup(group.subGroups))
+        }
+        return acc;
+    }, [])
+}

@@ -1,8 +1,10 @@
-import { SET_GROUPS, SET_GROUPS_ASYNC } from "./types";
+import { SET_GROUPS, SET_GROUPS_ASYNC, SET_SEARCHED_GROUPS, SET_INPUT_EMPTY } from "./types";
 
 const initialState = {
     async: false,
-    groups: {}
+    groups: {},
+    searchedGroups : {},
+    inputEmpty : ''
 }
 
 const ACTION_HANDLERS = {
@@ -10,13 +12,28 @@ const ACTION_HANDLERS = {
         return {
             ...state,
             async: false,
-            groups: action.groups
+            groups: action.groups,
         }
     },
     [SET_GROUPS_ASYNC]: (state, action) => {
         return {
             ...state,
             async: action.async
+        }
+    },
+    [SET_SEARCHED_GROUPS] : (state,action) => {
+        return {
+            ...state,
+            async: false,
+            searchedGroups:action.groups
+        }
+    },
+
+    [SET_INPUT_EMPTY] : (state,action) =>{
+        return{
+            ...state,
+            async: false,
+            inputEmpty : action.inputEmpty
         }
     }
 }

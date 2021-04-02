@@ -1,2 +1,4 @@
 export const SET_GROUPS = 'SET_GROUPS';
 export const SET_GROUPS_ASYNC = 'SET_GROUPS_ASYNC';
+export const SET_SEARCHED_GROUPS = 'SET_SEARCHED_GROUPS';
+export const SET_INPUT_EMPTY = 'SET_INPUT_EMPTY';
