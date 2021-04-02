@@ -20,6 +20,7 @@ function Questions() {
     };
 
     const[Questions,setQuestions]=useState([]);
+    const[QuestionsID,setQuestionsID]=useState([]);
     const[FormQuestions,setFormQuestions]=useState([]);
     const[FormAnswers, setFormAnswers]=useState([]);
 
@@ -38,32 +39,41 @@ console.log(e.target.value);
 
     };
 
- const Provera = (e) => {
+ const handleSubmit = (e) => {
   e.preventDefault();
+  let niz=[];
   for(let i=0;i<formData.broj+2;i++) {
-  FormAnswers.push(document.getElementsByClassName("answers")[i].value);
+
+  const doubleQuestion=FormQuestions.find(element=>element==document.getElementsByClassName("questions")[i].value);
+
+  //FormAnswers.push(document.getElementsByClassName("answers")[i].value);
    FormQuestions.push(document.getElementsByClassName("questions")[i].value);
+  var oneQuestion=document.getElementsByClassName("questions")[i].value;
+  const idQuestion=Questions.find(element=>element.Question==oneQuestion);
+  QuestionsID.push(idQuestion.QuestionId);
+
+var json={ "questionId":idQuestion.QuestionId, "answer":document.getElementsByClassName("answers")[i].value };
+if(!doubleQuestion)
+niz.push(json);
   }
+
+
 
 console.log("Pitanjaaaa");
 console.log(FormQuestions);
 console.log("odgovor");
 console.log(FormAnswers);
+console.log("ID");
+console.log(Questions);
+console.log("Jedan Id");
+console.log(Questions[0].QuestionId);
+console.log("idijeeviii");
+    console.log(QuestionsID);
+console.log("JSON ODGOVORI");
+console.log(niz);
     };
 
-    const handleSubmit = (e) => {
 
-        e.preventDefault();
-
-        const user = {
-            email: formData.email,
-        };
-
-        requestForgotPassword(user).then(r => {
-
-        })
-
-    };
 const AddQuestion=(e)=> {
         e.preventDefault();
         if(formData.broj<=7){
@@ -136,7 +146,7 @@ useEffect(()=>{
                 <div id="root9"> </div>
                 <div id="root10"> </div>
               <input id="AddQuestion" type="submit" value="Add more questions" onClick={AddQuestion}/>
-            <input id="submitButton" type="submit" value="Submit answers" onClick={Provera}/>
+            <input id="submitButton" type="submit" value="Submit answers" onClick={handleSubmit}/>
             </form>
 
         </div>
