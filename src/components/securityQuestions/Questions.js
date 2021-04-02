@@ -12,14 +12,14 @@ import request from "../../service";
 
 const securityQuestions = "http://localhost:3333/AllSecurityQuestions"
 
-function EmailSubmit({ requestForgotPassword }) {
+function Questions() {
     const initialFormData = {
         email: "",
         pitanja:[],
         broj : 1
     };
     const[Questions,setQuestions]=useState([]);
-    const[JSONQuestions,setJSONQuestions]=useState([]);
+    const[FormQuestions,setFormQuestions]=useState([]);
  const switchRoute = (link) => {
         push(link);
     };
@@ -27,11 +27,36 @@ function EmailSubmit({ requestForgotPassword }) {
     const [formData, updateFormData] = React.useState(initialFormData);
 
     const handleChange = (e) => {
-        updateFormData({
+ updateFormData({
             ...formData,
             [e.target.name]: e.target.value.trim()
         });
+console.log(e.target.value);
+
     };
+
+
+ const Provera = (e) => {
+  e.preventDefault();
+  FormQuestions.push(document.getElementById("select1").value);
+          FormQuestions.push(document.getElementById("select2").value);
+          FormQuestions.push(document.getElementById("select3").value);
+  if(formData.broj>1) {
+ for(let i=0;i<formData.broj-1;i++){
+      FormQuestions.push(document.getElementsByClassName("example")[i].value);
+  }
+  }
+  else{
+    console.log("Prva");
+  console.log(document.getElementById("select1").value);
+  console.log("Druga");
+   console.log(document.getElementById("select2").value);
+     console.log("Druga");
+      console.log(document.getElementById("select3").value);
+}
+console.log(FormQuestions);
+    };
+
 
     const handleSubmit = (e) => {
 
@@ -48,7 +73,7 @@ function EmailSubmit({ requestForgotPassword }) {
     };
 const AddQuestion=(e)=> {
         e.preventDefault();
-const myelement = <form><p> Quesstion {formData.broj+3}</p>    <select id="select">
+const myelement = <form><p> Quesstion {formData.broj+3}</p>    <select id="select" className="example">
                                                                             {Questions.map(question=>(
                                                                                           <option key={question.QuestionId}>{question.Question}</option>
                                                                                           ))}
@@ -61,29 +86,7 @@ formData.broj=broj;
 ReactDOM.render(myelement,document.getElementById(frr));
 switchRoute('/question');
 };
-/*
-useEffect(async () => {
-        const result = await request(
-            securityQuestions,
-        );
 
-   setQuestions(result.data[0].Question);
-       // setQrSecret(result.data.QrSecret)
-        //setImgLink(result.data.QRcode)
-        //formData.pitanja =await result.json();
-        var i;
-        for(i=0;i<result.data.length;i++) {
-                console.log(result.data.length);
-             console.log(result.data[i].Question);
-             setQuestions(Questions.concat(result.data[i].Question));
-        }
-// setQuestions(result.data[0]);
-        console.log(result.data.Question)
-        console.log(Questions);
-   //     setItems(items);
-        //console.log(formData.pitanja[0]);
-    }, []);
-*/
 useEffect(()=>{
         axios.get(securityQuestions)
                 .then(res=>{
@@ -93,7 +96,7 @@ useEffect(()=>{
        .catch(err=>{
          console.log(err);
       })
-  })
+  },[])
 
 
 
@@ -103,7 +106,7 @@ useEffect(()=>{
                     <form id="form">
                 <h2>Security questions?</h2>
                 <p>Quesstion 1:</p>
-                <select id="select">
+                <select id="select1" onClick={handleChange}>
       {Questions.map(question=>(
               <option key={question.QuestionId}>{question.Question}</option>
               ))}
@@ -112,7 +115,7 @@ useEffect(()=>{
                 <input name="email" type='email'
                        />
                        <p>Quesstion 2:</p>
-                          <select id="select">
+                          <select id="select2">
                                        {Questions.map(question=>(
                                                      <option key={question.QuestionId}>{question.Question}</option>
                                                      ))}
@@ -120,7 +123,7 @@ useEffect(()=>{
                                        <input name="vmdfk" type='email'
                                               />
                                               <p>Quesstion 3:</p>
-                                                 <select id="select">
+                                                 <select id="select3">
                                                               {Questions.map(question=>(
                                                                             <option key={question.QuestionId}>{question.Question}</option>
                                                                             ))}
@@ -138,7 +141,7 @@ useEffect(()=>{
                 <div id="root9"> </div>
                 <div id="root10"> </div>
               <input id="AddQuestion" type="submit" value="Add more questions" onClick={AddQuestion}/>
-            <input id="submitButton" type="submit" value="Submit answers" />
+            <input id="submitButton" type="submit" value="Submit answers" onClick={Provera}/>
             </form>
 
         </div>
@@ -146,4 +149,4 @@ useEffect(()=>{
     );
 }
 
-export default connect(state => ({}), { requestForgotPassword })(EmailSubmit);
+export default Questions;
