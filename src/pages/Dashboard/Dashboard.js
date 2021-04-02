@@ -85,7 +85,7 @@ let chartPieDataExample = {
 
 let currentTime = new Date().getHours();
 
-let dummyActiveMachines = [
+let activeMachines = [
     {
         deviceId: 1,
         name: "Desktop PC 1",
@@ -97,6 +97,20 @@ let dummyActiveMachines = [
         deviceId: 2,
         name: "Desktop PC 2",
         location: "Sarajevo - BBI",
+        ip: "255.255.255.0",
+        path: "C:/user/programfiles",
+    },
+    {
+        deviceId: 3,
+        name: "Desktop PC 1",
+        location: "Sarajevo - SCC",
+        ip: "255.255.255.0",
+        path: "C:/user/programfiles",
+    },
+    {
+        deviceId: 4,
+        name: "Desktop PC 2",
+        location: "Sarajevo - SCC",
         ip: "255.255.255.0",
         path: "C:/user/programfiles",
     }
@@ -126,20 +140,17 @@ let dummyMachines = [
     },
 ];
 
-
-
-
-
 function convertStatistics(statistic) {
     return [Math.round(statistic * 100), Math.round((1 - statistic) * 100)];
 }
 
 let removedMachine = null
 let clickedMachine = null
+let allMachinesUsage = null
+let lastDisconnected = null
 
 const Dashboard = ({user}) => {
-
-    let activeMachines = []
+  //  let activeMachines = []
     const [machines, setMachines] = React.useState([]);
     const [active, setActive] = React.useState([...activeMachines]);
     const [showCharts, setShowCharts] = React.useState(false);
@@ -156,12 +167,13 @@ const Dashboard = ({user}) => {
             return existingMachine;
         }) : [];
     }
-
+/*
     React.useEffect(() => {
         request(devices + "/AllDevices")
             .then((res) => {
                 const allMachines = res.data.data;
                 setMachines(allMachines);
+                console.log(allMachines)
                 request("https://si-grupa5.herokuapp.com/api/agent/online")
                     .then((res) => {
                         console.log(res)
@@ -170,9 +182,42 @@ const Dashboard = ({user}) => {
             })
             .catch((err) => console.log(err));
 
-      /*  request("https://si-grupa5.herokuapp.com/api/agent/online").then((res) => {
-            console.log(res);
-        });*/
+        request(devices + "/GetAverageHardwareUsageForUser")
+            .then((res) => {
+                allMachinesUsage = res.data.data
+                console.log(allMachinesUsage)
+                setCharts(allMachinesUsage, { name: "All machines"})
+            })
+    }, []);
+*/
+
+    React.useEffect(() => {
+        request(devices + "/AllDevices")
+            .then((res) => {
+                const allMachines = res.data.data;
+                setMachines(allMachines);
+                console.log(allMachines)
+             /*   request("https://si-grupa5.herokuapp.com/api/agent/online")
+                    .then((res) => {
+                        console.log(res)
+                        setActive(filterActive(res?.data, allMachines));
+                    })
+
+              */
+                setActive(filterActive(activeMachines, allMachines))
+            })
+            .catch((err) => console.log(err));
+
+        request(devices + "/GetAverageHardwareUsageForUser")
+            .then((res) => {
+                allMachinesUsage = res.data.data
+                console.log(allMachinesUsage)
+                setCharts(allMachinesUsage, { name: "All machines"})
+            })
+
+        /*  request("https://si-grupa5.herokuapp.com/api/agent/online").then((res) => {
+              console.log(res);
+          });*/
     }, []);
 
     const disconnectMachine = (machine) => {
@@ -192,8 +237,11 @@ const Dashboard = ({user}) => {
                 .then((res) => console.log(res))
                 .catch((err) => console.log(err))
             cloned.splice(index, 1);
-            if (removedMachine?.deviceId === clickedMachine?.deviceId)
-                setShowCharts(false)
+            lastDisconnected = machine
+            if (cloned.length === 0 || removedMachine?.deviceId === clickedMachine?.deviceId) {
+                clickedMachine = {name: "All machines"}
+                setCharts(allMachinesUsage, clickedMachine)
+            }
             setActive(cloned);
         }
     };
@@ -204,8 +252,9 @@ const Dashboard = ({user}) => {
                            averageHDDUsage,
                            averageRamUsage,
                        }, machine) => {
+        if (machine === lastDisconnected) return
         clickedMachine = machine
-        if (removedMachine?.deviceId !== machine?.deviceId) {
+        if (machine?.name === "All machines" || removedMachine?.deviceId !== machine?.deviceId) {
             cpuUsageChart.datasets[0].data = convertStatistics(averageCPUUsage);
             gpuUsageChart.datasets[0].data = convertStatistics(averageGPUUsage);
             hddUsageChart.datasets[0].data = convertStatistics(averageHDDUsage);
@@ -236,7 +285,7 @@ const Dashboard = ({user}) => {
                 
                 {showCharts && (
                     <div>
-                        <h2 className="machineName">{clickedMachine.name}</h2>
+                        <h2 className="machineName">{clickedMachine?.name}</h2>
                         <div className="chartContainer">
                             
                             <div className="row">
