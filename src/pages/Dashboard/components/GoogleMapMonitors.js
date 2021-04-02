@@ -69,6 +69,19 @@ function setActivityMarkers(activeMachines, allMachines) {
         })
 }
 
+function setNonLeapingLocations(machines) {
+    machines.map((machine, i) => {
+        const machineSameLocation = machines.find((m, j) => {
+            return i !== j && machine.locationLatitude === m.locationLatitude
+                && machine.locationLongitude === m.locationLongitude
+        })
+        if (machineSameLocation) {
+            machine.locationLatitude = machine.locationLatitude + (Math.random() -.5) / 30000;
+            machine.locationLongitude = machine.locationLongitude + (Math.random() -.5) / 30000;
+        }
+    })
+}
+
 class GoogleMapMonitors extends Component {
 /*
     state = {
@@ -86,6 +99,8 @@ class GoogleMapMonitors extends Component {
 
         let activeMachines = this.props.activeMachines
         let allMachines = this.props.allMachines
+
+        setNonLeapingLocations(allMachines)
 /*
         let machinesReadyToMark = [];
         if (!this.state.loading) {
