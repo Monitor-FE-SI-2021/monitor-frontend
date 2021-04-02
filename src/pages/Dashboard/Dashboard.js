@@ -196,7 +196,7 @@ const Dashboard = ({user}) => {
             .then((res) => {
                 const allMachines = res.data.data;
                 setMachines(allMachines);
-                console.log(allMachines)
+                // console.log(allMachines)
              /*   request("https://si-grupa5.herokuapp.com/api/agent/online")
                     .then((res) => {
                         console.log(res)
@@ -211,7 +211,7 @@ const Dashboard = ({user}) => {
         request(devices + "/GetAverageHardwareUsageForUser")
             .then((res) => {
                 allMachinesUsage = res.data.data
-                console.log(allMachinesUsage)
+                // console.log(allMachinesUsage)
                 setCharts(allMachinesUsage, { name: "All machines"})
             })
 
