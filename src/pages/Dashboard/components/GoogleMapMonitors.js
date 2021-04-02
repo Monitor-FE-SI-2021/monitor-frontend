@@ -1,8 +1,10 @@
 import { render } from '@testing-library/react';
-import React, {Component} from 'react';
-import { withGoogleMap, GoogleMap, Marker } from "react-google-maps"
+import React, {Component, useState} from 'react';
+import { withGoogleMap, GoogleMap, Marker, InfoWindow } from "react-google-maps"
 import request, { devices } from "../../../service";
 
+
+/*
     function filterActive(activeMachines, allMachines) {
         return activeMachines ? activeMachines.filter((machine) => {
             const existingMachine = allMachines.find(({name, location}) => {
@@ -30,6 +32,7 @@ import request, { devices } from "../../../service";
                     name: machine.name,
                     locationLongitude: machine.locationLongitude,
                     locationLatitude: machine.locationLatitude,
+                    lastTimeOnline: machine.lastTimeOnline,
                     imageURL: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
                 })
             } else {
@@ -38,6 +41,7 @@ import request, { devices } from "../../../service";
                     name: machine.name,
                     locationLongitude: machine.locationLongitude,
                     locationLatitude: machine.locationLatitude,
+                    lastTimeOnline: machine.lastTimeOnline,
                     imageURL: "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
                 })
             }
@@ -46,8 +50,27 @@ import request, { devices } from "../../../service";
         return result;
     }
 
-class GoogleMapMonitors extends Component {
 
+ */
+const greenMarkerURL = "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
+const redMarkerURL = "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
+
+function setActivityMarkers(activeMachines, allMachines) {
+        allMachines.map((machine) => {
+            const isActiveMachine = activeMachines.find(({ deviceUid }) => {
+                return machine.deviceUid === deviceUid
+            })
+            if (isActiveMachine) {
+                machine.imageURL = greenMarkerURL
+            }
+            else {
+                machine.imageURL = redMarkerURL
+            }
+        })
+}
+
+class GoogleMapMonitors extends Component {
+/*
     state = {
         loading: true,
         machines: []
@@ -58,37 +81,58 @@ class GoogleMapMonitors extends Component {
         this.setState({machines: response.data.data, loading:false})
     }
 
-
+*/
     render() {
 
+        let activeMachines = this.props.activeMachines
+        let allMachines = this.props.allMachines
+/*
         let machinesReadyToMark = [];
-
         if (!this.state.loading) {
             let activeMachines = filterActive([], this.state.machines)
             machinesReadyToMark = filterInactiveMachines(this.state.machines, activeMachines);
             console.log(machinesReadyToMark)
         }
+*/
+        setActivityMarkers(activeMachines, allMachines)
 
         //when calling a marker, check if loading is true/false
 
-        const MyMapComponent = withGoogleMap((props) =>
-            <GoogleMap
-                defaultZoom={8}
-                defaultCenter={{ lat: 43.856, lng: 18.413 }}
-            >
-           {machinesReadyToMark.map(machine => (
-               <Marker
-               key={machine.deviceId}
-               position={{
-                lat: machine.locationLatitude, 
-                lng: machine.locationLongitude 
-               }}
-               icon={{ url: machine.imageURL}}
-               >
-               </Marker>
-           ))
-           }
-            </GoogleMap>
+        const MyMapComponent = withGoogleMap((props) => {
+            const [selectedMachine, setSelectedMachine] = useState(null)
+            return (
+                    <GoogleMap
+                        defaultZoom={8}
+                        defaultCenter={{lat: 43.856, lng: 18.413}}
+                    >
+                        {allMachines.map(machine => (
+                            <Marker
+                                key={machine.deviceId}
+                                position={{
+                                    lat: machine.locationLatitude,
+                                    lng: machine.locationLongitude
+                                }}
+                                icon={{url: machine.imageURL}}
+                                onClick={() => setSelectedMachine(machine)}
+                            >
+                            </Marker>
+                        ))
+                        }
+                        {selectedMachine && (
+                            <InfoWindow
+                                position={{lat: selectedMachine.locationLatitude, lng: selectedMachine.locationLongitude}}
+                                onCloseClick={() => setSelectedMachine(null)}
+                            >
+                                <div>
+                                    <h2>{selectedMachine.name}</h2>
+                                    <p>{selectedMachine.location}</p>
+                                    <p>{new Date(selectedMachine.lastTimeOnline).toLocaleString()}</p>
+                                </div>
+                            </InfoWindow>
+                        )}
+                    </GoogleMap>
+                )
+            }
         );
 
 

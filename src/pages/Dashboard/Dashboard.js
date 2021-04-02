@@ -87,28 +87,28 @@ let currentTime = new Date().getHours();
 
 let activeMachines = [
     {
-        deviceId: 1,
+        deviceUid: "fc548ecb-12ec-4ad5-8672-9d5a9565ff60",
         name: "Desktop PC 1",
         location: "Sarajevo - BBI",
         ip: "255.255.255.0",
         path: "C:/user/programfiles",
     },
         {
-        deviceId: 2,
+        deviceUid: "92649d24-fc46-44c6-b085-356977dbb782",
         name: "Desktop PC 2",
         location: "Sarajevo - BBI",
         ip: "255.255.255.0",
         path: "C:/user/programfiles",
     },
     {
-        deviceId: 3,
+        deviceUid: "eed19402-67c5-4978-9ad2-513cd5db6376",
         name: "Desktop PC 1",
         location: "Sarajevo - SCC",
         ip: "255.255.255.0",
         path: "C:/user/programfiles",
     },
     {
-        deviceId: 4,
+        deviceUid: "d3143e54-d497-402f-82ef-b1b213c1d172",
         name: "Desktop PC 2",
         location: "Sarajevo - SCC",
         ip: "255.255.255.0",
@@ -315,6 +315,8 @@ const Dashboard = ({user}) => {
             </div>
             <div className="googleMapMonitors">
                 <GoogleMapMonitors
+                    activeMachines={active}
+                    allMachines={machines}
                 />  
             </div>
             
