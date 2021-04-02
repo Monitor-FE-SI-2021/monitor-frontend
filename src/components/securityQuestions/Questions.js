@@ -49,7 +49,9 @@ function EmailSubmit({ requestForgotPassword }) {
 const AddQuestion=(e)=> {
         e.preventDefault();
 const myelement = <form><p> Quesstion {formData.broj+3}</p>    <select id="select">
-                                                                            <option>Select1</option>
+                                                                            {Questions.map(question=>(
+                                                                                          <option key={question.QuestionId}>{question.Question}</option>
+                                                                                          ))}
                                                                             </select><input type="text"/></form>;
 var broj=formData.broj;
 var frr="root"+broj;
@@ -59,7 +61,7 @@ formData.broj=broj;
 ReactDOM.render(myelement,document.getElementById(frr));
 switchRoute('/question');
 };
-
+/*
 useEffect(async () => {
         const result = await request(
             securityQuestions,
@@ -73,14 +75,25 @@ useEffect(async () => {
         for(i=0;i<result.data.length;i++) {
                 console.log(result.data.length);
              console.log(result.data[i].Question);
-             setQuestions(result.data[i].Question);
+             setQuestions(Questions.concat(result.data[i].Question));
         }
- setQuestions(result.data[0]);
+// setQuestions(result.data[0]);
         console.log(result.data.Question)
         console.log(Questions);
    //     setItems(items);
         //console.log(formData.pitanja[0]);
     }, []);
+*/
+useEffect(()=>{
+        axios.get(securityQuestions)
+                .then(res=>{
+             console.log(res);
+             setQuestions(res.data);
+       })
+       .catch(err=>{
+         console.log(err);
+      })
+  })
 
 
 
@@ -91,20 +104,26 @@ useEffect(async () => {
                 <h2>Security questions?</h2>
                 <p>Quesstion 1:</p>
                 <select id="select">
-            <option> {Questions.Question}</option>
+      {Questions.map(question=>(
+              <option key={question.QuestionId}>{question.Question}</option>
+              ))}
 
                 </select>
                 <input name="email" type='email'
                        />
                        <p>Quesstion 2:</p>
                           <select id="select">
-                                       <option>Selewcr 1</option>
+                                       {Questions.map(question=>(
+                                                     <option key={question.QuestionId}>{question.Question}</option>
+                                                     ))}
                                        </select>
                                        <input name="vmdfk" type='email'
                                               />
                                               <p>Quesstion 3:</p>
                                                  <select id="select">
-                                                              <option>Select1</option>
+                                                              {Questions.map(question=>(
+                                                                            <option key={question.QuestionId}>{question.Question}</option>
+                                                                            ))}
                                                               </select>
                                                               <input name="fvddf" type='email'
                        />
