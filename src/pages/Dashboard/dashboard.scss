@@ -91,7 +91,8 @@ h4 {
 }
 
 .scrollable {
-  overflow: hidden;
+  overflow: scroll;
+  height: 100vh;
   padding: 5%;
 }
 
@@ -123,6 +124,9 @@ h4 {
 }
 
 .googleMapMonitors {
+  margin-top: 5vw;
   bottom: 30px;
   width: 100%;
+  box-shadow: 0 10px 20px #ccc;
+  border-radius: 25px;
 }
