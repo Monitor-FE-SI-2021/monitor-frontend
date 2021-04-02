@@ -18,8 +18,11 @@ function Questions() {
         pitanja:[],
         broj : 1
     };
+
     const[Questions,setQuestions]=useState([]);
     const[FormQuestions,setFormQuestions]=useState([]);
+    const[FormAnswers, setFormAnswers]=useState([]);
+
  const switchRoute = (link) => {
         push(link);
     };
@@ -35,28 +38,18 @@ console.log(e.target.value);
 
     };
 
-
  const Provera = (e) => {
   e.preventDefault();
-  FormQuestions.push(document.getElementById("select1").value);
-          FormQuestions.push(document.getElementById("select2").value);
-          FormQuestions.push(document.getElementById("select3").value);
-  if(formData.broj>1) {
- for(let i=0;i<formData.broj-1;i++){
-      FormQuestions.push(document.getElementsByClassName("example")[i].value);
+  for(let i=0;i<formData.broj+2;i++) {
+  FormAnswers.push(document.getElementsByClassName("answers")[i].value);
+   FormQuestions.push(document.getElementsByClassName("questions")[i].value);
   }
-  }
-  else{
-    console.log("Prva");
-  console.log(document.getElementById("select1").value);
-  console.log("Druga");
-   console.log(document.getElementById("select2").value);
-     console.log("Druga");
-      console.log(document.getElementById("select3").value);
-}
-console.log(FormQuestions);
-    };
 
+console.log("Pitanjaaaa");
+console.log(FormQuestions);
+console.log("odgovor");
+console.log(FormAnswers);
+    };
 
     const handleSubmit = (e) => {
 
@@ -73,17 +66,19 @@ console.log(FormQuestions);
     };
 const AddQuestion=(e)=> {
         e.preventDefault();
-const myelement = <form><p> Quesstion {formData.broj+3}</p>    <select id="select" className="example">
+        if(formData.broj<=7){
+const myelement = <form><p> Quesstion {formData.broj+3}</p>    <select id="select" className="questions">
                                                                             {Questions.map(question=>(
                                                                                           <option key={question.QuestionId}>{question.Question}</option>
                                                                                           ))}
-                                                                            </select><input type="text"/></form>;
+                                                                            </select><input type="text" className="answers"/></form>;
 var broj=formData.broj;
 var frr="root"+broj;
 const pet=document.getElementById(frr).isEmpty
 broj++;
 formData.broj=broj;
 ReactDOM.render(myelement,document.getElementById(frr));
+}
 switchRoute('/question');
 };
 
@@ -106,29 +101,29 @@ useEffect(()=>{
                     <form id="form">
                 <h2>Security questions?</h2>
                 <p>Quesstion 1:</p>
-                <select id="select1" onClick={handleChange}>
+                <select id="select1" className="questions" onClick={handleChange}>
       {Questions.map(question=>(
               <option key={question.QuestionId}>{question.Question}</option>
               ))}
 
                 </select>
-                <input name="email" type='email'
+                <input name="email" className="answers" type='email'
                        />
                        <p>Quesstion 2:</p>
-                          <select id="select2">
+                          <select id="select2" className="questions">
                                        {Questions.map(question=>(
                                                      <option key={question.QuestionId}>{question.Question}</option>
                                                      ))}
                                        </select>
-                                       <input name="vmdfk" type='email'
+                                       <input name="vmdfk"className="answers" type='email'
                                               />
                                               <p>Quesstion 3:</p>
-                                                 <select id="select3">
+                                                 <select id="select3" className="questions">
                                                               {Questions.map(question=>(
                                                                             <option key={question.QuestionId}>{question.Question}</option>
                                                                             ))}
                                                               </select>
-                                                              <input name="fvddf" type='email'
+                                                              <input name="fvddf" className="answers" type='email'
                        />
                <div id="root1"> </div>
                <div id="root2"> </div>
