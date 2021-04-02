@@ -107,7 +107,7 @@ class GoogleMapMonitors extends Component {
                     >
                         {allMachines.map(machine => (
                             <Marker
-                                key={machine.deviceId}
+                                key={machine.deviceUid}
                                 position={{
                                     lat: machine.locationLatitude,
                                     lng: machine.locationLongitude
