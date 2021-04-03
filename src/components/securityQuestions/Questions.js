@@ -10,7 +10,8 @@ import { push } from 'connected-react-router';
 import request from "../../service";
 
 
-const securityQuestions = "http://localhost:3333/AllSecurityQuestions"
+const securityQuestions = "http://localhost:3333/AllSecurityQuestions";
+const saveQuestions="http://localhost:3333/setSecurityQuestionsAndAnswers/:token"
 
 function Questions() {
     const initialFormData = {
@@ -23,6 +24,7 @@ function Questions() {
     const[QuestionsID,setQuestionsID]=useState([]);
     const[FormQuestions,setFormQuestions]=useState([]);
     const[FormAnswers, setFormAnswers]=useState([]);
+     const [QueSuc, setQueSuc] = useState(false)
 
  const switchRoute = (link) => {
         push(link);
@@ -43,10 +45,7 @@ console.log(e.target.value);
   e.preventDefault();
   let niz=[];
   for(let i=0;i<formData.broj+2;i++) {
-
   const doubleQuestion=FormQuestions.find(element=>element==document.getElementsByClassName("questions")[i].value);
-
-  //FormAnswers.push(document.getElementsByClassName("answers")[i].value);
    FormQuestions.push(document.getElementsByClassName("questions")[i].value);
   var oneQuestion=document.getElementsByClassName("questions")[i].value;
   const idQuestion=Questions.find(element=>element.Question==oneQuestion);
@@ -71,6 +70,23 @@ console.log("idijeeviii");
     console.log(QuestionsID);
 console.log("JSON ODGOVORI");
 console.log(niz);
+ console.log("TOKEN");
+   const token = window.localStorage.getItem(STORAGE_KEY);
+ console.log(token);
+
+ /*
+   request(saveQuestions, 'post', niz)
+             .then(() => {
+                 QueSuc(true)
+             }).catch((error) => {
+             console.log(error);
+             alert('Error');
+         })
+
+         updateFormData(initialFormData)
+
+*/
+
     };
 
 
@@ -110,7 +126,7 @@ useEffect(()=>{
         <div className="formDiv" >
                     <form id="form">
                 <h2>Security questions?</h2>
-                <p>Quesstion 1:</p>
+                <p>Question 1:</p>
                 <select id="select1" className="questions" onClick={handleChange}>
       {Questions.map(question=>(
               <option key={question.QuestionId}>{question.Question}</option>
@@ -119,7 +135,7 @@ useEffect(()=>{
                 </select>
                 <input name="email" className="answers" type='email'
                        />
-                       <p>Quesstion 2:</p>
+                       <p>Question 2:</p>
                           <select id="select2" className="questions">
                                        {Questions.map(question=>(
                                                      <option key={question.QuestionId}>{question.Question}</option>
@@ -127,7 +143,7 @@ useEffect(()=>{
                                        </select>
                                        <input name="vmdfk"className="answers" type='email'
                                               />
-                                              <p>Quesstion 3:</p>
+                                              <p>Question 3:</p>
                                                  <select id="select3" className="questions">
                                                               {Questions.map(question=>(
                                                                             <option key={question.QuestionId}>{question.Question}</option>
