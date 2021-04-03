@@ -65,7 +65,7 @@ console.log(niz);
    request(saveQuestions, 'post', niz)
              .then(() => {
                  setQueSuc(true);
-                 showSwalToast(`Uspješno odgovorena pitnja`, 'success');
+                 showSwalToast(`successfully answered`, 'success');
              }).catch((error) => {
              console.log(error);
               showSwalToast('Invalid answers');
