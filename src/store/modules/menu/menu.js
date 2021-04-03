@@ -8,7 +8,8 @@ export const RouteLink = {
     ManageDevice: '/manage-device',
     Terminal: '/terminal',
     RemoteControl: '/remotecontrol',
-    TwoFactorAuthentication: '/security'
+    TwoFactorAuthentication: '/security',
+    FileManagerView:'/file-manager'
 }
 
 const initialState = {
@@ -42,6 +43,11 @@ const initialState = {
         {
             link: RouteLink.TwoFactorAuthentication,
             name: 'Two Factor Authentication',
+            icon: ""
+        },
+        {
+            link: RouteLink.FileManagerView,
+            name: 'File Manager',
             icon: ""
         }
     ],

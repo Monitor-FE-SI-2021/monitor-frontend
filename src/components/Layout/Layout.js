@@ -10,7 +10,8 @@ import Reporting from "../../pages/Reporting/Reporting";
 import ManageDevice from "../../pages/ManageDevice/ManageDevice";
 import Terminal from "../Terminal/Terminal";
 import TwoFactorAuthentication from "../TwoFactorAuthentication/TwoFactorAuthentication";
-import RemoteControl from "../../pages/RemoteControl/RemoteControl"
+import RemoteControl from "../../pages/RemoteControl/RemoteControl";
+import FileManagerView from "../../pages/FileManager/FileManager";
 import { Spinner } from "../Spinner/Spinner";
 
 const Layout = ({ isMenuExpanded, loginAsync, userAsync, user }) => {
@@ -35,6 +36,7 @@ const Layout = ({ isMenuExpanded, loginAsync, userAsync, user }) => {
                     <Route path={RouteLink.Terminal} component={Terminal}/>
                     <Route path={RouteLink.RemoteControl} component={RemoteControl}/>
                     <Route path={RouteLink.TwoFactorAuthentication} component={TwoFactorAuthentication}/>
+                    <Route path={RouteLink.FileManagerView} component={FileManagerView}/>
                 </Switch>
             </div>
         </div>
