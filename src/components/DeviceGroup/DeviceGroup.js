@@ -4,10 +4,27 @@ import React, { useEffect, useState } from 'react';
 import { connect } from "react-redux";
 import { fetchDevicesForGroup, updateDevicesTableForGroup } from "../../store/modules/devices/actions";
 import { Spinner } from "../Spinner/Spinner";
+import { push } from "connected-react-router";
+import { selectGroup } from "../../store/modules/groups/actions";
 import CustomPagination from "../CustomTable/components/CustomPagination";
+import { RouteLink } from "../../store/modules/menu/menu";
 
 
-const DeviceGroup = ({ group, deviceTable, fetchDevicesForGroup, updateDevicesTableForGroup }) => {
+const DeviceGroup = ({ group, deviceTable, push, fetchDevicesForGroup, updateDevicesTableForGroup }) => {
+
+    const createDevice = (group) => {
+        push({
+            pathname: RouteLink.ManageDevice,
+            state: { group }
+        });
+    }
+
+    const createGroup = (group) => {
+        push({
+            pathname: RouteLink.ManageGroup,
+            state: { group }
+        });
+    }
 
     const [hidden, setHidden] = useState(true);
 
@@ -45,9 +62,17 @@ const DeviceGroup = ({ group, deviceTable, fetchDevicesForGroup, updateDevicesTa
 
     return (
         <div className='group'>
-            <div className='tab' onClick={toggleArrow}>
-                <button className={hidden ? 'collapsed' : 'expanded'}/>
-                <h2>{group.name}</h2>
+            <div className='tab'>
+                <div className='title' onClick={toggleArrow}>
+                    <button className={hidden ? 'collapsed' : 'expanded'}/>
+                    <h2>{group.name}</h2>
+                </div>
+                <div className='buttons'>
+                    {group.subGroups.length === 0 ?
+                        <button onClick={() => createDevice(group)}>+ Mašina</button>
+                        : null}
+                    <button onClick={() => createGroup(group)}>+ Grupa</button>
+                </div>
             </div>
             {!hidden && (
                 <React.Fragment>
@@ -83,6 +108,7 @@ const ConnectedDeviceGroup = connect((state, ownProps) => {
     }
     ,
     {
+        push,
         fetchDevicesForGroup,
         updateDevicesTableForGroup
     }

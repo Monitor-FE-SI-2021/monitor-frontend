@@ -11,34 +11,16 @@ import { push } from "connected-react-router";
 import { selectDevice } from "../../store/modules/devices/actions";
 import "./ManageDeviceForm.scss"
 
-// const useStyles = makeStyles((theme) => ({
-//     root: {
-//         '& .MuiFormControl-root, .MuiButton-root': {
-//             display: 'flex',
-//             flexWrap: 'wrap',
-//             margin: theme.spacing(3),
-//         },
-//         '& .MuiFormControl-root': {
-//             width: '50%',
-//         },
-//         '.MuiButton-root': {
-//             width: '25%',
-//         },
-//     },
-// }));
+const ManageDeviceForm = ({ selectedDevice, group, groupOptions, fetchAllGroups, push, selectDevice }) => {
 
-const initialValues = {
-    name: "",
-    location: "",
-    latitude: "",
-    longitude: "",
-    installationCode: "",
-    group: ""
-}
-
-const ManageDeviceForm = ({ selectedDevice, groupOptions, fetchAllGroups, push, selectDevice }) => {
-
-    // const classes = useStyles();
+    const initialValues = {
+        name: "",
+        location: "",
+        latitude: "",
+        longitude: "",
+        installationCode: "",
+        group: group?.groupId ?? ''
+    }
 
     const [editMode, setEditMode] = useState(false);
     const [values, setValues] = useState(initialValues)

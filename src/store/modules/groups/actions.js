@@ -1,4 +1,4 @@
-import { SET_GROUPS, SET_GROUPS_ASYNC } from "./types";
+import { SET_GROUPS, SET_GROUPS_ASYNC, SELECT_GROUP } from "./types";
 import request, { groups } from "../../../service";
 
 export const fetchAllGroups = () => {

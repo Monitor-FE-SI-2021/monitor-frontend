@@ -1,6 +1,7 @@
 import { connect } from "react-redux";
-import ManageDeviceForm from "../../components/ManageDeviceForm/ManageDeviceForm";
 import { Paper, makeStyles } from '@material-ui/core';
+import ManageGroupForm from "../../components/ManageGroupForm/ManageGroupFrom";
+import { useEffect } from "react";
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -9,16 +10,16 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-const ManageDevice = (props) => {
+const ManageGroup = (props) => {
     const classes = useStyles();
 
     return (
         <div className='page manage-device'>
             <Paper className={classes.pageContent}>
-                <ManageDeviceForm group={props?.location?.state?.group}/>
+                <ManageGroupForm parentGroup={props?.location?.state?.group}/>
             </Paper>
         </div>
     )
 }
 
-export default connect(state => ({}), {})(ManageDevice);
+export default connect(state => ({}), {})(ManageGroup);
