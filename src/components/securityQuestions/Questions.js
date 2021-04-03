@@ -65,6 +65,7 @@ console.log(niz);
    request(saveQuestions, 'post', niz)
              .then(() => {
                  setQueSuc(true);
+                 showSwalToast(`Uspješno odgovorena pitnja`, 'success');
              }).catch((error) => {
              console.log(error);
               showSwalToast('Invalid answers');
@@ -80,7 +81,7 @@ console.log(niz);
 const AddQuestion=(e)=> {
         e.preventDefault();
         if(formData.broj<=7){
-const myelement = <form><p> Quesstion {formData.broj+3}</p>    <select id="select" className="questions">
+const myelement = <form><p> Question {formData.broj+3}</p>    <select id="select" className="questions">
 <option value="" selected disabled hidden>Choose here</option>
    {Questions.map(question=>(
   <option key={question.QuestionId}>{question.Question}</option>
@@ -114,7 +115,7 @@ useEffect(()=>{
         <div className="formDiv" >
                     <form id="form">
                 <h2>Security questions?</h2>
-                <p>Question 1:</p>
+                <p>Question 1</p>
                 <select id="select1"   className="questions" onClick={handleChange}>
                 <option value="" selected disabled hidden>Choose here</option>
       {Questions.map(question=>(
@@ -124,7 +125,7 @@ useEffect(()=>{
                 </select>
                 <input  className="answers" type='text'
                        />
-                       <p>Question 2:</p>
+                       <p>Question 2</p>
                           <select id="select2" className="questions">
                           <option value="" selected disabled hidden>Choose here</option>
                                        {Questions.map(question=>(
@@ -133,7 +134,7 @@ useEffect(()=>{
                                        </select>
                                        <input className="answers" type='text'
                                               />
-                                              <p>Question 3:</p>
+                                              <p>Question 3</p>
                                                  <select id="select3" className="questions">
                                                  <option value="" selected disabled hidden>Choose here</option>
                                                               {Questions.map(question=>(
