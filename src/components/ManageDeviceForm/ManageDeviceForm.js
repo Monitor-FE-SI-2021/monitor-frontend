@@ -8,6 +8,8 @@ import request, { devices } from "../../service";
 import { showSwalToast } from "../../utils/utils";
 import { RouteLink } from "../../store/modules/menu/menu";
 import { push } from "connected-react-router";
+import './ManageDeviceForm.scss';
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -24,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
         },
     },
 }));
+
 
 const initialValues = {
     name: "",
@@ -175,10 +178,12 @@ const ManageDeviceForm = ({ selectedDevice, groupOptions, fetchAllGroups, push }
                     </MenuItem>
                 ))}
             </TextField>
-
-            <Button type="submit" variant="contained">
-                {editMode === true ? "Edit Machine" : "Create Machine"}
-            </Button>
+            <div className="buttons">
+                <Button type="cancel" variant="contained" onClick={() => push(RouteLink.Devices)} className="buttonCancel">Otkaži</Button>
+                <Button type="submit" variant="contained" className="buttonEditAndCreate">
+                       {editMode === true ? "Edit Machine" : "Create Machine"}
+                </Button>
+            </div>
         </form>
     );
 }
