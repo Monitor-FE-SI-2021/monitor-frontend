@@ -1,26 +1,14 @@
 import React, {useState} from "react";
-
 import Avatar from "./MachineAvatar.js";
-import request, {devices} from "../../../service";
 
-const ActiveMachine = ({data, img, fun, setCharts}) => {
-    //averageCPUUsage, averageGPUUsage, averageHDDUsage, averageRamUsage
-    function getStatistics() {
-        request(devices + "/GetDeviceLogs?deviceId=" + data.deviceId)
-            .then((res) => res.data.data)
-            .then((res) => {
-                console.log(res);
-                setCharts(res, data);
-            })
-            .catch((err) => console.log(err));
-    }
+const ActiveMachine = ({data, img, fun, getStatistics}) => {
 
     return (
         <>
             <div
                 className="card"
                 id={data.deviceId}
-                onClick={() => getStatistics()}
+                onClick={() => getStatistics(data)}
                 onDoubleClick={() =>
                     window.open("/remotecontrol/" + data.name + "/terminal", "_blank")
                 }

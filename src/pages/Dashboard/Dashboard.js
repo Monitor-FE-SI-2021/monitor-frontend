@@ -5,14 +5,7 @@ import DonutChart from "./components/charts/DonutChart";
 import ActiveMachine from "./components/ActiveMachine";
 import request, {devices} from "../../service";
 import GoogleMapMonitors from "./components/GoogleMapMonitors";
-
 import "./dashboard.scss";
-import {act} from "@testing-library/react";
-
-// DUMMY DATA
-
-// Api get may or may not be called here.
-// The data is an example of how the data structure should look like
 
 let ramUsageChart = {
     labels: ["Used", "Not used"],
@@ -57,33 +50,6 @@ let hddUsageChart = {
         },
     ],
 };
-/*
-let chartPieDataExample = {
-    labels: ['Used', 'Not used'],
-    datasets: [
-        {
-            label: 'Average RAM usage',
-            data: [
-                80,
-                20
-            ],
-            backgroundColor: [
-                'rgba(75, 192, 192, 0.6)',
-                'rgba(54, 162, 235, 0.6)',
-                            'rgba(255, 206, 86, 0.6)',
-                              'rgba(255, 99, 132, 0.6)',
-                              'rgba(153, 102, 255, 0.6)',
-                              'rgba(255, 159, 64, 0.6)',
-                              'rgba(255, 99, 132, 0.6)'
-            ]
-        }
-    ]
-}
-
- */
-
-
-let currentTime = new Date().getHours();
 
 let activeMachines = [
     {
@@ -116,30 +82,6 @@ let activeMachines = [
     }
 ];
 
-let dummyMachines = [
-    {
-        deviceId: 1,
-        name: "Desktop PC 1",
-        location: "Sarajevo - BBI",
-        ip: "255.255.255.0",
-        path: "C:/user/programfiles",
-    },
-    {
-        deviceId: 2,
-        name: "Desktop PC 2",
-        location: "Sarajevo - BBI",
-        ip: "255.255.255.0",
-        path: "C:/user/programfiles",
-    },
-    {
-        deviceId: 3,
-        name: "Desktop PC",
-        location: "Mostar - Mepas Mall",
-        ip: "255.255.255.0",
-        path: "C:/user/programfiles",
-    },
-];
-
 function convertStatistics(statistic) {
     return [Math.round(statistic * 100), Math.round((1 - statistic) * 100)];
 }
@@ -166,6 +108,16 @@ const Dashboard = ({user}) => {
             }
             return existingMachine;
         }) : [];
+    }
+
+    function getStatistics(machine) {
+        request(devices + "/GetDeviceLogs?deviceId=" + machine.deviceId)
+            .then((res) => res.data.data)
+            .then((res) => {
+                console.log(res);
+                setCharts(res, machine);
+            })
+            .catch((err) => console.log(err));
     }
 /*
     React.useEffect(() => {
@@ -277,7 +229,7 @@ const Dashboard = ({user}) => {
                                 data={machine}
                                 img={MachineIcon}
                                 fun={disconnectMachine}
-                                setCharts={setCharts}
+                                getStatistics={getStatistics}
                             />
                         ))}
                     </div>
