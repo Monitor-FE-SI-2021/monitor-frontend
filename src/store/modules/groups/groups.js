@@ -1,10 +1,18 @@
-import { SET_GROUPS, SET_GROUPS_ASYNC, SET_SEARCHED_GROUPS, SET_INPUT_EMPTY } from "./types";
+import { SET_GROUPS, SET_GROUPS_ASYNC, SEARCH_GROUPS_ACTION } from "./types";
+import { flattenGroup } from "../../../components/ManageDeviceForm/ManageDeviceForm";
 
 const initialState = {
     async: false,
     groups: {},
-    searchedGroups : {},
-    inputEmpty : ''
+    searchedGroups: [],         // This is a list of all groups, no hierarchy here
+    searchText: ''
+}
+
+function filterGroupTree(root, searchText) {
+
+    const allGroups = root?.subGroups ? flattenGroup(root.subGroups) : [];
+
+    return allGroups.filter(g => g?.name?.toLowerCase().includes(searchText.toLowerCase()));
 }
 
 const ACTION_HANDLERS = {
@@ -21,19 +29,20 @@ const ACTION_HANDLERS = {
             async: action.async
         }
     },
-    [SET_SEARCHED_GROUPS] : (state,action) => {
+
+    [SEARCH_GROUPS_ACTION]: (state, action) => {
+
+        const { searchText } = action;
+
+        console.log(searchText);
+
+        const searchedGroups = filterGroupTree(state.groups, searchText) || {};
+
         return {
             ...state,
             async: false,
-            searchedGroups:action.groups
-        }
-    },
-
-    [SET_INPUT_EMPTY] : (state,action) =>{
-        return{
-            ...state,
-            async: false,
-            inputEmpty : action.inputEmpty
+            searchText,
+            searchedGroups
         }
     }
 }

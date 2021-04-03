@@ -187,18 +187,7 @@ export default connect(state => {
 
     const groupsTree = state.groups.groups;
 
-    const flatten = data => {
-
-        return data.reduce((acc, group) => {
-            acc.push(group);
-            if (group?.subGroups?.length) {
-                acc.push(...flatten(group.subGroups))
-            }
-            return acc;
-        }, [])
-    }
-
-    const allGroups = groupsTree.subGroups ? flatten(groupsTree.subGroups) : [];
+    const allGroups = groupsTree.subGroups ? flattenGroup(groupsTree.subGroups) : [];
 
     const groupOptions = allGroups.filter(g => g.subGroups.length === 0).map(g => ({
         id: g.groupId,

@@ -7,7 +7,13 @@ import { Spinner } from "../Spinner/Spinner";
 import CustomPagination from "../CustomTable/components/CustomPagination";
 
 
-const DeviceGroup = ({ group, deviceTable, fetchDevicesForGroup, updateDevicesTableForGroup }) => {
+const DeviceGroup = ({
+                         group,
+                         deviceTable,
+                         fetchDevicesForGroup,
+                         updateDevicesTableForGroup,
+                         shouldRenderSubgroups = true
+                     }) => {
 
     const [hidden, setHidden] = useState(true);
 
@@ -63,7 +69,7 @@ const DeviceGroup = ({ group, deviceTable, fetchDevicesForGroup, updateDevicesTa
                         </React.Fragment>
                     ) : null
                     }
-                    {subGroupsRendered || null}
+                    {shouldRenderSubgroups && (subGroupsRendered || null)}
                 </React.Fragment>
             )}
         </div>
