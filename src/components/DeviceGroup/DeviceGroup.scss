@@ -1,83 +1,62 @@
-.group {
+.device-group {
     margin-left: 25px;
+
+    .tab {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .buttons {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+
+        button {
+            padding: 8px 15px;
+            margin: 0 0 0 10px;
+        }
+    }
+
+    .title {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        padding-right: 10px;
+        margin-left: -20px;
+
+        .group-name {
+            color: var(--main-color);
+            cursor: pointer;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .collapsed,
+        .expanded {
+            background-color: inherit;
+            cursor: pointer;
+            border: none;
+            outline: none;
+            margin-right: 5px;
+            color: var(--main-color);
+        }
+
+        .collapsed:hover,
+        .expanded:hover {
+
+        }
+
+        .collapsed:after {
+            content: "\25B8";
+            font-size: 22px;
+        }
+
+        .expanded:after {
+            content: "\25BE";
+            font-size: 22px;
+        }
+    }
+
 }
-
-.tab {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-}
-
-.buttons {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-
-    button {
-        margin:8px;
-        padding:8px 15px 8px 15px;
-        border-radius: 12px;
-        background: #fff;
-        color:#495c8f;
-        font-weight: normal;
-        font-size: small;
-        border-color: #495c8f;
-        border: 1px solid;
-
-        
-    &:hover {
-        font-weight: 500;
-        letter-spacing: 2px;
-        background: #eeeeee;
-        cursor: pointer;
-        transition: all 0.3s ease 0s;
-    }
-
-    &:active {
-        background-color: #495c8f;
-        color:white;
-        box-shadow: 0 2px #666;
-        transform: translateY(1px);
-        outline: none;
-        border: none;
-      }
-   
-    }
-
-}
-
-.title {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding-right: 10px;
-    margin-left: -20px;
-
-    .collapsed,
-    .expanded {
-        background-color: inherit;
-        cursor: pointer;
-        border: none;
-        outline: none;
-        margin-right: 5px;
-    }
-
-    .collapsed:hover,
-    .expanded:hover {
-        background-color: #eee;
-    }
-
-    .collapsed:after {
-        content: "\25B8";
-        color:#495c8f;
-        font-size: 22px;
-    }
-
-    .expanded:after {
-        content: "\25BE";
-        font-size:22px;
-        color:#495c8f;
-    }
-}
-
 

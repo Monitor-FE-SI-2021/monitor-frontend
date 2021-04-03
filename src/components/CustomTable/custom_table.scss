@@ -27,4 +27,18 @@
             font-size: 26px;
         }
     }
+
+    .spinner {
+        padding: 20px 0;
+        width: 100%;
+    }
+
+    .no-results-message {
+        display: flex;
+        justify-content: center;
+        padding: 20px 0;
+        font-weight: 500;
+        font-size: 18px;
+        color: var(--main-color);
+    }
 }

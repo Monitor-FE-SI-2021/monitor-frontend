@@ -179,10 +179,12 @@ const ManageDeviceForm = ({ selectedDevice, group, groupOptions, fetchAllGroups,
                 ))}
             </TextField>
 
-            <Button type="cancel" variant="contained" onClick={() => push(RouteLink.Devices)}>Otkaži</Button>
-            <Button type="submit" variant="contained">
-                {editMode === true ? "Izmijeni mašinu" : "Kreiraj mašinu"}
-            </Button>
+            <div className='buttons'>
+                <button className="custom-btn outlined" onClick={() => push(RouteLink.Devices)}>Otkaži</button>
+                <button className="custom-btn">
+                    {editMode === true ? "Izmijeni mašinu" : "Kreiraj mašinu"}
+                </button>
+            </div>
         </form>
     );
 }

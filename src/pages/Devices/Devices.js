@@ -9,7 +9,7 @@ import { RouteLink } from "../../store/modules/menu/menu";
 import { Spinner } from "../../components/Spinner/Spinner";
 import request, { wsEndpoint } from "../../service";
 import SearchIcon from '@material-ui/icons/Search';
-
+import { TextField } from "@material-ui/core";
 
 
 const getRootGroups = (groupTree) => {
@@ -74,22 +74,29 @@ const Devices = ({
             <div className="top">
                 <h1> Pregled mašina </h1>
                 <div>
-                    <button className="create" onClick={() => push(RouteLink.ManageGroup)}>Kreiraj grupu</button>
-                    <button className="create" onClick={() => push(RouteLink.ManageDevice)}>Kreiraj mašinu</button>
+                    <button className="custom-btn" onClick={() => push(RouteLink.ManageGroup)}>Kreiraj grupu</button>
+                    <button className="custom-btn" onClick={() => push(RouteLink.ManageDevice)}>Kreiraj mašinu</button>
                 </div>
             </div>
             <div>
-                <input className='search'
-                       type='text'
-                       id='groupInput'
-                       onChange={searchGroups}
-                       value={groupsSearchText}
-                       placeholder='Pretraga po grupi'
-                        endAdornment={
-                            <SearchIcon />
-                        }
+                <TextField
+                    className='search'
+                    size={'small'}
+                    variant="outlined"
+                    label="Pretraži grupe"
+                    onChange={searchGroups}
+                    value={groupsSearchText}
                 />
-                <input className='search' type='text' placeholder='Pretraga po imenu mašine'/>
+                <TextField className='search'
+                           InputProps={{
+                               style: {
+
+                               }
+                           }}
+                           label="Ime uređaja"
+                           size={'small'}
+                           variant="outlined"
+                />
             </div>
             <div className={'groups-list'}>
                 {async ? <Spinner color={'inherit'}/> : rootGroups}
@@ -101,7 +108,6 @@ const Devices = ({
 export default connect((state) => ({
     allDevices: state.devices.devices,
     allGroups: state.groups.groups,
-    searchedGroups: state.groups.searchedGroups,
     devicesAsync: state.devices.async,
     groupsAsync: state.groups.async,
     groupsSearchText: state.groups.searchText,

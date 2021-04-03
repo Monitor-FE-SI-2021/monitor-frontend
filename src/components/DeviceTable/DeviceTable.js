@@ -137,6 +137,7 @@ const DeviceTable = ({
                         </MenuItem>
                         <MenuItem>
                             <Checkbox checked={deviceTable.status === DEVICE_STATUS.ACTIVE}
+                                      color={'primary'}
                                       onChange={(e, val) =>
                                           handleFiltersChange('status', val === true ? DEVICE_STATUS.ACTIVE : DEVICE_STATUS.INACTIVE)
                                       }/>
@@ -145,44 +146,40 @@ const DeviceTable = ({
                     </Select>
                 </FormControl>
                 : null}
-            {async ? <Spinner/> : devices.length !== 0 ? (
-                <React.Fragment>
-                    <CustomTable data={devices}
-                                 fields={tableFields}
-                                 activeSortField={deviceTable.sortField}
-                                 activeSortOrder={deviceTable.sortOrder}
-                                 handleSort={handleSort}>
-                        <TableSlot slot='actions' render={dataRow => (
-                            <div className='actions'>
-                                {canConnectToDevice(dataRow) && (
-                                    <CastConnected onClick={() => connectDevice(dataRow)}/>
-                                )}
-                                <Edit className='edit-btn' onClick={() => editDevice(dataRow)}/>
-                            </div>
-                        )}/>
+            <React.Fragment>
+                <CustomTable data={devices}
+                             async={async}
+                             fields={tableFields}
+                             activeSortField={deviceTable.sortField}
+                             activeSortOrder={deviceTable.sortOrder}
+                             handleSort={handleSort}>
+                    <TableSlot slot='actions' render={dataRow => (
+                        <div className='actions'>
+                            {canConnectToDevice(dataRow) && (
+                                <CastConnected onClick={() => connectDevice(dataRow)}/>
+                            )}
+                            <Edit className='edit-btn' onClick={() => editDevice(dataRow)}/>
+                        </div>
+                    )}/>
 
-                        <TableSlot slot='lastTimeOnline' render={dataRow => (
-                            <span>
+                    <TableSlot slot='lastTimeOnline' render={dataRow => (
+                        <span>
                                 {dayjs(dataRow.lastTimeOnline).format('DD.MM.YYYY HH:mm:ss')}
                             </span>
-                        )}/>
+                    )}/>
 
-                        <TableSlot slot='status' render={dataRow => (
-                            <span>{canConnectToDevice(dataRow) ? 'Offline' : 'Online'}</span>
-                        )}/>
-                    </CustomTable>
+                    <TableSlot slot='status' render={dataRow => (
+                        <span>{canConnectToDevice(dataRow) ? 'Offline' : 'Online'}</span>
+                    )}/>
+                </CustomTable>
 
-                    <CustomPagination totalCount={deviceTable.totalCount}
-                                      page={deviceTable.page}
-                                      perPage={deviceTable.perPage}
-                                      handleChangePage={handleChangePage}
-                                      handleChangePerPage={handleChangePerPage}
-                    />
-                </React.Fragment>
-
-            ) : <div className='no-results-message'>
-                Nema rezultata.
-            </div>}
+                <CustomPagination totalCount={deviceTable.totalCount}
+                                  page={deviceTable.page}
+                                  perPage={deviceTable.perPage}
+                                  handleChangePage={handleChangePage}
+                                  handleChangePerPage={handleChangePerPage}
+                />
+            </React.Fragment>
         </div>
     )
 }

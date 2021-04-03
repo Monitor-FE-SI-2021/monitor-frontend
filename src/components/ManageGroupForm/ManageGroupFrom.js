@@ -101,8 +101,10 @@ const ManageGroupForm = ({ parentGroup, push, groupOptions, fetchAllGroups }) =>
                 ))}
             </TextField>
 
-            <Button type="cancel" variant="contained"  onClick={() => push(RouteLink.Devices)}>Otkaži</Button>
-            <Button type="submit" variant="contained">Kreiraj grupu</Button>
+            <div className={'buttons'}>
+                <button className="custom-btn outlined" onClick={() => push(RouteLink.Devices)}>Otkaži</button>
+                <button className="custom-btn">Kreiraj grupu</button>
+            </div>
         </form>
     );
 }
