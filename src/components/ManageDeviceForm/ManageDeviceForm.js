@@ -1,7 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from "react-redux";
 import { makeStyles, TextField, MenuItem, Button } from '@material-ui/core';
 import { useState } from 'react';
+import { cloneDeep } from "lodash";
+import { fetchAllGroups } from "../../store/modules/groups/actions";
+import request, { devices } from "../../service";
+import { showSwalToast } from "../../utils/utils";
+import { RouteLink } from "../../store/modules/menu/menu";
+import { push } from "connected-react-router";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -19,73 +25,90 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const groups = [
-    {
-        id: 1,
-        name: 'Grupa 1',
-    },
-    {
-        id: 2,
-        name: 'Grupa 2',
-    },
-    {
-        id: 3,
-        name: 'Grupa 3',
-    },
-]
+const initialValues = {
+    name: "",
+    location: "",
+    latitude: "",
+    longitude: "",
+    installationCode: "",
+    group: ""
+}
 
 // fieldValues is a prop for passing the field values for when the form is opened in edit mode
 // the required form of the object is
 // {name: "value", location: "value", latitude: "value", longitude: "value", installationCode: "value", group: "value"}
-const ManageDeviceForm = ({ fieldValues }) => {
+const ManageDeviceForm = ({ selectedDevice, groupOptions, fetchAllGroups, push }) => {
+
     const classes = useStyles();
 
-    // initial values for when the form isn't opened in edit mode
-    const initialValues = {
-        name: "",
-        location: "",
-        latitude: "",
-        longitude: "",
-        installationCode: "",
-        group: ""
+    const [editMode, setEditMode] = useState(false);
+    const [values, setValues] = useState(initialValues)
+    const [errors, setErrors] = useState({})
+
+    const transformDeviceToForm = (device) => {
+
+        const form = cloneDeep(device);
+
+        form.latitude = device.locationLatitude;
+        form.longitude = device.locationLongitude;
+        form.group = device.groupId;
+
+        return form;
     }
+
+    const transformFormToDevice = (form) => {
+        return {
+            Name: form.name ?? '',
+            Location: form.location ?? '',
+            LocationLongitude: form.longitude ?? '',
+            LocationLatitude: form.latitude ?? '',
+            InstallationCode: form.installationCode ?? '',
+        }
+    }
+
+    useEffect(() => {
+
+        if (!groupOptions?.length) {
+            fetchAllGroups();
+        }
+
+        if (selectedDevice) {
+            setValues(transformDeviceToForm(selectedDevice));
+        }
+
+        setEditMode(Boolean(selectedDevice));
+
+    }, [selectedDevice])
+
+    // initial values for when the form isn't opened in edit mode
 
     const validate = () => {
         let temp = {}
         let letterNumber = /^[0-9a-zA-Z]+$/
 
-        if (values.name == "")
+        if (values.name === "")
             temp.name = "This field is required"
         else if (!values.name.match(letterNumber) && !values.name.includes(" "))
             temp.name = "This field can only contain the following characters: A-Z, a-z, 0-9"
         else
             temp.name = ""
 
-        if (values.location == "")
+        if (values.location === "")
             temp.location = "This field is required"
         else if (!values.location.match(letterNumber) && !values.location.includes(" "))
             temp.location = "This field can only contain the following characters: A-Z, a-z, 0-9"
         else
             temp.location = ""
 
-        temp.latitude = values.latitude.length == 6 ? "" : "Latitude should consist of exactly 6 numbers!"
-        temp.longitude = values.longitude.length == 6 ? "" : "Longitude should consist of exactly 6 numbers!"
+        temp.latitude = values.latitude.length > 0 ? "" : "This field is required"
+        temp.longitude = values.longitude.length > 0 ? "" : "This field is required"
         temp.group = values.group ? "" : "This field is required!"
         temp.installationCode = values.installationCode ? "" : "This field is required!"
         setErrors(temp)
 
-        return Object.values(temp).every(x => x == "")
+        return Object.values(temp).every(x => x === "")
     }
 
-    // if the form is opened in edit mode we shall obtain the passed values
-    const getInitialValues = () => {
-        if (fieldValues !== undefined)
-            return fieldValues
-        return initialValues
-    }
-
-    const [values, setValues] = useState(getInitialValues)
-    const [errors, setErrors] = useState({})
 
     const handleInputChange = e => {
         const { name, value } = e.target
@@ -97,12 +120,23 @@ const ManageDeviceForm = ({ fieldValues }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
+
+        const deviceData = transformFormToDevice(values);
+
         if (validate()) {
-            if (fieldValues === undefined) {
-                alert("Created machine successfully!")
-                setValues(initialValues)
-            } else {
+
+            if (editMode === true) {
                 alert("Edited machine successfully!")
+            } else {
+
+                request(devices + `/CreateDevice?groupId=${values.group}`, 'POST', deviceData)
+                    .then(r => {
+                        console.log(r.data);
+                        showSwalToast(`Uspješno kreirana mašina ${deviceData.Name}`, 'success');
+                        setValues(initialValues);
+                        push(RouteLink.Devices);
+                    })
+
             }
         }
     }
@@ -135,18 +169,44 @@ const ManageDeviceForm = ({ fieldValues }) => {
                 onChange={handleInputChange}
                 {...(errors.group && { error: true, helperText: errors.group })}
             >
-                {groups.map((group) => (
-                    <MenuItem key={group.id} value={group.name}>
+                {groupOptions.map((group) => (
+                    <MenuItem key={group.id} value={group.id}>
                         {group.name}
                     </MenuItem>
                 ))}
             </TextField>
 
             <Button type="submit" variant="contained">
-                {fieldValues !== undefined ? "Edit Machine" : "Create Machine"}
+                {editMode === true ? "Edit Machine" : "Create Machine"}
             </Button>
         </form>
     );
 }
 
-export default connect(state => ({}), {})(ManageDeviceForm);
+export default connect(state => {
+
+    const groupsTree = state.groups.groups;
+
+    const flatten = data => {
+
+        return data.reduce((acc, group) => {
+            acc.push(group);
+            if (group?.subGroups?.length) {
+                acc.push(...flatten(group.subGroups))
+            }
+            return acc;
+        }, [])
+    }
+
+    const allGroups = groupsTree.subGroups ? flatten(groupsTree.subGroups) : [];
+
+    const groupOptions = allGroups.filter(g => g.subGroups.length === 0).map(g => ({
+        id: g.groupId,
+        name: g.name
+    }))
+
+    return {
+        selectedDevice: state.devices.selectedDevice,
+        groupOptions
+    }
+}, { fetchAllGroups, push })(ManageDeviceForm);

@@ -1,15 +1,16 @@
 import React from "react";
-import {connect} from "react-redux";
+import { connect } from "react-redux";
 import MachineIcon from "../../assets/icons/machine.png";
 import PieChart from "./components/charts/PieChart";
 import LineChart from "./components/charts/LineChart";
 import DonutChart from "./components/charts/DonutChart";
 import BarChart from "./components/charts/BarChart";
 import ActiveMachine from "./components/ActiveMachine";
-import request, {devices} from "../../service";
+import request, { devices } from "../../service";
 
 import "./dashboard.scss";
-import {act} from "@testing-library/react";
+import { act } from "@testing-library/react";
+import { setActiveGlobal } from "../../store/modules/devices/actions";
 
 // DUMMY DATA
 
@@ -166,7 +167,7 @@ function convertStatistics(statistic) {
 let removedMachine = null
 let clickedMachine = null
 
-const Dashboard = ({user}) => {
+const Dashboard = ({ user, setActiveGlobal }) => {
 
     let activeMachines = []
     const [machines, setMachines] = React.useState([]);
@@ -175,7 +176,7 @@ const Dashboard = ({user}) => {
 
     function filterActive(activeMachines, allMachines) {
         return activeMachines ? activeMachines.filter((machine) => {
-            const existingMachine = allMachines.find(({name, location}) => {
+            const existingMachine = allMachines.find(({ name, location }) => {
                 return machine.status !== "Disconnected" && name === machine.name && location === machine.location;
             });
             if (existingMachine) {
@@ -194,14 +195,16 @@ const Dashboard = ({user}) => {
                 request("https://si-grupa5.herokuapp.com/api/agent/online")
                     .then((res) => {
                         console.log(res)
-                        setActive(filterActive(res?.data, allMachines));
+                        const filtered = filterActive(res?.data, allMachines);
+                        setActive(filtered);
+                        setActiveGlobal(filtered)
                     })
             })
             .catch((err) => console.log(err));
 
-      /*  request("https://si-grupa5.herokuapp.com/api/agent/online").then((res) => {
-            console.log(res);
-        });*/
+        /*  request("https://si-grupa5.herokuapp.com/api/agent/online").then((res) => {
+              console.log(res);
+          });*/
     }, []);
 
     const disconnectMachine = (machine) => {
@@ -262,12 +265,12 @@ const Dashboard = ({user}) => {
                         ))}
                     </div>
                 </div>
-                
+
                 {showCharts && (
                     <div>
                         <h2 className="machineName">{clickedMachine.name}</h2>
                         <div className="chartContainer">
-                            
+
                             <div className="row">
                                 <DonutChart
                                     displayTitle="Average RAM usage"
@@ -300,5 +303,7 @@ export default connect(
     (state) => ({
         user: state.login.user,
     }),
-    {}
+    {
+        setActiveGlobal
+    }
 )(Dashboard);

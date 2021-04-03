@@ -4,7 +4,8 @@ import {
     SET_DEVICES_ASYNC,
     SET_DEVICES_ASYNC_FOR_GROUP,
     SET_DEVICES_FOR_GROUP,
-    UPDATE_DEVICES_TABLE_FOR_GROUP
+    UPDATE_DEVICES_TABLE_FOR_GROUP,
+    SET_ACTIVE_DEVICES
 } from "./types";
 import request, { devices } from "../../../service";
 
@@ -77,6 +78,15 @@ export function selectDevice(device) {
         dispatch({
             type: SELECT_DEVICE,
             device
+        })
+    }
+}
+
+export function setActiveGlobal(devices) {
+    return dispatch => {
+        dispatch({
+            type: SET_ACTIVE_DEVICES,
+            devices
         })
     }
 }

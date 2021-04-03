@@ -56,11 +56,11 @@ const request = async (
 
                 const response = ex.response;
 
-                if (response.status === 401) {
+                if (response && response.status === 401) {
                     removeAllData();
                 }
 
-                const errMessage = response?.data?.message || response?.data?.title || response?.statusText;
+                const errMessage = response?.data?.message || response?.data?.title || response?.statusText || "Došlo je do greške.";
 
                 showSwalToast(errMessage)
 

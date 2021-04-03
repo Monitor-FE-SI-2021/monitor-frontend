@@ -7,12 +7,12 @@ import { connect } from "react-redux";
 import Devices from "../../pages/Devices/Devices";
 import Dashboard from "../../pages/Dashboard/Dashboard";
 import Reporting from "../../pages/Reporting/Reporting";
+import ReportList from "../../pages/Reporting/ReportList";
 import ManageDevice from "../../pages/ManageDevice/ManageDevice";
-import Terminal from "../Terminal/Terminal";
 import TwoFactorAuthentication from "../TwoFactorAuthentication/TwoFactorAuthentication";
-import RemoteControl from "../../pages/RemoteControl/RemoteControl";
-import FileManagerView from "../../pages/FileManager/FileManager";
 import { Spinner } from "../Spinner/Spinner";
+import Terminal from "../Terminal/Terminal";
+import RemoteControl from "../../pages/RemoteControl/RemoteControl";
 
 const Layout = ({ isMenuExpanded, loginAsync, userAsync, user }) => {
     if (loginAsync || userAsync) {
@@ -31,12 +31,15 @@ const Layout = ({ isMenuExpanded, loginAsync, userAsync, user }) => {
                 <Switch>
                     <Route exact path={RouteLink.Dashboard} component={Dashboard}/>
                     <Route path={RouteLink.Devices} component={Devices}/>
+                    <Route path={RouteLink.ReportList} component={ReportList}/>
                     <Route path={RouteLink.Reporting} component={Reporting}/>
-                    <Route path={RouteLink.AddDevice} component={ManageDevice}/>
-                    <Route path={RouteLink.Terminal} component={Terminal}/>
-                    <Route path={RouteLink.RemoteControl} component={RemoteControl}/>
+                    <Route path={RouteLink.ManageDevice} component={ManageDevice}/>
                     <Route path={RouteLink.TwoFactorAuthentication} component={TwoFactorAuthentication}/>
-                    <Route path={RouteLink.FileManagerView} component={FileManagerView}/>
+                    <Route path={RouteLink.Terminal} component={Terminal}/>
+                    <Route
+                        path={RouteLink.RemoteControl + "/:name?/:tab?"}
+                        component={RemoteControl}
+                    />
                 </Switch>
             </div>
         </div>
@@ -49,6 +52,6 @@ export default connect(
         loginAsync: state.login.loginAsync,
         userAsync: state.login.userAsync,
         user: state.login.user,
-  }),
-  {}
+    }),
+    {}
 )(Layout);
