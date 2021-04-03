@@ -165,4 +165,4 @@ class GoogleMapMonitors extends Component {
 
 }
 
-export default GoogleMapMonitors;
+export default React.memo(GoogleMapMonitors);
