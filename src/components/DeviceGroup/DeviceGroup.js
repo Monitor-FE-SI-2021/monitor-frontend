@@ -70,9 +70,9 @@ const DeviceGroup = ({
                 </div>
                 <div className='buttons'>
                     {group.subGroups.length === 0 ?
-                        <button onClick={() => createDevice(group)}>+ Mašina</button>
+                        <button variant="outlined" onClick={() => createDevice(group)}>+ Mašina</button>
                         : null}
-                    <button onClick={() => createGroup(group)}>+ Grupa</button>
+                    <button variant="outlined" onClick={() => createGroup(group)}>+ Grupa</button>
                 </div>
             </div>
             {!hidden && (

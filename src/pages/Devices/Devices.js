@@ -8,6 +8,8 @@ import { push } from "connected-react-router";
 import { RouteLink } from "../../store/modules/menu/menu";
 import { Spinner } from "../../components/Spinner/Spinner";
 import request, { wsEndpoint } from "../../service";
+import SearchIcon from '@material-ui/icons/Search';
+
 
 
 const getRootGroups = (groupTree) => {
@@ -82,8 +84,12 @@ const Devices = ({
                        id='groupInput'
                        onChange={searchGroups}
                        value={groupsSearchText}
-                       placeholder='Search by group name'/>
-                <input className='search' type='text' placeholder='Search by device name'/>
+                       placeholder='Pretraga po grupi'
+                        endAdornment={
+                            <SearchIcon />
+                        }
+                />
+                <input className='search' type='text' placeholder='Pretraga po imenu mašine'/>
             </div>
             <div className={'groups-list'}>
                 {async ? <Spinner color={'inherit'}/> : rootGroups}

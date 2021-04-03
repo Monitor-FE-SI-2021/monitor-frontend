@@ -14,11 +14,36 @@
     justify-content: flex-end;
 
     button {
-        border-radius: 10px;
-        background: rgba(64, 64, 64, 0.9);
-        color: white;
+        margin:8px;
+        padding:8px 15px 8px 15px;
+        border-radius: 12px;
+        background: #fff;
+        color:#495c8f;
         font-weight: normal;
+        font-size: small;
+        border-color: #495c8f;
+        border: 1px solid;
+
+        
+    &:hover {
+        font-weight: 500;
+        letter-spacing: 2px;
+        background: #eeeeee;
+        cursor: pointer;
+        transition: all 0.3s ease 0s;
     }
+
+    &:active {
+        background-color: #495c8f;
+        color:white;
+        box-shadow: 0 2px #666;
+        transform: translateY(1px);
+        outline: none;
+        border: none;
+      }
+   
+    }
+
 }
 
 .title {
@@ -44,12 +69,14 @@
 
     .collapsed:after {
         content: "\25B8";
-        font-size: 15px;
+        color:#495c8f;
+        font-size: 22px;
     }
 
     .expanded:after {
         content: "\25BE";
-        font-size: 15px;
+        font-size:22px;
+        color:#495c8f;
     }
 }
 

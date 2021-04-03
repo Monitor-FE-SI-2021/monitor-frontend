@@ -66,7 +66,7 @@ export default function CustomTable({ data, fields, children, handleSort, active
                                             <UpArrow
                                                 className={'sort-icon'}
                                                 style={{
-                                                    color: (activeSortField === field.name && activeSortOrder === 'asc') && "#7777ff"
+                                                    color: (activeSortField === field.name && activeSortOrder === 'asc') && "#2d3c63"
                                                 }}
                                                 onClick={() => {
                                                     handleSort(field.name, "asc")
@@ -74,7 +74,7 @@ export default function CustomTable({ data, fields, children, handleSort, active
                                             <DownArrow
                                                 className={'sort-icon'}
                                                 style={{
-                                                    color: (activeSortField === field.name && activeSortOrder === 'desc') && "#7777ff"
+                                                    color: (activeSortField === field.name && activeSortOrder === 'desc') && "#2d3c63"
                                                 }}
                                                 onClick={() => handleSort(field.name, "desc")}/>
                                         </div>
