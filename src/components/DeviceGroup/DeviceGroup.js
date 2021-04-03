@@ -5,13 +5,17 @@ import { connect } from "react-redux";
 import { fetchDevicesForGroup, updateDevicesTableForGroup } from "../../store/modules/devices/actions";
 import { Spinner } from "../Spinner/Spinner";
 import { push } from "connected-react-router";
-import { selectGroup } from "../../store/modules/groups/actions";
 import CustomPagination from "../CustomTable/components/CustomPagination";
 import { RouteLink } from "../../store/modules/menu/menu";
 
 
-const DeviceGroup = ({ group, deviceTable, push, fetchDevicesForGroup, updateDevicesTableForGroup }) => {
-
+const DeviceGroup = ({
+                         group,
+                         deviceTable,
+                         fetchDevicesForGroup,
+                         updateDevicesTableForGroup,
+                         shouldRenderSubgroups = true
+                     }) => {
     const createDevice = (group) => {
         push({
             pathname: RouteLink.ManageDevice,
@@ -88,7 +92,7 @@ const DeviceGroup = ({ group, deviceTable, push, fetchDevicesForGroup, updateDev
                         </React.Fragment>
                     ) : null
                     }
-                    {subGroupsRendered || null}
+                    {shouldRenderSubgroups && (subGroupsRendered || null)}
                 </React.Fragment>
             )}
         </div>

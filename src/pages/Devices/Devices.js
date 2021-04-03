@@ -3,24 +3,38 @@ import "./Devices.scss";
 import DeviceGroup from "../../components/DeviceGroup/DeviceGroup";
 import React, { useEffect } from 'react';
 import { fetchAllDevices, setActiveGlobal } from "../../store/modules/devices/actions";
-import { fetchAllGroups } from "../../store/modules/groups/actions";
+import { fetchAllGroups, searchGroupsAction } from "../../store/modules/groups/actions";
 import { push } from "connected-react-router";
 import { RouteLink } from "../../store/modules/menu/menu";
 import { Spinner } from "../../components/Spinner/Spinner";
 import request, { wsEndpoint } from "../../service";
 
-const getRootGroups = (groups) => {
+
+const getRootGroups = (groupTree) => {
     const parentGroups = [];
 
-    if (typeof groups.subGroups === "undefined") {
+    if (typeof groupTree.subGroups === "undefined") {
         return parentGroups
     }
 
-    return groups.subGroups;
+    return groupTree.subGroups;
 
 }
 
-const Devices = ({ allGroups, fetchAllDevices, fetchAllGroups, push, devicesAsync, groupsAsync, setActiveGlobal }) => {
+const Devices = ({
+                     allGroups,
+                     fetchAllDevices,
+                     fetchAllGroups,
+                     push,
+                     devicesAsync,
+                     groupsAsync,
+                     setActiveGlobal,
+                     groupsSearchText,
+                     searchGroupsAction,
+                     searchedGroups = []
+                 }) => {
+
+    const async = devicesAsync || groupsAsync;
 
     useEffect(() => {
         request(wsEndpoint + "/agent/online")
@@ -29,20 +43,29 @@ const Devices = ({ allGroups, fetchAllDevices, fetchAllGroups, push, devicesAsyn
             })
     }, [])
 
-    const async = devicesAsync || groupsAsync;
-
     useEffect(() => {
         fetchAllDevices();
         fetchAllGroups();
     }, [fetchAllDevices, fetchAllGroups])
 
-
-    const rootGroups = getRootGroups(allGroups).map((grupa) => {
+    const rootGroups = (Boolean(groupsSearchText) ? searchedGroups : getRootGroups(allGroups)).map((grupa) => {
         return (
             <DeviceGroup group={grupa}
+                         shouldRenderSubgroups={!Boolean(groupsSearchText)}
                          key={grupa.groupId}/>
         );
     });
+
+    const searchGroups = (e) => {
+
+        const searchText = e.target.value;
+
+        // if (searchText?.length >= 3) {
+        //
+        // }
+
+        searchGroupsAction(searchText);
+    }
 
     return (
         <div className="page devices">
@@ -52,6 +75,11 @@ const Devices = ({ allGroups, fetchAllDevices, fetchAllGroups, push, devicesAsyn
                     <button className="create" onClick={() => push(RouteLink.ManageGroup)}>Kreiraj grupu</button>
                     <button className="create" onClick={() => push(RouteLink.ManageDevice)}>Kreiraj mašinu</button>
                 </div>
+            </div>
+            <div>
+                <input className='search' type='text' id='groupInput' onChange={searchGroups}
+                       placeholder='Search by group name'/>
+                <input className='search' type='text' placeholder='Search by device name'/>
             </div>
             <div className={'groups-list'}>
                 {async ? <Spinner color={'inherit'}/> : rootGroups}
@@ -64,5 +92,7 @@ export default connect((state) => ({
     allDevices: state.devices.devices,
     allGroups: state.groups.groups,
     devicesAsync: state.devices.async,
-    groupsAsync: state.groups.async
-}), { fetchAllDevices, fetchAllGroups, push, setActiveGlobal })(Devices);
+    groupsAsync: state.groups.async,
+    groupsSearchText: state.groups.searchText,
+    searchedGroups: state.groups.searchedGroups,
+}), { fetchAllDevices, fetchAllGroups, push, setActiveGlobal, searchGroupsAction })(Devices);

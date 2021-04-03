@@ -1,4 +1,4 @@
-import { SET_GROUPS, SET_GROUPS_ASYNC, SELECT_GROUP } from "./types";
+import { SET_GROUPS, SET_GROUPS_ASYNC, SEARCH_GROUPS_ACTION } from "./types";
 import request, { groups } from "../../../service";
 
 export const fetchAllGroups = () => {
@@ -12,7 +12,7 @@ export const fetchAllGroups = () => {
 
                 return dispatch({
                     type: SET_GROUPS,
-                    groups: r.data
+                    groups: r.data,
                 })
             }).finally(() => {
                 dispatch({ type: SET_GROUPS_ASYNC, async: false });
@@ -29,3 +29,14 @@ export const setGroupsAsync = (async) => {
         })
     }
 }
+
+export const searchGroupsAction = (searchText) => {
+    return dispatch => {
+        return dispatch({
+            type: SEARCH_GROUPS_ACTION,
+            searchText
+        })
+    }
+}
+
+

@@ -59,7 +59,9 @@ const ManageDeviceForm = ({ selectedDevice, group, groupOptions, fetchAllGroups,
 
         setEditMode(Boolean(selectedDevice));
 
-        return () => {selectDevice(null)}
+        return () => {
+            selectDevice(null)
+        }
 
     }, [selectedDevice, fetchAllGroups, selectDevice, groupOptions?.length])
 
@@ -141,18 +143,22 @@ const ManageDeviceForm = ({ selectedDevice, group, groupOptions, fetchAllGroups,
             <TextField variant="outlined" label="Naziv" name="name" value={values.name} onChange={handleInputChange}
                        {...(errors.name && { error: true, helperText: errors.name })} />
 
-            <TextField variant="outlined" label="Lokacija" name="location" value={values.location} onChange={handleInputChange}
+            <TextField variant="outlined" label="Lokacija" name="location" value={values.location}
+                       onChange={handleInputChange}
                        {...(errors.location && { error: true, helperText: errors.location })} />
 
-            <TextField variant="outlined" label="Geografska širina" type='number' name="latitude" value={values.latitude}
+            <TextField variant="outlined" label="Geografska širina" type='number' name="latitude"
+                       value={values.latitude}
                        onChange={handleInputChange}
                        {...(errors.latitude && { error: true, helperText: errors.latitude })}/>
 
-            <TextField variant="outlined" label="Geografska dužina" type='number' name="longitude" value={values.longitude}
+            <TextField variant="outlined" label="Geografska dužina" type='number' name="longitude"
+                       value={values.longitude}
                        onChange={handleInputChange}
                        {...(errors.longitude && { error: true, helperText: errors.longitude })}/>
 
-            <TextField variant="outlined" disabled={editMode} label="Instalacioni kod" name="installationCode" value={values.installationCode}
+            <TextField variant="outlined" disabled={editMode} label="Instalacioni kod" name="installationCode"
+                       value={values.installationCode}
                        onChange={handleInputChange}
                        {...(errors.installationCode && { error: true, helperText: errors.installationCode })}/>
 
@@ -173,7 +179,7 @@ const ManageDeviceForm = ({ selectedDevice, group, groupOptions, fetchAllGroups,
                 ))}
             </TextField>
 
-            <Button type="cancel" variant="contained" onClick={() => push(RouteLink.Devices)} >Otkaži</Button>
+            <Button type="cancel" variant="contained" onClick={() => push(RouteLink.Devices)}>Otkaži</Button>
             <Button type="submit" variant="contained">
                 {editMode === true ? "Izmijeni mašinu" : "Kreiraj mašinu"}
             </Button>
@@ -185,18 +191,7 @@ export default connect(state => {
 
     const groupsTree = state.groups.groups;
 
-    const flatten = data => {
-
-        return data.reduce((acc, group) => {
-            acc.push(group);
-            if (group?.subGroups?.length) {
-                acc.push(...flatten(group.subGroups))
-            }
-            return acc;
-        }, [])
-    }
-
-    const allGroups = groupsTree.subGroups ? flatten(groupsTree.subGroups) : [];
+    const allGroups = groupsTree.subGroups ? flattenGroup(groupsTree.subGroups) : [];
 
     const groupOptions = allGroups.filter(g => g.subGroups.length === 0).map(g => ({
         id: g.groupId,
@@ -208,3 +203,14 @@ export default connect(state => {
         groupOptions
     }
 }, { fetchAllGroups, push, selectDevice })(ManageDeviceForm);
+
+export const flattenGroup = data => {
+
+    return data.reduce((acc, group) => {
+        acc.push(group);
+        if (group?.subGroups?.length) {
+            acc.push(...flattenGroup(group.subGroups))
+        }
+        return acc;
+    }, [])
+}
