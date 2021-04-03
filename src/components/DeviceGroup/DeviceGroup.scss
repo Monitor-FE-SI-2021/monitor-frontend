@@ -1,56 +1,62 @@
-.group {
+.device-group {
     margin-left: 25px;
+
+    .tab {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .buttons {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+
+        button {
+            padding: 8px 15px;
+            margin: 0 0 0 10px;
+        }
+    }
+
+    .title {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        padding-right: 10px;
+        margin-left: -20px;
+
+        .group-name {
+            color: var(--main-color);
+            cursor: pointer;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .collapsed,
+        .expanded {
+            background-color: inherit;
+            cursor: pointer;
+            border: none;
+            outline: none;
+            margin-right: 5px;
+            color: var(--main-color);
+        }
+
+        .collapsed:hover,
+        .expanded:hover {
+
+        }
+
+        .collapsed:after {
+            content: "\25B8";
+            font-size: 22px;
+        }
+
+        .expanded:after {
+            content: "\25BE";
+            font-size: 22px;
+        }
+    }
+
 }
-
-.tab {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-}
-
-.buttons {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-
-    button {
-        border-radius: 10px;
-        background: rgba(64, 64, 64, 0.9);
-        color: white;
-        font-weight: normal;
-    }
-}
-
-.title {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding-right: 10px;
-    margin-left: -20px;
-
-    .collapsed,
-    .expanded {
-        background-color: inherit;
-        cursor: pointer;
-        border: none;
-        outline: none;
-        margin-right: 5px;
-    }
-
-    .collapsed:hover,
-    .expanded:hover {
-        background-color: #eee;
-    }
-
-    .collapsed:after {
-        content: "\25B8";
-        font-size: 15px;
-    }
-
-    .expanded:after {
-        content: "\25BE";
-        font-size: 15px;
-    }
-}
-
 

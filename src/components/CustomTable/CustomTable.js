@@ -12,15 +12,14 @@ import { getDeepProp } from "../../utils/utils";
 import classnames from 'classnames';
 
 import './custom_table.scss'
+import { Spinner } from "../Spinner/Spinner";
 
 
 export function TableSlot({ slot, render }) {
     return <div></div>
 }
 
-export default function CustomTable({ data, fields, children, handleSort, activeSortField, activeSortOrder }) {
-
-    const [tableData] = useState(data);
+export default function CustomTable({ data, fields, children, handleSort, activeSortField, activeSortOrder, async }) {
 
     const activeFields = (fields || []).filter(field => field.disabled !== undefined ? !field.disabled : true);
 
@@ -66,7 +65,7 @@ export default function CustomTable({ data, fields, children, handleSort, active
                                             <UpArrow
                                                 className={'sort-icon'}
                                                 style={{
-                                                    color: (activeSortField === field.name && activeSortOrder === 'asc') && "#7777ff"
+                                                    color: (activeSortField === field.name && activeSortOrder === 'asc') && "#7c90ff"
                                                 }}
                                                 onClick={() => {
                                                     handleSort(field.name, "asc")
@@ -74,7 +73,7 @@ export default function CustomTable({ data, fields, children, handleSort, active
                                             <DownArrow
                                                 className={'sort-icon'}
                                                 style={{
-                                                    color: (activeSortField === field.name && activeSortOrder === 'desc') && "#7777ff"
+                                                    color: (activeSortField === field.name && activeSortOrder === 'desc') && "#7c90ff"
                                                 }}
                                                 onClick={() => handleSort(field.name, "desc")}/>
                                         </div>
@@ -84,16 +83,21 @@ export default function CustomTable({ data, fields, children, handleSort, active
                         ))}
                     </TableRow>
                 </TableHead>
-                <TableBody>
-                    {tableData.map((row, rowIndex) => (
+                {(!async && data.length !== 0) && (<TableBody>
+                    {data.map((row, rowIndex) => (
                         <TableRow key={row.id ?? rowIndex}>
                             {activeFields.map((field, index) => (
                                 renderDataRowCell(row, field, index)
                             ))}
                         </TableRow>
                     ))}
-                </TableBody>
+                </TableBody>)}
             </Table>
+            {async ? <Spinner/> : data?.length !== 0 ? null : (
+                <div className='no-results-message'>
+                    Nema rezultata.
+                </div>
+            )}
         </TableContainer>
     );
 }

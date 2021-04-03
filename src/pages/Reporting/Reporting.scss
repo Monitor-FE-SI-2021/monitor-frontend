@@ -3,148 +3,148 @@
     width: 100%;
     display: flex;
     flex-direction: column;
-}
 
-.reportingInput {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-}
+    .reportingInput {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
 
-.inputWrapper {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin: 10px;
-}
+    .inputWrapper {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin: 10px;
+    }
 
-.inputLabelWrapper {
-    width: 370px;
-}
+    .inputLabelWrapper {
+        width: 370px;
+    }
 
-.select {
-    width: 200px;
-    margin-left: 50px;
-}
+    .select {
+        width: 200px;
+        margin-left: 50px;
+    }
 
-.MuiInputBase-root.MuiInput-root.MuiInput-underline {
-    width: 210px;
-}
+    .MuiInputBase-root.MuiInput-root.MuiInput-underline {
+        width: 210px;
+    }
 
-.MuiFormControl-root.MuiTextField-root {
-    width: 210px;
-    margin-left: 50px;
-}
+    .MuiFormControl-root.MuiTextField-root {
+        width: 210px;
+        margin-left: 50px;
+    }
 
-.queryBuilderWrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-}
+    .queryBuilderWrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
 
-.queryBuilderTitle {
-    display: flex;
-    color: #808080;
-}
+    .queryBuilderTitle {
+        display: flex;
+        color: #808080;
+    }
 
-.MuiButtonBase-root.MuiButton-root.MuiButton-contained {
-    margin-top: 50px;
-}
+    .MuiButtonBase-root.MuiButton-root.MuiButton-contained {
+        margin-top: 50px;
+    }
 
-.ruleGroup {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 15px;
-    margin: 20px;
-    border: solid;
-    border-width: 1px;
-    border-radius: 15px;
-    background: #f2f2f2;
-    border-color: #808080;
-}
+    .ruleGroup {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 15px;
+        margin: 20px;
+        border: solid;
+        border-width: 1px;
+        border-radius: 15px;
+        background: #f2f2f2;
+        border-color: #808080;
+    }
 
-.ruleGroup-combinators {
-    width: 200px;
-    height: 40px;
-    margin-right: 10px;
-    border-radius: 5px;
-}
+    .ruleGroup-combinators {
+        width: 200px;
+        height: 40px;
+        margin-right: 10px;
+        border-radius: 5px;
+    }
 
-.rule-fields {
-    width: 180px;
-    height: 40px;
-    margin-left: 20px;
-    margin-right: 15px;
-    border-width: 1px;
-    border-radius: 5px;
-}
+    .rule-fields {
+        width: 180px;
+        height: 40px;
+        margin-left: 20px;
+        margin-right: 15px;
+        border-width: 1px;
+        border-radius: 5px;
+    }
 
-.ruleGroup-addRule {
-    font-weight: normal;
-    border: none;
-    background-color: lightgrey;
-    margin-right: 10px;
-    border-radius: 5px;
-}
+    .ruleGroup-addRule {
+        font-weight: normal;
+        border: none;
+        background-color: lightgrey;
+        margin-right: 10px;
+        border-radius: 5px;
+    }
 
-.ruleGroup-addGroup {
-    font-weight: normal;
-    border: none;
-    background-color: lightgrey;
-    margin-right: 10px;
-    border-radius: 5px;
-}
+    .ruleGroup-addGroup {
+        font-weight: normal;
+        border: none;
+        background-color: lightgrey;
+        margin-right: 10px;
+        border-radius: 5px;
+    }
 
-.rule-remove {
-    font-weight: normal;
-    border: none;
-    border-radius: 20px;
-    background-color: #f2f2f2;
-    padding: 0px;
-    margin: 0px 0px 0px 10px;
-}
+    .rule-remove {
+        font-weight: normal;
+        border: none;
+        border-radius: 20px;
+        background-color: #f2f2f2;
+        padding: 0px;
+        margin: 0px 0px 0px 10px;
+    }
 
-.ruleGroup-remove {
-    font-weight: normal;
-    border: none;
-    border-radius: 50px;
-    background-color: #f2f2f2;
-    padding: 0px;
-    margin: 0px 0px 0px 10px;
-}
+    .ruleGroup-remove {
+        font-weight: normal;
+        border: none;
+        border-radius: 50px;
+        background-color: #f2f2f2;
+        padding: 0px;
+        margin: 0px 0px 0px 10px;
+    }
 
-.rule-operators {
-    height: 40px;
-    margin-right: 15px;
-    border-width: 1px;
-    border-radius: 5px;
-}
+    .rule-operators {
+        height: 40px;
+        margin-right: 15px;
+        border-width: 1px;
+        border-radius: 5px;
+    }
 
-.rule-value {
-    height: 40px;
-    margin-right: 15px;
-    border-width: 1px;
-    border-radius: 5px;
-}
+    .rule-value {
+        height: 40px;
+        margin-right: 15px;
+        border-width: 1px;
+        border-radius: 5px;
+    }
 
-.rule {
-    margin-bottom: 10px;
-}
+    .rule {
+        margin-bottom: 10px;
+    }
 
-.ruleGroup-header {
-    margin-bottom: 15px;
-}
+    .ruleGroup-header {
+        margin-bottom: 15px;
+    }
 
-.ruleGroup-notToggle {
-    margin-right: 10px;
-}
+    .ruleGroup-notToggle {
+        margin-right: 10px;
+    }
 
-label.MuiFormLabel-root.MuiInputLabel-root.selectCol.MuiInputLabel-animated {
-    display: inline-block;
+    label.MuiFormLabel-root.MuiInputLabel-root.selectCol.MuiInputLabel-animated {
+        display: inline-block;
+    }
 }

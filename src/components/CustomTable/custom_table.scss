@@ -7,10 +7,10 @@
         .header-row {
 
             .header-row-cell {
-                background-color: #404040;
+                background-color: #495c8f;
                 color: white;
                 font-weight: 600;
-                padding: 5px 20px;
+                padding: 10px 15px;
 
                 .cell-content {
                     display: flex;
@@ -26,5 +26,19 @@
         .sort-icon {
             font-size: 26px;
         }
+    }
+
+    .spinner {
+        padding: 20px 0;
+        width: 100%;
+    }
+
+    .no-results-message {
+        display: flex;
+        justify-content: center;
+        padding: 20px 0;
+        font-weight: 500;
+        font-size: 18px;
+        color: var(--main-color);
     }
 }

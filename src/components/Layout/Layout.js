@@ -17,7 +17,7 @@ import ManageGroup from "../../pages/ManageGroup/ManageGroup";
 
 const Layout = ({ isMenuExpanded, loginAsync, userAsync, user }) => {
     if (loginAsync || userAsync) {
-        return <Spinner/>;
+        return <Spinner className={'app-loader'}/>;
     }
 
     if (!user) {

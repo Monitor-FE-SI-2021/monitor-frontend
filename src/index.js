@@ -12,6 +12,7 @@ import PasswordReset from "./pages/Login/PasswordReset";
 import { STORAGE_KEY } from "./utils/consts";
 import { RouteLink } from "./store/modules/menu/menu";
 import { getMe } from "./store/modules/login/login";
+import { MuiThemeProvider } from "material-ui";
 
 const App = ({ user, getMe, push }) => {
 
@@ -55,11 +56,13 @@ const ConnectedApp = connect(state => ({
 }), { getMe, push })(App);
 
 ReactDOM.render(
-    <Provider store={store}>
-        <ConnectedRouter history={history}>
-            <ConnectedApp/>
-        </ConnectedRouter>
-    </Provider>,
+    <MuiThemeProvider>
+        <Provider store={store}>
+            <ConnectedRouter history={history}>
+                <ConnectedApp/>
+            </ConnectedRouter>
+        </Provider>
+    </MuiThemeProvider>,
     document.getElementById('root')
 );
 

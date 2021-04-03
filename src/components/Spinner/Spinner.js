@@ -1,22 +1,13 @@
-import { CircularProgress, makeStyles } from "@material-ui/core";
+import { CircularProgress } from "@material-ui/core";
+import './spinner.scss'
+import classnames from "classnames";
 
-const useStyles = makeStyles((theme) => ({
-    container: {
-        display: 'flex',
-        width: '100%',
-        justifyContent: 'center',
-        alignItems: 'center',
-        margin: '5px 0',
-        color: "#000"
-    }
-}));
+export function Spinner({ className }) {
 
-export function Spinner() {
-
-    const classes = useStyles();
+    const classes = classnames('spinner', className)
 
     return (
-        <div className={classes.container}>
+        <div className={classes}>
             <CircularProgress color={'inherit'}/>
         </div>
     )

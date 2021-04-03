@@ -6,7 +6,6 @@ import { fetchDevicesForGroup, updateDevicesTableForGroup } from "../../store/mo
 import { push } from "connected-react-router";
 import { RouteLink } from "../../store/modules/menu/menu";
 
-
 const DeviceGroup = ({
                          push,
                          group,
@@ -62,17 +61,22 @@ const DeviceGroup = ({
 
 
     return (
-        <div className='group'>
+        <div className='device-group'>
             <div className='tab'>
                 <div className='title' onClick={toggleArrow}>
                     <button className={hidden ? 'collapsed' : 'expanded'}/>
-                    <h2>{group.name}</h2>
+                    <span className='group-name'>{group.name}</span>
                 </div>
                 <div className='buttons'>
                     {group.subGroups.length === 0 ?
-                        <button onClick={() => createDevice(group)}>+ Mašina</button>
+                        <button className={'custom-btn outlined'}
+                                onClick={() => createDevice(group)}>
+                            + Mašina
+                        </button>
                         : null}
-                    <button onClick={() => createGroup(group)}>+ Grupa</button>
+                    <button className={'custom-btn outlined'} onClick={() => createGroup(group)}>
+                        + Grupa
+                    </button>
                 </div>
             </div>
             {!hidden && (

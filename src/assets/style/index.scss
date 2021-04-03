@@ -1,5 +1,6 @@
 @import "variables";
 @import "menu";
+@import "misc";
 
 html {
     box-sizing: border-box;
@@ -16,6 +17,10 @@ html, body, #app, #root {
     flex-direction: column;
 }
 
+:root {
+    --main-color: #495c8f;
+}
+
 * {
     box-sizing: inherit;
     font-family: Roboto, sans-serif;
@@ -24,6 +29,11 @@ html, body, #app, #root {
     &:after {
         box-sizing: inherit;
     }
+}
+
+.app-loader {
+    height: 100vh;
+    margin: 0 !important
 }
 
 .layout {
