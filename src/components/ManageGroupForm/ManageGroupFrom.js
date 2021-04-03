@@ -69,7 +69,7 @@ const ManageGroupForm = ({ parentGroup, push, groupOptions, fetchAllGroups }) =>
         //Šta ako postoji već grupa sa istim imenom?
 
         if (validate()) {
-            request(groups + `/CreateGroup?parentGroupId=${values.parentGroup}`, 'POST', groupData)
+            request(groups + `/CreateGroup`, 'POST', groupData)
                 .then(r => {
                     console.log(r.data);
                     showSwalToast(`Uspješno kreirana grupa ${groupData.Name}`, 'success');
