@@ -8,6 +8,7 @@ import {
     SET_ACTIVE_DEVICES
 } from "./types";
 import request, { devices } from "../../../service";
+import { DEVICE_STATUS } from "./devices";
 
 export function fetchAllDevices() {
 
@@ -28,9 +29,16 @@ export function fetchAllDevices() {
     }
 }
 
-export function fetchDevicesForGroup({ groupId, page = 1, perPage = 10 }) {
+export function fetchDevicesForGroup({
+                                         groupId,
+                                         page = 1,
+                                         perPage = 10,
+                                         status = DEVICE_STATUS.ACTIVE,
+                                         sortField = 'name',
+                                         sortOrder = 'desc'
+                                     }) {
 
-    const query = `page=${page}&per_page=${perPage}&name=&status=active&groupId=${groupId}&sort_by=name_desc`
+    const query = `page=${page}&per_page=${perPage}&name=&status=${status}&groupId=${groupId}&sort_by=${sortField}_${sortOrder}`
 
     return (dispatch, getState) => {
 
@@ -55,6 +63,9 @@ export function fetchDevicesForGroup({ groupId, page = 1, perPage = 10 }) {
                         totalCount: deviceCount,
                         page,
                         perPage,
+                        status,
+                        sortField,
+                        sortOrder
                     }
                 })
             }).finally(() => {

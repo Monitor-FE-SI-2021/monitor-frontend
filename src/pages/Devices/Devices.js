@@ -95,6 +95,7 @@ const Devices = ({
 export default connect((state) => ({
     allDevices: state.devices.devices,
     allGroups: state.groups.groups,
+    searchedGroups: state.groups.searchedGroups,
     devicesAsync: state.devices.async,
     groupsAsync: state.groups.async,
     groupsSearchText: state.groups.searchText,

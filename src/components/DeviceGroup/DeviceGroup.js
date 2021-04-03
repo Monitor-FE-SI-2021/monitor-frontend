@@ -3,9 +3,7 @@ import DeviceTable from '../DeviceTable/DeviceTable';
 import React, { useEffect, useState } from 'react';
 import { connect } from "react-redux";
 import { fetchDevicesForGroup, updateDevicesTableForGroup } from "../../store/modules/devices/actions";
-import { Spinner } from "../Spinner/Spinner";
 import { push } from "connected-react-router";
-import CustomPagination from "../CustomTable/components/CustomPagination";
 import { RouteLink } from "../../store/modules/menu/menu";
 
 
@@ -35,17 +33,22 @@ const DeviceGroup = ({
 
     const devices = deviceTable?.devices ?? [];
 
-    const async = deviceTable?.async;
-
     useEffect(() => {
 
         const hasNoSubGroups = group.subGroups.length === 0;
 
         if (!hidden && hasNoSubGroups) {
-            fetchDevicesForGroup({ groupId: group.groupId, page: deviceTable.page, perPage: deviceTable.perPage });
+            fetchDevicesForGroup({
+                groupId: group.groupId,
+                page: deviceTable.page,
+                perPage: deviceTable.perPage,
+                status: deviceTable.status,
+                sortField: deviceTable.sortField,
+                sortOrder: deviceTable.sortOrder
+            });
         }
 
-    }, [hidden, group, deviceTable.page, deviceTable.perPage]);
+    }, [hidden, group, deviceTable.page, deviceTable.perPage, deviceTable.status, deviceTable.sortField, deviceTable.sortOrder]);
 
     let subGroupsRendered = group.subGroups.map(subGroup => {
         return <ConnectedDeviceGroup group={subGroup}
@@ -57,13 +60,6 @@ const DeviceGroup = ({
         setHidden(newHidden);
     }
 
-    const handleChangePage = (page) => {
-        updateDevicesTableForGroup({ groupId: group.groupId, data: { page } })
-    }
-
-    const handleChangePerPage = (perPage) => {
-        updateDevicesTableForGroup({ groupId: group.groupId, data: { perPage } })
-    }
 
     return (
         <div className='group'>
@@ -81,19 +77,8 @@ const DeviceGroup = ({
             </div>
             {!hidden && (
                 <React.Fragment>
-                    {async ? <Spinner/> : devices.length !== 0 ? (
-                        <React.Fragment>
-                            <DeviceTable devices={devices}/>
-                            <CustomPagination totalCount={deviceTable.totalCount}
-                                              page={deviceTable.page}
-                                              perPage={deviceTable.perPage}
-                                              handleChangePage={handleChangePage}
-                                              handleChangePerPage={handleChangePerPage}
-                            />
-                        </React.Fragment>
-                    ) : null
-                    }
-                    {shouldRenderSubgroups && (subGroupsRendered || null)}
+                    {!subGroupsRendered?.length && <DeviceTable devices={devices} group={group}/>}
+                    {subGroupsRendered || null}
                 </React.Fragment>
             )}
         </div>
