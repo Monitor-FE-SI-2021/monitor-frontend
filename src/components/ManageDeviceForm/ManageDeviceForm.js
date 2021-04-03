@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { connect } from "react-redux";
-import { TextField, MenuItem, Button } from '@material-ui/core';
+import { TextField, MenuItem } from '@material-ui/core';
 import { useState } from 'react';
 import { cloneDeep } from "lodash";
 import { fetchAllGroups } from "../../store/modules/groups/actions";

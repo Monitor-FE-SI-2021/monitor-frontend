@@ -12,8 +12,10 @@ const DeviceGroup = ({
                          deviceTable,
                          fetchDevicesForGroup,
                          updateDevicesTableForGroup,
+                         devicesSearchText,
                          shouldRenderSubgroups = true
                      }) => {
+
     const createDevice = (group) => {
         push({
             pathname: RouteLink.ManageDevice,
@@ -47,7 +49,7 @@ const DeviceGroup = ({
             });
         }
 
-    }, [hidden, group, deviceTable.page, deviceTable.perPage, deviceTable.status, deviceTable.sortField, deviceTable.sortOrder]);
+    }, [hidden, group, deviceTable.page, deviceTable.perPage, deviceTable.status, deviceTable.sortField, deviceTable.sortOrder, devicesSearchText]);
 
     let subGroupsRendered = group.subGroups.map(subGroup => {
         return <ConnectedDeviceGroup group={subGroup}
@@ -98,6 +100,7 @@ const ConnectedDeviceGroup = connect((state, ownProps) => {
 
         return {
             deviceTable,
+            devicesSearchText: state.devices.searchText
         }
     }
     ,

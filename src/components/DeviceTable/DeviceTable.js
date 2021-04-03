@@ -82,7 +82,7 @@ const DeviceTable = ({
             sort: true,
         },
         {
-            name: 'lastTimeOnline',
+            name: 'LastTimeOnline',
             title: 'Posljednji put online',
             width: '30%',
             sort: true,

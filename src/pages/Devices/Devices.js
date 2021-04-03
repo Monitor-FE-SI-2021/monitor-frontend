@@ -2,13 +2,12 @@ import { connect } from "react-redux";
 import "./Devices.scss";
 import DeviceGroup from "../../components/DeviceGroup/DeviceGroup";
 import React, { useEffect } from 'react';
-import { fetchAllDevices, setActiveGlobal } from "../../store/modules/devices/actions";
+import { fetchAllDevices, searchDevicesAction, setActiveGlobal } from "../../store/modules/devices/actions";
 import { fetchAllGroups, searchGroupsAction } from "../../store/modules/groups/actions";
 import { push } from "connected-react-router";
 import { RouteLink } from "../../store/modules/menu/menu";
 import { Spinner } from "../../components/Spinner/Spinner";
 import request, { wsEndpoint } from "../../service";
-import SearchIcon from '@material-ui/icons/Search';
 import { TextField } from "@material-ui/core";
 
 
@@ -33,6 +32,8 @@ const Devices = ({
                      setActiveGlobal,
                      groupsSearchText,
                      searchGroupsAction,
+                     devicesSearchText,
+                     searchDevicesAction,
                      searchedGroups = []
                  }) => {
 
@@ -58,14 +59,13 @@ const Devices = ({
         );
     });
 
-    const searchGroups = (e) => {
-
+    const searchDevices = (e) => {
         const searchText = e.target.value;
+        searchDevicesAction(searchText);
+    }
 
-        // if (searchText?.length >= 3) {
-        //
-        // }
-
+    const searchGroups = (e) => {
+        const searchText = e.target.value;
         searchGroupsAction(searchText);
     }
 
@@ -78,7 +78,7 @@ const Devices = ({
                     <button className="custom-btn" onClick={() => push(RouteLink.ManageDevice)}>Kreiraj mašinu</button>
                 </div>
             </div>
-            <div>
+            <div className='search-fields'>
                 <TextField
                     className='search'
                     size={'small'}
@@ -88,14 +88,11 @@ const Devices = ({
                     value={groupsSearchText}
                 />
                 <TextField className='search'
-                           InputProps={{
-                               style: {
-
-                               }
-                           }}
-                           label="Ime uređaja"
+                           label="Pretraži uređaje"
                            size={'small'}
                            variant="outlined"
+                           value={devicesSearchText}
+                           onChange={searchDevices}
                 />
             </div>
             <div className={'groups-list'}>
@@ -112,4 +109,5 @@ export default connect((state) => ({
     groupsAsync: state.groups.async,
     groupsSearchText: state.groups.searchText,
     searchedGroups: state.groups.searchedGroups,
-}), { fetchAllDevices, fetchAllGroups, push, setActiveGlobal, searchGroupsAction })(Devices);
+    devicesSearchText: state.devices.searchText
+}), { fetchAllDevices, fetchAllGroups, push, setActiveGlobal, searchGroupsAction, searchDevicesAction })(Devices);

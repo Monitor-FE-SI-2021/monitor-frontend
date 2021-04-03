@@ -31,7 +31,7 @@ const initialState = {
     deviceTables: {},   // Mapa gdje je ključ groupId a vrijednost tabela uredjaja te grupe uz dodatne informacije (paginacija, filteri i slicno)
     selectedDevice: null,
     activeDevices: [],
-    searchText: ""
+    searchText: ''
 }
 
 const getUpdatedDeviceTables = (currentTables, groupId, data) => {
@@ -100,10 +100,10 @@ const ACTION_HANDLERS = {
             activeDevices: action.devices
         }
     },
-    [SEARCH_DEVICES_ACTION]: (state, action) => {
+    [SEARCH_DEVICES_ACTION]: (state, { searchText }) => {
         return {
             ...state,
-            searchText: action.searchText
+            searchText
         }
     },
 
