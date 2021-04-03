@@ -2,8 +2,26 @@
     margin-left: 25px;
 }
 
-
 .tab {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.buttons {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    button {
+        border-radius: 10px;
+        background: rgba(64, 64, 64, 0.9);
+        color: white;
+        font-weight: normal;
+    }
+}
+
+.title {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -34,3 +52,5 @@
         font-size: 15px;
     }
 }
+
+

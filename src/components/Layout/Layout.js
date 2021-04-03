@@ -13,6 +13,7 @@ import TwoFactorAuthentication from "../TwoFactorAuthentication/TwoFactorAuthent
 import { Spinner } from "../Spinner/Spinner";
 import Terminal from "../Terminal/Terminal";
 import RemoteControl from "../../pages/RemoteControl/RemoteControl";
+import ManageGroup from "../../pages/ManageGroup/ManageGroup";
 
 const Layout = ({ isMenuExpanded, loginAsync, userAsync, user }) => {
     if (loginAsync || userAsync) {
@@ -34,6 +35,7 @@ const Layout = ({ isMenuExpanded, loginAsync, userAsync, user }) => {
                     <Route path={RouteLink.ReportList} component={ReportList}/>
                     <Route path={RouteLink.Reporting} component={Reporting}/>
                     <Route path={RouteLink.ManageDevice} component={ManageDevice}/>
+                    <Route path={RouteLink.ManageGroup} component={ManageGroup}/>
                     <Route path={RouteLink.TwoFactorAuthentication} component={TwoFactorAuthentication}/>
                     <Route path={RouteLink.Terminal} component={Terminal}/>
                     <Route
