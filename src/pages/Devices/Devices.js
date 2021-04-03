@@ -75,8 +75,6 @@ const Devices = ({
                     <button className="create" onClick={() => push(RouteLink.ManageGroup)}>Kreiraj grupu</button>
                     <button className="create" onClick={() => push(RouteLink.ManageDevice)}>Kreiraj mašinu</button>
                 </div>
-                <h1> Overview </h1>
-                <button className="create" onClick={() => push(RouteLink.ManageDevice)}>Create machine</button>
             </div>
             <div>
                 <input className='search' type='text' id='groupInput' onChange={searchGroups}
