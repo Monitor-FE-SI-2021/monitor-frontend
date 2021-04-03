@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { connect } from "react-redux";
-import { makeStyles, TextField, MenuItem, Button } from '@material-ui/core';
+import { TextField, MenuItem, Button } from '@material-ui/core';
 import { useState } from 'react';
 import { cloneDeep } from "lodash";
 import { fetchAllGroups } from "../../store/modules/groups/actions";
@@ -8,25 +8,24 @@ import request, { devices } from "../../service";
 import { showSwalToast } from "../../utils/utils";
 import { RouteLink } from "../../store/modules/menu/menu";
 import { push } from "connected-react-router";
-import './ManageDeviceForm.scss';
+import { selectDevice } from "../../store/modules/devices/actions";
+import "./ManageDeviceForm.scss"
 
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-        '& .MuiFormControl-root, .MuiButton-root': {
-            display: 'flex',
-            flexWrap: 'wrap',
-            margin: theme.spacing(3),
-        },
-        '& .MuiFormControl-root': {
-            width: '50%',
-        },
-        '.MuiButton-root': {
-            width: '25%',
-        },
-    },
-}));
-
+// const useStyles = makeStyles((theme) => ({
+//     root: {
+//         '& .MuiFormControl-root, .MuiButton-root': {
+//             display: 'flex',
+//             flexWrap: 'wrap',
+//             margin: theme.spacing(3),
+//         },
+//         '& .MuiFormControl-root': {
+//             width: '50%',
+//         },
+//         '.MuiButton-root': {
+//             width: '25%',
+//         },
+//     },
+// }));
 
 const initialValues = {
     name: "",
@@ -37,12 +36,9 @@ const initialValues = {
     group: ""
 }
 
-// fieldValues is a prop for passing the field values for when the form is opened in edit mode
-// the required form of the object is
-// {name: "value", location: "value", latitude: "value", longitude: "value", installationCode: "value", group: "value"}
-const ManageDeviceForm = ({ selectedDevice, groupOptions, fetchAllGroups, push }) => {
+const ManageDeviceForm = ({ selectedDevice, groupOptions, fetchAllGroups, push, selectDevice }) => {
 
-    const classes = useStyles();
+    // const classes = useStyles();
 
     const [editMode, setEditMode] = useState(false);
     const [values, setValues] = useState(initialValues)
@@ -81,32 +77,45 @@ const ManageDeviceForm = ({ selectedDevice, groupOptions, fetchAllGroups, push }
 
         setEditMode(Boolean(selectedDevice));
 
-    }, [selectedDevice])
+        return () => {selectDevice(null)}
 
-    // initial values for when the form isn't opened in edit mode
+    }, [selectedDevice, fetchAllGroups, selectDevice, groupOptions?.length])
 
     const validate = () => {
         let temp = {}
         let letterNumber = /^[0-9a-zA-Z]+$/
+        const emptyFieldError = "Polje je obavezno"
 
         if (values.name === "")
-            temp.name = "This field is required"
+            temp.name = emptyFieldError
         else if (!values.name.match(letterNumber) && !values.name.includes(" "))
-            temp.name = "This field can only contain the following characters: A-Z, a-z, 0-9"
+            temp.name = "Polje smije sadržavati samo karaktere: A-Z, a-z, 0-9"
         else
             temp.name = ""
 
         if (values.location === "")
-            temp.location = "This field is required"
+            temp.location = emptyFieldError
         else if (!values.location.match(letterNumber) && !values.location.includes(" "))
-            temp.location = "This field can only contain the following characters: A-Z, a-z, 0-9"
+            temp.location = "Polje smije sadržavati samo karaktere: A-Z, a-z, 0-9"
         else
             temp.location = ""
 
-        temp.latitude = values.latitude.length > 0 ? "" : "This field is required"
-        temp.longitude = values.longitude.length > 0 ? "" : "This field is required"
-        temp.group = values.group ? "" : "This field is required!"
-        temp.installationCode = values.installationCode ? "" : "This field is required!"
+        if (values.latitude === "")
+            temp.latitude = emptyFieldError
+        else if (Number(values.latitude) < -90 || Number(values.latitude) > 90)
+            temp.latitude = "Geografska širina je broj između -90 i 90"
+        else
+            temp.latitude = ""
+
+        if (values.longitude === "")
+            temp.longitude = emptyFieldError
+        else if (Number(values.longitude) < -180 || Number(values.longitude) > 180)
+            temp.longitude = "Geografska dužina je broj između -180 i 180"
+        else
+            temp.longitude = ""
+
+        temp.group = values.group ? "" : emptyFieldError
+        temp.installationCode = values.installationCode ? "" : emptyFieldError
         setErrors(temp)
 
         return Object.values(temp).every(x => x === "")
@@ -129,7 +138,8 @@ const ManageDeviceForm = ({ selectedDevice, groupOptions, fetchAllGroups, push }
         if (validate()) {
 
             if (editMode === true) {
-                alert("Edited machine successfully!")
+                showSwalToast(`Uspješno izmijenjena mašina ${deviceData.Name}`, 'success');
+                //push(RouteLink.Devices);
             } else {
 
                 request(devices + `/CreateDevice?groupId=${values.group}`, 'POST', deviceData)
@@ -145,31 +155,33 @@ const ManageDeviceForm = ({ selectedDevice, groupOptions, fetchAllGroups, push }
     }
 
     return (
-        <form className={classes.root} onSubmit={handleSubmit}>
-            <TextField label="Name" name="name" value={values.name} onChange={handleInputChange}
+        <form className="manage-device-form" onSubmit={handleSubmit}>
+            <TextField variant="outlined" label="Naziv" name="name" value={values.name} onChange={handleInputChange}
                        {...(errors.name && { error: true, helperText: errors.name })} />
 
-            <TextField label="Location" name="location" value={values.location} onChange={handleInputChange}
+            <TextField variant="outlined" label="Lokacija" name="location" value={values.location} onChange={handleInputChange}
                        {...(errors.location && { error: true, helperText: errors.location })} />
 
-            <TextField label="Latitude" type='number' name="latitude" value={values.latitude}
+            <TextField variant="outlined" label="Geografska širina" type='number' name="latitude" value={values.latitude}
                        onChange={handleInputChange}
                        {...(errors.latitude && { error: true, helperText: errors.latitude })}/>
 
-            <TextField label="Longitude" type='number' name="longitude" value={values.longitude}
+            <TextField variant="outlined" label="Geografska dužina" type='number' name="longitude" value={values.longitude}
                        onChange={handleInputChange}
                        {...(errors.longitude && { error: true, helperText: errors.longitude })}/>
 
-            <TextField label="Installation code" name="installationCode" value={values.installationCode}
+            <TextField variant="outlined" disabled={editMode} label="Instalacioni kod" name="installationCode" value={values.installationCode}
                        onChange={handleInputChange}
                        {...(errors.installationCode && { error: true, helperText: errors.installationCode })}/>
 
             <TextField
+                variant="outlined"
                 select
                 name="group"
                 value={values.group}
-                label="Group"
+                label="Grupa"
                 onChange={handleInputChange}
+                className="group-selector"
                 {...(errors.group && { error: true, helperText: errors.group })}
             >
                 {groupOptions.map((group) => (
@@ -178,12 +190,11 @@ const ManageDeviceForm = ({ selectedDevice, groupOptions, fetchAllGroups, push }
                     </MenuItem>
                 ))}
             </TextField>
-            <div className="buttons">
-                <Button type="cancel" variant="contained" onClick={() => push(RouteLink.Devices)} className="buttonCancel">Otkaži</Button>
-                <Button type="submit" variant="contained" className="buttonEditAndCreate">
-                       {editMode === true ? "Edit Machine" : "Create Machine"}
-                </Button>
-            </div>
+
+            <Button type="cancel" variant="contained" onClick={() => push(RouteLink.Devices)} >Otkaži</Button>
+            <Button type="submit" variant="contained">
+                {editMode === true ? "Izmijeni mašinu" : "Kreiraj mašinu"}
+            </Button>
         </form>
     );
 }
@@ -214,4 +225,4 @@ export default connect(state => {
         selectedDevice: state.devices.selectedDevice,
         groupOptions
     }
-}, { fetchAllGroups, push })(ManageDeviceForm);
+}, { fetchAllGroups, push, selectDevice })(ManageDeviceForm);
