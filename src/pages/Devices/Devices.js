@@ -77,7 +77,11 @@ const Devices = ({
                 </div>
             </div>
             <div>
-                <input className='search' type='text' id='groupInput' onChange={searchGroups}
+                <input className='search'
+                       type='text'
+                       id='groupInput'
+                       onChange={searchGroups}
+                       value={groupsSearchText}
                        placeholder='Search by group name'/>
                 <input className='search' type='text' placeholder='Search by device name'/>
             </div>

@@ -34,8 +34,6 @@ const ACTION_HANDLERS = {
 
         const { searchText } = action;
 
-        console.log(searchText);
-
         const searchedGroups = filterGroupTree(state.groups, searchText) || {};
 
         return {

@@ -10,6 +10,7 @@ import { RouteLink } from "../../store/modules/menu/menu";
 
 
 const DeviceGroup = ({
+                         push,
                          group,
                          deviceTable,
                          fetchDevicesForGroup,

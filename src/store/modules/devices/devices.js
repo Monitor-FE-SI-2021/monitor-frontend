@@ -2,9 +2,10 @@ import {
     SET_DEVICES,
     SET_DEVICES_ASYNC,
     SET_DEVICES_ASYNC_FOR_GROUP,
-    SET_DEVICES_FOR_GROUP,
     SELECT_DEVICE,
-    UPDATE_DEVICES_TABLE_FOR_GROUP, SET_ACTIVE_DEVICES
+    UPDATE_DEVICES_TABLE_FOR_GROUP,
+    SET_ACTIVE_DEVICES,
+    SEARCH_DEVICES_ACTION,
 } from "./types";
 import { cloneDeep, merge } from "lodash";
 
@@ -22,6 +23,7 @@ const initialState = {
     deviceTables: {},   // Mapa gdje je ključ groupId a vrijednost tabela uredjaja te grupe uz dodatne informacije (paginacija, filteri i slicno)
     selectedDevice: null,
     activeDevices: [],
+    searchText: ""
 }
 
 const getUpdatedDeviceTables = (currentTables, groupId, data) => {
@@ -87,7 +89,13 @@ const ACTION_HANDLERS = {
             ...state,
             activeDevices: action.devices
         }
-    }
+    },
+    [SEARCH_DEVICES_ACTION]: (state, action) => {
+        return {
+            ...state,
+            searchText: action.searchText
+        }
+    },
 
 }
 
