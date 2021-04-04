@@ -14,7 +14,8 @@ const commands = {
   move: 1,
   rd: 1,
   set: 1,
-  '?' : 0
+  '?' : 0,
+  mkdir: 1
 };
 
 const UseOnEnter = () => {

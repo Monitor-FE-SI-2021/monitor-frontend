@@ -23,6 +23,8 @@ const Terminal = (props) => {
   console.log("IP ", props);
   const inputText = React.useRef();
 
+  //const [put, setPut] = React.useState(props.machine.path);
+
   const [
     consoleOutput,
     savedLogs,
@@ -72,13 +74,17 @@ const Terminal = (props) => {
           name={props.machine.name}
           location={props.machine.location}
           ip={props.machine.ip}
-          path={props.machine.name + " " + props.machine.path}
+          id={props.machine.deviceUid}
+          path={props.machine.path}
+          // path={put}
+          //setPut={setPut}
           consoleOutput={consoleOutput}
           updateConsoleOutput={updateConsoleOutput}
           token={token}
         />
         <div className="input-prompt">
           <Prompt path={props.machine.path} />
+          {/* <Prompt path={put} /> */}
           <input
             className="input-console"
             type="text"

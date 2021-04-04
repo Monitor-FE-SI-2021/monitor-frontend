@@ -12,6 +12,8 @@ const MapConsoleOutput = ({
   name,
   location,
   ip,
+  id,
+  //setPut
 }) => {
   const scrollRef = React.useRef();
 
@@ -27,30 +29,30 @@ const MapConsoleOutput = ({
 
       const isCommandValid = item.includes("Valid Command!");
       if (isCommandValid) {
-        const itemString = item.toString().split("!");
+        const command = item.toString().split("!");
+        console.log("Item string ", command);
+        //let args = itemString[1].toString().split(" ");
 
-        let args = itemString[1].toString().split(" ");
+        //const command = args[0];
 
-        const command = args[0];
+        // let argumenti = [];
+        // if (args.length > 1) {
+        //   argumenti.push(args[1]);
+        // }
 
-        let argumenti = [];
-        if (args.length > 1) {
-          argumenti.push(args[1]);
-        }
-
-        console.log(
-          name +
-            " " +
-            location +
-            " " +
-            ip +
-            " " +
-            command +
-            " " +
-            argumenti +
-            " " +
-            config.email
-        );
+        // console.log(
+        //   name +
+        //     " " +
+        //     location +
+        //     " " +
+        //     ip +
+        //     " " +
+        //     command +
+        //     " " +
+        //     argumenti +
+        //     " " +
+        //     config.email
+        // );
         fetch(wsEndpoint + "/command", {
           method: "POST",
           headers: {
@@ -59,11 +61,12 @@ const MapConsoleOutput = ({
             Authorization: "Bearer " + token,
           },
           body: JSON.stringify({
-            name: name,
-            location: location,
-            ip: ip,
+            // name: name,
+            // location: location,
+            // ip: ip,
+            deviceUid: id,
             command: command,
-            parameters: argumenti,
+            //parameters: argumenti,
             user: config.email,
           }),
         })
@@ -76,6 +79,7 @@ const MapConsoleOutput = ({
             if (clone != "" || clone != null) updateConsoleOutput(clone);
             else updateConsoleOutput("Server Response error");
             updateNewLog(clone, name);
+            //setPut(res.path)
           })
           .catch(function (e) {
             console.log(e);
