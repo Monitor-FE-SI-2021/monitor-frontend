@@ -66,7 +66,7 @@ const ReportList = ({push}) => {
     
       const filterFrequency =  (event) => {
         setSelectedFrequency(event.target.value);
-        if(event.target.value  === "noFilter" || filter[0] === event.target.value ) {
+        if(event.target.value  === "noFilter") {
             setFilter([]);
         } else {
             setFilter([event.target.value]);
@@ -75,6 +75,7 @@ const ReportList = ({push}) => {
 
     const setData = async (frequencies) => {
         if(frequencies === null){
+            setReports([]);
             const res = await request("https://si-2021.167.99.244.168.nip.io/api/report/AllReportsForUser");
             // for (let re of res.data.data) 
             //     for (let r of re.reportInstances)
@@ -90,7 +91,7 @@ const ReportList = ({push}) => {
         }
         else{
             const res = await request('https://si-2021.167.99.244.168.nip.io/api/report/GetReports?' + `Frequency=${frequencies}`);
-            
+            setReports([]);
             for (let repo of res.data.data) 
                 //for (let r of repo.reportInstances)
                     reports.push(repo);
