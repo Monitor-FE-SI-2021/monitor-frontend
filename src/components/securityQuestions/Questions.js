@@ -22,7 +22,7 @@ function Questions() {
 
     const[Questions,setQuestions]=useState([]);
     const[FormQuestions,setFormQuestions]=useState([]);
-     const [QueSuc, setQueSuc] = useState(false)
+     const [QueSuc, setQueSuc] = useState(false);
 
  const switchRoute = (link) => {
         push(link);
@@ -51,27 +51,28 @@ console.log(niz);
 
              }).catch((error) => {
              console.log(error);
-              showSwalToast('Invalid answers');
+              showSwalToast("Must contain between 3 and 5 questions");
          })
     }
 
 
 const AddQuestion=(e)=> {
         e.preventDefault();
-        if(formData.broj<=7){
+        if(formData.broj<=2){
 const myelement = <form><p> Question {formData.broj+3}</p>    <select id="select" className="questions">
-<option value="" selected disabled hidden>Choose here</option>
+   <option value="" selected disabled hidden>Choose here</option>
    {Questions.map(question=>(
-  <option key={question.QuestionId}>{question.Question}</option>
+   <option key={question.QuestionId}>{question.Question}</option>
            ))}
    </select><input type="text" className="answers"/></form>;
-var broj=formData.broj;
-var add="root"+formData.broj;
-const pet=document.getElementById(add).isEmpty
-broj++;
-formData.broj++;
-ReactDOM.render(myelement,document.getElementById(add));
-}
+    var broj=formData.broj;
+    var add="root"+formData.broj;
+
+    const pet=document.getElementById(add).isEmpty
+    broj++;
+    formData.broj++;
+    ReactDOM.render(myelement,document.getElementById(add));
+      }
 switchRoute('/question');
 };
 
@@ -123,14 +124,6 @@ useEffect(()=>{
                        />
                <div id="root1"> </div>
                <div id="root2"> </div>
-               <div id="root3"> </div>
-               <div id="root4"> </div>
-               <div id="root5"> </div>
-               <div id="root6"> </div>
-               <div id="root7"> </div>
-               <div id="root8"> </div>
-                <div id="root9"> </div>
-                <div id="root10"> </div>
               <input id="AddQuestion" type="submit" value="Add more questions" onClick={AddQuestion}/>
             <input id="submitButton" type="submit" value="Submit answers" onClick={handleSubmit}/>
             </form>
