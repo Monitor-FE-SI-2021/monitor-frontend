@@ -1,6 +1,6 @@
 .formDiv {
     margin: auto;
-       width: 30020px;
+    width: 30020px;
 }
 
 #form {
@@ -34,7 +34,7 @@
 
 #forgotPasswordButton {
     background: #eeebeb;
-    border:#fff;
+    border: #fff;
     width: 100%;
 }
 
@@ -42,6 +42,7 @@ html,
 body {
     font-family: arial, sans-serif;
 }
+
 select {
     box-sizing: border-box;
     width: 100%;
