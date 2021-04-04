@@ -2,58 +2,108 @@ import React from 'react';
 import './FileManagerTable.scss';
 import RenamePopup from "../Popups/RenapePopup";
 import DeletePopup from "../Popups/DeletePopup";
+import request from "../../service";
+import DragAndDrop from '../DragAndDrop/DragAndDrop';
+import Swal from "sweetalert2";
+
+
+const config = require("../Terminal/config");
+const userFiles = "https://si-grupa5.herokuapp.com/api/web/user/fileList";
 
 class FileManagerTable extends React.Component {
     constructor(props) {
         super(props);
+    
         this.state = {
             responseObject: [
                 {
                     id: 1,
-                    fileName: "Prvi fajl",
+                    fileName: "LOADING...",
                     link: 'linkDoFajla'
                 },
-                {
-                    id: 2,
-                    fileName: "Drugaciji naziv fajla",
-                    link: 'drugiLink'
-                },
-                {
-                    id: 3,
-                    fileName: "Treci Fajl",
-                    link: 'treciLink'
-                },
-                {
-                    id: 4,
-                    fileName: "Nesto novo",
-                    link: 'linkDoFajla'
-                },
-                {
-                    id: 5,
-                    fileName: "Neki peti fajl",
-                    link: 'drugiLink'
-                },
-                {
-                    id: 6,
-                    fileName: "Ovo je neki novi",
-                    link: 'treciLink'
-                },
-                {
-                    id: 7,
-                    fileName: "Neki fajl",
-                    link: 'linkDoFajla'
-                },
-                {
-                    id: 8,
-                    fileName: "Sprint 2",
-                    link: 'drugiLink'
-                },
-                {
-                    id: 9,
-                    fileName: "Sprint 1",
-                    link: 'treciLink'
-                }
-            ], showRenamePopup: false, showDeletePopup: false, globalId: -1
+            ], 
+            showRenamePopup: false, 
+            showDeletePopup: false,
+            globalId: -1, 
+            activeFolder: '.'
+        }
+
+        this.updateResponse();
+    }
+
+    updateResponse = async () => {
+        console.log('I live');
+        var path_arr = this.state.activeFolder.trim('/').split('/');
+        console.log(path_arr);
+        try{
+            const requestOptions = {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  email: config.email,
+                  password: config.password,
+                }),
+              };
+      
+            var response = await fetch(config.url, requestOptions);
+            if(response.status == 200)
+            {
+                var x = await response.json();
+                const token = x.accessToken;
+                const requestOptions1 = {
+                    method: "POST",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer " + token,
+                    },
+                    body: JSON.stringify({
+                    user: config.email,
+                    }),
+                };
+
+                var response = await fetch(userFiles, requestOptions1)
+                .then((res) => {
+                    console.log(res.json().then(data =>{
+
+                        // Dobio djecu
+                        console.log(data);
+                        var files = data.children;
+
+                        for(var i=1; i<path_arr.length;i++){
+                            console.log(path_arr[i]);
+                            for(var j=0;j<files.length;j++){
+                                console.log('---' + files[j].name);
+                                if (path_arr[i] == files[j].name && files[j].type == 'directory'){
+                                    files = files[j].children;
+                                    console.log('EVOMEEEEEEE')
+                                    break;
+                                }
+                            }
+                        }
+
+
+                        //Redndera dejcu
+                        files = files.map((file, index) => {
+                            return {
+                                id: index,
+                                fileName: file.name,
+                                link: file.path,
+                                data: file
+                            }
+                        });
+
+                        this.setState({responseObject : files});
+                    }));
+                }).catch((error) => {
+                    console.log(error);
+                }); 
+                
+                
+    
+            }
+        } catch(e){
+            console.log(e);
         }
     }
     
@@ -124,8 +174,89 @@ class FileManagerTable extends React.Component {
         })
     }
 
-    handleClick(id) {
-        console.log("Download file with id " + id);
+    handleClick = async (id) => {
+        //#region Help ako treba neki request poslat TODO
+        /*aaaaaa
+        try{
+            const requestOptions = {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  email: config.email,
+                  password: config.password,
+                }),
+              };
+      
+            var response = await fetch(config.url, requestOptions);
+            if(response.status == 200)
+            {
+                var x = await response.json();
+                const token = x.accessToken;
+                const requestOptions1 = {
+                    method: "POST",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer " + token,
+                    },
+                    body: JSON.stringify({
+                    user: config.email,
+                    }),
+                };
+
+                const requestOptions2 = {
+                    method: "POST",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer " + token,
+                    },
+                    body: JSON.stringify({
+                        user: config.email,
+                        base64Data : "string",
+                        fileName : "test"+this.state.responseObject.length+".txt",
+                        path : "/"
+                    }),
+                };
+    
+                console.log("Download file with id " + id);
+                var response = await fetch(userFiles, requestOptions1)
+                .then((res) => {
+                    console.log(res.json());
+                }).catch((error) => {
+                    console.log(error);
+                }); 
+                
+                console.log(response);
+
+                
+                var response1 = await fetch('https://si-grupa5.herokuapp.com/api/web/user/file/put', requestOptions2)
+                .then((res) => {
+                    console.log(res.json());
+                }).catch((error) => {
+                    console.log(error);
+                }); 
+                console.log(response1);
+    
+            }
+        } catch(e){
+            console.log(e);
+        }
+        //*/
+        //#endregion
+    
+        var file = this.state.responseObject[id];
+        if(file.data.type == 'file'){
+            //Kliknut file
+            console.log("Ja sam file prikazi me");
+        }else{
+            //Kliknut folder
+            console.log("Ja sam folder otvori me");
+
+            this.state.activeFolder += '/' + file.data.name;
+            console.log(this.state.activeFolder);
+            this.updateResponse();
+        }
     }
 
     handleDelete(id) {
@@ -138,30 +269,134 @@ class FileManagerTable extends React.Component {
         this.toggleRenamePopup(false);
     }
 
+    clickUp() {
+        this.state.activeFolder = this.state.activeFolder.split('/').slice(0,-1).join('/');
+        this.updateResponse();
+    }
+
+    addFolder = async (newFolder) => {
+
+        this.state.activeFolder += '/' + newFolder;
+
+        try{
+            const requestOptions = {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  email: config.email,
+                  password: config.password,
+                }),
+              };
+      
+            var response = await fetch(config.url, requestOptions);
+            if(response.status == 200)
+            {
+                var x = await response.json();
+                const token = x.accessToken;
+
+                const requestOptions2 = {
+                    method: "POST",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer " + token,
+                    },
+                    body: JSON.stringify({
+                        fileName: 'new.file',
+                        base64: '',
+                        user: config.email,
+                        path : this.state.activeFolder
+                    })
+                };
+                
+                var response1 = await fetch('https://si-grupa5.herokuapp.com/api/web/user/file/put', requestOptions2)
+                .then((res) => {
+                    console.log(res.json());
+
+                    Swal.fire({
+                        title: "File manager",
+                        text: "Datoteka uspješno poslana!",
+                        type: "success",
+                    });
+
+                    this.updateResponse();
+
+                }).catch((error) => {
+                    console.log(error);
+                }); 
+                console.log(response1);
+    
+            }
+        } catch(e){
+            console.log(e);
+        }
+
+    }
+
+    clickNewFolder() {
+        console.log("Napravi novi folder");
+
+
+
+        Swal.fire({
+            title: 'New folder name:',
+            input: 'text',
+            inputAttributes: {
+                autocapitalize: 'off'
+            },
+            preConfirm: newFolder => {
+                //console.log(newFolder);
+            },
+            showCancelButton: true,
+            confirmButtonText: 'Add',
+            showLoaderOnConfirm: true,
+            allowOutsideClick: () => !Swal.isLoading()
+            })
+            .then((result) => {
+                if (result.isConfirmed) {
+                    this.addFolder(result.value);
+                }
+             })
+
+
+        return
+        /*
+        //#region Dodavanje praznog fajla u novi folder
+        
+        //#endregion
+        */
+    }
+
     render() {
         return (
-            <div className="table-wrapper">
-                <table >
-                    <tbody>
-                    {this.renderTableHeader()}
-                        {this.renderTableData()}
-                    </tbody>
-                </table>
-                {this.state.showRenamePopup ?
-                    <RenamePopup className="rename-popup"
-                        closePopupButton={this.toggleRenamePopup.bind(this)}
-                           changeName={this.sendChangeRequest.bind(this)}
-                    />
-                    : null
-                }
-                {this.state.showDeletePopup ?
-                    <DeletePopup className="delete-popup"
-                        closeDeletePopupButton={this.toggleDeletePopup.bind(this)}
-                           changeName={this.sendDeleteRequest.bind(this)}
-                    />
-                    : null
-                }
-                
+            <div>
+                <button onClick={() => this.clickUp()} disabled={this.state.activeFolder == '.' ? "disabled" : ""}>Go UP</button>
+                <button onClick={() => this.clickNewFolder()} >New folder</button>
+                <button disabled="disabled">{this.state.activeFolder}</button>
+                <div className="table-wrapper">
+                    <table >
+                        <tbody>
+                        {this.renderTableHeader()}
+                            {this.renderTableData()}
+                        </tbody>
+                    </table>
+                    {this.state.showRenamePopup ?
+                        <RenamePopup className="rename-popup"
+                            closePopupButton={this.toggleRenamePopup.bind(this)}
+                            changeName={this.sendChangeRequest.bind(this)}
+                        />
+                        : null
+                    }
+                    {this.state.showDeletePopup ?
+                        <DeletePopup className="delete-popup"
+                            closeDeletePopupButton={this.toggleDeletePopup.bind(this)}
+                            changeName={this.sendDeleteRequest.bind(this)}
+                        />
+                        : null
+                    }
+                    
+                </div>
+                <DragAndDrop updateView={this.updateResponse} activePath={this.state.activeFolder}></DragAndDrop>
             </div>
         )
     }
