@@ -4,6 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { push } from "connected-react-router";
 import { RouteLink } from "../../store/modules/menu/menu";
 import {  FormControl, MenuItem, Select } from "@material-ui/core";
+import InputLabel from '@material-ui/core/InputLabel';
+import TextField from '@material-ui/core/TextField';
 
 import request from "../../service";
 
@@ -14,9 +16,9 @@ const ReportList = ({push}) => {
     const [reports, setReports] = useState([]);
     const [open, setOpen] = React.useState(false);
     const [filter, setFilter] = useState([]);
-   // let filter = false;
-    //const reports = [];
     const [selectedFrequency, setSelectedFrequency] = useState("noFilter");
+    const [selectedName, setSelectedName] = useState("");
+    const [title, setTitle] = useState("");
    
     //za probu
     let rep= [
@@ -63,7 +65,10 @@ const ReportList = ({push}) => {
             ]
           }
       ];
-    
+      const changeTitle = (event) => {
+        setTitle(event.target.value);
+    };
+
       const filterFrequency =  (event) => {
         setSelectedFrequency(event.target.value);
         if(event.target.value  === "noFilter") {
@@ -72,20 +77,26 @@ const ReportList = ({push}) => {
             setFilter([event.target.value]);
         }     
     };
-
+    const emptyReports = () =>{
+        let size = reports.length;
+        for(let i = 0; i < size ; i++)
+            reports.pop();
+    };
     const setData = async (frequencies) => {
+        emptyReports();
+
         if(frequencies === null){
             setReports([]);
             const res = await request("https://si-2021.167.99.244.168.nip.io/api/report/AllReportsForUser");
-            // for (let re of res.data.data) 
-            //     for (let r of re.reportInstances)
-            //         reports.push(r);
-            
-            //za probu
-            for (let re of rep) 
+            for (let re of res.data.data) 
                 for (let r of re.reportInstances)
                     reports.push(r);
-            console.log("1",reports);
+            
+            //za probu
+            // for (let re of rep) 
+            //     for (let r of re.reportInstances)
+            //         reports.push(r);
+
             setReports(reports);
             
         }
@@ -93,11 +104,10 @@ const ReportList = ({push}) => {
             const res = await request('https://si-2021.167.99.244.168.nip.io/api/report/GetReports?' + `Frequency=${frequencies}`);
             setReports([]);
             for (let repo of res.data.data) 
-                //for (let r of repo.reportInstances)
+                for (let r of repo.reportInstances)
                     reports.push(repo);
             
             setReports(reports);
-            console.log("2",reports);
         }
     };
 
@@ -150,7 +160,7 @@ const ReportList = ({push}) => {
                 : null}
             </div>
             <div className="reportTable">
-            <ReportTable reports={ reports} />     
+                <ReportTable reports={ reports} />     
             </div>
         </div>
     )
