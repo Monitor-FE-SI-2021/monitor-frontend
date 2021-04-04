@@ -99,14 +99,7 @@ const Reports = () => {
                     <TextField labelId="frequencyLabel" value={title} className="select" onChange={changeTitle} autoFocus />
                 </div>
 
-                <div className="inputWrapper">
-                    <InputLabel className="inputLabelWrapper" id="frequencyLabel"> How often do you want a report to be sent to you? </InputLabel>
-                    {frequencies.length > 0 &&
-                        <Select className="select" labelId="frequencyLabel" value={selectedFrequency} onChange={changeFrequency}>
-                            {frequencies.map(el => <MenuItem key={el.name} value={el.name}> {el.label} </MenuItem>)}
-                        </Select>
-                    }
-                </div>
+                
 
                 <div className="inputWrapper">
                     <ReportTiming />
