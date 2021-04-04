@@ -3,10 +3,7 @@ import ReportTable from '../../components/ReportTable/ReportTable';
 import React, { useState, useEffect } from 'react';
 import { push } from "connected-react-router";
 import { RouteLink } from "../../store/modules/menu/menu";
-import {  FormControl, MenuItem, Select } from "@material-ui/core";
-import InputLabel from '@material-ui/core/InputLabel';
-import TextField from '@material-ui/core/TextField';
-
+import {  FormControl, MenuItem, Select , Popover  } from "@material-ui/core";
 import request from "../../service";
 
 import './ReportList.scss';
@@ -18,8 +15,7 @@ const ReportList = ({push}) => {
     const [filter, setFilter] = useState([]);
     const [selectedFrequency, setSelectedFrequency] = useState("noFilter");
     const [selectedName, setSelectedName] = useState("");
-    const [title, setTitle] = useState("");
-   
+    
     //za probu
     let rep= [
         {
@@ -65,11 +61,18 @@ const ReportList = ({push}) => {
             ]
           }
       ];
-      const changeTitle = (event) => {
-        setTitle(event.target.value);
+
+      const filterName = (event) => {
+        handleClose();
+        if(selectedName  === "") {
+            setFilter([]);
+        } else {
+            setFilter([selectedName]);
+        }     
     };
 
-      const filterFrequency =  (event) => {
+    const filterFrequency =  (event) => {
+        handleClose();
         setSelectedFrequency(event.target.value);
         if(event.target.value  === "noFilter") {
             setFilter([]);
@@ -77,6 +80,7 @@ const ReportList = ({push}) => {
             setFilter([event.target.value]);
         }     
     };
+
     const emptyReports = () =>{
         let size = reports.length;
         for(let i = 0; i < size ; i++)
@@ -85,7 +89,7 @@ const ReportList = ({push}) => {
     const setData = async (frequencies) => {
         emptyReports();
 
-        if(frequencies === null){
+        if(frequencies === null && selectedName===""){
             setReports([]);
             const res = await request("https://si-2021.167.99.244.168.nip.io/api/report/AllReportsForUser");
             for (let re of res.data.data) 
@@ -100,32 +104,54 @@ const ReportList = ({push}) => {
             setReports(reports);
             
         }
-        else{
+        else if(frequencies !== null){
+            setSelectedName("");
             const res = await request('https://si-2021.167.99.244.168.nip.io/api/report/GetReports?' + `Frequency=${frequencies}`);
             setReports([]);
             for (let repo of res.data.data) 
                 for (let r of repo.reportInstances)
-                    reports.push(repo);
+                    reports.push(r);
             
             setReports(reports);
         }
-    };
+        else{
+            setSelectedFrequency("noFilter");
+            const res = await request('https://si-2021.167.99.244.168.nip.io/api/report/GetReports?' + `Name=${selectedName}`);
+            setReports([]);
+            for (let repo of res.data.data) 
+                for (let r of repo.reportInstances)
+                    reports.push(r);
 
+            setReports(reports);
+        }
+    };
+   
     useEffect(() => {
         setReports([]);
         let freq = null;
+        
         if(selectedFrequency !== "noFilter")
             freq = selectedFrequency;
-        console.log("freq",freq);
+
         setData(freq);
     }, [filter]);
 
     const handleClose = () => {
         setOpen(false);
     };
-
+    
     const handleOpen = () => {
         setOpen(true);
+    };
+
+    const handleReset= () => {
+        setSelectedName("");
+        setSelectedFrequency("noFilter");
+        setData(null);
+    };
+    ;
+    const handleResetFreq= () => {
+        setSelectedFrequency("noFilter");
     };
 
     return (
@@ -135,27 +161,45 @@ const ReportList = ({push}) => {
                 <button className="createReport" onClick={() => push(RouteLink.Reporting)}>New report</button>
                 
             </div>
-            <div className="reportTable">
+            <div className="buttons">
             <button className="searchReport" onClick={handleOpen}>Filter</button>
-      {open ?
+            <button className="searchReport" onClick={handleReset}>Reset filters</button>
+            {open ?
                 <FormControl className="filter"style={{ float: 'right' }}>
-                    <Select
-                        labelId="demo-controlled-open-select-label"
-                        id="demo-controlled-open-select"
-                        open={open}
-                        onClose={handleClose}
-                        >
+                    <Popover
+                    anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                    }}
+                    transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'left',
+                    }}
+                    open={open}>
                         <MenuItem disabled>
                             <em>Frequency</em>
                         </MenuItem>
-                        <MenuItem value={selectedFrequency}>
+                        <MenuItem value={selectedFrequency} >
                         {frequenciesFilter.length > 0 &&
                             <Select className="select" labelId="frequencyLabel" value={selectedFrequency} onChange={filterFrequency}>
                                 {frequenciesFilter.map(el => <MenuItem key={el.name} value={el.name}> {el.label} </MenuItem>)}
                             </Select>
                         }
                         </MenuItem>
-                    </Select>
+                        <MenuItem value={selectedName}>
+                            <input 
+                            type="text" 
+                            className="MuiInputBase-input MuiInput-input" 
+                            placeholder="Name" 
+                            onChange={e => setSelectedName(e.target.value)}
+                            onKeyPress={event => {
+                                if (event.key === 'Enter') {
+                                handleResetFreq();
+                                filterName();
+                                }
+                              }}/>
+                        </MenuItem>
+                    </Popover>
                 </FormControl>
                 : null}
             </div>
