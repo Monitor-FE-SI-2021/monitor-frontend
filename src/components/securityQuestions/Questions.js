@@ -13,6 +13,7 @@ import { showSwalToast } from "../../utils/utils";
 const tooken = window.localStorage.getItem(STORAGE_KEY);
 const securityQuestions = "https://si-2021.167.99.244.168.nip.io:3333/AllSecurityQuestions";
 const saveQuestions="https://si-2021.167.99.244.168.nip.io:3333/setSecurityQuestionsAndAnswers";
+const niz =[];
 
 function Questions() {
     const initialFormData = {
@@ -20,9 +21,7 @@ function Questions() {
     };
 
     const[Questions,setQuestions]=useState([]);
-    const[QuestionsID,setQuestionsID]=useState([]);
     const[FormQuestions,setFormQuestions]=useState([]);
-    const[FormAnswers, setFormAnswers]=useState([]);
      const [QueSuc, setQueSuc] = useState(false)
 
  const switchRoute = (link) => {
@@ -31,50 +30,29 @@ function Questions() {
 
     const [formData, updateFormData] = React.useState(initialFormData);
 
-    const handleChange = (e) => {
- updateFormData({
-            ...formData,
-            [e.target.name]: e.target.value.trim()
-        });
-console.log(e.target.value);
-
-    };
-
  const handleSubmit = (e) => {
   e.preventDefault();
-  let niz=[];
   for(let i=0;i<formData.broj+2;i++) {
   const doubleQuestion=FormQuestions.find(element=>element==document.getElementsByClassName("questions")[i].value);
    FormQuestions.push(document.getElementsByClassName("questions")[i].value);
-  //var oneQuestion=document.getElementsByClassName("questions")[i].value;
   const DBQuestion=Questions.find(element=>element.Question==document.getElementsByClassName("questions")[i].value);
- // QuestionsID.push(idQuestion.QuestionId);
 if(DBQuestion) {
 var json={ "questionId":DBQuestion.QuestionId, "answer":document.getElementsByClassName("answers")[i].value };
 if(!doubleQuestion)
 niz.push(json);
   }
   }
-console.log("JSON ODGOVORI");
 console.log(niz);
- console.log("TOKEN");
-   const token = window.localStorage.getItem(STORAGE_KEY);
- console.log(token);
-
-
    request(saveQuestions, 'post', niz)
              .then(() => {
                  setQueSuc(true);
                  showSwalToast(`successfully answered`, 'success');
+                 window.location.reload();
+
              }).catch((error) => {
              console.log(error);
               showSwalToast('Invalid answers');
          })
-
-         updateFormData(initialFormData);
-         niz=[];
-
-
     }
 
 
@@ -116,7 +94,7 @@ useEffect(()=>{
                     <form id="form">
                 <h2>Security questions?</h2>
                 <p>Question 1</p>
-                <select id="select1"   className="questions" onClick={handleChange}>
+                <select id="select1"   className="questions" >
                 <option value="" selected disabled hidden>Choose here</option>
       {Questions.map(question=>(
               <option key={question.QuestionId}>{question.Question}</option>
