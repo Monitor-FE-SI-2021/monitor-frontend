@@ -6,6 +6,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 
 import  './ReportTiming.scss'
 
+import HourPicker from './HourPicker.js';
+
 
 const options = [
     {
@@ -42,115 +44,114 @@ class ReportTiming extends React.Component {
     render() {
 
         let inputType;
-        if(this.state.frequency === 'none'){
-            inputType = <div><input id="noneInput" disabled type='text'/></div>
-        } else if(this.state.frequency === 'daily'){
-            inputType = <div><input className="timeInput" type='time'/></div>
+        
+        if(this.state.frequency === 'daily'){
+            inputType = < HourPicker />
         } else if(this.state.frequency === 'weekly'){
             inputType = <div> 
-            <select id="weeklyInputDay" name="Todays_Day">
-            <option value="Monday">Monday</option>
-            <option value="Tuesday">Tuesday</option>
-            <option value="Wednesday">Wednesday</option>
-            <option value="Thursday">Thursday</option>
-            <option value="Friday">Friday</option>
-            <option value="Saturday">Saturday</option>
-            <option value="Sunday">Sunday</option>
-        </select>
-        <input id="weeklyInputTime" type='time'/>
+                <Select className="select">
+                <MenuItem value="0">Monday</MenuItem>
+                <MenuItem value="1">Tuesday</MenuItem>
+                <MenuItem value="2">Wednesday</MenuItem>
+                <MenuItem value="3">Thursday</MenuItem>
+                <MenuItem value="4">Friday</MenuItem>
+                <MenuItem value="5">Saturday</MenuItem>
+                <MenuItem value="6">Sunday</MenuItem>
+            </Select>
+        < HourPicker />
         </div>
         } else if(this.state.frequency === 'monthly'){
             inputType = inputType = <div> 
        <span>
-            <select id="selectDay" name="day">
-                 <option value="01">1</option>
-                 <option value="02">2</option>
-                 <option value="03">3</option>
-                 <option value="04">4</option>
-                 <option value="05">5</option>
-                 <option value="06">6</option>
-                 <option value="07">7</option>
-                 <option value="08">8</option>
-                 <option value="09">9</option>
-                 <option value="10">10</option>
-                 <option value="11">11</option>
-                 <option value="12">12</option>
-                 <option value="13">13</option>
-                 <option value="14">14</option>
-                 <option value="15">15</option>
-                 <option value="16">16</option>
-                 <option value="17">17</option>
-                 <option value="18">18</option>
-                 <option value="19">19</option>
-                 <option value="20">20</option>
-                 <option value="21">21</option>
-                 <option value="22">22</option>
-                 <option value="23">23</option>
-                 <option value="24">24</option>
-                 <option value="25">25</option>
-                 <option value="26">26</option>
-                 <option value="27">27</option>
-                 <option value="28">28</option>
-                 <option value="29">29</option>
-                 <option value="30">30</option>
-                 <option value="31">31</option>
-            </select>
+       <Select className="select">
+                <MenuItem value="0">1</MenuItem>
+                <MenuItem value="1">2</MenuItem>
+                <MenuItem value="2">3</MenuItem>
+                <MenuItem value="3">4</MenuItem>
+                <MenuItem value="4">5</MenuItem>
+                <MenuItem value="5">6</MenuItem>
+                <MenuItem value="6">7</MenuItem>
+                <MenuItem value="7">8</MenuItem>
+                <MenuItem value="8">9</MenuItem>
+                <MenuItem value="9">10</MenuItem>
+                <MenuItem value="10">11</MenuItem>
+                <MenuItem value="11">12</MenuItem>
+                <MenuItem value="13">13</MenuItem>
+                <MenuItem value="14">14</MenuItem>
+                <MenuItem value="15">15</MenuItem>
+                <MenuItem value="16">16</MenuItem>
+                <MenuItem value="17">17</MenuItem>
+                <MenuItem value="18">18</MenuItem>
+                <MenuItem value="19">19</MenuItem>
+                <MenuItem value="20">20</MenuItem>
+                <MenuItem value="21">21</MenuItem>
+                <MenuItem value="22">22</MenuItem>
+                <MenuItem value="23">23</MenuItem>
+                <MenuItem value="24">24</MenuItem>
+                <MenuItem value="25">25</MenuItem>
+                <MenuItem value="26">26</MenuItem>
+                <MenuItem value="27">27</MenuItem>
+                <MenuItem value="28">28</MenuItem>
+                <MenuItem value="29">29</MenuItem>
+                <MenuItem value="30">30</MenuItem>
+                <MenuItem value="31">31</MenuItem>
+            </Select>
        </span>
-        <input className="timeInput" type='time'/>
+       < HourPicker />
              </div>;
         } else if(this.state.frequency === 'yearly'){
             inputType = <div> <span>
-            <select id="selectMonth" name="month">
-               <option value="01">January</option>
-               <option value="02">February</option>
-               <option value="03">March</option>
-               <option value="04">April</option>
-               <option value="05">May</option>
-               <option value="06">June</option>
-               <option value="07">July</option>
-               <option value="08">August</option>
-               <option value="09">September</option>
-               <option value="10">October</option>
-               <option value="11">November</option>
-               <option value="12">December</option>
-            </select> 
+            <Select className="select">
+                <MenuItem value="0">1</MenuItem>
+                <MenuItem value="1">2</MenuItem>
+                <MenuItem value="2">3</MenuItem>
+                <MenuItem value="3">4</MenuItem>
+                <MenuItem value="4">5</MenuItem>
+                <MenuItem value="5">6</MenuItem>
+                <MenuItem value="6">7</MenuItem>
+                <MenuItem value="7">8</MenuItem>
+                <MenuItem value="8">9</MenuItem>
+                <MenuItem value="9">10</MenuItem>
+                <MenuItem value="10">11</MenuItem>
+                <MenuItem value="11">12</MenuItem>
+                <MenuItem value="13">13</MenuItem>
+                <MenuItem value="14">14</MenuItem>
+                <MenuItem value="15">15</MenuItem>
+                <MenuItem value="16">16</MenuItem>
+                <MenuItem value="17">17</MenuItem>
+                <MenuItem value="18">18</MenuItem>
+                <MenuItem value="19">19</MenuItem>
+                <MenuItem value="20">20</MenuItem>
+                <MenuItem value="21">21</MenuItem>
+                <MenuItem value="22">22</MenuItem>
+                <MenuItem value="23">23</MenuItem>
+                <MenuItem value="24">24</MenuItem>
+                <MenuItem value="25">25</MenuItem>
+                <MenuItem value="26">26</MenuItem>
+                <MenuItem value="27">27</MenuItem>
+                <MenuItem value="28">28</MenuItem>
+                <MenuItem value="29">29</MenuItem>
+                <MenuItem value="30">30</MenuItem>
+                <MenuItem value="31">31</MenuItem>
+            </Select>
        </span>
        <span>
-            <select id="selectDayY" name="day">
-                 <option value="01">1</option>
-                 <option value="02">2</option>
-                 <option value="03">3</option>
-                 <option value="04">4</option>
-                 <option value="05">5</option>
-                 <option value="06">6</option>
-                 <option value="07">7</option>
-                 <option value="08">8</option>
-                 <option value="09">9</option>
-                 <option value="10">10</option>
-                 <option value="11">11</option>
-                 <option value="12">12</option>
-                 <option value="13">13</option>
-                 <option value="14">14</option>
-                 <option value="15">15</option>
-                 <option value="16">16</option>
-                 <option value="17">17</option>
-                 <option value="18">18</option>
-                 <option value="19">19</option>
-                 <option value="20">20</option>
-                 <option value="21">21</option>
-                 <option value="22">22</option>
-                 <option value="23">23</option>
-                 <option value="24">24</option>
-                 <option value="25">25</option>
-                 <option value="26">26</option>
-                 <option value="27">27</option>
-                 <option value="28">28</option>
-                 <option value="29">29</option>
-                 <option value="30">30</option>
-                 <option value="31">31</option>
-            </select>
+       <Select className="select">
+                <MenuItem value="0">January</MenuItem>
+                <MenuItem value="1">February</MenuItem>
+                <MenuItem value="2">March</MenuItem>
+                <MenuItem value="3">April</MenuItem>
+                <MenuItem value="4">May</MenuItem>
+                <MenuItem value="5">June</MenuItem>
+                <MenuItem value="6">July</MenuItem>
+                <MenuItem value="7">August</MenuItem>
+                <MenuItem value="8">September</MenuItem>
+                <MenuItem value="9">October</MenuItem>
+                <MenuItem value="10">November</MenuItem>
+                <MenuItem value="11">December</MenuItem>
+            </Select>
        </span>
-            <input className="timeInput" type='time'/>
+       < HourPicker />
              </div>;
         }
 
@@ -165,9 +166,9 @@ class ReportTiming extends React.Component {
 
                 <div className="inputWrapper">
                     <InputLabel className="inputLabelWrapper"> At what time do you want an email to be sent? </InputLabel>
-                    <div className="select">
+                    
                         {inputType}
-                    </div>
+                   
                 </div>
             </div>
         );
