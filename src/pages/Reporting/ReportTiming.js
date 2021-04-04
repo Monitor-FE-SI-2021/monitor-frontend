@@ -1,12 +1,13 @@
 import React from 'react';
-
+import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-
+import FormHelperText from '@material-ui/core/FormHelperText';
 import  './ReportTiming.scss'
 
 import HourPicker from './HourPicker.js';
+
 
 
 const options = [
@@ -46,10 +47,14 @@ class ReportTiming extends React.Component {
         let inputType;
         
         if(this.state.frequency === 'daily'){
-            inputType = < HourPicker />
+            inputType = < HourPicker placeholder={<div>Type to search</div>}/>
         } else if(this.state.frequency === 'weekly'){
             inputType = <div> 
-                <Select className="select">
+                <FormControl>
+                <InputLabel shrink className="demo-simple-select-placeholder-label-label">
+                    Day in week
+                </InputLabel>
+                <Select className="select" >
                 <MenuItem value="0">Monday</MenuItem>
                 <MenuItem value="1">Tuesday</MenuItem>
                 <MenuItem value="2">Wednesday</MenuItem>
@@ -58,11 +63,17 @@ class ReportTiming extends React.Component {
                 <MenuItem value="5">Saturday</MenuItem>
                 <MenuItem value="6">Sunday</MenuItem>
             </Select>
+            </FormControl>
+            <br></br>
         < HourPicker />
         </div>
         } else if(this.state.frequency === 'monthly'){
-            inputType = inputType = <div> 
+            inputType = <div> 
        <span>
+       <FormControl>
+       <InputLabel shrink className="demo-simple-select-placeholder-label-label">
+                    Day in month
+                </InputLabel>
        <Select className="select">
                 <MenuItem value="0">1</MenuItem>
                 <MenuItem value="1">2</MenuItem>
@@ -96,11 +107,16 @@ class ReportTiming extends React.Component {
                 <MenuItem value="30">30</MenuItem>
                 <MenuItem value="31">31</MenuItem>
             </Select>
+            </FormControl>
        </span>
+       <br></br>
        < HourPicker />
              </div>;
         } else if(this.state.frequency === 'yearly'){
-            inputType = <div> <span>
+            inputType = <div> <span><FormControl>
+                <InputLabel shrink className="demo-simple-select-placeholder-label-label">
+                    Day in month
+                </InputLabel>
             <Select className="select">
                 <MenuItem value="0">1</MenuItem>
                 <MenuItem value="1">2</MenuItem>
@@ -134,8 +150,13 @@ class ReportTiming extends React.Component {
                 <MenuItem value="30">30</MenuItem>
                 <MenuItem value="31">31</MenuItem>
             </Select>
+            </FormControl>
        </span>
-       <span>
+       <br></br>
+       <span><FormControl>
+       <InputLabel shrink className="demo-simple-select-placeholder-label-label">
+                   Month
+                </InputLabel>
        <Select className="select">
                 <MenuItem value="0">January</MenuItem>
                 <MenuItem value="1">February</MenuItem>
@@ -150,7 +171,9 @@ class ReportTiming extends React.Component {
                 <MenuItem value="10">November</MenuItem>
                 <MenuItem value="11">December</MenuItem>
             </Select>
+            </FormControl>
        </span>
+       <br></br>
        < HourPicker />
              </div>;
         }
@@ -164,12 +187,13 @@ class ReportTiming extends React.Component {
                     </Select>
                 </div>
 
-                <div className="inputWrapper">
+                <div className="inputWrapper" id="timeEmail">
                     <InputLabel className="inputLabelWrapper"> At what time do you want an email to be sent? </InputLabel>
                     
                         {inputType}
-                   
+                    
                 </div>
+                
             </div>
         );
     }
