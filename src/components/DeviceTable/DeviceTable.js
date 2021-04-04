@@ -9,16 +9,43 @@ import { push } from "connected-react-router";
 import { RouteLink } from "../../store/modules/menu/menu";
 
 import './device_table.scss'
+import request, { wsEndpoint } from "../../service";
+import { showSwalToast } from "../../utils/utils";
 
-const DeviceTable = ({ devices, selectDevice, push }) => {
+const DeviceTable = ({ devices, selectDevice, push, user, activeDevices }) => {
 
     const editDevice = (device) => {
         selectDevice(device);
         push(RouteLink.ManageDevice);
     }
 
-    const connectDevice = (tableRow) => {
-        console.log(tableRow)
+    const connectDevice = (device) => {
+        const ipAddr = activeDevices.find(d => (d.name === device.name && d.location === device.location))?.ip;
+
+        console.log(ipAddr);
+
+        if (ipAddr) {
+            request(wsEndpoint + "/agent/connect", "POST", {
+                name: device.name,
+                location: device.location,
+                user: user,
+                ip: ipAddr,
+            }).then(r => {
+                if (r?.data?.type === "Connected") {
+                    showSwalToast("Uređaj je uspješno konektovan.", 'success')
+                    push(RouteLink.Dashboard)
+                }
+            })
+        } else {
+            showSwalToast("Uređaj nije online.");
+        }
+    }
+
+    const canConnectToDevice = device => {
+
+        const activeDevice = activeDevices.find(d => (d.name === device.name && d.location === device.location));
+
+        return activeDevice && (activeDevice.status === 'Disconnected' || activeDevice.status === 'Online');
     }
 
     const [tableFields] = useState([
@@ -58,7 +85,9 @@ const DeviceTable = ({ devices, selectDevice, push }) => {
             <CustomTable data={devices} fields={tableFields}>
                 <TableSlot slot='actions' render={dataRow => (
                     <div className='actions'>
-                        <CastConnected onClick={() => connectDevice(dataRow)}/>
+                        {canConnectToDevice(dataRow) && (
+                            <CastConnected onClick={() => connectDevice(dataRow)}/>
+                        )}
                         <Edit className='edit-btn' onClick={() => editDevice(dataRow)}/>
                     </div>
                 )}/>
@@ -70,11 +99,14 @@ const DeviceTable = ({ devices, selectDevice, push }) => {
                 )}/>
 
                 <TableSlot slot='status' render={dataRow => (
-                    <span>{dataRow.status === true ? 'Online' : 'Offline'}</span>
+                    <span>{canConnectToDevice(dataRow) ? 'Offline' : 'Online'}</span>
                 )}/>
             </CustomTable>
         </React.Fragment>
     )
 }
 
-export default connect(null, { selectDevice, push })(DeviceTable);
+export default connect((state) => ({
+    activeDevices: state.devices.activeDevices,
+    user: state.login.user,
+}), { selectDevice, push })(DeviceTable);

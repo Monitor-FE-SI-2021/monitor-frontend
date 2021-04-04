@@ -2,11 +2,12 @@ import { connect } from "react-redux";
 import "./Devices.scss";
 import DeviceGroup from "../../components/DeviceGroup/DeviceGroup";
 import React, { useEffect } from 'react';
-import { fetchAllDevices } from "../../store/modules/devices/actions";
+import { fetchAllDevices, setActiveGlobal } from "../../store/modules/devices/actions";
 import { fetchAllGroups } from "../../store/modules/groups/actions";
 import { push } from "connected-react-router";
 import { RouteLink } from "../../store/modules/menu/menu";
 import { Spinner } from "../../components/Spinner/Spinner";
+import request, { wsEndpoint } from "../../service";
 
 const getRootGroups = (groups) => {
     const parentGroups = [];
@@ -19,10 +20,16 @@ const getRootGroups = (groups) => {
 
 }
 
-const Devices = ({ allGroups, fetchAllDevices, fetchAllGroups, push, devicesAsync, groupsAsync }) => {
+const Devices = ({ allGroups, fetchAllDevices, fetchAllGroups, push, devicesAsync, groupsAsync, setActiveGlobal }) => {
+
+    useEffect(() => {
+        request(wsEndpoint + "/agent/online")
+            .then((res) => {
+                setActiveGlobal(res.data)
+            })
+    }, [])
 
     const async = devicesAsync || groupsAsync;
-
 
     useEffect(() => {
         fetchAllDevices();
@@ -55,4 +62,4 @@ export default connect((state) => ({
     allGroups: state.groups.groups,
     devicesAsync: state.devices.async,
     groupsAsync: state.groups.async
-}), { fetchAllDevices, fetchAllGroups, push })(Devices);
+}), { fetchAllDevices, fetchAllGroups, push, setActiveGlobal })(Devices);
