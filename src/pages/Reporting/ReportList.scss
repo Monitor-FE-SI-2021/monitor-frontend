@@ -5,7 +5,7 @@
     flex-direction: column;
 }
 
-.createReport {
+.createReport , .searchReport{
     border: none;
     background: rgba(64, 64, 64, 0.9);
     font-weight: 100;
@@ -14,8 +14,15 @@
     letter-spacing: 2px;
     border-radius: 6px;
     display: inline-block;
+    align-self: flex-end;
     transition: all 0.3s ease 0s;
     color: #fff;
+}
+
+.filter{
+    display: inline-block;
+    align-self: flex-end;
+    padding-right: 20px;
 }
 
 .header {
@@ -33,4 +40,9 @@
     align-items: center;
     justify-content: center;
     padding: 20px;
+}
+.reportingWrapper{
+    .custom-table-container .filter-btn {
+    display: none;
+    }
 }

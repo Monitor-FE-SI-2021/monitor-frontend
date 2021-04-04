@@ -21,6 +21,14 @@ export const frequencies = [
   { name: "year", label: "Yearly" },
 ];
 
+export const frequenciesFilter = [
+  { name: "noFilter", label: "No filter" },
+  { name: "Daily", label: "Daily" },
+  { name: "Weekly", label: "Weekly" },
+  { name: "Monthly", label: "Monthly" },
+  { name: "Yearly", label: "Yearly" },
+];
+
 export const devices = [
   { name: "1", label: "dev 1" },
   { name: "2", label: "dev 2" },
