@@ -99,7 +99,10 @@ const Reports = () => {
                     <TextField labelId="frequencyLabel" value={title} className="select" onChange={changeTitle} autoFocus />
                 </div>
 
-                
+                <div className="inputWrapper">
+                    <InputLabel className="inputLabelWrapper" id="frequencyLabel"> Receiving reports to the mail address </InputLabel>
+                    <input id="emailCheckbox" type="checkbox"></input>
+                </div>
 
                 <div className="inputWrapper">
                     <ReportTiming />
