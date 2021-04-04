@@ -4,7 +4,7 @@ import { CastConnected } from "@material-ui/icons";
 import { Edit } from "@material-ui/icons";
 import dayjs from 'dayjs';
 import { connect } from "react-redux";
-import { selectDevice, updateDevicesTableForGroup } from "../../store/modules/devices/actions";
+import { selectDevice, updateActiveDevice, updateDevicesTableForGroup } from "../../store/modules/devices/actions";
 import { push } from "connected-react-router";
 import { RouteLink } from "../../store/modules/menu/menu";
 
@@ -12,10 +12,26 @@ import './device_table.scss'
 import request, { wsEndpoint } from "../../service";
 import { showSwalToast } from "../../utils/utils";
 import FilterList from "@material-ui/icons/FilterList";
-import { Checkbox, FormControl, Input, ListItemText, MenuItem, Select } from "@material-ui/core";
+import { Checkbox, Chip, FormControl, Input, ListItemText, MenuItem, Select } from "@material-ui/core";
 import { DEVICE_STATUS } from "../../store/modules/devices/devices";
-import { Spinner } from "../Spinner/Spinner";
 import CustomPagination from "../CustomTable/components/CustomPagination";
+
+const DEVICE_WS_STATUS = {
+    WAITING: "Waiting",
+    IN_USE: "In use",
+}
+
+const DEVICE_STATUS_TEXT = {
+    [DEVICE_WS_STATUS.WAITING]: "Spreman",
+    [DEVICE_WS_STATUS.IN_USE]: "U upotrebi",
+    OFFLINE: "Van mreže"
+}
+
+const DEVICE_STATUS_COLORS = {
+    [DEVICE_WS_STATUS.WAITING]: "#5db98c",
+    [DEVICE_WS_STATUS.IN_USE]: "#bdbdbd",
+    OFFLINE: "#ff5252",
+}
 
 const DeviceTable = ({
                          devices,
@@ -25,7 +41,8 @@ const DeviceTable = ({
                          activeDevices,
                          deviceTable,
                          group,
-                         updateDevicesTableForGroup
+                         updateDevicesTableForGroup,
+                         updateActiveDevice
                      }) => {
 
     const [statusFilterOpened, setStatusFilterOpened] = React.useState(false);
@@ -38,18 +55,18 @@ const DeviceTable = ({
     }
 
     const connectDevice = (device) => {
-        const ipAddr = activeDevices.find(d => (d.name === device.name && d.location === device.location))?.ip;
+        const activeDevice = activeDevices.find(d => (d.deviceUid === device.deviceUid));
 
-        if (ipAddr) {
+        if (activeDevice) {
             request(wsEndpoint + "/agent/connect", "POST", {
-                name: device.name,
-                location: device.location,
-                user: user,
-                ip: ipAddr,
+                deviceUid: activeDevice.deviceUid,
+                user: user?.email,
             }).then(r => {
+                console.log(r);
                 if (r?.data?.type === "Connected") {
                     showSwalToast("Uređaj je uspješno konektovan.", 'success')
-                    push(RouteLink.Dashboard)
+                    updateActiveDevice(activeDevice.deviceUid, { status: r.data.type })
+                    // push(RouteLink.Dashboard)
                 }
             })
         } else {
@@ -59,9 +76,9 @@ const DeviceTable = ({
 
     const canConnectToDevice = device => {
 
-        const activeDevice = activeDevices.find(d => (d.name === device.name && d.location === device.location));
+        const activeDevice = activeDevices.find(d => (d.deviceUid === device.deviceUid));
 
-        return activeDevice && (activeDevice.status === 'Disconnected' || activeDevice.status === 'Online');
+        return activeDevice && (activeDevice.status === DEVICE_WS_STATUS.WAITING);
     }
 
     const [tableFields] = useState([
@@ -96,6 +113,20 @@ const DeviceTable = ({
             slot: 'actions'
         }]
     )
+
+    const renderDeviceStatus = device => {
+
+        const activeDevice = activeDevices.find(d => (d.deviceUid === device.deviceUid));
+
+        const status = activeDevice?.status ?? "OFFLINE";
+
+        const text = DEVICE_STATUS_TEXT[status];
+        const backgroundColor = DEVICE_STATUS_COLORS[status];
+
+        return <Chip style={{ background: backgroundColor, color: "#fff" }}
+                     size={'small'}
+                     label={text}/>
+    }
 
     const handleFiltersChange = (name, value) => {
 
@@ -156,7 +187,8 @@ const DeviceTable = ({
                     <TableSlot slot='actions' render={dataRow => (
                         <div className='actions'>
                             {canConnectToDevice(dataRow) && (
-                                <CastConnected onClick={() => connectDevice(dataRow)}/>
+                                <CastConnected className='connect-btn'
+                                               onClick={() => connectDevice(dataRow)}/>
                             )}
                             <Edit className='edit-btn' onClick={() => editDevice(dataRow)}/>
                         </div>
@@ -169,7 +201,9 @@ const DeviceTable = ({
                     )}/>
 
                     <TableSlot slot='status' render={dataRow => (
-                        <span>{canConnectToDevice(dataRow) ? 'Offline' : 'Online'}</span>
+                        <span>
+                            {renderDeviceStatus(dataRow)}
+                        </span>
                     )}/>
                 </CustomTable>
 
@@ -199,6 +233,9 @@ export default connect((state, ownProps) => {
     }
     ,
     {
-        selectDevice, push, updateDevicesTableForGroup
+        selectDevice,
+        push,
+        updateDevicesTableForGroup,
+        updateActiveDevice
     }
 )(DeviceTable);

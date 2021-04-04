@@ -54,7 +54,6 @@ const Devices = ({
     const rootGroups = (Boolean(groupsSearchText) ? searchedGroups : getRootGroups(allGroups)).map((grupa) => {
         return (
             <DeviceGroup group={grupa}
-                         shouldRenderSubgroups={!Boolean(groupsSearchText)}
                          key={grupa.groupId}/>
         );
     });

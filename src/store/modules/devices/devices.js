@@ -5,7 +5,7 @@ import {
     SELECT_DEVICE,
     UPDATE_DEVICES_TABLE_FOR_GROUP,
     SET_ACTIVE_DEVICES,
-    SEARCH_DEVICES_ACTION,
+    SEARCH_DEVICES_ACTION, UPDATE_ACTIVE_DEVICE,
 } from "./types";
 import { cloneDeep, merge } from "lodash";
 
@@ -104,6 +104,21 @@ const ACTION_HANDLERS = {
             searchText
         }
     },
+    [UPDATE_ACTIVE_DEVICE]: (state, { deviceUid, data }) => {
+
+        const activeCloned = cloneDeep(state.activeDevices);
+
+        const device = activeCloned.find(d => d.deviceUid === deviceUid);
+
+        if (device) {
+            merge(device, data);
+        }
+
+        return {
+            ...state,
+            activeCloned
+        }
+    }
 
 }
 

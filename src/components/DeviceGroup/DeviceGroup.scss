@@ -1,5 +1,5 @@
 .device-group {
-    margin-left: 25px;
+    margin: 5px 0 5px 25px;
 
     .tab {
         display: flex;
@@ -40,6 +40,7 @@
             outline: none;
             margin-right: 5px;
             color: var(--main-color);
+            padding: 5px 10px;
         }
 
         .collapsed:hover,

@@ -13,9 +13,14 @@ const DeviceGroup = ({
                          deviceTable,
                          fetchDevicesForGroup,
                          updateDevicesTableForGroup,
+                         groupsSearchText,
                          devicesSearchText,
                          shouldRenderSubgroups = true
                      }) => {
+
+    const [hidden, setHidden] = useState(true);
+
+    const devices = deviceTable?.devices ?? [];
 
     const createDevice = (group) => {
         push({
@@ -30,10 +35,6 @@ const DeviceGroup = ({
             state: { group }
         });
     }
-
-    const [hidden, setHidden] = useState(true);
-
-    const devices = deviceTable?.devices ?? [];
 
     const fetchData = () => fetchDevicesForGroup({
         groupId: group.groupId,
@@ -59,6 +60,7 @@ const DeviceGroup = ({
 
     }, [hidden, group, deviceTable.page, deviceTable.perPage, deviceTable.status, deviceTable.sortField, deviceTable.sortOrder]);
 
+
     // search useEffect so i can debounce it
     useEffect(() => {
         const hasNoSubGroups = group.subGroups.length === 0;
@@ -74,17 +76,23 @@ const DeviceGroup = ({
                                      key={subGroup.groupId}/>
     })
 
-    const toggleArrow = () => {
+    const isListView = Boolean(groupsSearchText);       // If groups are being searched, list mode is on
+
+    const shouldAllowOpen = !isListView || (isListView && group.subGroups?.length === 0);
+
+    const toggleHidden = () => {
+
+        if (!shouldAllowOpen) return;
+
         let newHidden = !hidden;
         setHidden(newHidden);
     }
 
-
     return (
         <div className='device-group'>
             <div className='tab'>
-                <div className='title' onClick={toggleArrow}>
-                    <button className={hidden ? 'collapsed' : 'expanded'}/>
+                <div className='title' onClick={toggleHidden}>
+                    {shouldAllowOpen && <button className={hidden ? 'collapsed' : 'expanded'}/>}
                     <span className='group-name'>{group.name}</span>
                 </div>
                 <div className='buttons'>
@@ -118,6 +126,7 @@ const ConnectedDeviceGroup = connect((state, ownProps) => {
 
         return {
             deviceTable,
+            groupsSearchText: state.groups.searchText,
             devicesSearchText: state.devices.searchText
         }
     }

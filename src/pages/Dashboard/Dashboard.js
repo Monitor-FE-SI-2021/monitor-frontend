@@ -216,10 +216,8 @@ const Dashboard = ({ user, setActiveGlobal }) => {
             window.confirm("Are you sure you wish to disconnect this machine?")
         ) {
             request("https://si-grupa5.herokuapp.com/api/agent/disconnect", "POST", {
-                name: machine.name,
-                location: machine.location,
-                ip: machine.ip,
-                user: user
+                deviceUid: machine?.deviceUid,
+                user: user?.email
             })
                 .then((res) => console.log(res))
                 .catch((err) => console.log(err))

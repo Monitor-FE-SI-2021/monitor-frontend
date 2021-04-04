@@ -4,7 +4,9 @@ import {
     SET_DEVICES_ASYNC,
     SET_DEVICES_ASYNC_FOR_GROUP,
     UPDATE_DEVICES_TABLE_FOR_GROUP,
-    SET_ACTIVE_DEVICES, SEARCH_DEVICES_ACTION
+    SET_ACTIVE_DEVICES,
+    SEARCH_DEVICES_ACTION,
+    UPDATE_ACTIVE_DEVICE
 } from "./types";
 import request, { devices } from "../../../service";
 import { DEVICE_STATUS } from "./devices";
@@ -116,6 +118,16 @@ export function searchDevicesAction(searchText) {
         dispatch({
             type: SEARCH_DEVICES_ACTION,
             searchText
+        })
+    }
+}
+
+export function updateActiveDevice(deviceUid, data) {
+    return dispatch => {
+        dispatch({
+            type: UPDATE_ACTIVE_DEVICE,
+            deviceUid,
+            data
         })
     }
 }
