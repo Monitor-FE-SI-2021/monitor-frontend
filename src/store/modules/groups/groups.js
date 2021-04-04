@@ -1,11 +1,12 @@
-import { SET_GROUPS, SET_GROUPS_ASYNC, SEARCH_GROUPS_ACTION } from "./types";
+import { SET_GROUPS, SET_GROUPS_ASYNC, SEARCH_GROUPS_ACTION, SELECT_GROUP } from "./types";
 import { flattenGroup } from "../../../components/ManageDeviceForm/ManageDeviceForm";
 
 const initialState = {
     async: false,
     groups: {},
     searchedGroups: [],         // This is a list of all groups, no hierarchy here
-    searchText: ''
+    searchText: '',
+    selectedGroup: null,
 }
 
 function filterGroupTree(root, searchText) {
@@ -42,7 +43,13 @@ const ACTION_HANDLERS = {
             searchText,
             searchedGroups
         }
-    }
+    },
+    [SELECT_GROUP]: (state, action) => {
+        return {
+            ...state,
+            selectedGroup: action.group
+        }
+    },
 }
 
 

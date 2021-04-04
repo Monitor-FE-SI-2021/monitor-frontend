@@ -14,11 +14,13 @@
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
-        border-bottom: 1px solid #495c8f;
-    }
+        border-bottom: 1px solid var(--main-color);
 
-    h1 {
-        color: #495c8f;
+        .page-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--main-color);
+        }
     }
 
     .search {

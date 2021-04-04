@@ -6,6 +6,8 @@ import { fetchDevicesForGroup, updateDevicesTableForGroup } from "../../store/mo
 import { push } from "connected-react-router";
 import { RouteLink } from "../../store/modules/menu/menu";
 import { debounce } from "lodash/function";
+import { Edit } from "@material-ui/icons";
+import { selectGroup } from "../../store/modules/groups/actions";
 
 const DeviceGroup = ({
                          push,
@@ -15,6 +17,7 @@ const DeviceGroup = ({
                          updateDevicesTableForGroup,
                          groupsSearchText,
                          devicesSearchText,
+                         selectGroup,
                          shouldRenderSubgroups = true
                      }) => {
 
@@ -88,12 +91,20 @@ const DeviceGroup = ({
         setHidden(newHidden);
     }
 
+    const editGroup = (group) => {
+        selectGroup(group);
+        push(RouteLink.ManageGroup);
+    }
+
     return (
         <div className='device-group'>
             <div className='tab'>
                 <div className='title' onClick={toggleHidden}>
                     {shouldAllowOpen && <button className={hidden ? 'collapsed' : 'expanded'}/>}
-                    <span className='group-name'>{group.name}</span>
+                    <div className='group-name-container'>
+                        <span className='group-name'>{group.name}</span>
+                        <Edit className='edit-group-btn' onClick={() => editGroup(group)}/>
+                    </div>
                 </div>
                 <div className='buttons'>
                     {group.subGroups.length === 0 ?
@@ -134,7 +145,8 @@ const ConnectedDeviceGroup = connect((state, ownProps) => {
     {
         push,
         fetchDevicesForGroup,
-        updateDevicesTableForGroup
+        updateDevicesTableForGroup,
+        selectGroup
     }
 )(DeviceGroup);
 

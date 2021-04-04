@@ -122,14 +122,20 @@ const ManageDeviceForm = ({ selectedDevice, group, groupOptions, fetchAllGroups,
         if (validate()) {
 
             if (editMode === true) {
-                showSwalToast(`Uspješno izmijenjena mašina ${deviceData.Name}`, 'success');
+                request(devices + `/${group.groupId}`, 'PUT', deviceData)
+                    .then(r => {
+                        console.log(r.data);
+                        showSwalToast(`Uspješno izmijenjena mašina '${deviceData.Name}'`, 'success');
+                        setValues(initialValues);
+                        push(RouteLink.Devices);
+                    })
                 //push(RouteLink.Devices);
             } else {
 
                 request(devices + `/CreateDevice?groupId=${values.group}`, 'POST', deviceData)
                     .then(r => {
                         console.log(r.data);
-                        showSwalToast(`Uspješno kreirana mašina ${deviceData.Name}`, 'success');
+                        showSwalToast(`Uspješno kreirana mašina '${deviceData.Name}'`, 'success');
                         setValues(initialValues);
                         push(RouteLink.Devices);
                     })

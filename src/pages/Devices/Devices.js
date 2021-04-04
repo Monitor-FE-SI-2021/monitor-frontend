@@ -71,7 +71,7 @@ const Devices = ({
     return (
         <div className="page devices">
             <div className="top">
-                <h1> Pregled mašina </h1>
+                <span className='page-title'> Pregled mašina </span>
                 <div>
                     <button className="custom-btn" onClick={() => push(RouteLink.ManageGroup)}>Kreiraj grupu</button>
                     <button className="custom-btn" onClick={() => push(RouteLink.ManageDevice)}>Kreiraj mašinu</button>

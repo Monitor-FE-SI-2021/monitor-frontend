@@ -34,3 +34,13 @@
         color: rgba(73, 92, 143, 0.9);
     }
 }
+
+.async-button {
+    display: flex;
+    align-items: center;
+
+    .spinner {
+        margin: 0 0 0 10px;
+        color: #fff;
+    }
+}
