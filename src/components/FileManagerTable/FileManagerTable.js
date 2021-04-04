@@ -80,7 +80,7 @@ class FileManagerTable extends React.Component {
                                     break;
                                 }
                             }
-                        }
+                        } 
 
 
                         //Redndera dejcu
@@ -249,6 +249,8 @@ class FileManagerTable extends React.Component {
         if(file.data.type == 'file'){
             //Kliknut file
             console.log("Ja sam file prikazi me");
+            var text = await this.getText(file);
+            alert(text);
         }else{
             //Kliknut folder
             console.log("Ja sam folder otvori me");
@@ -331,6 +333,60 @@ class FileManagerTable extends React.Component {
             console.log(e);
         }
 
+    }
+
+    getText = async (file) => {
+        var returnable = null;
+        try{
+            const requestOptions = {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  email: config.email,
+                  password: config.password,
+                }),
+              };
+      
+            var response = await fetch(config.url, requestOptions);
+            if(response.status == 200)
+            {
+                var x = await response.json();
+                const token = x.accessToken;
+
+                const requestOptions2 = {
+                    method: "POST",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer " + token,
+                    },
+                    body: JSON.stringify({
+                        fileName: 'test.txt',
+                        user: config.email,
+                        path : ''
+                    })
+                };
+                
+                return await fetch('https://si-grupa5.herokuapp.com/api/web/user/file/getText', requestOptions2)
+                .then((res) => {
+                    return res.json().then((res) => {
+                        console.log(res.text);
+                        returnable = res.text;
+                        return res.text;
+                    });
+
+                }).catch((error) => {
+                    console.log(error);
+                });
+
+                
+    
+            }
+        } catch(e){
+            console.log(e);
+        }
+
+        
     }
 
     clickNewFolder() {
