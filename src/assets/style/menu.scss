@@ -20,7 +20,6 @@
         align-items: center;
         margin-bottom: 30px;
         white-space: nowrap;
-        overflow: scroll;
 
         span {
             font-weight: bold;
@@ -42,6 +41,18 @@
 
         &:hover {
             opacity: 1;
+        }
+    }
+
+    .username {
+        margin-top: auto;
+        margin-bottom: 10px;
+        font-weight: bold;
+        white-space: nowrap;
+        overflow: hidden;
+
+        &.hidden {
+            visibility: hidden;
         }
     }
 }
