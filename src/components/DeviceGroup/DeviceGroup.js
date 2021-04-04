@@ -1,10 +1,11 @@
 import './DeviceGroup.scss';
 import DeviceTable from '../DeviceTable/DeviceTable';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { connect } from "react-redux";
 import { fetchDevicesForGroup, updateDevicesTableForGroup } from "../../store/modules/devices/actions";
 import { push } from "connected-react-router";
 import { RouteLink } from "../../store/modules/menu/menu";
+import { debounce } from "lodash/function";
 
 const DeviceGroup = ({
                          push,
@@ -34,22 +35,39 @@ const DeviceGroup = ({
 
     const devices = deviceTable?.devices ?? [];
 
+    const fetchData = () => fetchDevicesForGroup({
+        groupId: group.groupId,
+        page: deviceTable.page,
+        perPage: deviceTable.perPage,
+        status: deviceTable.status,
+        sortField: deviceTable.sortField,
+        sortOrder: deviceTable.sortOrder
+    });
+
+    const fetchDataDebounced = useCallback(
+        debounce(fetchData, 400),
+        []
+    );
+
     useEffect(() => {
 
         const hasNoSubGroups = group.subGroups.length === 0;
 
         if (!hidden && hasNoSubGroups) {
-            fetchDevicesForGroup({
-                groupId: group.groupId,
-                page: deviceTable.page,
-                perPage: deviceTable.perPage,
-                status: deviceTable.status,
-                sortField: deviceTable.sortField,
-                sortOrder: deviceTable.sortOrder
-            });
+            fetchData();
         }
 
-    }, [hidden, group, deviceTable.page, deviceTable.perPage, deviceTable.status, deviceTable.sortField, deviceTable.sortOrder, devicesSearchText]);
+    }, [hidden, group, deviceTable.page, deviceTable.perPage, deviceTable.status, deviceTable.sortField, deviceTable.sortOrder]);
+
+    // search useEffect so i can debounce it
+    useEffect(() => {
+        const hasNoSubGroups = group.subGroups.length === 0;
+
+        if (!hidden && hasNoSubGroups) {
+            fetchDataDebounced();
+        }
+    }, [devicesSearchText])
+
 
     let subGroupsRendered = group.subGroups.map(subGroup => {
         return <ConnectedDeviceGroup group={subGroup}

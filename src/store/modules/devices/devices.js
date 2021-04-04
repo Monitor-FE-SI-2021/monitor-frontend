@@ -49,8 +49,6 @@ const getUpdatedDeviceTables = (currentTables, groupId, data) => {
 
     newDeviceTables[groupId] = Object.assign(newDeviceTables[groupId], data);
 
-    console.log(newDeviceTables[groupId]);
-
     return newDeviceTables;
 }
 
