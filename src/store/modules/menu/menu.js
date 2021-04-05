@@ -1,66 +1,72 @@
-export const SET_MENU_EXPANDED = "SET_MENU_EXPANDED";
+export const SET_MENU_EXPANDED = 'SET_MENU_EXPANDED';
 
 export const RouteLink = {
-  Dashboard: "/",
-  Login: "/login",
-  Devices: "/devices",
-  Reporting: "/reporting",
-  AddDevice: "/manage-device",
-  Terminal: "/terminal",
-  RemoteControl: "/remotecontrol",
-};
+    Dashboard: '/',
+    Login: "/login",
+    Devices: "/devices",
+    Reporting: "/reporting",
+    ReportList: "/report-list",
+    AddDevice: '/manage-device',
+    ManageDevice: '/manage-device',
+    ManageGroup: '/manage-group',
+    Terminal: '/terminal',
+    RemoteControl: '/remotecontrol',
+    TwoFactorAuthentication: '/security',
+    SecurityQuestions : '/securityQuestions'
+}
 
 const initialState = {
-  isMenuExpanded: true,
-  items: [
-    {
-      link: RouteLink.Dashboard,
-      name: "Dashboard",
-      icon: "",
-    },
-    {
-      link: RouteLink.Devices,
-      name: "Mašine",
-      icon: "",
-    },
-    {
-      link: RouteLink.Reporting,
-      name: "Reporting",
-      icon: "",
-    },
-    // {
-    //     link: RouteLink.Terminal,
-    //     name: 'Terminal',
-    //     icon: ""
-    // },
-    // {
-    //     link: RouteLink.RemoteControl,
-    //     name: 'Remote Control',
-    //     icon: ""
-    // },
-  ],
+    isMenuExpanded: true,
+    items: [
+        {
+            link: RouteLink.Dashboard,
+            name: "Dashboard",
+            icon: "",
+        },
+        {
+            link: RouteLink.Devices,
+            name: "Mašine",
+            icon: "",
+        },
+        {
+            link: RouteLink.ReportList,
+            name: "Reporting",
+            icon: "",
+        },
+        {
+            link: RouteLink.TwoFactorAuthentication,
+            name: 'Two Factor Authentication',
+            icon: ""
+        },
+         {
+             link: RouteLink.SecurityQuestions,
+             name: 'Security Questions',
+             icon: ""
+         }
+    ],
 };
 
 const ACTION_HANDLERS = {
-  [SET_MENU_EXPANDED]: (state, action) => {
-    return {
-      ...state,
-      isMenuExpanded: action.toggle,
-    };
-  },
-};
+    [SET_MENU_EXPANDED]: (state, action) => {
+        return {
+            ...state,
+            isMenuExpanded: action.toggle,
+        }
+    }
+}
 
 export const setMenuExpanded = (toggle) => {
-  return (dispatch) => {
-    dispatch({
-      type: SET_MENU_EXPANDED,
-      toggle,
-    });
-  };
-};
+    return dispatch => {
+        dispatch({
+            type: SET_MENU_EXPANDED,
+            toggle
+        })
+    }
+}
 
 export default function menu(state = initialState, action) {
-  const handler = ACTION_HANDLERS[action.type];
 
-  return handler ? handler(state, action) : state;
+    const handler = ACTION_HANDLERS[action.type];
+
+    return handler ? handler(state, action) : state;
 }

@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import AddDeviceForm from "../../components/AddDeviceForm/AddDeviceForm";
+import ManageDeviceForm from "../../components/ManageDeviceForm/ManageDeviceForm";
 import { Paper, makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
@@ -9,16 +9,16 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-const AddDevice = () => {
+const ManageDevice = (props) => {
     const classes = useStyles();
 
     return (
         <div className='page manage-device'>
             <Paper className={classes.pageContent}>
-                <AddDeviceForm/>
+                <ManageDeviceForm group={props?.location?.state?.group}/>
             </Paper>
         </div>
     )
 }
 
-export default connect(state => ({}), {})(AddDevice);
+export default connect(state => ({}), {})(ManageDevice);

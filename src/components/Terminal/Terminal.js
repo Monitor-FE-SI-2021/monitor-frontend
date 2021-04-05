@@ -20,8 +20,10 @@ firebase.initializeApp({
 var counterOfSavedLogs = 0;
 
 const Terminal = (props) => {
-  console.log("IP ", props.machine.ip);
+  //console.log("IP ", props);
   const inputText = React.useRef();
+
+  const [put, setPut] = React.useState(props.machine.path);
 
   const [
     consoleOutput,
@@ -65,26 +67,31 @@ const Terminal = (props) => {
     <div className="page">
       <div className={"terminal"}>
         <HistoryLogs
-          path={props.machine.name + " " + props.machine.path}
+          path={props.machine.path}
           name={props.machine.name}
         />
         <MapConsoleOutput
           name={props.machine.name}
           location={props.machine.location}
           ip={props.machine.ip}
-          path={props.machine.name + " " + props.machine.path}
+          id={props.machine.deviceUid}
+          //path={props.machine.path}
+          path={put}
+          setPut={setPut}
           consoleOutput={consoleOutput}
           updateConsoleOutput={updateConsoleOutput}
           token={token}
+          user={props.user}
         />
         <div className="input-prompt">
-          <Prompt path={props.machine.name + " " + props.machine.path} />
+          <Prompt path={put} />
+          {/* <Prompt path={put} /> */}
           <input
             className="input-console"
             type="text"
             ref={inputText}
             onKeyPress={({ target: { value }, key }) =>
-              onEnter(value, key, props.machine.name)
+              onEnter(value, key, props.machine.name, props.machine.path)
             }
             onKeyDown={logsHistory}
           />
@@ -94,4 +101,9 @@ const Terminal = (props) => {
   );
 };
 
-export default connect((state) => ({}), {})(Terminal);
+export default connect(
+  (state) => ({
+      user: state.login.user,
+  }),
+  {}
+)(Terminal);

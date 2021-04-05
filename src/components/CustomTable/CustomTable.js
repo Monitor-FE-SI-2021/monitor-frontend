@@ -1,5 +1,4 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import React, { useEffect, useState } from 'react';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -7,27 +6,20 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import UpArrow from '@material-ui/icons/ArrowDropUp';
+import DownArrow from '@material-ui/icons/ArrowDropDown';
 import { getDeepProp } from "../../utils/utils";
+import classnames from 'classnames';
 
-const useStyles = makeStyles({
-    table: {
-        minWidth: 650,
-    },
-    header: {
-        backgroundColor: '#404040',
-        color: 'white',
-        fontWeight: 600,
-        padding: '5px 20px'
-    }
-});
+import './custom_table.scss'
+import { Spinner } from "../Spinner/Spinner";
+
 
 export function TableSlot({ slot, render }) {
     return <div></div>
 }
 
-export default function CustomTable({ data, fields, children }) {
-
-    const classes = useStyles();
+export default function CustomTable({ data, fields, children, handleSort, activeSortField, activeSortOrder, async }) {
 
     const activeFields = (fields || []).filter(field => field.disabled !== undefined ? !field.disabled : true);
 
@@ -54,20 +46,44 @@ export default function CustomTable({ data, fields, children }) {
     }
 
     return (
-        <TableContainer component={Paper} className={'custom-table'}>
-            <Table className={classes.table}>
+        <TableContainer component={Paper} className={'custom-table-container'}>
+            <Table className='custom-table'>
                 <TableHead>
-                    <TableRow className={classes.header} key={'header-row'}>
+                    <TableRow className={'header-row'} key={'header-row'}>
                         {activeFields.map(field => (
-                            <TableCell className={classes.header} key={field.name}
+                            <TableCell key={field.name}
+                                       className='header-row-cell'
                                        align={field.align}
                                        style={{ width: field.width || 'initial' }}>
-                                {field.title}
+                                <div className={classnames('cell-content', [field.align])}>
+                                    <span>{field.title}</span>
+                                    {field.sort === true && (
+                                        <div style={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                        }}>
+                                            <UpArrow
+                                                className={'sort-icon'}
+                                                style={{
+                                                    color: (activeSortField === field.name && activeSortOrder === 'asc') && "#7c90ff"
+                                                }}
+                                                onClick={() => {
+                                                    handleSort(field.name, "asc")
+                                                }}/>
+                                            <DownArrow
+                                                className={'sort-icon'}
+                                                style={{
+                                                    color: (activeSortField === field.name && activeSortOrder === 'desc') && "#7c90ff"
+                                                }}
+                                                onClick={() => handleSort(field.name, "desc")}/>
+                                        </div>
+                                    )}
+                                </div>
                             </TableCell>
                         ))}
                     </TableRow>
                 </TableHead>
-                <TableBody>
+                {(!async && data.length !== 0) && (<TableBody>
                     {data.map((row, rowIndex) => (
                         <TableRow key={row.id ?? rowIndex}>
                             {activeFields.map((field, index) => (
@@ -75,8 +91,13 @@ export default function CustomTable({ data, fields, children }) {
                             ))}
                         </TableRow>
                     ))}
-                </TableBody>
+                </TableBody>)}
             </Table>
+            {async ? <Spinner/> : data?.length !== 0 ? null : (
+                <div className='no-results-message'>
+                    Nema rezultata.
+                </div>
+            )}
         </TableContainer>
     );
 }

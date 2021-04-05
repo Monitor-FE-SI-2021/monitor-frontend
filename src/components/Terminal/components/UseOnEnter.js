@@ -14,7 +14,14 @@ const commands = {
   move: 1,
   rd: 1,
   set: 1,
-  '?' : 0
+  '?' : 0,
+  mkdir: 1,
+  ipconfig: 0,
+  driverquery: 0,
+  systeminfo: 0,
+  tasklist: 0,
+  dir: 0,
+  ping: 1
 };
 
 const UseOnEnter = () => {
@@ -25,7 +32,7 @@ const UseOnEnter = () => {
   const [savedLogs, setSavedLogs] = React.useState([]);
   const [counter, setCounter] = React.useState(0);
 
-  const onEnter = async (value, key, name) => {
+  const onEnter = async (value, key, name, path) => {
     
     if (key === "Enter") {
       //console.log("Proba")
@@ -54,16 +61,18 @@ const UseOnEnter = () => {
   }
   
     
-      const newInput = value;
-
+      let newInput = value;
+      
       if(value==="")
       return updateConsoleOutput(consoleOutput => consoleOutput.concat(""))
-        
+      
       setSavedLogs(savedLogs => savedLogs.concat(newInput))
-        
+      let newInput2 = newInput.replace(/ +/g, ' ').trim();
+      newInput=path.concat("> ").concat(value)
       updateConsoleOutput(consoleOutput => consoleOutput.concat(newInput))
-        
-      let args = value.split(" ");
+      
+      console.log(newInput2)
+      let args = newInput2.split(" ");
 
       const argument = String(commands[args[0]]);
 
@@ -73,7 +82,7 @@ const UseOnEnter = () => {
       return updateConsoleOutput(consoleOutput =>
         consoleOutput.concat("Invalid Command"), setCounter(brojac=>brojac+1)
       )}
-        console.log("Name ", name)
+        //console.log("Name ", name)
       if(args.length>1){
         addNewLog({
           command_type: args[0].toString(),

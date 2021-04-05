@@ -1,5 +1,5 @@
 import React from 'react';
-import './FileManagerTable.css';
+import './FileManagerTable.scss';
 import RenamePopup from "../Popups/RenapePopup";
 import DeletePopup from "../Popups/DeletePopup";
 
@@ -54,6 +54,16 @@ class FileManagerTable extends React.Component {
                     link: 'treciLink'
                 }
             ], showRenamePopup: false, showDeletePopup: false, globalId: -1
+        }
+    }
+    
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.currentFile !== this.props.currentFile) {
+            this.state.responseObject.push({
+                id: this.state.responseObject[this.state.responseObject.length-1].id+1,
+                fileName: nextProps.currentFile.fileName,
+                link: "testLink"
+            });
         }
     }
 
@@ -127,7 +137,6 @@ class FileManagerTable extends React.Component {
         this.state.globalId = id;
         this.toggleRenamePopup(false);
     }
-
 
     render() {
         return (
