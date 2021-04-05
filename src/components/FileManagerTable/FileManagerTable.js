@@ -252,10 +252,15 @@ class FileManagerTable extends React.Component {
 
         var file = this.state.responseObject[id];
         if (file.data.type == 'file') {
+            if(file.data.extension != '.txt') return;
+
             //Kliknut file
             console.log("Ja sam file prikazi me");
+
             var text = await this.getText(file);
+            
             var myWindow = window.open("", "textFeild", "width=600,height=600");
+            myWindow.document.open();
             myWindow.document.write(text);
         } else {
             //Kliknut folder
@@ -367,7 +372,7 @@ class FileManagerTable extends React.Component {
                     body: JSON.stringify({
                         fileName: file.fileName,
                         user: config.email,
-                        path: ''
+                        path: this.state.activeFolder
                     })
                 };
 
