@@ -63,7 +63,7 @@ const DeviceTable = ({
                 user: user?.email,
             }).then(r => {
                 console.log(r);
-                if (r?.data?.type === "Connected") {
+                if (r?.data?.type === DEVICE_WS_STATUS.IN_USE) {
                     showSwalToast("Uređaj je uspješno konektovan.", 'success')
                     updateActiveDevice(activeDevice.deviceUid, { status: r.data.type })
                     // push(RouteLink.Dashboard)

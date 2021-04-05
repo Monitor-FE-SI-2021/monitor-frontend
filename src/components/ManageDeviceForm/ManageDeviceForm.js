@@ -10,6 +10,7 @@ import { RouteLink } from "../../store/modules/menu/menu";
 import { push } from "connected-react-router";
 import { selectDevice } from "../../store/modules/devices/actions";
 import "./ManageDeviceForm.scss"
+import { AsyncButton } from "../AsyncButton/AsyncButton";
 
 const ManageDeviceForm = ({ selectedDevice, group, groupOptions, fetchAllGroups, push, selectDevice }) => {
 
@@ -25,6 +26,7 @@ const ManageDeviceForm = ({ selectedDevice, group, groupOptions, fetchAllGroups,
     const [editMode, setEditMode] = useState(false);
     const [values, setValues] = useState(initialValues)
     const [errors, setErrors] = useState({})
+    const [async, setAsync] = useState(false);
 
     const transformDeviceToForm = (device) => {
 
@@ -33,6 +35,7 @@ const ManageDeviceForm = ({ selectedDevice, group, groupOptions, fetchAllGroups,
         form.latitude = device.locationLatitude;
         form.longitude = device.locationLongitude;
         form.group = device.groupId;
+        form.deviceUid = device.deviceUid;
 
         return form;
     }
@@ -44,6 +47,8 @@ const ManageDeviceForm = ({ selectedDevice, group, groupOptions, fetchAllGroups,
             LocationLongitude: form.longitude ?? '',
             LocationLatitude: form.latitude ?? '',
             InstallationCode: form.installationCode ?? '',
+            DeviceUid: form.deviceUid,
+            GroupId: form.group
         }
     }
 
@@ -119,30 +124,48 @@ const ManageDeviceForm = ({ selectedDevice, group, groupOptions, fetchAllGroups,
 
         const deviceData = transformFormToDevice(values);
 
+        console.log(deviceData);
+
+        const groupId = deviceData.GroupId;
+
+        deviceData.Status = true;
+
+        delete deviceData.GroupId;
+
         if (validate()) {
 
+            setAsync(true);
+
             if (editMode === true) {
-                request(devices + `/${group.groupId}`, 'PUT', deviceData)
+
+                request(devices + `/${groupId}`, 'PUT', deviceData)
                     .then(r => {
                         console.log(r.data);
                         showSwalToast(`Uspješno izmijenjena mašina '${deviceData.Name}'`, 'success');
                         setValues(initialValues);
-                        push(RouteLink.Devices);
-                    })
-                //push(RouteLink.Devices);
+                    }).finally(() => {
+                    setAsync(false)
+                    push(RouteLink.Devices);
+                })
             } else {
 
-                request(devices + `/CreateDevice?groupId=${values.group}`, 'POST', deviceData)
+                delete deviceData.DeviceUid;
+
+                request(devices + `/CreateDevice?groupId=${groupId}`, 'POST', deviceData)
                     .then(r => {
                         console.log(r.data);
                         showSwalToast(`Uspješno kreirana mašina '${deviceData.Name}'`, 'success');
                         setValues(initialValues);
-                        push(RouteLink.Devices);
-                    })
+                    }).finally(() => {
+                    setAsync(false)
+                    push(RouteLink.Devices);
+                })
 
             }
         }
     }
+
+    const installationCodeDisabled = editMode && selectedDevice?.installationCode === null;
 
     return (
         <form className="manage-device-form" onSubmit={handleSubmit}>
@@ -163,7 +186,10 @@ const ManageDeviceForm = ({ selectedDevice, group, groupOptions, fetchAllGroups,
                        onChange={handleInputChange}
                        {...(errors.longitude && { error: true, helperText: errors.longitude })}/>
 
-            <TextField variant="outlined" disabled={editMode} label="Instalacioni kod" name="installationCode"
+            <TextField variant="outlined"
+                       disabled={installationCodeDisabled}
+                       label="Instalacioni kod"
+                       name="installationCode"
                        value={values.installationCode}
                        onChange={handleInputChange}
                        {...(errors.installationCode && { error: true, helperText: errors.installationCode })}/>
@@ -187,9 +213,9 @@ const ManageDeviceForm = ({ selectedDevice, group, groupOptions, fetchAllGroups,
 
             <div className='buttons'>
                 <button className="custom-btn outlined" onClick={() => push(RouteLink.Devices)}>Otkaži</button>
-                <button className="custom-btn">
+                <AsyncButton className="custom-btn" async={async}>
                     {editMode === true ? "Izmijeni mašinu" : "Kreiraj mašinu"}
-                </button>
+                </AsyncButton>
             </div>
         </form>
     );

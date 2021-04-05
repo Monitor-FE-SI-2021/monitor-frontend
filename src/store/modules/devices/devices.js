@@ -116,7 +116,7 @@ const ACTION_HANDLERS = {
 
         return {
             ...state,
-            activeCloned
+            activeDevices: activeCloned
         }
     }
 
