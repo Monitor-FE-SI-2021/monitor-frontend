@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import debounce from 'lodash/debounce';
 
 import NewWindow from '../../../components/NewWindow/NewWindow';
 import RemoteAccess from '../../RemoteAccess/RemoteAccess.js';
@@ -10,12 +11,17 @@ const ActiveMachine = ({data, img, onDisconnect, getStatistics}) => {
     const [remoteAccessOpen, setRemoteAccessOpen] = useState(false);
     const popup = useRef();
 
+    const handleOnClick = debounce(
+        () => getStatistics(data),
+        300
+    );
+
     return (
         <>
             <div
                 className="card"
                 id={data.deviceId}
-                onClick={() => getStatistics(data)}
+                onClick={handleOnClick}
                 onDoubleClick={() => remoteAccessOpen ? popup.current.focus() : setRemoteAccessOpen(true)}
             >
                 <div className="img-info">
