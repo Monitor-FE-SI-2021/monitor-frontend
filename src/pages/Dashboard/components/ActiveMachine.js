@@ -1,7 +1,14 @@
-import React, {useState} from "react";
+import React, { useRef, useState } from "react";
+
+import NewWindow from '../../../components/NewWindow/NewWindow';
+import RemoteAccess from '../../RemoteAccess/RemoteAccess.js';
 import Avatar from "./MachineAvatar.js";
 
-const ActiveMachine = ({data, img, fun, getStatistics}) => {
+import './ActiveMachine.scss';
+
+const ActiveMachine = ({data, img, onDisconnect, getStatistics}) => {
+    const [remoteAccessOpen, setRemoteAccessOpen] = useState(false);
+    const popup = useRef();
 
     return (
         <>
@@ -9,9 +16,7 @@ const ActiveMachine = ({data, img, fun, getStatistics}) => {
                 className="card"
                 id={data.deviceId}
                 onClick={() => getStatistics(data)}
-                onDoubleClick={() =>
-                    window.open("/remotecontrol/" + data.name + "/terminal", "_blank")
-                }
+                onDoubleClick={() => remoteAccessOpen ? popup.current.focus() : setRemoteAccessOpen(true)}
             >
                 <div className="img-info">
                     <div className="card-img">
@@ -27,13 +32,24 @@ const ActiveMachine = ({data, img, fun, getStatistics}) => {
                 <div className="card-actions">
                     <button
                         onClick={() => {
-                            fun(data);
+                            onDisconnect(data);
+                            setRemoteAccessOpen(false);
                         }}
                     >
                         Disconnect
                     </button>
                 </div>
             </div>
+
+            { remoteAccessOpen && (
+                <NewWindow
+                    onClose={() => setRemoteAccessOpen(false)}
+                    title={`Remote Access - ${data.name} (${data.location})`}
+                    ref={popup}
+                >
+                    <RemoteAccess machine={data} />
+                </NewWindow>
+            ) }
         </>
     );
 };
