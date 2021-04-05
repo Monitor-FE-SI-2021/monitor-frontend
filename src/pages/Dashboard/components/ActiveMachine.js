@@ -27,6 +27,7 @@ const ActiveMachine = ({data, img, fun, getStatistics}) => {
                 <div className="card-actions">
                     <button
                         onClick={() => {
+                            console.log(data.deviceUid)
                             fun(data);
                         }}
                     >

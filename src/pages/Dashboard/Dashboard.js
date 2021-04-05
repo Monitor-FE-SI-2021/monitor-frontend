@@ -50,7 +50,7 @@ let hddUsageChart = {
         },
     ],
 };
-
+/*
 let activeMachines = [
     {
         deviceUid: "fc548ecb-12ec-4ad5-8672-9d5a9565ff60",
@@ -81,7 +81,7 @@ let activeMachines = [
         path: "C:/user/programfiles",
     }
 ];
-
+*/
 function convertStatistics(statistic) {
     return [Math.round(statistic * 100), Math.round((1 - statistic) * 100)];
 }
@@ -92,18 +92,18 @@ let allMachinesUsage = null
 let lastDisconnected = null
 
 const Dashboard = ({user}) => {
-  //  let activeMachines = []
+    let activeMachines = []
     const [machines, setMachines] = React.useState([]);
     const [active, setActive] = React.useState([...activeMachines]);
     const [showCharts, setShowCharts] = React.useState(false);
 
     function filterActive(activeMachines, allMachines) {
         return activeMachines ? activeMachines.filter((machine) => {
-            const existingMachine = allMachines.find(({name, location}) => {
-                return machine.status !== "Disconnected" && name === machine.name && location === machine.location;
+            const existingMachine = allMachines.find(({deviceUid}) => {
+                return machine.status !== "Waiting" && machine.deviceUid === deviceUid;
             });
             if (existingMachine) {
-                machine.deviceId = existingMachine.deviceId;
+                machine.deviceId = existingMachine.deviceId
                 machine.lastTimeOnline = existingMachine.lastTimeOnline;
             }
             return existingMachine;
@@ -111,10 +111,10 @@ const Dashboard = ({user}) => {
     }
 
     function getStatistics(machine) {
+        console.log(machine)
         request(devices + "/GetDeviceLogs?deviceId=" + machine.deviceId)
             .then((res) => res.data.data)
             .then((res) => {
-                console.log(res);
                 setCharts(res, machine);
             })
             .catch((err) => console.log(err));
@@ -148,28 +148,20 @@ const Dashboard = ({user}) => {
             .then((res) => {
                 const allMachines = res.data.data;
                 setMachines(allMachines);
-                console.log(allMachines)
-             /*   request("https://si-grupa5.herokuapp.com/api/agent/online")
+                request("https://si-grupa5.herokuapp.com/api/agent/online")
                     .then((res) => {
-                        console.log(res)
                         setActive(filterActive(res?.data, allMachines));
                     })
-
-              */
-                setActive(filterActive(activeMachines, allMachines))
+              //  setActive(filterActive(activeMachines, allMachines))
             })
             .catch((err) => console.log(err));
 
         request(devices + "/GetAverageHardwareUsageForUser")
             .then((res) => {
                 allMachinesUsage = res.data.data
-                console.log(allMachinesUsage)
                 setCharts(allMachinesUsage, { name: "All machines"})
             })
 
-        /*  request("https://si-grupa5.herokuapp.com/api/agent/online").then((res) => {
-              console.log(res);
-          });*/
     }, []);
 
     const disconnectMachine = (machine) => {
@@ -181,10 +173,8 @@ const Dashboard = ({user}) => {
             window.confirm("Are you sure you wish to disconnect this machine?")
         ) {
             request("https://si-grupa5.herokuapp.com/api/agent/disconnect", "POST", {
-                name: machine.name,
-                location: machine.location,
-                ip: machine.ip,
-                user: user
+                deviceUid: machine.deviceUid,
+                user: user.email
             })
                 .then((res) => console.log(res))
                 .catch((err) => console.log(err))
