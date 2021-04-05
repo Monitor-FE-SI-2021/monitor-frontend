@@ -9,6 +9,8 @@ import Swal from "sweetalert2";
 
 const config = require("../Terminal/config");
 const userFiles = "https://si-grupa5.herokuapp.com/api/web/user/fileList";
+const folderIconUrl = "https://img.icons8.com/color/40/000000/folder-invoices--v2.png";
+const fileIconUrl = "https://img.icons8.com/office/40/000000/document--v2.png";
 
 class FileManagerTable extends React.Component {
     constructor(props) {
@@ -19,7 +21,8 @@ class FileManagerTable extends React.Component {
                 {
                     id: 1,
                     fileName: "LOADING...",
-                    link: 'linkDoFajla'
+                    link: 'linkDoFajla',
+                    data: {}
                 },
             ],
             showRenamePopup: false,
@@ -151,10 +154,10 @@ class FileManagerTable extends React.Component {
 
     renderTableHeader() {
         return (
-            <tr>
-                <th>ID</th>
-                <th>Filename</th>
-                <th colSpan="2">File manipulation</th>
+            <tr className="header-row">
+                {/* <th>ID</th> */}
+                <th className="centriraj-lijevo pomjereni-naziv">Filename</th>
+                <th colSpan="2" className="centriraj">File manipulation</th>
             </tr>
         )
     }
@@ -164,10 +167,13 @@ class FileManagerTable extends React.Component {
             const { id, fileName, link } = oneObject;
             return (
                 <tr>
-                    <td className="id">{id}</td>
-                    <td className="file-download" onClick={() => { this.handleClick(id) }} >{fileName}</td>
-                    <td className="file-manipulation file-delete" onClick={() => { this.handleDelete(id) }}>Delete</td>
-                    <td className="file-manipulation file-rename" onClick={() => { this.handleRename(id) }}>Rename</td>
+                    {/* <td className="id">{id}</td> */}
+                    <td className="file-download pomjereni-naziv file-icon" onClick={() => { this.handleClick(id) }} >
+                        <img className="file-icon" src={oneObject.data.type == "file" ? fileIconUrl : folderIconUrl}></img>
+                        {fileName}
+                    </td>
+                    <td className="file-manipulation file-delete centriraj" onClick={() => { this.handleDelete(id) }}>Delete</td>
+                    <td className="file-manipulation file-rename centriraj" onClick={() => { this.handleRename(id) }}>Rename</td>
                 </tr>
             )
         })
