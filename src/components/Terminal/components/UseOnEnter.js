@@ -15,7 +15,13 @@ const commands = {
   rd: 1,
   set: 1,
   '?' : 0,
-  mkdir: 1
+  mkdir: 1,
+  ipconfig: 0,
+  driverquery: 0,
+  systeminfo: 0,
+  tasklist: 0,
+  dir: 0,
+  ping: 1
 };
 
 const UseOnEnter = () => {
@@ -76,7 +82,7 @@ const UseOnEnter = () => {
       return updateConsoleOutput(consoleOutput =>
         consoleOutput.concat("Invalid Command"), setCounter(brojac=>brojac+1)
       )}
-        console.log("Name ", name)
+        //console.log("Name ", name)
       if(args.length>1){
         addNewLog({
           command_type: args[0].toString(),

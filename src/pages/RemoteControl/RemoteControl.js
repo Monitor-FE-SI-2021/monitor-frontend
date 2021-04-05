@@ -14,8 +14,8 @@ const RemoteControl = (props, { user }) => {
   const groupId = user?.userGroups[0]?.groupId || 2;
 //ASIM
   if (machines == undefined) {
-    //request("https://si-grupa5.herokuapp.com/api/agent/online")
-    request("http://109.237.39.237:25565/api/agent/online")
+    request("https://si-grupa5.herokuapp.com/api/agent/online")
+    //request("http://109.237.39.237:25565/api/agent/online")
       .then((res) => {
         console.log("testee" + JSON.stringify(res));
         setMachines(res?.data);

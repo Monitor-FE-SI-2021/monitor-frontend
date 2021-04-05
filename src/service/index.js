@@ -5,8 +5,8 @@ import { merge } from "lodash";
 import { showSwalToast } from "../utils/utils";
 
 export const endpoint = 'https://si-2021.167.99.244.168.nip.io/api';
-export const wsEndpoint = 'http://109.237.39.237:25565/api'
-//export const wsEndpoint = 'https://si-grupa5.herokuapp.com/api';
+//export const wsEndpoint = 'http://109.237.39.237:25565/api'
+export const wsEndpoint = 'https://si-grupa5.herokuapp.com/api';
 export const authEndpoint = 'https://si-2021.167.99.244.168.nip.io:3333';
 export const forgotPassword = 'https://si-2021.167.99.244.168.nip.io:3333/forgotPassword';
 export const resetPassword = 'https://si-2021.167.99.244.168.nip.io:3333/changePassword';
