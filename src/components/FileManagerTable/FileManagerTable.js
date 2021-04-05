@@ -13,7 +13,7 @@ const userFiles = "https://si-grupa5.herokuapp.com/api/web/user/fileList";
 class FileManagerTable extends React.Component {
     constructor(props) {
         super(props);
-    
+
         this.state = {
             responseObject: [
                 {
@@ -21,10 +21,10 @@ class FileManagerTable extends React.Component {
                     fileName: "LOADING...",
                     link: 'linkDoFajla'
                 },
-            ], 
-            showRenamePopup: false, 
+            ],
+            showRenamePopup: false,
             showDeletePopup: false,
-            globalId: -1, 
+            globalId: -1,
             activeFolder: '.'
         }
 
@@ -35,19 +35,18 @@ class FileManagerTable extends React.Component {
         console.log('I live');
         var path_arr = this.state.activeFolder.trim('/').split('/');
         console.log(path_arr);
-        try{
+        try {
             const requestOptions = {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                  email: config.email,
-                  password: config.password,
+                    email: config.email,
+                    password: config.password,
                 }),
-              };
-      
+            };
+
             var response = await fetch(config.url, requestOptions);
-            if(response.status == 200)
-            {
+            if (response.status == 200) {
                 var x = await response.json();
                 const token = x.accessToken;
                 const requestOptions1 = {
@@ -58,59 +57,59 @@ class FileManagerTable extends React.Component {
                         Authorization: "Bearer " + token,
                     },
                     body: JSON.stringify({
-                    user: config.email,
+                        user: config.email,
                     }),
                 };
 
                 var response = await fetch(userFiles, requestOptions1)
-                .then((res) => {
-                    console.log(res.json().then(data =>{
+                    .then((res) => {
+                        console.log(res.json().then(data => {
 
-                        // Dobio djecu
-                        console.log(data);
-                        var files = data.children;
+                            // Dobio djecu
+                            console.log(data);
+                            var files = data.children;
 
-                        for(var i=1; i<path_arr.length;i++){
-                            console.log(path_arr[i]);
-                            for(var j=0;j<files.length;j++){
-                                console.log('---' + files[j].name);
-                                if (path_arr[i] == files[j].name && files[j].type == 'directory'){
-                                    files = files[j].children;
-                                    console.log('EVOMEEEEEEE')
-                                    break;
+                            for (var i = 1; i < path_arr.length; i++) {
+                                console.log(path_arr[i]);
+                                for (var j = 0; j < files.length; j++) {
+                                    console.log('---' + files[j].name);
+                                    if (path_arr[i] == files[j].name && files[j].type == 'directory') {
+                                        files = files[j].children;
+                                        console.log('EVOMEEEEEEE')
+                                        break;
+                                    }
                                 }
                             }
-                        } 
 
 
-                        //Redndera dejcu
-                        files = files.map((file, index) => {
-                            return {
-                                id: index,
-                                fileName: file.name,
-                                link: file.path,
-                                data: file
-                            }
-                        });
+                            //Redndera dejcu
+                            files = files.map((file, index) => {
+                                return {
+                                    id: index,
+                                    fileName: file.name,
+                                    link: file.path,
+                                    data: file
+                                }
+                            });
 
-                        this.setState({responseObject : files});
-                    }));
-                }).catch((error) => {
-                    console.log(error);
-                }); 
-                
-                
-    
+                            this.setState({ responseObject: files });
+                        }));
+                    }).catch((error) => {
+                        console.log(error);
+                    });
+
+
+
             }
-        } catch(e){
+        } catch (e) {
             console.log(e);
         }
     }
-    
+
     componentWillReceiveProps(nextProps) {
         if (nextProps.currentFile !== this.props.currentFile) {
             this.state.responseObject.push({
-                id: this.state.responseObject[this.state.responseObject.length-1].id+1,
+                id: this.state.responseObject[this.state.responseObject.length - 1].id + 1,
                 fileName: nextProps.currentFile.fileName,
                 link: "testLink"
             });
@@ -121,7 +120,7 @@ class FileManagerTable extends React.Component {
         this.setState({
             showRenamePopup: !this.state.showRenamePopup
         });
-        if(resetId) {
+        if (resetId) {
             this.state.globalId = -1;
         }
     }
@@ -130,14 +129,14 @@ class FileManagerTable extends React.Component {
         this.setState({
             showDeletePopup: !this.state.showDeletePopup
         });
-        if(resetId) {
+        if (resetId) {
             this.state.globalId = -1;
         }
     }
 
     sendChangeRequest() {
         let formField = document.getElementsByClassName('rename-wrapper')[0].children[0].value;
-        if(formField.length === 0) {
+        if (formField.length === 0) {
             console.log("Ne možete poslati prazan string!")
         } else {
             console.log("Naziv: " + formField + ", ID: " + this.state.globalId);
@@ -161,7 +160,7 @@ class FileManagerTable extends React.Component {
     }
 
     renderTableData() {
-        return this.state.responseObject.map((oneObject,index) => {
+        return this.state.responseObject.map((oneObject, index) => {
             const { id, fileName, link } = oneObject;
             return (
                 <tr>
@@ -244,14 +243,15 @@ class FileManagerTable extends React.Component {
         }
         //*/
         //#endregion
-    
+
         var file = this.state.responseObject[id];
-        if(file.data.type == 'file'){
+        if (file.data.type == 'file') {
             //Kliknut file
             console.log("Ja sam file prikazi me");
             var text = await this.getText(file);
-            alert(text);
-        }else{
+            var myWindow = window.open("", "textFeild", "width=600,height=600");
+            myWindow.document.write(text);
+        } else {
             //Kliknut folder
             console.log("Ja sam folder otvori me");
 
@@ -272,7 +272,7 @@ class FileManagerTable extends React.Component {
     }
 
     clickUp() {
-        this.state.activeFolder = this.state.activeFolder.split('/').slice(0,-1).join('/');
+        this.state.activeFolder = this.state.activeFolder.split('/').slice(0, -1).join('/');
         this.updateResponse();
     }
 
@@ -280,19 +280,18 @@ class FileManagerTable extends React.Component {
 
         this.state.activeFolder += '/' + newFolder;
 
-        try{
+        try {
             const requestOptions = {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                  email: config.email,
-                  password: config.password,
+                    email: config.email,
+                    password: config.password,
                 }),
-              };
-      
+            };
+
             var response = await fetch(config.url, requestOptions);
-            if(response.status == 200)
-            {
+            if (response.status == 200) {
                 var x = await response.json();
                 const token = x.accessToken;
 
@@ -307,29 +306,29 @@ class FileManagerTable extends React.Component {
                         fileName: 'new.file',
                         base64: '',
                         user: config.email,
-                        path : this.state.activeFolder
+                        path: this.state.activeFolder
                     })
                 };
-                
+
                 var response1 = await fetch('https://si-grupa5.herokuapp.com/api/web/user/file/put', requestOptions2)
-                .then((res) => {
-                    console.log(res.json());
+                    .then((res) => {
+                        console.log(res.json());
 
-                    Swal.fire({
-                        title: "File manager",
-                        text: "Datoteka uspješno poslana!",
-                        type: "success",
+                        Swal.fire({
+                            title: "File manager",
+                            text: "Datoteka uspješno poslana!",
+                            type: "success",
+                        });
+
+                        this.updateResponse();
+
+                    }).catch((error) => {
+                        console.log(error);
                     });
-
-                    this.updateResponse();
-
-                }).catch((error) => {
-                    console.log(error);
-                }); 
                 console.log(response1);
-    
+
             }
-        } catch(e){
+        } catch (e) {
             console.log(e);
         }
 
@@ -337,19 +336,18 @@ class FileManagerTable extends React.Component {
 
     getText = async (file) => {
         var returnable = null;
-        try{
+        try {
             const requestOptions = {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                  email: config.email,
-                  password: config.password,
+                    email: config.email,
+                    password: config.password,
                 }),
-              };
-      
+            };
+
             var response = await fetch(config.url, requestOptions);
-            if(response.status == 200)
-            {
+            if (response.status == 200) {
                 var x = await response.json();
                 const token = x.accessToken;
 
@@ -361,32 +359,32 @@ class FileManagerTable extends React.Component {
                         Authorization: "Bearer " + token,
                     },
                     body: JSON.stringify({
-                        fileName: 'test.txt',
+                        fileName: file.fileName,
                         user: config.email,
-                        path : ''
+                        path: ''
                     })
                 };
-                
+
                 return await fetch('https://si-grupa5.herokuapp.com/api/web/user/file/getText', requestOptions2)
-                .then((res) => {
-                    return res.json().then((res) => {
-                        console.log(res.text);
-                        returnable = res.text;
-                        return res.text;
+                    .then((res) => {
+                        return res.json().then((res) => {
+                            console.log(res.text);
+                            returnable = res.text;
+                            return res.text;
+                        });
+
+                    }).catch((error) => {
+                        console.log(error);
                     });
 
-                }).catch((error) => {
-                    console.log(error);
-                });
 
-                
-    
+
             }
-        } catch(e){
+        } catch (e) {
             console.log(e);
         }
 
-        
+
     }
 
     clickNewFolder() {
@@ -407,12 +405,12 @@ class FileManagerTable extends React.Component {
             confirmButtonText: 'Add',
             showLoaderOnConfirm: true,
             allowOutsideClick: () => !Swal.isLoading()
-            })
+        })
             .then((result) => {
                 if (result.isConfirmed) {
                     this.addFolder(result.value);
                 }
-             })
+            })
 
 
         return
@@ -432,7 +430,7 @@ class FileManagerTable extends React.Component {
                 <div className="table-wrapper">
                     <table >
                         <tbody>
-                        {this.renderTableHeader()}
+                            {this.renderTableHeader()}
                             {this.renderTableData()}
                         </tbody>
                     </table>
@@ -450,7 +448,7 @@ class FileManagerTable extends React.Component {
                         />
                         : null
                     }
-                    
+
                 </div>
                 <DragAndDrop updateView={this.updateResponse} activePath={this.state.activeFolder}></DragAndDrop>
             </div>
