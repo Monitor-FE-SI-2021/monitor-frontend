@@ -31,61 +31,6 @@ h4 {
   margin: 7%;
 }
 
-.card {
-  border-radius: 10px;
-  box-shadow: 0 2px 5px #ccc;
-  height: 200px;
-  margin-bottom: 10px;
-}
-
-.card:hover {
-  background-color: #ffffff;
-}
-
-.img-info {
-  display: flex;
-  height: 140px;
-  text-align: left;
-  width: 100%;
-}
-.card-actions {
-  height: 40px;
-  border-radius: 10px;
-}
-.card-actions button {
-  border-radius: 10px;
-  background-color: transparent;
-  box-shadow: 0 2px 5px #ccc;
-  width: 95%;
-  height: 100%;
-  margin: 0 0 0 2.5%;
-  border: #ccc;
-  font-size: 14px;
-}
-.card-img {
-  padding: 5%;
-  width: 30%;
-  height: 100%;
-}
-
-.card-img img {
-  height: 100%;
-}
-
-.card-info {
-  padding: 5% 0% 5% 5%;
-  width: 70%;
-}
-
-.card-info h3 {
-  margin: 3px;
-}
-
-.card-info p {
-  font-family: "Roboto", sans-serif;
-  padding: 5px;
-}
-
 .page-devices {
   margin: 20px;
 }

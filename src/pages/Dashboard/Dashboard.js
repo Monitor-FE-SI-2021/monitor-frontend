@@ -218,7 +218,7 @@ const Dashboard = ({user}) => {
                                 key={id}
                                 data={machine}
                                 img={MachineIcon}
-                                fun={disconnectMachine}
+                                onDisconnect={disconnectMachine}
                                 getStatistics={getStatistics}
                             />
                         ))}

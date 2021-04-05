@@ -1,17 +1,28 @@
-import React, {useState} from "react";
+import React, { useRef, useState } from "react";
+import debounce from 'lodash/debounce';
+
+import NewWindow from '../../../components/NewWindow/NewWindow';
+import RemoteAccess from '../../RemoteAccess/RemoteAccess.js';
 import Avatar from "./MachineAvatar.js";
 
-const ActiveMachine = ({data, img, fun, getStatistics}) => {
+import './ActiveMachine.scss';
+
+const ActiveMachine = ({data, img, onDisconnect, getStatistics}) => {
+    const [remoteAccessOpen, setRemoteAccessOpen] = useState(false);
+    const popup = useRef();
+
+    const handleOnClick = debounce(
+        () => getStatistics(data),
+        300
+    );
 
     return (
         <>
             <div
                 className="card"
                 id={data.deviceId}
-                onClick={() => getStatistics(data)}
-                onDoubleClick={() =>
-                    window.open("/remotecontrol/" + data.name + "/terminal", "_blank")
-                }
+                onClick={handleOnClick}
+                onDoubleClick={() => remoteAccessOpen ? popup.current.focus() : setRemoteAccessOpen(true)}
             >
                 <div className="img-info">
                     <div className="card-img">
@@ -27,14 +38,24 @@ const ActiveMachine = ({data, img, fun, getStatistics}) => {
                 <div className="card-actions">
                     <button
                         onClick={() => {
-                            console.log(data.deviceUid)
-                            fun(data);
+                            onDisconnect(data);
+                            setRemoteAccessOpen(false);
                         }}
                     >
                         Disconnect
                     </button>
                 </div>
             </div>
+
+            { remoteAccessOpen && (
+                <NewWindow
+                    onClose={() => setRemoteAccessOpen(false)}
+                    title={`Remote Access - ${data.name} (${data.location})`}
+                    ref={popup}
+                >
+                    <RemoteAccess machine={data} />
+                </NewWindow>
+            ) }
         </>
     );
 };
