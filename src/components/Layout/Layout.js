@@ -39,11 +39,11 @@ const Layout = ({ isMenuExpanded, loginAsync, userAsync, user }) => {
                     <Route path={RouteLink.ManageGroup} component={ManageGroup}/>
                     <Route path={RouteLink.TwoFactorAuthentication} component={TwoFactorAuthentication}/>
                     <Route path={RouteLink.Terminal} component={Terminal}/>
-                    <Route path={RouteLink.securityQuestions} component={securityQuestions}/>
                     <Route
                         path={RouteLink.RemoteControl + "/:name?/:tab?"}
                         component={RemoteControl}
                     />
+                    <Route path={RouteLink.SecurityQuestions} component={securityQuestions}/>
                 </Switch>
             </div>
         </div>

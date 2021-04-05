@@ -12,7 +12,7 @@ export const RouteLink = {
     Terminal: '/terminal',
     RemoteControl: '/remotecontrol',
     TwoFactorAuthentication: '/security',
-    secutityQuestions : '/securityQuestions'
+    SecurityQuestions : '/securityQuestions'
 }
 
 const initialState = {
@@ -39,7 +39,7 @@ const initialState = {
             icon: ""
         },
          {
-             link: RouteLink.secutityQuestions,
+             link: RouteLink.SecurityQuestions,
              name: 'Security Questions',
              icon: ""
          }
