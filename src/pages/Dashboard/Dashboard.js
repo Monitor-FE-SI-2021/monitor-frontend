@@ -186,13 +186,15 @@ const Dashboard = ({ user, setActiveGlobal }) => {
             return existingMachine;
         }) : [];
     }
-
+    
     React.useEffect(() => {
         request(devices + "/AllDevices")
             .then((res) => {
+                
                 const allMachines = res.data.data;
                 setMachines(allMachines);
                 request("https://si-grupa5.herokuapp.com/api/agent/online")
+                //request("http://109.237.39.237:25565/api/agent/online")
                     .then((res) => {
                         console.log(res)
                         const filtered = filterActive(res?.data, allMachines);
@@ -216,10 +218,8 @@ const Dashboard = ({ user, setActiveGlobal }) => {
             window.confirm("Are you sure you wish to disconnect this machine?")
         ) {
             request("https://si-grupa5.herokuapp.com/api/agent/disconnect", "POST", {
-                name: machine.name,
-                location: machine.location,
-                ip: machine.ip,
-                user: user
+                deviceUid: machine?.deviceUid,
+                user: user?.email
             })
                 .then((res) => console.log(res))
                 .catch((err) => console.log(err))

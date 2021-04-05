@@ -1,10 +1,30 @@
-.actions {
+.device-table {
 
-    svg {
-        cursor: pointer;
+    .actions {
+        margin-right: 8px;
+
+        svg {
+            cursor: pointer;
+        }
+
+        .connect-btn, .edit-btn {
+            opacity: 0.8;
+            color: var(--main-color);
+
+            &:hover {
+                opacity: 1;
+            }
+        }
+
+
+        .edit-btn {
+            margin-left: 10px;
+        }
     }
 
-    .edit-btn {
-        margin-left: 15px;
+    .filter-btn {
+        margin: 10px;
+        float: right;
     }
 }
+

@@ -8,6 +8,7 @@ export const RouteLink = {
     ReportList: "/report-list",
     AddDevice: '/manage-device',
     ManageDevice: '/manage-device',
+    ManageGroup: '/manage-group',
     Terminal: '/terminal',
     RemoteControl: '/remotecontrol',
     TwoFactorAuthentication: '/security',
