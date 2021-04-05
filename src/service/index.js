@@ -61,7 +61,7 @@ const request = async (
                 if (response && response.status === 401) {
                     removeAllData();
                 }
-
+                console.log(response)
                 const errMessage = response?.data?.message || response?.data?.title || response?.statusText || "Došlo je do greške.";
 
                 showSwalToast(errMessage)

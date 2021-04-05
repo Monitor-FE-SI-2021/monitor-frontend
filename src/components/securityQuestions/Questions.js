@@ -13,9 +13,10 @@ import {showSwalToast} from "../../utils/utils";
 const tooken = window.localStorage.getItem(STORAGE_KEY);
 const securityQuestions = "https://si-2021.167.99.244.168.nip.io:3333/AllSecurityQuestions";
 const saveQuestions = "https://si-2021.167.99.244.168.nip.io:3333/setSecurityQuestionsAndAnswers";
-const niz = [];
+let nizOdgovora = [];
 
 function Questions() {
+
     const initialFormData = {
         broj: 1
     };
@@ -32,8 +33,9 @@ function Questions() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        nizOdgovora = [];
         for (let i = 0; i < formData.broj + 2; i++) {
-            const doubleQuestion = FormQuestions.find(element => element == document.getElementsByClassName("questions")[i].value);
             FormQuestions.push(document.getElementsByClassName("questions")[i].value);
             const DBQuestion = Questions.find(element => element.Question == document.getElementsByClassName("questions")[i].value);
             if (DBQuestion) {
@@ -41,21 +43,16 @@ function Questions() {
                     "questionId": DBQuestion.QuestionId,
                     "answer": document.getElementsByClassName("answers")[i].value
                 };
-                if (!doubleQuestion)
-                    niz.push(json);
+
+                nizOdgovora.push(json);
             }
         }
-        console.log(niz);
-        request(saveQuestions, 'post', niz)
+        request(saveQuestions, 'post', nizOdgovora)
             .then(() => {
                 setQueSuc(true);
-                showSwalToast(`successfully answered`, 'success');
                 window.location.reload();
-
-            }).catch((error) => {
-            console.log(error);
-            showSwalToast("Must contain between 3 and 5 questions");
-        })
+                showSwalToast(`successfully answered`, 'success');
+            })
     }
 
 
@@ -82,7 +79,6 @@ function Questions() {
     useEffect(() => {
         axios.get(securityQuestions)
             .then(res => {
-                console.log(res);
                 setQuestions(res.data);
             })
             .catch(err => {
