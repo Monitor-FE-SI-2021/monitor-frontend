@@ -34,6 +34,7 @@
     "redux-thunk": "^2.3.0",
     "sweetalert2": "^10.15.7",
     "typeface-roboto": "^1.1.13",
+    "use-state": "^0.0.3",
     "web-vitals": "^1.1.1"
   },
   "scripts": {
