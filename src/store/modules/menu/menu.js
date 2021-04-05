@@ -11,7 +11,8 @@ export const RouteLink = {
     ManageGroup: '/manage-group',
     Terminal: '/terminal',
     RemoteControl: '/remotecontrol',
-    TwoFactorAuthentication: '/security'
+    TwoFactorAuthentication: '/security',
+    secutityQuestions : '/securityQuestions'
 }
 
 const initialState = {
@@ -36,7 +37,12 @@ const initialState = {
             link: RouteLink.TwoFactorAuthentication,
             name: 'Two Factor Authentication',
             icon: ""
-        }
+        },
+         {
+             link: RouteLink.secutityQuestions,
+             name: 'Security Questions',
+             icon: ""
+         }
     ],
 };
 
