@@ -1,177 +1,148 @@
-import React from 'react';
-
+import React, { useEffect, useState } from 'react';
+import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import HourPicker from './HourPicker.js';
+import { options, days, months, times } from './constants/index';
 
-import  './ReportTiming.scss'
+import './ReportTiming.scss'
 
+const ReportTiming = ({ setTimeInfo }) => {
+    const [frequency, setFrequency] = useState(options[0]);
+    const [day, setDay] = useState(days[0]);
+    const [month, setMonth] = useState(months[0]);
+    const [dayInMonth, setDayInMonth] = useState(1);
+    const [time, setTime] = useState(times[0]);
 
-const options = [
-    {
-        label: "Daily",
-        value: "daily",
-    },
-    {
-        label: "Weekly",
-        value: "weekly",
-    },
-    {
-        label: "Monthly",
-        value: "monthly",
-    },
-    {
-        label: "Yearly",
-        value: "yearly",
-    },
-];
+    useEffect(() => {
+        setTimeInfo({
+            frequency,
+            day,
+            month,
+            dayInMonth,
+            time,
+        });
+    }, []);
 
-class ReportTiming extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            frequency: "daily",
-        };
-        this.handleChange = this.handleChange.bind(this);
-    }
-
-    handleChange(e) {
-        this.setState({ frequency: e.target.value });
-    }
-
-    render() {
-
-        let inputType;
-        if(this.state.frequency === 'none'){
-            inputType = <div><input id="noneInput" disabled type='text'/></div>
-        } else if(this.state.frequency === 'daily'){
-            inputType = <div><input className="timeInput" type='time'/></div>
-        } else if(this.state.frequency === 'weekly'){
-            inputType = <div> 
-            <select id="weeklyInputDay" name="Todays_Day">
-            <option value="Monday">Monday</option>
-            <option value="Tuesday">Tuesday</option>
-            <option value="Wednesday">Wednesday</option>
-            <option value="Thursday">Thursday</option>
-            <option value="Friday">Friday</option>
-            <option value="Saturday">Saturday</option>
-            <option value="Sunday">Sunday</option>
-        </select>
-        <input id="weeklyInputTime" type='time'/>
-        </div>
-        } else if(this.state.frequency === 'monthly'){
-            inputType = inputType = <div> 
-       <span>
-            <select id="selectDay" name="day">
-                 <option value="01">1</option>
-                 <option value="02">2</option>
-                 <option value="03">3</option>
-                 <option value="04">4</option>
-                 <option value="05">5</option>
-                 <option value="06">6</option>
-                 <option value="07">7</option>
-                 <option value="08">8</option>
-                 <option value="09">9</option>
-                 <option value="10">10</option>
-                 <option value="11">11</option>
-                 <option value="12">12</option>
-                 <option value="13">13</option>
-                 <option value="14">14</option>
-                 <option value="15">15</option>
-                 <option value="16">16</option>
-                 <option value="17">17</option>
-                 <option value="18">18</option>
-                 <option value="19">19</option>
-                 <option value="20">20</option>
-                 <option value="21">21</option>
-                 <option value="22">22</option>
-                 <option value="23">23</option>
-                 <option value="24">24</option>
-                 <option value="25">25</option>
-                 <option value="26">26</option>
-                 <option value="27">27</option>
-                 <option value="28">28</option>
-                 <option value="29">29</option>
-                 <option value="30">30</option>
-                 <option value="31">31</option>
-            </select>
-       </span>
-        <input className="timeInput" type='time'/>
-             </div>;
-        } else if(this.state.frequency === 'yearly'){
-            inputType = <div> <span>
-            <select id="selectMonth" name="month">
-               <option value="01">January</option>
-               <option value="02">February</option>
-               <option value="03">March</option>
-               <option value="04">April</option>
-               <option value="05">May</option>
-               <option value="06">June</option>
-               <option value="07">July</option>
-               <option value="08">August</option>
-               <option value="09">September</option>
-               <option value="10">October</option>
-               <option value="11">November</option>
-               <option value="12">December</option>
-            </select> 
-       </span>
-       <span>
-            <select id="selectDayY" name="day">
-                 <option value="01">1</option>
-                 <option value="02">2</option>
-                 <option value="03">3</option>
-                 <option value="04">4</option>
-                 <option value="05">5</option>
-                 <option value="06">6</option>
-                 <option value="07">7</option>
-                 <option value="08">8</option>
-                 <option value="09">9</option>
-                 <option value="10">10</option>
-                 <option value="11">11</option>
-                 <option value="12">12</option>
-                 <option value="13">13</option>
-                 <option value="14">14</option>
-                 <option value="15">15</option>
-                 <option value="16">16</option>
-                 <option value="17">17</option>
-                 <option value="18">18</option>
-                 <option value="19">19</option>
-                 <option value="20">20</option>
-                 <option value="21">21</option>
-                 <option value="22">22</option>
-                 <option value="23">23</option>
-                 <option value="24">24</option>
-                 <option value="25">25</option>
-                 <option value="26">26</option>
-                 <option value="27">27</option>
-                 <option value="28">28</option>
-                 <option value="29">29</option>
-                 <option value="30">30</option>
-                 <option value="31">31</option>
-            </select>
-       </span>
-            <input className="timeInput" type='time'/>
-             </div>;
+    const createDays = (d) => {
+        let daysForRender = [];
+        for (let i = 1; i <= d; i++) {
+            daysForRender.push(<MenuItem key={i} value={i}> {i} </MenuItem>);
         }
-
-        return (
-            <div >
-                <div className="inputWrapper">
-                    <InputLabel className="inputLabelWrapper"> How often do you want a report to be sent to you? </InputLabel>
-                    <Select className="select" labelId="frequencyLabel" value={this.state.frequency} onChange={this.handleChange}>
-                        {options.map(option => <MenuItem key={option.value} value={option.value}> {option.label} </MenuItem>)}
-                    </Select>
-                </div>
-
-                <div className="inputWrapper">
-                    <InputLabel className="inputLabelWrapper"> At what time do you want an email to be sent? </InputLabel>
-                    <div className="select">
-                        {inputType}
-                    </div>
-                </div>
-            </div>
-        );
+        return daysForRender;
     }
+
+    const handleFrequency = e => {
+        setFrequency(e.target.value);
+        setTimeInfo({
+            frequency: e.target.value,
+            day,
+            month,
+            dayInMonth,
+            time,
+        });
+    };
+
+    const handleTime = (e) => {
+        setTime(e.target.value);
+        setTimeInfo({
+            frequency,
+            day,
+            month,
+            dayInMonth,
+            time: e.target.value,
+        });
+    };
+
+    const handleDay = (e) => {
+        setDay(e.target.value);
+        setTimeInfo({
+            frequency,
+            day: e.target.value,
+            month,
+            dayInMonth,
+            time,
+        });
+    };
+
+    const handleMonth = (e) => {
+        setMonth(e.target.value);
+        setTimeInfo({
+            frequency,
+            day,
+            month: e.target.value,
+            dayInMonth,
+            time,
+        });
+    };
+
+    const handleDayInMonth = (e) => {
+        setDayInMonth(e.target.value);
+        setTimeInfo({
+            frequency,
+            day,
+            month,
+            dayInMonth: e.target.value,
+            time,
+        });
+    };
+
+    return (
+        <div className="timingWrapper">
+            <div className="timeInputWrapper">
+                <InputLabel className="timeLabelWrapper"> How often do you want your report? </InputLabel>
+                <Select value={frequency} onChange={handleFrequency}>
+                    {options.map(item => <MenuItem key={item.value} value={item}> {item.label} </MenuItem>)}
+                </Select>
+            </div>
+            <div className="timeInputWrapper">
+                <InputLabel className="timeLabelWrapper"> Time: </InputLabel>
+                <Select value={time} onChange={handleTime}>
+                    {times.map(item => <MenuItem key={item.value} value={item}> {item.label} </MenuItem>)}
+                </Select>
+            </div>
+            {
+                frequency.value === 'weekly' ?
+                <div className="timeInputWrapper">
+                    <InputLabel className="timeLabelWrapper"> Day of the week: </InputLabel>
+                    <Select value={day} onChange={handleDay}>
+                        {days.map(item => <MenuItem key={item.value} value={item}> {item.label} </MenuItem>)}
+                    </Select>
+                </div> :
+                null
+            }
+            {
+                frequency.value === 'monthly' ?
+                <div className="timeInputWrapper">
+                    <InputLabel className="timeLabelWrapper"> Day: </InputLabel>
+                    <Select value={dayInMonth} onChange={handleDayInMonth}>
+                        {createDays(31)}
+                    </Select>
+                </div> :
+                null
+            }
+            {
+                frequency.value === 'yearly' ?
+                <div>
+                    <div className="timeInputWrapper">
+                        <InputLabel className="timeLabelWrapper"> Month: </InputLabel>
+                        <Select value={month} onChange={handleMonth}>
+                            {months.map(item => <MenuItem key={item.value} value={item}> {item.label} </MenuItem>)}
+                        </Select>
+                    </div>
+                    <div className="timeInputWrapper">
+                        <InputLabel className="timeLabelWrapper"> Day: </InputLabel>
+                        <Select value={dayInMonth} onChange={handleDayInMonth}>
+                            {createDays(month.days)}
+                        </Select>
+                    </div>
+                </div> :
+                null
+            }
+        </div>
+    );
 }
 
 export default ReportTiming;

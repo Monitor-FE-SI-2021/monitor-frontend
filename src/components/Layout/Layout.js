@@ -13,10 +13,13 @@ import TwoFactorAuthentication from "../TwoFactorAuthentication/TwoFactorAuthent
 import { Spinner } from "../Spinner/Spinner";
 import Terminal from "../Terminal/Terminal";
 import RemoteControl from "../../pages/RemoteControl/RemoteControl";
+import securityQuestions from "../securityQuestions/Questions"
+import ManageGroup from "../../pages/ManageGroup/ManageGroup";
+import FileManagerView from "../../pages/FileManager/FileManager"
 
 const Layout = ({ isMenuExpanded, loginAsync, userAsync, user }) => {
     if (loginAsync || userAsync) {
-        return <Spinner/>;
+        return <Spinner className={'app-loader'}/>;
     }
 
     if (!user) {
@@ -34,12 +37,15 @@ const Layout = ({ isMenuExpanded, loginAsync, userAsync, user }) => {
                     <Route path={RouteLink.ReportList} component={ReportList}/>
                     <Route path={RouteLink.Reporting} component={Reporting}/>
                     <Route path={RouteLink.ManageDevice} component={ManageDevice}/>
+                    <Route path={RouteLink.ManageGroup} component={ManageGroup}/>
                     <Route path={RouteLink.TwoFactorAuthentication} component={TwoFactorAuthentication}/>
                     <Route path={RouteLink.Terminal} component={Terminal}/>
                     <Route
                         path={RouteLink.RemoteControl + "/:name?/:tab?"}
                         component={RemoteControl}
                     />
+                    <Route path={RouteLink.FileManagerView} component={FileManagerView}/>
+                    <Route path={RouteLink.SecurityQuestions} component={securityQuestions}/>
                 </Switch>
             </div>
         </div>

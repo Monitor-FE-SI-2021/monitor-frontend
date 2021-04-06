@@ -5,10 +5,13 @@ import { merge } from "lodash";
 import { showSwalToast } from "../utils/utils";
 
 export const endpoint = 'https://si-2021.167.99.244.168.nip.io/api';
+//export const wsEndpoint = 'http://109.237.39.237:25565/api'
 export const wsEndpoint = 'https://si-grupa5.herokuapp.com/api';
 export const authEndpoint = 'https://si-2021.167.99.244.168.nip.io:3333';
 export const forgotPassword = 'https://si-2021.167.99.244.168.nip.io:3333/forgotPassword';
 export const resetPassword = 'https://si-2021.167.99.244.168.nip.io:3333/changePassword';
+export const userSecurityQuestions  = 'https://si-2021.167.99.244.168.nip.io:3333/User/AllQuestions';
+export const answerCheck  = 'https://si-2021.167.99.244.168.nip.io:3333/answerCheck';
 export const devices = `${endpoint}/device`
 export const groups = `${endpoint}/group`
 export const users = `${endpoint}/user`
@@ -59,8 +62,8 @@ const request = async (
                 if (response && response.status === 401) {
                     removeAllData();
                 }
-
-                const errMessage = response?.data?.message || response?.data?.title || response?.statusText;
+                console.log(response)
+                const errMessage = response?.data?.message || response?.data?.title || response?.statusText || "Došlo je do greške.";
 
                 showSwalToast(errMessage)
 

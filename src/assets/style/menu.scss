@@ -12,6 +12,7 @@
     background: #ffffff;
     width: $menuWidth;
     transition: all 250ms ease-in-out;
+    overflow: hidden;
 
     .app-title {
         width: 100%;
@@ -20,7 +21,7 @@
         align-items: center;
         margin-bottom: 30px;
         white-space: nowrap;
-        overflow: scroll;
+        color: var(--main-color);
 
         span {
             font-weight: bold;
@@ -42,6 +43,19 @@
 
         &:hover {
             opacity: 1;
+        }
+    }
+
+    .username {
+        margin-top: auto;
+        margin-bottom: 10px;
+        font-weight: bold;
+        white-space: nowrap;
+        overflow: hidden;
+        color: var(--main-color);
+
+        &.hidden {
+            visibility: hidden;
         }
     }
 }

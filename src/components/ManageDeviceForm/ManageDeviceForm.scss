@@ -1,0 +1,21 @@
+.manage-device-form {
+
+    .MuiFormControl-root {
+        display: flex;
+        flex-wrap: wrap;
+        width: 30%;
+        margin-left: 5px;
+        margin-bottom: 20px;
+    }
+
+
+    .group-selector {
+        margin-bottom: -20px;
+    }
+
+    .buttons {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 20px;
+    }
+}
