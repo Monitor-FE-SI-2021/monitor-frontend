@@ -52,6 +52,7 @@ export function fetchDevicesForGroup({
             page: page,
             per_page: perPage,
             name: searchText ?? '',
+            location: searchText ?? '',
             status,
             groupId,
             sort_by: `${sortField}_${sortOrder}`
