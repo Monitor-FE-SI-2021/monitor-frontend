@@ -28,13 +28,17 @@ class FileManagerTable extends React.Component {
             showRenamePopup: false,
             showDeletePopup: false,
             globalId: -1,
-            activeFolder: '.'
+            activeFolder: '.',
+            user: props.user
         }
 
         this.updateResponse();
     }
 
     updateResponse = async () => {
+
+        console.log(this.state.user);
+
         console.log('I live');
         var path_arr = this.state.activeFolder.trim('/').split('/');
         console.log(path_arr);
@@ -60,7 +64,7 @@ class FileManagerTable extends React.Component {
                         Authorization: "Bearer " + token,
                     },
                     body: JSON.stringify({
-                        user: config.email,
+                        user: this.state.user.email,
                     }),
                 };
 
@@ -316,7 +320,7 @@ class FileManagerTable extends React.Component {
                     body: JSON.stringify({
                         fileName: 'new.file',
                         base64: '',
-                        user: config.email,
+                        user: this.state.user.email,
                         path: this.state.activeFolder
                     })
                 };
@@ -371,7 +375,7 @@ class FileManagerTable extends React.Component {
                     },
                     body: JSON.stringify({
                         fileName: file.fileName,
-                        user: config.email,
+                        user: this.state.user.email,
                         path: this.state.activeFolder
                     })
                 };
@@ -461,7 +465,7 @@ class FileManagerTable extends React.Component {
                     }
 
                 </div>
-                <DragAndDrop updateView={this.updateResponse} activePath={this.state.activeFolder}></DragAndDrop>
+                <DragAndDrop updateView={this.updateResponse} activePath={this.state.activeFolder} user={this.state.user}></DragAndDrop>
             </div>
         )
     }
