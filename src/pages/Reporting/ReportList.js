@@ -162,8 +162,8 @@ const ReportList = ({push}) => {
                 
             </div>
             <div className="buttons">
-            <button className="searchReport" onClick={handleOpen}>Filter</button>
             <button className="searchReport" onClick={handleReset}>Reset filters</button>
+            <button className="searchReport" onClick={handleOpen}>Filter</button>
             {open ?
                 <FormControl className="filter"style={{ float: 'right' }}>
                     <Popover

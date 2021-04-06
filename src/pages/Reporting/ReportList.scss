@@ -5,7 +5,7 @@
     flex-direction: column;
 }
 
-.createReport , .searchReport{
+.createReport {
     border: none;
     background: rgba(64, 64, 64, 0.9);
     font-weight: 100;
@@ -17,6 +17,7 @@
     align-self: flex-end;
     transition: all 0.3s ease 0s;
     color: #fff;
+    margin: 10px;
 }
 
 .filter{
@@ -25,11 +26,7 @@
     padding-right: 20px;
 }
 
-.buttons{
-    display: inline-block;
-    align-self: flex-end;
-    padding-right: 20px;
-}
+
 
 .header {
     display: flex;
@@ -50,6 +47,24 @@
 .reportingWrapper{
     .custom-table-container .filter-btn {
     display: none;
+    }
+    .buttons{
+        display: inline-block;
+        align-self: flex-end;
+        .searchReport{
+            border: none;
+            background: rgba(64, 64, 64, 0.9);
+            font-weight: 100;
+            padding: 10px 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-radius: 6px;
+            display: inline-block;
+            align-self: flex-end;
+            transition: all 0.3s ease 0s;
+            color: #fff;
+            margin: 10px;
+        }
     }
 }
 .select {
