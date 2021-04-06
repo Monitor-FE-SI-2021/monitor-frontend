@@ -14,25 +14,28 @@ import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
 import TextField from '@material-ui/core/TextField';
 import Checkbox from '@material-ui/core/Checkbox';
+import { push } from "connected-react-router";
+import { RouteLink } from "../../store/modules/menu/menu";
 
 import './Reporting.scss';
 
 
 
-const Reports = () => {
-    const [selectedFrequency, setSelectedFrequency] = useState(frequencies[0].name);
-    const [selectedDateTime, setSelectedDateTime] = useState("");
+const Reports = ({ user, push }) => {
     const [selectedGroup, setSelectedGroup] = useState({ group: null, parent: null });
     const [groupStack, setGroupStack] = useState([]);
     const [groups, setGroups] = useState([]);
     const [queryValue, setQueryValue] = useState("");
     const [title, setTitle] = useState("");
     const [selectedColumns, setSelectedColumns] = useState([]);
+    const [frequencyInfo, setFrequencyInfo] = useState(null);
+    const [sendEmailValue, setSendEmailValue] = useState(false);
 
 
 
     const setData = async () => {
         const res = await request("https://si-2021.167.99.244.168.nip.io/api/group/MyAssignedGroups");
+        console.log("ovo je res", res, user);
         setGroups(res.data.data.subGroups);
         setSelectedGroup({depth: 0, group: {groupId : -1, subGroups : res.data.data.subGroups}, parent: null });
         setGroupStack([{depth: 0, group: {groupId : -1, subGroups : res.data.data.subGroups}, parent: null }]);
@@ -47,14 +50,6 @@ const Reports = () => {
         setTitle(event.target.value);
     };
 
-    const changeFrequency = (event) => {
-        setSelectedFrequency(event.target.value);
-    };
-
-    const changeDateTime = (event) => {
-        setSelectedDateTime(event.target.value);
-    };
-
     const changeGroup = (event, index=-1) => {
         setSelectedGroup({depth : selectedGroup.depth + 1, group: event.target.value, parent: selectedGroup });
         setGroups(event.target.value.subGroups);
@@ -67,14 +62,84 @@ const Reports = () => {
     };
 
     const checkQuery = () => {
-        if (queryValue?.rules?.length <= 0 || title.length < 1) return true;
+        if (queryValue?.rules?.length <= 0 || title.length < 1 || frequencyInfo === null) return true;
         return false;
-    }
+    };
 
-    const submitReportForm = e => {
+    const calculateDate = () => {
+        let date = null;
+        let dateCurrent = new Date();
+        
+        const freq = frequencyInfo?.frequency?.value;
+        switch(freq){
+            case "daily":
+                const dailyHours = frequencyInfo.time.value.split(':');
+                dateCurrent.setHours(parseInt(dailyHours[0]) + 2, dailyHours[1], dailyHours[2]);
+                break;
+            case "weekly":
+                console.log(frequencyInfo, 'testbest weekly');
+                const daysMap = {
+                    "Mon": 1,
+                    "Tue": 2,
+                    "Wed": 3,
+                    "Thu": 4,
+                    "Fri": 5,
+                    "Sat": 6,
+                    "Sun": 0
+                }
+                dateCurrent.setDate(dateCurrent.getDate() + (daysMap[frequencyInfo?.day?.value] + 7 - dateCurrent.getDay()) % 7 );
+                const weeklyHours = frequencyInfo.time.value.split(':');
+                dateCurrent.setHours(parseInt(weeklyHours[0]) + 2, weeklyHours[1], weeklyHours[2]);
+                break;
+            case "monthly":
+                dateCurrent.setDate(frequencyInfo?.dayInMonth);
+                if(dateCurrent< new Date()) dateCurrent.setMonth(dateCurrent.getMonth() + 1);
+                const monthlyHours = frequencyInfo.time.value.split(':');
+                dateCurrent.setHours(parseInt(monthlyHours[0]) + 2, monthlyHours[1], monthlyHours[2]);
+                break;
+            case "yearly": 
+                const monthsMap = {
+                    "january": 0,
+                    "february": 1,
+                    "march": 2,
+                    "april": 3,
+                    "may": 4,
+                    "june": 5,
+                    "july": 6,
+                    "august": 7,
+                    "september": 8,
+                    "october": 9,
+                    "november": 10,
+                    "december": 11,
+                }
+                dateCurrent.setMonth(monthsMap[frequencyInfo?.month?.value]);
+                dateCurrent.setDate(frequencyInfo?.dayInMonth);
+                if(dateCurrent < new Date()) dateCurrent.setFullYear(dateCurrent.getFullYear() + 1);
+                const yearlyHours = frequencyInfo.time.value.split(':');
+                dateCurrent.setHours(parseInt(yearlyHours[0]) + 2, yearlyHours[1], yearlyHours[2]);
+                break;
+            default:
+                break;
+        }
+        return dateCurrent.toISOString();
+    };
+
+    const submitReportForm = async (e) => {
         e.preventDefault();
-        console.log("( " + formatQuery(queryValue, 'sql') + " ) and groupId = " + (selectedGroup.group.groupId == -1 ? "groupId" : selectedGroup.group.groupId));
-        console.log(groupStack);
+        const finalQuery = "( " + formatQuery(queryValue, 'sql') + " ) and groupId = " + (selectedGroup.group.groupId == -1 ? "groupId" : selectedGroup.group.groupId);
+        const body = {
+            name: title,
+            userId: user.userId,
+            query: finalQuery,
+            nextDate: calculateDate(),
+            frequency: frequencyInfo.frequency.value,
+            sendEmail: sendEmailValue,
+        };
+        const response = await request("https://si-2021.167.99.244.168.nip.io/api/report/CreateReport", "POST", body);
+        if (response.status === 200) {
+            window.alert("Uspjesno kreiran report!");
+            push(RouteLink.ReportList);
+        }
     };
 
     const groupBacktrack = e => {
@@ -85,8 +150,6 @@ const Reports = () => {
         setGroups(newGroups);
         var newStack = groupStack.slice(0,-1);
         Promise.all([setGroupStack(groupStack.slice(0,-2))]).then(()=>setGroupStack(newStack));
-        
-        //setGroupStack([]);
         console.log(groupStack);
 
     }
@@ -98,7 +161,10 @@ const Reports = () => {
         else {
             setSelectedColumns(selectedColumns.filter(col => col !== event.target.value));
         }
+    };
 
+    const handleSendEmailValue = (event) => {
+        setSendEmailValue(event.target.value);
     };
 
     return (
@@ -112,13 +178,11 @@ const Reports = () => {
                 </div>
 
                 <div className="inputWrapper">
-                    <InputLabel className="inputLabelWrapper" id="frequencyLabel"> Receiving reports to the mail address </InputLabel>
-                    <input id="emailCheckbox" type="checkbox"></input>
+                    <InputLabel className="inputLabelWrapper" id="frequencyLabel"> Do you want to be send an email with this report? </InputLabel>
+                    <input id="emailCheckbox" type="checkbox" value={sendEmailValue} onChange={handleSendEmailValue}></input>
                 </div>
 
-                <div className="inputWrapper">
-                    <ReportTiming />
-                </div>
+                <ReportTiming setTimeInfo={(info) => setFrequencyInfo(info)} />
 
                 <div className="groupInputWrapper">
 
@@ -196,4 +260,8 @@ const Reports = () => {
     )
 };
 
-export default connect(state => ({}), {})(Reports);
+export default connect(state => {
+    return {
+        user: state.login.user,
+    };
+}, {push})(Reports);
