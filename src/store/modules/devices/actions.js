@@ -3,11 +3,13 @@ import {
     SET_DEVICES,
     SET_DEVICES_ASYNC,
     SET_DEVICES_ASYNC_FOR_GROUP,
-    SET_DEVICES_FOR_GROUP,
     UPDATE_DEVICES_TABLE_FOR_GROUP,
-    SET_ACTIVE_DEVICES
+    SET_ACTIVE_DEVICES,
+    SEARCH_DEVICES_ACTION,
+    UPDATE_ACTIVE_DEVICE
 } from "./types";
 import request, { devices } from "../../../service";
+import { DEVICE_STATUS } from "./devices";
 
 export function fetchAllDevices() {
 
@@ -28,10 +30,14 @@ export function fetchAllDevices() {
     }
 }
 
-export function fetchDevicesForGroup({ groupId, page = 1, perPage = 10 }) {
-
-    const query = `page=${page}&per_page=${perPage}&name=&status=active&groupId=${groupId}&sort_by=name_desc`
-
+export function fetchDevicesForGroup({
+                                         groupId,
+                                         page = 1,
+                                         perPage = 10,
+                                         status = DEVICE_STATUS.ACTIVE,
+                                         sortField = 'name',
+                                         sortOrder = 'desc'
+                                     }) {
     return (dispatch, getState) => {
 
         const deviceTable = getState().devices.deviceTables?.[groupId];
@@ -40,9 +46,22 @@ export function fetchDevicesForGroup({ groupId, page = 1, perPage = 10 }) {
             return;
         }
 
+        const { searchText } = getState().devices;
+
+        const queryData = {
+            page: page,
+            per_page: perPage,
+            name: searchText ?? '',
+            status,
+            groupId,
+            sort_by: `${sortField}_${sortOrder}`
+        }
+
+        const searchParams = new URLSearchParams(queryData);
+
         dispatch({ type: SET_DEVICES_ASYNC_FOR_GROUP, groupId: groupId, async: true });
 
-        return request(devices + `/AllDevicesForGroup?${query}`).then(response => response.data)
+        return request(devices + `/AllDevicesForGroup?${searchParams}`).then(response => response.data)
             .then(r => {
 
                 const { devices, deviceCount } = r.data;
@@ -55,6 +74,9 @@ export function fetchDevicesForGroup({ groupId, page = 1, perPage = 10 }) {
                         totalCount: deviceCount,
                         page,
                         perPage,
+                        status,
+                        sortField,
+                        sortOrder
                     }
                 })
             }).finally(() => {
@@ -87,6 +109,25 @@ export function setActiveGlobal(devices) {
         dispatch({
             type: SET_ACTIVE_DEVICES,
             devices
+        })
+    }
+}
+
+export function searchDevicesAction(searchText) {
+    return dispatch => {
+        dispatch({
+            type: SEARCH_DEVICES_ACTION,
+            searchText
+        })
+    }
+}
+
+export function updateActiveDevice(deviceUid, data) {
+    return dispatch => {
+        dispatch({
+            type: UPDATE_ACTIVE_DEVICE,
+            deviceUid,
+            data
         })
     }
 }

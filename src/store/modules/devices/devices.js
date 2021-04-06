@@ -2,11 +2,17 @@ import {
     SET_DEVICES,
     SET_DEVICES_ASYNC,
     SET_DEVICES_ASYNC_FOR_GROUP,
-    SET_DEVICES_FOR_GROUP,
     SELECT_DEVICE,
-    UPDATE_DEVICES_TABLE_FOR_GROUP, SET_ACTIVE_DEVICES
+    UPDATE_DEVICES_TABLE_FOR_GROUP,
+    SET_ACTIVE_DEVICES,
+    SEARCH_DEVICES_ACTION, UPDATE_ACTIVE_DEVICE,
 } from "./types";
 import { cloneDeep, merge } from "lodash";
+
+export const DEVICE_STATUS = {
+    ACTIVE: 'active',
+    INACTIVE: 'notactive'
+}
 
 const defaultDeviceTableInfo = {
     devices: [],
@@ -14,6 +20,9 @@ const defaultDeviceTableInfo = {
     page: 1,
     perPage: 10,
     totalCount: 10,
+    sortField: 'name',
+    sortOrder: 'desc',
+    status: DEVICE_STATUS.ACTIVE
 }
 
 const initialState = {
@@ -22,6 +31,7 @@ const initialState = {
     deviceTables: {},   // Mapa gdje je ključ groupId a vrijednost tabela uredjaja te grupe uz dodatne informacije (paginacija, filteri i slicno)
     selectedDevice: null,
     activeDevices: [],
+    searchText: ''
 }
 
 const getUpdatedDeviceTables = (currentTables, groupId, data) => {
@@ -86,6 +96,27 @@ const ACTION_HANDLERS = {
         return {
             ...state,
             activeDevices: action.devices
+        }
+    },
+    [SEARCH_DEVICES_ACTION]: (state, { searchText }) => {
+        return {
+            ...state,
+            searchText
+        }
+    },
+    [UPDATE_ACTIVE_DEVICE]: (state, { deviceUid, data }) => {
+
+        const activeCloned = cloneDeep(state.activeDevices);
+
+        const device = activeCloned.find(d => d.deviceUid === deviceUid);
+
+        if (device) {
+            merge(device, data);
+        }
+
+        return {
+            ...state,
+            activeDevices: activeCloned
         }
     }
 

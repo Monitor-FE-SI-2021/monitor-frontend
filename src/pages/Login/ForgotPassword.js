@@ -1,49 +1,32 @@
 import { connect } from "react-redux";
 import React from 'react';
 import './Login.css';
-import { requestForgotPassword } from "../../store/modules/login/login";
+import { push } from "connected-react-router";
 
-function EmailSubmit({ requestForgotPassword }) {
-    const initialFormData = {
-        email: ""
+function ChooseTypeOfReset({push}) {
+
+    const switchRoute = (link) => {
+        push(link);
     };
 
-    const [formData, updateFormData] = React.useState(initialFormData);
-
-    const handleChange = (e) => {
-        updateFormData({
-            ...formData,
-            [e.target.name]: e.target.value.trim()
-        });
-    };
-
-    const handleSubmit = (e) => {
-
+    const handleSubmitEmailLink = (e) => {
         e.preventDefault();
+        switchRoute('/forgot-password-email');
+    };
 
-        const user = {
-            email: formData.email,
-        };
-
-        requestForgotPassword(user).then(r => {
-
-        })
-
+    const handleSubmitQuestions = (e) => {
+        e.preventDefault();
+        switchRoute('/forgot-password-questions');
     };
 
     return (
         <div className="formDiv">
-            <form id="login-form">
-                <h2>Forgot password?</h2>
-                <p>Enter your email adress:</p>
-                <input name="email" type='email'
-                       placeholder="example@domain.com"
-                       value={formData.email}
-                       onChange={handleChange}/>
-                <input id="submitButton" type="submit" value="Get reset link" onClick={handleSubmit}/>
+            <form class="form">
+                <p>Choose how you want to reset your password:</p>
+                <input class="submitButton" type="submit" value="Get reset link" onClick={handleSubmitEmailLink}/>
+                <input class="submitButton" type="submit" value="Answer security questions" onClick={handleSubmitQuestions}/>
             </form>
         </div>
     );
 }
-
-export default connect(state => ({}), { requestForgotPassword })(EmailSubmit);
+export default connect(state => ({}), { push })(ChooseTypeOfReset);

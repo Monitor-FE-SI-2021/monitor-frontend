@@ -1,36 +1,80 @@
-.group {
-    margin-left: 25px;
+.device-group {
+    margin: 5px 0 5px 25px;
+
+    .tab {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .buttons {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+
+        button {
+            padding: 8px 15px;
+            margin: 0 0 0 10px;
+        }
+    }
+
+    .title {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        padding-right: 10px;
+        margin-left: -20px;
+
+        .group-name-container {
+            display: flex;
+            align-items: center;
+
+            .group-name {
+                color: var(--main-color);
+                cursor: pointer;
+                font-size: 22px;
+                font-weight: bold;
+            }
+
+            .edit-group-btn {
+                font-size: 16px;
+                cursor: pointer;
+                margin-left: 10px;
+                opacity: 0.7;
+                color: var(--main-color);
+
+                &:hover {
+                    opacity: 1;
+                }
+            }
+        }
+
+        .collapsed,
+        .expanded {
+            background-color: inherit;
+            cursor: pointer;
+            border: none;
+            outline: none;
+            margin-right: 5px;
+            color: var(--main-color);
+            padding: 5px 10px;
+        }
+
+        .collapsed:hover,
+        .expanded:hover {
+
+        }
+
+        .collapsed:after {
+            content: "\25B8";
+            font-size: 22px;
+        }
+
+        .expanded:after {
+            content: "\25BE";
+            font-size: 22px;
+        }
+    }
+
 }
 
-
-.tab {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding-right: 10px;
-    margin-left: -20px;
-
-    .collapsed,
-    .expanded {
-        background-color: inherit;
-        cursor: pointer;
-        border: none;
-        outline: none;
-        margin-right: 5px;
-    }
-
-    .collapsed:hover,
-    .expanded:hover {
-        background-color: #eee;
-    }
-
-    .collapsed:after {
-        content: "\25B8";
-        font-size: 15px;
-    }
-
-    .expanded:after {
-        content: "\25BE";
-        font-size: 15px;
-    }
-}
