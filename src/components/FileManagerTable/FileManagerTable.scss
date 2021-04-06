@@ -1,58 +1,97 @@
 .table-wrapper {
-    margin: 0 auto;
-    width: 700px;
-    height: 400px;
-    overflow-y: scroll;
-    border-bottom: 2px solid black;
-    margin-bottom: 10px;
+  margin: 0 auto;
+  width: 700px;
+  height: 400px;
+  overflow-y: scroll;
+  border-bottom: 2px solid black;
+  margin-bottom: 10px;
 
-table {
-    background-color: white;
+  table {
+    //background-color: white;
     width: 100%;
     border-collapse: collapse;
-    border-top: 2px solid black;
-    border-left: 2px solid black;
-}
+    //border-top: 2px solid black;
+    //border-left: 2px solid black;
+  }
 
-th, tr {
-    border-bottom: 1px solid black;
-    text-align: center;
-}
+  //th,
+  tr:hover:not(tr:first-of-type) {
+    //border-bottom: 1px solid black;
+    //text-align: center;
+    background-color: #ebebeb;
+  }
 
-th {
-    background-color: #f9f9f9;
+  th {
+    //background-color: #f9f9f9;
     font-size: 18px;
     height: 50px;
     text-transform: uppercase;
-}
+  }
 
-td {
+  td {
     height: 50px;
-    border-right: 2px solid black;
-}
+    //border-right: 2px solid black;
+  }
 
-th {
+  th {
     border-bottom: 2px solid black;
-    border-right: 2px solid black;
-}
+    //border-right: 2px solid black;
+  }
 
-.file-download, .file-rename, .file-delete {
+  .file-download,
+  .file-rename,
+  .file-delete {
     transition: 0.2s ease-in-out;
     cursor: pointer;
-}
+  }
 
-.file-manipulation {
+  .file-manipulation {
     cursor: pointer;
     width: 14%;
-}
+  }
 
-.file-delete:hover {
+  .file-delete:hover {
     transition: 0.2s ease-in-out;
     color: #d21d1d;
-}
+  }
 
-.id {
+  .file-rename:hover {
+    transition: 0.2s ease-in-out;
+    color: #0040ff;
+  }
+
+  .id {
     width: 5%;
-}
-}
+  }
 
+  .header-row {
+    background: linear-gradient(
+      to top,
+      rgba(235, 189, 73, 0.6),
+      rgba(235, 189, 73, 0)
+    );
+  }
+
+  .centriraj {
+    text-align: center;
+  }
+
+  .centriraj-lijevo {
+    text-align: left;
+  }
+
+  .pomjereni-naziv {
+    padding-left: 8px;
+    vertical-align: middle;
+  }
+
+  .file-icon {
+    vertical-align: middle;
+    padding-right: 3px;
+  }
+
+  .back-button {
+    width: 25px;
+    height: 25px;
+  }
+}

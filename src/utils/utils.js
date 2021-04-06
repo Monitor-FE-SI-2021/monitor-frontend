@@ -17,3 +17,14 @@ export function showSwalToast(message, type = 'error') {
         showConfirmButton: false,
     });
 }
+
+export function findParentGroup(childGroup, rootGroups) {
+
+    for (const group of rootGroups) {
+        if (group.subGroups.find(sg => sg.groupId === childGroup.groupId)) {
+            return group;
+        }
+
+        return findParentGroup(childGroup, group.subGroups);
+    }
+}

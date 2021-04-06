@@ -1,0 +1,48 @@
+.formDiv {
+    margin: auto;
+    width: 30020px;
+}
+
+#form {
+    max-width: 1000px;
+    margin: auto;
+    padding: 20px;
+    background: #fafafa;
+    border: 1px solid #ccc;
+}
+
+#form h1 {
+    margin: 0 0 20px 0;
+}
+
+#form input {
+    box-sizing: border-box;
+    width: 100%;
+    margin: 0 0 20px 0;
+    padding: 10px;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+#submitButton {
+    border: 0;
+    padding: 15px;
+    background: #5b77bd;
+    color: #fff;
+    cursor: pointer;
+}
+
+#forgotPasswordButton {
+    background: #eeebeb;
+    border: #fff;
+    width: 100%;
+}
+
+select {
+    box-sizing: border-box;
+    width: 100%;
+    margin: 0 0 20px 0;
+    padding: 10px;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}

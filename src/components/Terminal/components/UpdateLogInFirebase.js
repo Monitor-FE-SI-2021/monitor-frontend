@@ -10,7 +10,7 @@ export default function updateNewLog(response, comp_name) {
            var array = querySnapshot._delegate._snapshot.docs
            .keyedMap.root.key.path.segments
            var id = array[array.length-1]
-           console.log("update new "+ JSON.stringify(id, null, 4))
+           //console.log("update new "+ JSON.stringify(id, null, 4))
 
            firebase.firestore()
             .collection("saved_logs")

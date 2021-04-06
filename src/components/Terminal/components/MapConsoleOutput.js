@@ -3,7 +3,7 @@ import Prompt from "./Prompt";
 import request, { wsEndpoint } from "../../../service";
 import updateNewLog from "./UpdateLogInFirebase";
 import config from "../config";
-
+//push
 const MapConsoleOutput = ({
   consoleOutput,
   updateConsoleOutput,
@@ -12,13 +12,16 @@ const MapConsoleOutput = ({
   name,
   location,
   ip,
+  id,
+  setPut,
+  user
 }) => {
   const scrollRef = React.useRef();
 
   React.useEffect(() => {
     if (scrollRef.current)
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-  });
+  }); 
 
   if (consoleOutput.length > 1) {
     //console.log( consoleOutput[consoleOutput.length-1])
@@ -27,31 +30,11 @@ const MapConsoleOutput = ({
 
       const isCommandValid = item.includes("Valid Command!");
       if (isCommandValid) {
-        const itemString = item.toString().split("!");
+        const command = item.toString().split("!")[1];
+        console.log("Item string ", command);
+        console.log("Path ", path)
 
-        let args = itemString[1].toString().split(" ");
-
-        const command = args[0];
-
-        let argumenti = [];
-        if (args.length > 1) {
-          argumenti.push(args[1]);
-        }
-
-        console.log(
-          name +
-            " " +
-            location +
-            " " +
-            ip +
-            " " +
-            command +
-            " " +
-            argumenti +
-            " " +
-            config.email
-        );
-        fetch(wsEndpoint + "/command", {
+        fetch(wsEndpoint + "/agent/command", {
           method: "POST",
           headers: {
             Accept: "application/json",
@@ -59,12 +42,10 @@ const MapConsoleOutput = ({
             Authorization: "Bearer " + token,
           },
           body: JSON.stringify({
-            name: name,
-            location: location,
-            ip: ip,
+            deviceUid: id,
             command: command,
-            parameters: argumenti,
-            user: config.email,
+            path: path,
+            user: user.email,
           }),
         })
           .then((res) => res.json())
@@ -72,10 +53,15 @@ const MapConsoleOutput = ({
             console.log(res);
             token = res.token;
             const clone = [...consoleOutput];
-            clone[clone.length - 1] = res.message;
+            let modified = res.message.replace(/\\n/g, "\n");
+            modified = modified.replace(/\\r/g, "\r");
+            console.log(modified);
+            clone[clone.length - 1] = modified;
+            setPut(res.path);
             if (clone != "" || clone != null) updateConsoleOutput(clone);
-            else updateConsoleOutput("Server Response error");
+            //else updateConsoleOutput("Server Response error");
             updateNewLog(clone, name);
+            //setPut(res.path)
           })
           .catch(function (e) {
             console.log(e);
@@ -94,14 +80,16 @@ const MapConsoleOutput = ({
         if (item == "Invalid Command") {
           return (
             <div key={index}>
-              <span>{item}</span>
+              <span style={{whiteSpace: 'pre-line'}}>{item}</span>
             </div>
           );
         } else {
           return (
             <div key={index}>
-              <Prompt path={path} />
-              <span>{item || "Server Response error"}</span>
+              <span style={{whiteSpace: 'pre-line'}}> 
+                {item} 
+              </span>
+              
             </div>
           );
         }
