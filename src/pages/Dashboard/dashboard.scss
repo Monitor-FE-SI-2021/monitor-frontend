@@ -1,5 +1,6 @@
 .dashboard {
   display: flex;
+  max-height: 80%;
 }
 
 .chartContainer {
@@ -36,8 +37,8 @@ h4 {
 }
 
 .scrollable {
-  overflow: scroll;
-  height: 100vh;
+  overflow: auto;
+  max-height: 90%;
   padding: 5%;
 }
 

@@ -50,7 +50,7 @@ let hddUsageChart = {
         },
     ],
 };
-/*
+
 let activeMachines = [
     {
         deviceUid: "fc548ecb-12ec-4ad5-8672-9d5a9565ff60",
@@ -81,7 +81,6 @@ let activeMachines = [
         path: "C:/user/programfiles",
     }
 ];
-*/
 function convertStatistics(statistic) {
     return [Math.round(statistic * 100), Math.round((1 - statistic) * 100)];
 }
@@ -92,7 +91,7 @@ let allMachinesUsage = null
 let lastDisconnected = null
 
 const Dashboard = ({user}) => {
-    let activeMachines = []
+    // let activeMachines = []
     const [machines, setMachines] = React.useState([]);
     const [active, setActive] = React.useState([...activeMachines]);
     const [showCharts, setShowCharts] = React.useState(false);
@@ -148,11 +147,11 @@ const Dashboard = ({user}) => {
             .then((res) => {
                 const allMachines = res.data.data;
                 setMachines(allMachines);
-                request("https://si-grupa5.herokuapp.com/api/agent/online")
-                    .then((res) => {
-                        setActive(filterActive(res?.data, allMachines));
-                    })
-              //  setActive(filterActive(activeMachines, allMachines))
+                // request("https://si-grupa5.herokuapp.com/api/agent/online")
+                //     .then((res) => {
+                //         setActive(filterActive(res?.data, allMachines));
+                //     })
+               setActive(filterActive(activeMachines, allMachines))
             })
             .catch((err) => console.log(err));
 

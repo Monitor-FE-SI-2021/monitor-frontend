@@ -239,21 +239,21 @@ const Tabs = (props, machine) => {
                         Get Screenshot
                     </button>
                 </div>
-                <div
-                    className={
-                        tab === "filemanager" ? "content  active-content" : "content"
-                    }
-                >
-                    <FileManagerTable currentFile={requestMessage}></FileManagerTable>
-                    <div className="uploadArea">
-                        <div {...getRootProps({ style })}>
-                            <input {...getInputProps()} />
-                            <p className="uploadText">
-                                Drag 'n' drop some files here, or click to select files
-                            </p>
-                        </div>
-                    </div>
-                </div>
+                {/* <div
+          className={
+            tab === "filemanager" ? "content  active-content" : "content"
+          }
+        >
+          <FileManagerTable currentFile={requestMessage}></FileManagerTable>
+          <div className="uploadArea">
+            <div {...getRootProps({ style })}>
+              <input {...getInputProps()} />
+              <p className="uploadText">
+                Drag 'n' drop some files here, or click to select files
+              </p>
+            </div>
+          </div>
+        </div> */}
             </div>
         </div>
     );

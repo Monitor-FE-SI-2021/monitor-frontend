@@ -15,6 +15,7 @@ import Terminal from "../Terminal/Terminal";
 import RemoteControl from "../../pages/RemoteControl/RemoteControl";
 import securityQuestions from "../securityQuestions/Questions"
 import ManageGroup from "../../pages/ManageGroup/ManageGroup";
+import FileManagerView from "../../pages/FileManager/FileManager"
 
 const Layout = ({ isMenuExpanded, loginAsync, userAsync, user }) => {
     if (loginAsync || userAsync) {
@@ -43,6 +44,7 @@ const Layout = ({ isMenuExpanded, loginAsync, userAsync, user }) => {
                         path={RouteLink.RemoteControl + "/:name?/:tab?"}
                         component={RemoteControl}
                     />
+                    <Route path={RouteLink.FileManagerView} component={FileManagerView}/>
                     <Route path={RouteLink.SecurityQuestions} component={securityQuestions}/>
                 </Switch>
             </div>
