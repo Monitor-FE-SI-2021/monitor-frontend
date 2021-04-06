@@ -56,7 +56,7 @@ const DragAndDrop = (props) => {
         let requestMessageJson = JSON.stringify({
             fileName: acceptedFiles[0].name,
             base64Data: base64FileString,
-            user: config.email,
+            user: props.user.email,
             path : "/foldercic/"
         });
     
@@ -99,7 +99,7 @@ const DragAndDrop = (props) => {
                     body: JSON.stringify({
                         fileName: acceptedFiles[0].name,
                         base64: base64FileString,
-                        user: config.email,
+                        user: props.user.email,
                         path : props.activePath
                     })
                 };
