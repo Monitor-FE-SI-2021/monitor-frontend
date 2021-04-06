@@ -40,7 +40,7 @@ function Login({ doLogin, push }) {
 
     return (
         <div className="formDiv">
-            <form id="login-form">
+            <form class="form">
                 <h1>LOGIN</h1>
                 
                 <input name="email" placeholder="Email" value={formData.email} onChange={handleChange}/>
@@ -48,8 +48,8 @@ function Login({ doLogin, push }) {
                        placeholder="Password"
                        value={formData.password}
                        onChange={handleChange}/>
-                <input id = "submitButton" type="submit" value="LOG IN" onClick={handleSubmit}/>
-                <input id = "forgotPasswordButton" type="button" value="Forgot password?" onClick={()=>switchRoute('/forgot-password')}/>
+                <input class = "submitButton" type="submit" value="LOG IN" onClick={handleSubmit}/>
+                <input id = "forgotPasswordButton" type="button" value="Forgot password?" onClick={()=>switchRoute('/forgot-password-type')}/>
             </form>
         </div>
     );

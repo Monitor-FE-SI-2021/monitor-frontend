@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
+import React, {useEffect} from "react";
 import './TwoFactorAuthentication.css'
-import { useState } from "react";
+import {useState} from "react";
 import axios from "axios";
-import { STORAGE_KEY } from "../../utils/consts";
-import { Update } from "@material-ui/icons";
-import { showSwalToast } from "../../utils/utils";
+import {STORAGE_KEY} from "../../utils/consts";
+import {Update} from "@material-ui/icons";
+import {showSwalToast} from "../../utils/utils";
 import request from "../../service";
 
 const securityLink = "https://si-2021.167.99.244.168.nip.io:3333/QRcode";

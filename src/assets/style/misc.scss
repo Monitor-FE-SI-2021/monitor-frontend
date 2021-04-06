@@ -1,0 +1,46 @@
+.custom-btn {
+    margin: 10px;
+    border: none;
+    color: rgba(255, 255, 255, 0.8);
+    background: rgba(73, 92, 143, 0.9);
+    padding: 10px 20px;
+    border-radius: 8px;
+    display: inline-block;
+    transition: all 0.3s ease 0s;
+    font-weight: 400;
+    white-space: nowrap;
+
+    &:hover {
+        color: rgba(255, 255, 255, 1);
+        background: rgba(73, 92, 143, 1);
+        cursor: pointer;
+        -webkit-box-shadow: -1px 4px 10px -1px rgba(0, 0, 0, 0.28);
+        -moz-box-shadow: -1px 4px 10px -1px rgba(0, 0, 0, 0.28);
+        box-shadow: -1px 4px 10px -1px rgba(0, 0, 0, 0.28);
+        transition: all 0.3s ease 0s;
+    }
+
+    &:active {
+        background-color: #2d3c63;
+        box-shadow: 0 2px #666;
+        transform: translateY(2px);
+        outline: none;
+        border: none;
+    }
+
+    &.outlined {
+        border: 1px solid rgba(73, 92, 143, 0.9);
+        background-color: #fff;
+        color: rgba(73, 92, 143, 0.9);
+    }
+}
+
+.async-button {
+    display: flex;
+    align-items: center;
+
+    .spinner {
+        margin: 0 0 0 10px;
+        color: #fff;
+    }
+}

@@ -5,13 +5,13 @@
     width: 315px;
 }
 
-.login-form-security h1{
+.login-form-security h1 {
     margin: 0 0 20px 0;
     font-size: 20px;
     text-align: center;
 }
 
-.login-form-security img{
+.login-form-security img {
     box-sizing: border-box;
     width: 100%;
     margin: 0 0 20px 0;
@@ -50,9 +50,4 @@
     cursor: pointer;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
-}
-
-html,
-body {
-    font-family: arial, sans-serif;
 }
