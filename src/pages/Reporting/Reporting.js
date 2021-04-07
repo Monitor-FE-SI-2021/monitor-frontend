@@ -126,7 +126,14 @@ const Reports = ({ user, push }) => {
 
     const submitReportForm = async (e) => {
         e.preventDefault();
-        const finalQuery = "( " + formatQuery(queryValue, 'sql') + " ) and groupId = " + (selectedGroup.group.groupId == -1 ? "groupId" : selectedGroup.group.groupId);
+
+        const selectClause = selectedColumns.join(', ');
+        const fromClause = "DEVICES";
+        const whereClause = "( " + formatQuery(queryValue, 'sql') + " ) and groupId = " + (selectedGroup.group.groupId == -1 ? "groupId" : selectedGroup.group.groupId);
+
+        const finalQuery = "SELECT " + selectClause + " FROM " + fromClause + " WHERE " + whereClause;
+        console.log(finalQuery);
+
         const body = {
             name: title,
             userId: user.userId,
@@ -135,6 +142,7 @@ const Reports = ({ user, push }) => {
             frequency: frequencyInfo.frequency.value,
             sendEmail: sendEmailValue,
         };
+
         const response = await request("https://si-2021.167.99.244.168.nip.io/api/report/CreateReport", "POST", body);
         if (response.status === 200) {
             window.alert("Uspjesno kreiran report!");
