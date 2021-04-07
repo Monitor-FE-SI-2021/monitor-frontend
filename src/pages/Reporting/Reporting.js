@@ -246,6 +246,7 @@ const Reports = ({ user, push }) => {
                         showNotToggle={true}
                     />
                 </div>
+                
                 <div>
                     <h3 className="queryBuilderTitle"> Which columns do you want in your report? </h3>
 

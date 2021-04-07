@@ -8,6 +8,7 @@ import HourPicker from './HourPicker.js';
 import { options, days, months, times } from './constants/index';
 
 import './ReportTiming.scss'
+import { Input } from '@material-ui/core';
 
 const ReportTiming = ({ setTimeInfo }) => {
     const [frequency, setFrequency] = useState(options[0]);
@@ -15,6 +16,8 @@ const ReportTiming = ({ setTimeInfo }) => {
     const [month, setMonth] = useState(months[0]);
     const [dayInMonth, setDayInMonth] = useState(1);
     const [time, setTime] = useState(times[0]);
+
+    const refTime = React.createRef();
 
     useEffect(() => {
         setTimeInfo({
@@ -57,6 +60,11 @@ const ReportTiming = ({ setTimeInfo }) => {
     };
 
     const handleDay = (e) => {
+        var up_lim = month.days;        
+        var x = e.target.value;
+        x = x > up_lim ? up_lim : x < 1 ? 1 : x;
+        e.target.value = x;
+
         setDay(e.target.value);
         setTimeInfo({
             frequency,
@@ -67,7 +75,7 @@ const ReportTiming = ({ setTimeInfo }) => {
         });
     };
 
-    const handleMonth = (e) => {
+    const handleMonth = async (e) => {
         setMonth(e.target.value);
         setTimeInfo({
             frequency,
@@ -78,15 +86,20 @@ const ReportTiming = ({ setTimeInfo }) => {
         });
     };
 
-    const handleDayInMonth = (e) => {
+    const handleDayInMonth = async (e) => {
+        var x = e.target.value;
+        x = x > 31 ? 31 : x < 1 ? 1 : x;
+        e.target.value = x;
+
         setDayInMonth(e.target.value);
-        setTimeInfo({
+        await setTimeInfo({
             frequency,
             day,
             month,
             dayInMonth: e.target.value,
             time,
         });
+        setFrequency(frequency);
     };
 
     return (
@@ -99,17 +112,13 @@ const ReportTiming = ({ setTimeInfo }) => {
             </div>
             <div className="timeInputWrapper">
                 <InputLabel className="timeLabelWrapper"> Time: </InputLabel>
-                <Select value={time} onChange={handleTime}>
-                    {times.map(item => <MenuItem key={item.value} value={item}> {item.label} </MenuItem>)}
-                </Select>
+                <Input onChange={handleTime} type="time" defaultValue="12:00"></Input>
             </div>
             {
                 frequency.value === 'Weekly' ?
                 <div className="timeInputWrapper">
                     <InputLabel className="timeLabelWrapper"> Day of the week: </InputLabel>
-                    <Select value={day} onChange={handleDay}>
-                        {days.map(item => <MenuItem key={item.value} value={item}> {item.label} </MenuItem>)}
-                    </Select>
+                    <Input type="number" inputProps={{min:1, max:31}} onChange={handleDayInMonth} defaultValue="1"></Input>
                 </div> :
                 null
             }
@@ -117,9 +126,7 @@ const ReportTiming = ({ setTimeInfo }) => {
                 frequency.value === 'Monthly' ?
                 <div className="timeInputWrapper">
                     <InputLabel className="timeLabelWrapper"> Day: </InputLabel>
-                    <Select value={dayInMonth} onChange={handleDayInMonth}>
-                        {createDays(31)}
-                    </Select>
+                    <Input type="number" inputProps={{min:1, max:31}} onChange={handleDayInMonth} defaultValue="1"></Input>
                 </div> :
                 null
             }
@@ -134,9 +141,7 @@ const ReportTiming = ({ setTimeInfo }) => {
                     </div>
                     <div className="timeInputWrapper">
                         <InputLabel className="timeLabelWrapper"> Day: </InputLabel>
-                        <Select value={dayInMonth} onChange={handleDayInMonth}>
-                            {createDays(month.days)}
-                        </Select>
+                        <Input type="number" inputProps={{min:1, max:31}} onChange={handleDay} defaultValue="1" id="inputTime" ref={refTime}></Input>
                     </div>
                 </div> :
                 null
