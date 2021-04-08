@@ -35,7 +35,7 @@ const Terminal = (props) => {
   ] = UseOnEnter();
 
   counterOfSavedLogs = counter;
-
+  //pravljenje novog brancha
   React.useEffect(() => {
     inputText.current.value = "";
     inputText.current.focus();
