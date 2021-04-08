@@ -11,13 +11,33 @@ import request from "../../service";
 
 const Tasks = ({push}) => {
     const [users, setUsers] = useState([{"name" : "ime", "lastname" : "prezime", "email" : "mail", "phone" : "telefon"},
-    {"name" : "ime", "lastname" : "prezime", "email" : "mail", "phone" : "telefon"},
-    {"name" : "ime", "lastname" : "prezime", "email" : "mail", "phone" : "telefon"},
+    {"name" : "ime2", "lastname" : "prezime", "email" : "mail", "phone" : "telefon"},
+    {"name" : "ime3", "lastname" : "prezime", "email" : "mail", "phone" : "telefon"},
     {"name" : "ime", "lastname" : "prezime", "email" : "mail", "phone" : "telefon"},
     {"name" : "ime", "lastname" : "prezime", "email" : "mail", "phone" : "telefon"},
     {"name" : "ime", "lastname" : "prezime", "email" : "mail", "phone" : "telefon"}]);
     
+
     
+    
+   /* const setData = async () => {
+        
+
+      
+            setUsers([]);
+            const res = await request("https://si-2021.167.99.244.168.nip.io/api/user/All");
+            for (let re of res.data) //data.data 
+                users.push(re);
+
+            setUsers(users);
+            
+        
+       
+    };
+   
+    useEffect(() => {
+        setData();
+    }, []);*/
 
     return (
         <div className="reportingWrapper page">

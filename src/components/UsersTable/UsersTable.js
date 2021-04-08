@@ -6,9 +6,9 @@ import dayjs from 'dayjs';
 import './UsersTable.scss';
 
 
-const UsersTable = ({ users }) => {
+const UsersTable = ({ users} ) => {
     const [tableData, setTableData] = useState(users);
-
+    const [selectedUser, setSelectedUser] = useState({"name" : "prvi", "lastname" : "prvi", "email" : "mail", "phone" : "telefon"})
     const downloadTableRow = (tableRow) => {
         console.log(tableRow);
     }
@@ -17,6 +17,8 @@ const UsersTable = ({ users }) => {
 
         let newHidden = !hidden;
         setHidden(newHidden);
+        setSelectedUser(user);
+        console.log("U tabeli je user" + user.name);
     }
 
     const [hidden, setHidden] = useState(true);
