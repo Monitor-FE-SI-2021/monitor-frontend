@@ -185,7 +185,7 @@ class FileManagerTable extends React.Component {
                         <td className="file-manipulation file-rename centriraj" onClick={() => { this.handleRename(id) }}>
                             <FaPencilAlt size={20} />
                         </td>
-                        <Checkbox className="file-checkbox file-manipulation" color="default" />
+                        <Checkbox className="file-checkbox file-manipulation" color="default"/>
                     </div>
                 </tr>
             )
