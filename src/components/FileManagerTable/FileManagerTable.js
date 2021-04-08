@@ -5,6 +5,7 @@ import DeletePopup from "../Popups/DeletePopup";
 import request from "../../service";
 import DragAndDrop from '../DragAndDrop/DragAndDrop';
 import Swal from "sweetalert2";
+import { FaPencilAlt, FaTrash } from 'react-icons/fa';
 
 
 const config = require("../Terminal/config");
@@ -176,8 +177,12 @@ class FileManagerTable extends React.Component {
                         <img className="file-icon" src={oneObject.data.type == "file" ? fileIconUrl : folderIconUrl}></img>
                         {fileName}
                     </td>
-                    <td className="file-manipulation file-delete centriraj" onClick={() => { this.handleDelete(id) }}>Delete</td>
-                    <td className="file-manipulation file-rename centriraj" onClick={() => { this.handleRename(id) }}>Rename</td>
+                    <td className="file-manipulation file-delete centriraj" onClick={() => { this.handleDelete(id) }}>
+                        <FaTrash size={20} />
+                    </td>
+                    <td className="file-manipulation file-rename centriraj" onClick={() => { this.handleRename(id) }}>
+                        <FaPencilAlt size={20} />
+                    </td>
                 </tr>
             )
         })
