@@ -1,7 +1,7 @@
 .table-wrapper {
   margin: 0 auto;
-  width: 700px;
-  height: 400px;
+  width: 800px;
+  height: 500px;
   overflow-y: scroll;
   border-bottom: 2px solid black;
   margin-bottom: 10px;
@@ -90,8 +90,23 @@
     padding-right: 3px;
   }
 
-  .back-button {
-    width: 25px;
-    height: 25px;
+  .date-style {
+    color: gray;
+    width: 27%;
+  }
+
+  .center-vertical {
+    vertical-align: middle;
+  }
+
+  .centriraj-datum {
+    vertical-align: middle;
+    text-align: left;
+  }
+
+  .sort-strelica:hover {
+    transition: 0.2s ease-in-out;
+    background-color: #ffca26;
+    border-radius: 100%;
   }
 }

@@ -23,7 +23,7 @@ class FileManagerTable extends React.Component {
                     fileName: "LOADING...",
                     link: 'linkDoFajla',
                     data: {}
-                },
+                }
             ],
             showRenamePopup: false,
             showDeletePopup: false,
@@ -160,15 +160,56 @@ class FileManagerTable extends React.Component {
         return (
             <tr className="header-row">
                 {/* <th>ID</th> */}
-                <th className="centriraj-lijevo pomjereni-naziv">Filename</th>
+                <th>
+                    <div style={{
+                        display: "flex",
+                        justifyContent: "left",
+                        alignItems: "center",
+                        paddingLeft: "8px"
+                    }}>
+                        <span>File name</span>
+                        <img onClick={() => {this.sortFilesDescending()}} className="sort-strelica" src="https://img.icons8.com/material-rounded/24/000000/sort-down.png"></img>
+                        <img onClick={() => {this.sortFilesAscending()}} className="sort-strelica" src="https://img.icons8.com/material-rounded/24/000000/sort-up.png"/>
+                    </div>
+                </th>
+                <th>
+                    <div style={{
+                        display: "flex",
+                        justifyContent: "left",
+                        alignItems: "center"
+                    }}>
+                        <span>Date added</span>
+                        <img onClick={() => {}} className="sort-strelica" src="https://img.icons8.com/material-rounded/24/000000/sort-down.png"></img>
+                        <img onClick={() => {}} className="sort-strelica" src="https://img.icons8.com/material-rounded/24/000000/sort-up.png"/>
+                    </div>
+                </th>
                 <th colSpan="2" className="centriraj">File manipulation</th>
             </tr>
         )
     }
 
+    sortFilesDescending() {
+        this.state.responseObject.sort((f1, f2) => {
+            let name1 = f1.fileName.toUpperCase(),
+                name2 = f2.fileName.toUpperCase();
+            return name1 == name2 ? 0 : name1 > name2 ? -1 : 1;
+        });
+        this.setState(this.state);
+    }
+
+    sortFilesAscending() {
+        this.state.responseObject.sort((f1, f2) => {
+            let name1 = f1.fileName.toUpperCase(),
+                name2 = f2.fileName.toUpperCase();
+            return name1 == name2 ? 0 : name1 > name2 ? 1 : -1;
+        });
+        this.setState(this.state);
+    }
+
     renderTableData() {
         return this.state.responseObject.map((oneObject, index) => {
             const { id, fileName, link } = oneObject;
+            console.log("Ovo je moje: ",oneObject)
             return (
                 <tr>
                     {/* <td className="id">{id}</td> */}
@@ -176,6 +217,7 @@ class FileManagerTable extends React.Component {
                         <img className="file-icon" src={oneObject.data.type == "file" ? fileIconUrl : folderIconUrl}></img>
                         {fileName}
                     </td>
+                    <td className="date-style">08.04.2021 23:22</td>
                     <td className="file-manipulation file-delete centriraj" onClick={() => { this.handleDelete(id) }}>Delete</td>
                     <td className="file-manipulation file-rename centriraj" onClick={() => { this.handleRename(id) }}>Rename</td>
                 </tr>
