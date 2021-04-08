@@ -33,9 +33,11 @@ p {
 .wrapper > button {
     align-content: center;
     width: 60%;
+    height: 30px;
     cursor: pointer;
     border: 1px solid #3f3f3f;
-    border-radius: 10px;
+    border-radius: 2px;
+    font-weight: bolder;
     text-transform: uppercase;
 }
 

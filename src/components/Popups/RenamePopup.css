@@ -9,7 +9,7 @@
     display: flex;
     align-content: center;
  }
- .rename-popup-inner {
+.rename-popup-inner {
     background-color: #fefefe;
     margin: auto;
     border: 1px solid #888;
@@ -18,29 +18,34 @@
     display: grid;
     flex-direction: column;
     align-content: center;
- }
+}
 
-/* input {
+.rename-input {
     line-height: 30px;
     font-size: 18px;
     margin-bottom: 10px;
     width: 60%;
-} */
+    text-align: center;
+}
+
 
 .rename-wrapper {
     width: 100%;
     text-align: center;
 }
 
-.rename-wrapper > button {
+.rename-wrapper > .rename-button {
     align-content: center;
     width: 60%;
+    height: 30px;
     border: 1px solid #3f3f3f;
-    border-radius: 10px;
+    border-radius: 2px;
     cursor: pointer;
+    text-transform: uppercase;
+    font-weight: bolder;
 }
 
-.upper-button > button {
+.upper-button > .rename-close {
     width: 100%;
     text-align: right;
     position: relative;
@@ -48,4 +53,5 @@
     background-color: transparent;
     border: none;
     font-size: 1.5em;
+    cursor: pointer;
 }
