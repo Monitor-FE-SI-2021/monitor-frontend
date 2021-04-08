@@ -19,7 +19,7 @@ class FileManagerTable extends React.Component {
         this.state = {
             responseObject: [
                 {
-                    id: 1,
+                    id: 0,
                     fileName: "LOADING...",
                     link: 'linkDoFajla',
                     data: {}
@@ -27,9 +27,11 @@ class FileManagerTable extends React.Component {
             ],
             globalId: -1,
             activeFolder: '.',
-            user: props.user
+            user: props.user,
+            checkedFiles: []
         }
-
+        this.getCheckedFiles = this.getCheckedFiles.bind(this)
+        this.handleAddFile = this.handleAddFile.bind(this)
         this.updateResponse();
     }
 
@@ -154,7 +156,7 @@ class FileManagerTable extends React.Component {
                         <td className="file-manipulation file-rename centriraj" onClick={() => { this.handleRename(id) }}>
                             <FaPencilAlt size={20} />
                         </td>
-                        <Checkbox className="file-checkbox file-manipulation" color="default"/>
+                        <Checkbox onChange={(e) => { this.handleAddFile(e, id)}} className="file-checkbox file-manipulation" color="default"/>
                     </div>
                 </tr>
             )
@@ -300,6 +302,24 @@ class FileManagerTable extends React.Component {
             },
             allowOutsideClick: () => !Swal.isLoading()
         })
+    }
+
+    handleAddFile(e, id) {
+        let fileList = this.state.checkedFiles
+        let availableFiles = this.state.responseObject;
+        let selectedFile = availableFiles.find(ele => ele.id == id)
+
+        if(e.target.checked) {
+            fileList.push(selectedFile);
+        }
+        else {
+            for( let i = 0; i < fileList.length; i++){
+                if ( fileList[i].id === id) {
+                    fileList.splice(i, 1);
+                }
+            }
+        }
+        this.state.checkedFiles = fileList;
     }
 
     clickUp() {
@@ -450,6 +470,11 @@ class FileManagerTable extends React.Component {
         
         //#endregion
         */
+    }
+
+    getCheckedFiles() {
+        const sendFiles = this.state.checkedFiles;
+        console.log(JSON.stringify(sendFiles));
     }
 
     render() {
