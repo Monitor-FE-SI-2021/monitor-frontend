@@ -6,6 +6,7 @@ import request from "../../service";
 import DragAndDrop from '../DragAndDrop/DragAndDrop';
 import Swal from "sweetalert2";
 import { FaPencilAlt, FaTrash } from 'react-icons/fa';
+import Checkbox from '@material-ui/core/Checkbox';
 
 
 const config = require("../Terminal/config");
@@ -162,7 +163,7 @@ class FileManagerTable extends React.Component {
             <tr className="header-row">
                 {/* <th>ID</th> */}
                 <th className="centriraj-lijevo pomjereni-naziv">Filename</th>
-                <th colSpan="2" className="centriraj">File manipulation</th>
+                <th colSpan="3" className="centriraj">File manipulation</th>
             </tr>
         )
     }
@@ -177,12 +178,15 @@ class FileManagerTable extends React.Component {
                         <img className="file-icon" src={oneObject.data.type == "file" ? fileIconUrl : folderIconUrl}></img>
                         {fileName}
                     </td>
-                    <td className="file-manipulation file-delete centriraj" onClick={() => { this.handleDelete(id) }}>
-                        <FaTrash size={20} />
-                    </td>
-                    <td className="file-manipulation file-rename centriraj" onClick={() => { this.handleRename(id) }}>
-                        <FaPencilAlt size={20} />
-                    </td>
+                    <div className="file-manipulation-wrapper">
+                        <td className="file-manipulation file-delete centriraj" onClick={() => { this.handleDelete(id) }}>
+                            <FaTrash size={20} />
+                        </td>
+                        <td className="file-manipulation file-rename centriraj" onClick={() => { this.handleRename(id) }}>
+                            <FaPencilAlt size={20} />
+                        </td>
+                        <Checkbox className="file-checkbox file-manipulation" color="default" />
+                    </div>
                 </tr>
             )
         })

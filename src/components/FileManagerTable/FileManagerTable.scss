@@ -45,9 +45,14 @@
     cursor: pointer;
   }
 
+  .file-download {
+    width: 70%;
+  }
+
   .file-manipulation {
-    cursor: pointer;
-    width: 14%;
+    display: flex;
+    align-items: center;
+    margin-right: 60px;
   }
 
   .file-delete:hover {
@@ -95,8 +100,12 @@
     height: 25px;
   }
 
-  .manipulation-icon {
-    width: 30px;
-    height: 30px;
+  .file-manipulation-wrapper {
+    display: flex;
+    justify-content: center;
+  }
+
+  .file-checkbox {
+    margin-right: 0px;
   }
 }
