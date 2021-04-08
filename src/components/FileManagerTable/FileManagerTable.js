@@ -1,7 +1,5 @@
 import React from 'react';
 import './FileManagerTable.scss';
-import RenamePopup from "../Popups/RenapePopup";
-import DeletePopup from "../Popups/DeletePopup";
 import request from "../../service";
 import DragAndDrop from '../DragAndDrop/DragAndDrop';
 import Swal from "sweetalert2";
@@ -27,8 +25,6 @@ class FileManagerTable extends React.Component {
                     data: {}
                 },
             ],
-            showRenamePopup: false,
-            showDeletePopup: false,
             globalId: -1,
             activeFolder: '.',
             user: props.user
@@ -125,33 +121,6 @@ class FileManagerTable extends React.Component {
         }
     }
 
-    toggleRenamePopup(resetId) {
-        this.setState({
-            showRenamePopup: !this.state.showRenamePopup
-        });
-        if (resetId) {
-            this.state.globalId = -1;
-        }
-    }
-
-    toggleDeletePopup(resetId) {
-        this.setState({
-            showDeletePopup: !this.state.showDeletePopup
-        });
-        if (resetId) {
-            this.state.globalId = -1;
-        }
-    }
-
-    sendChangeRequest() {
-        let formField = document.getElementsByClassName('rename-wrapper')[0].children[0].value;
-        if (formField.length === 0) {
-            console.log("Ne možete poslati prazan string!")
-        } else {
-            console.log("Naziv: " + formField + ", ID: " + this.state.globalId);
-        }
-        this.toggleRenamePopup(true);
-    }
 
     sendDeleteRequest() {
         console.log("Delete, ID: " + this.state.globalId);
@@ -287,12 +256,50 @@ class FileManagerTable extends React.Component {
 
     handleDelete(id) {
         this.state.globalId = id;
-        this.toggleDeletePopup(false);
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You cannot return the file after you delete it",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // TODO: send delete request here
+                console.log("delete file " + this.state.globalId)
+                Swal.fire(
+                    'Deleted!',
+                    'Your file has been deleted.',
+                    'success'
+                )
+            }
+        })
     }
 
     handleRename(id) {
         this.state.globalId = id;
-        this.toggleRenamePopup(false);
+        Swal.fire({
+            title: 'Change file name',
+            input: 'text',
+            inputAttributes: {
+                autocapitalize: 'off'
+            },
+            showCancelButton: true,
+            confirmButtonText: 'Rename',
+            showLoaderOnConfirm: true,
+            preConfirm: (newName) => {
+                if(newName.length === 0) {
+                    Swal.showValidationMessage(
+                        'File name cannot be empty!'
+                    )
+                } else {
+                    // TODO: send rename request here
+                    console.log("rename request " + this.state.globalId);
+                }
+            },
+            allowOutsideClick: () => !Swal.isLoading()
+        })
     }
 
     clickUp() {
@@ -458,21 +465,6 @@ class FileManagerTable extends React.Component {
                             {this.renderTableData()}
                         </tbody>
                     </table>
-                    {this.state.showRenamePopup ?
-                        <RenamePopup className="rename-popup"
-                            closePopupButton={this.toggleRenamePopup.bind(this)}
-                            changeName={this.sendChangeRequest.bind(this)}
-                        />
-                        : null
-                    }
-                    {this.state.showDeletePopup ?
-                        <DeletePopup className="delete-popup"
-                            closeDeletePopupButton={this.toggleDeletePopup.bind(this)}
-                            changeName={this.sendDeleteRequest.bind(this)}
-                        />
-                        : null
-                    }
-
                 </div>
                 <DragAndDrop updateView={this.updateResponse} activePath={this.state.activeFolder} user={this.state.user}></DragAndDrop>
             </div>
