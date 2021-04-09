@@ -6,29 +6,23 @@ import { RouteLink } from "../../store/modules/menu/menu";
 import {  FormControl, MenuItem, Select , Popover  } from "@material-ui/core";
 import request from "../../service";
 
-// import './ReportList.scss';
-// import { frequenciesFilter } from './constants';
 
 const Tasks = ({push}) => {
-    const [users, setUsers] = useState([{"name" : "ime", "lastname" : "prezime", "email" : "mail", "phone" : "telefon"},
-    {"name" : "ime2", "lastname" : "prezime", "email" : "mail", "phone" : "telefon"},
-    {"name" : "ime3", "lastname" : "prezime", "email" : "mail", "phone" : "telefon"},
-    {"name" : "ime", "lastname" : "prezime", "email" : "mail", "phone" : "telefon"},
-    {"name" : "ime", "lastname" : "prezime", "email" : "mail", "phone" : "telefon"},
-    {"name" : "ime", "lastname" : "prezime", "email" : "mail", "phone" : "telefon"}]);
+    const [users, setUsers] = useState([]); 
     
-
-    
-    
-   /* const setData = async () => {
+    const setData = async () => {
         
-
       
             setUsers([]);
             const res = await request("https://si-2021.167.99.244.168.nip.io/api/user/All");
-            for (let re of res.data) //data.data 
-                users.push(re);
+            
 
+            var data =res.data.data;
+           
+            for(let user of data) {
+                users.push(user);
+            }
+                
             setUsers(users);
             
         
@@ -37,7 +31,7 @@ const Tasks = ({push}) => {
    
     useEffect(() => {
         setData();
-    }, []);*/
+    }, []);
 
     return (
         <div className="reportingWrapper page">
