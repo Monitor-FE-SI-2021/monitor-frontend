@@ -1,5 +1,5 @@
-import {STORAGE_KEY} from "../../utils/consts";
-import request,{authEndpoint} from "../../service";
+import { STORAGE_KEY } from "../../utils/consts";
+import request, { authEndpoint } from "../../service";
 const neki = "http://localhost:3333/getUserDetails";
 
 
@@ -8,14 +8,14 @@ export const getUserDetails = () => {
         if (res && res.status === 200) {
             return res;
         }
-    }).catch(error=>{
+    }).catch(error => {
         console.log(error)
     })
 }
-export const verifyEmail = ({ email}) => {
+export const verifyEmail = ({ email }) => {
 
     const data = {
-        email:email.email
+        email: email.email
     };
 
     return request("http://localhost:3333/checkIfEmailVerified", "POST",
@@ -30,16 +30,16 @@ export const verifyEmail = ({ email}) => {
                 }
             }
         }
-    }).catch(error=>{
-    console.log(error)
-})
+    }).catch(error => {
+        console.log(error)
+    })
 
 }
 
 export const sendVerificationEmail = ({ email }) => {
 
     const data = {
-        email:email.email
+        email: email.email
     };
     return request("http://localhost:3333/sendVerificationEmail", "PUT",
         data
@@ -54,7 +54,7 @@ export const sendVerificationEmail = ({ email }) => {
 
 export const checkIfEmailExists = ({ email }) => {
     const data = {
-        email:email.email
+        email: email.email
     };
 
     return request("http://localhost:3333/checkIfEmailExists", "POST",
@@ -69,7 +69,7 @@ export const checkIfEmailExists = ({ email }) => {
 export const changeEmailForUser = ({ email }) => {
 
     const data = {
-        email:email.email
+        email: email.email
     };
 
     return request("http://localhost:3333/sendVerificationEmail", "PUT",
@@ -82,3 +82,9 @@ export const changeEmailForUser = ({ email }) => {
 
 
 }
+export const regexEmail = ({ email }) => {
+    console.log(email);
+    var pattern = new RegExp(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g);
+    return pattern.test(email);
+}
+
