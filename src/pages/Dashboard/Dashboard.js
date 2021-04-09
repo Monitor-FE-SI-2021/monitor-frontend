@@ -5,6 +5,9 @@ import DonutChart from "./components/charts/DonutChart";
 import ActiveMachine from "./components/ActiveMachine";
 import request, { devices } from "../../service";
 import GoogleMapMonitors from "./components/GoogleMapMonitors";
+
+import "react-modern-calendar-datepicker/lib/DatePicker.css";
+import DatePicker from "react-modern-calendar-datepicker";
 import "./dashboard.scss";
 
 let ramUsageChart = {
@@ -92,11 +95,35 @@ let allMachinesUsage = null
 let lastDisconnected = null
 
 const Dashboard = ({ user }) => {
+    let end = new Date();
+    const endDefaultValue = {
+        year: end.getFullYear(),
+        month: end.getMonth()+1,
+        day: end.getUTCDate()
+    };
+    let start = new Date(end.getTime() - (7 * 24 * 60 * 60 * 1000));
+    const startDefaultValue = {
+        year: start.getFullYear(),
+        month: start.getMonth()+1,
+        day: start.getUTCDate()
+    };
     let activeMachines = []
     const [machines, setMachines] = React.useState([]);
     const [active, setActive] = React.useState([...activeMachines]);
     const [showCharts, setShowCharts] = React.useState(false);
-
+   
+    const [endDate, setEndDate] = React.useState(endDefaultValue);
+    const endformatInputValue = () => {
+        if (!endDate) return '';
+        return `${endDate.day}/${endDate.month}/${endDate.year}`;
+      };
+    
+    const [startDate, setStartDate] = React.useState(startDefaultValue);
+    const startformatInputValue = () => {
+        if (!startDate) return '';
+        return `${startDate.day}/${startDate.month}/${startDate.year}`;
+      };
+    
     function filterActive(activeMachines, allMachines) {
         return activeMachines ? activeMachines.filter((machine) => {
             const existingMachine = allMachines.find(({ deviceUid }) => {
@@ -110,6 +137,7 @@ const Dashboard = ({ user }) => {
         }) : [];
     }
 
+   
     function getStatistics(machine) {
         console.log(machine)
         request(devices + "/GetDeviceLogs?deviceId=" + machine.deviceId)
@@ -235,6 +263,30 @@ const Dashboard = ({ user }) => {
                 {showCharts && (
                     <div>
                         <h2 className="machineName">{clickedMachine?.name}</h2>
+                        
+                        <div className="pickers">
+                        <h5 className="picker-h5">Date Range Input</h5>
+                        <DatePicker
+                         className="picker"
+                         value={startDate}
+                         onChange={setStartDate}
+                         formatInputText={startformatInputValue} // format value
+                         
+                         inputClassName="my-custom-input" // custom class
+                         shouldHighlightWeekends
+                        />
+                        <DatePicker
+                         className="picker"
+                         value={endDate}
+                         onChange={setEndDate}
+                         formatInputText={endformatInputValue} // format value
+                        
+                         inputClassName="my-custom-input" // custom class
+                         shouldHighlightWeekends
+                        />
+                       
+                        </div>
+                        
                         <div className="chartContainer">
 
                             <div className="row">
