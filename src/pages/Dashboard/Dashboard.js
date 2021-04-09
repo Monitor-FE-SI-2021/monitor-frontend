@@ -8,7 +8,9 @@ import GoogleMapMonitors from "./components/GoogleMapMonitors";
 
 import "react-modern-calendar-datepicker/lib/DatePicker.css";
 import DatePicker from "react-modern-calendar-datepicker";
+import { utils } from "react-modern-calendar-datepicker";
 import "./dashboard.scss";
+import { LiveTv } from "@material-ui/icons";
 
 let ramUsageChart = {
     labels: ["Used", "Not used"],
@@ -96,28 +98,30 @@ let lastDisconnected = null
 
 const Dashboard = ({ user }) => {
     let end = new Date();
-    const endDefaultValue = {
+    let endDefaultValue = {
         year: end.getFullYear(),
         month: end.getMonth()+1,
         day: end.getUTCDate()
     };
-    let start = new Date(end.getTime() - (7 * 24 * 60 * 60 * 1000));
-    const startDefaultValue = {
-        year: start.getFullYear(),
-        month: start.getMonth()+1,
-        day: start.getUTCDate()
-    };
+    
     let activeMachines = []
     const [machines, setMachines] = React.useState([]);
     const [active, setActive] = React.useState([...activeMachines]);
     const [showCharts, setShowCharts] = React.useState(false);
    
-    const [endDate, setEndDate] = React.useState(endDefaultValue);
+    const [endDate, setEndDate] = React.useState(utils().getToday());
     const endformatInputValue = () => {
         if (!endDate) return '';
         return `${endDate.day}/${endDate.month}/${endDate.year}`;
       };
     
+    let st= new Date(endDate.year,endDate.month-1,endDate.day);
+    let start = new Date(st.getTime() - (7 * 24 * 60 * 60 * 1000));
+    let startDefaultValue = {
+        year: start.getFullYear(),
+        month: start.getMonth()+1,
+        day: start.getDate()
+    };
     const [startDate, setStartDate] = React.useState(startDefaultValue);
     const startformatInputValue = () => {
         if (!startDate) return '';
@@ -270,6 +274,7 @@ const Dashboard = ({ user }) => {
                          className="picker"
                          value={startDate}
                          onChange={setStartDate}
+                         maximumDate={endDate}
                          formatInputText={startformatInputValue} // format value
                          
                          inputClassName="my-custom-input" // custom class
@@ -280,7 +285,7 @@ const Dashboard = ({ user }) => {
                          value={endDate}
                          onChange={setEndDate}
                          formatInputText={endformatInputValue} // format value
-                        
+                         minimumDate={startDate}
                          inputClassName="my-custom-input" // custom class
                          shouldHighlightWeekends
                         />
