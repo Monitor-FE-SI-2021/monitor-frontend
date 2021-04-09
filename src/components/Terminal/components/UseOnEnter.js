@@ -36,29 +36,6 @@ const UseOnEnter = () => {
     
     if (key === "Enter") {
       //console.log("Proba")
-    const requestOptions = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: config.email, password:  config.password})
-  };
-
-  try {
-      var response = await fetch(config.url, requestOptions);
-     //console.log(response.status)
-      
-      //console.log(x);
-      if(response.status == 200)
-      {
-          var x = await response.json();
-          //console.log(JSON.stringify(x.accessToken));
-          token = x.accessToken
-      }
-      else{
-        //console.log("Error");
-      }
-  }catch(e){
-    
-  }
   
     
       let newInput = value;

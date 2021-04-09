@@ -5,7 +5,7 @@ import Prompt from "./Prompt";
 async function retrieveDataFromFirebase(comp_name) {
     var savedLogs = [];
 
-    console.log("-----firebase-----")
+    //console.log("-----firebase-----")
     var db = firebase.firestore();
     var collectionRef = db.collection("saved_logs")
                             .doc(comp_name)
@@ -18,8 +18,8 @@ async function retrieveDataFromFirebase(comp_name) {
             .then((querySnapshot) => {
                 querySnapshot.forEach((doc) => {
                     var response = doc.data()
-                    console.log(doc.id, " => ", " args:"+response.args+
-                    " command_type "+response.command_type+" response "+response.response+" "+response.createdAt);
+                    //console.log(doc.id, " => ", " args:"+response.args+
+                    //" command_type "+response.command_type+" response "+response.response+" "+response.createdAt);
                     savedLogs.push(logsConverter.fromFirestore(doc));
                 });
                 return savedLogs;
@@ -65,7 +65,7 @@ componentDidMount() {
 renderLogs = async() => {
     try {
         var res = await retrieveDataFromFirebase(this.props.name)
-        console.log("data "+ JSON.stringify(res, null, 4));
+        //console.log("data "+ JSON.stringify(res, null, 4));
         // this will re render the view with new data
         this.setState({
             Logs: res.map((log) => (

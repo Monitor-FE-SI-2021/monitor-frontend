@@ -4,6 +4,7 @@ import UseOnEnter from "./components/UseOnEnter";
 import MapConsoleOutput from "./components/MapConsoleOutput";
 import "./terminal.scss";
 import { connect } from "react-redux";
+import request, { wsEndpoint } from "../../service";
 //merge
 import firebase from "firebase/app";
 import "firebase/firestore";
@@ -24,6 +25,27 @@ const Terminal = (props) => {
   const inputText = React.useRef();
 
   const [put, setPut] = React.useState(props.machine.path);
+  const [tabCommands, setTabCommands] = React.useState()
+
+    React.useEffect(()=>{
+      request(wsEndpoint + "/agent/command", "POST", {
+      deviceUid: props.machine.deviceUid,
+      command: "ls",
+      path: put,
+      user: props.user.email,
+      })
+    .then((res) => {
+      let modified = res.data.message.replace(/\\n/g, "\n");
+      modified = modified.replace(/\\r/g, "\r");
+      let novaLista = modified.split("\n");
+      console.log(novaLista);
+
+      setTabCommands(modified)  
+    })
+    .catch(function (e) {
+      console.log(e)
+    })
+    }, [put])
 
   const [
     consoleOutput,
@@ -45,6 +67,7 @@ const Terminal = (props) => {
     if (e.key === "ArrowUp" || e.key === "ArrowDown") e.preventDefault();
     switch (e.keyCode) {
       case 38:
+        
         if (counterOfSavedLogs !== 0) {
           counterOfSavedLogs = counterOfSavedLogs - 1;
           inputText.current.value = savedLogs[counterOfSavedLogs];
@@ -60,6 +83,9 @@ const Terminal = (props) => {
           inputText.current.value = savedLogs[counterOfSavedLogs];
         }
         break;
+      case 9:
+        console.log("Tab ", tabCommands)
+      break;
     }
   };
 
@@ -75,13 +101,13 @@ const Terminal = (props) => {
           location={props.machine.location}
           ip={props.machine.ip}
           id={props.machine.deviceUid}
-          //path={props.machine.path}
           path={put}
           setPut={setPut}
           consoleOutput={consoleOutput}
           updateConsoleOutput={updateConsoleOutput}
           token={token}
           user={props.user}
+          setTabCommands = {setTabCommands}
         />
         <div className="input-prompt">
           <Prompt path={put} />
