@@ -3,7 +3,6 @@ import React, {Component, useState} from 'react';
 import { withGoogleMap, GoogleMap, Marker, InfoWindow } from "react-google-maps"
 import request, { devices } from "../../../service";
 
-
 /*
     function filterActive(activeMachines, allMachines) {
         return activeMachines ? activeMachines.filter((machine) => {
@@ -52,8 +51,10 @@ import request, { devices } from "../../../service";
 
 
  */
-const greenMarkerURL = "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
-const redMarkerURL = "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
+const greenMarkerURL = "http://maps.google.com/mapfiles/ms/micons/green-dot.png"
+const redMarkerURL = "http://maps.google.com/mapfiles/ms/micons/red-dot.png"
+const yellowMarkerURL = "http://maps.google.com/mapfiles/ms/micons/yellow-dot.png"
+const ltBlueMarkerURL = "http://maps.google.com/mapfiles/ms/micons/ltblue-dot.png"
 
 function setActivityMarkers(activeMachines, allMachines) {
         allMachines.map((machine) => {
@@ -64,7 +65,7 @@ function setActivityMarkers(activeMachines, allMachines) {
                 machine.imageURL = greenMarkerURL
             }
             else {
-                machine.imageURL = redMarkerURL
+                machine.imageURL = ltBlueMarkerURL
             }
         })
 }
@@ -82,6 +83,27 @@ function setNonLeapingLocations(machines) {
     })
 }
 
+function checkMachineErrors(errors, machines) {
+
+    machines.map((machine) => {
+            let statusCodesOfMachine = errors.find(e => e.deviceUID == machine.deviceUid);
+            
+            if (statusCodesOfMachine != undefined) {
+
+                if (statusCodesOfMachine.errorInfo.filter(e => e.code >= 400 && e.code <= 561 || e.type == "RED" || e.type == "RUNTIME").length != 0)
+                    {
+                        machine.imageURL = redMarkerURL;    
+                        return;
+                    }
+                else if (statusCodesOfMachine.errorInfo.filter(e => e.code >= 300 && e.code < 400).length != 0)
+                    {
+                        machine.imageURL = yellowMarkerURL;   
+                    }
+            }
+        })
+}
+
+
 class GoogleMapMonitors extends Component {
 /*
     state = {
@@ -97,11 +119,37 @@ class GoogleMapMonitors extends Component {
 */
     render() {
 
+    let errors = [
+        {
+            deviceUID: "14d5abe9-0b08-4443-a280-4ee170ae9665",
+            errorNumber: 2,
+            errorInfo: [
+            {
+                errorTime: "",
+                message: "",
+                code: 411,
+                descripction:"",
+                type: "RED"
+            },
+            {
+                errorTime: "",
+                message: "",
+                code: 412,
+                descripction:"",
+                type: "RED"
+            }
+        ]
+        }
+    ];
+
+
+
         let activeMachines = this.props.activeMachines
         let allMachines = this.props.allMachines
 
         setNonLeapingLocations(allMachines)
-/*
+        
+        /*
         let machinesReadyToMark = [];
         if (!this.state.loading) {
             let activeMachines = filterActive([], this.state.machines)
@@ -110,6 +158,7 @@ class GoogleMapMonitors extends Component {
         }
 */
         setActivityMarkers(activeMachines, allMachines)
+        checkMachineErrors(errors, allMachines)
 
         //when calling a marker, check if loading is true/false
 
