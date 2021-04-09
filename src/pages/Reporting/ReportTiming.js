@@ -60,11 +60,6 @@ const ReportTiming = ({ setTimeInfo }) => {
     };
 
     const handleDay = (e) => {
-        var up_lim = month.days;        
-        var x = e.target.value;
-        x = x > up_lim ? up_lim : x < 1 ? 1 : x;
-        e.target.value = x;
-
         setDay(e.target.value);
         setTimeInfo({
             frequency,
@@ -76,30 +71,35 @@ const ReportTiming = ({ setTimeInfo }) => {
     };
 
     const handleMonth = async (e) => {
+        var x = dayInMonth;
+        var up_lim = e.target.value.days;
+        x = x > up_lim ? up_lim : x < 1 ? 1 : x;
+
         setMonth(e.target.value);
+        setDayInMonth(x);
         setTimeInfo({
             frequency,
             day,
             month: e.target.value,
-            dayInMonth,
+            dayInMonth : x,
             time,
         });
     };
 
     const handleDayInMonth = async (e) => {
         var x = e.target.value;
-        x = x > 31 ? 31 : x < 1 ? 1 : x;
+        var up_lim = month.days;
+        x = x > up_lim ? up_lim : x < 1 ? 1 : x;
         e.target.value = x;
 
         setDayInMonth(e.target.value);
-        await setTimeInfo({
+        setTimeInfo({
             frequency,
             day,
             month,
             dayInMonth: e.target.value,
             time,
         });
-        setFrequency(frequency);
     };
 
     return (
@@ -118,7 +118,9 @@ const ReportTiming = ({ setTimeInfo }) => {
                 frequency.value === 'weekly' ?
                 <div className="timeInputWrapper">
                     <InputLabel className="timeLabelWrapper"> Day of the week: </InputLabel>
-                    <Input type="number" inputProps={{min:1, max:31}} onChange={handleDayInMonth} defaultValue="1"></Input>
+                    <Select value={day} onChange={handleDay}>
+                        {days.map(item => <MenuItem key={item.value} value={item}> {item.label} </MenuItem>)}
+                    </Select>
                 </div> :
                 null
             }
@@ -141,7 +143,7 @@ const ReportTiming = ({ setTimeInfo }) => {
                     </div>
                     <div className="timeInputWrapper">
                         <InputLabel className="timeLabelWrapper"> Day: </InputLabel>
-                        <Input type="number" inputProps={{min:1, max:31}} onChange={handleDay} defaultValue="1" id="inputTime" ref={refTime}></Input>
+                        <Input type="number" inputProps={{min:1, max:month.days}} onChange={handleDayInMonth} value={dayInMonth} id="inputTime" ref={refTime}></Input>
                     </div>
                 </div> :
                 null
