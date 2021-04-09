@@ -285,7 +285,6 @@ class FileManagerTable extends React.Component {
                     }).catch((error) => {
                         console.log(error);
                     });
-                console.log(response1);
             }
         } catch (e) {
             console.log(e);
@@ -327,7 +326,6 @@ class FileManagerTable extends React.Component {
                     }).catch((error) => {
                         console.log(error);
                     });
-                console.log(response1);
             }
         } catch (e) {
             console.log(e);
@@ -432,7 +430,6 @@ class FileManagerTable extends React.Component {
                     }).catch((error) => {
                         console.log(error);
                     });
-                console.log(response1);
 
             }
         } catch (e) {
@@ -459,14 +456,12 @@ class FileManagerTable extends React.Component {
                         'File name cannot be empty!'
                     )
                 } else {
-                    // TODO: send rename request here
                     let isDirectory = false;
                     if (file.data.type === 'directory') {
                         isDirectory = true;
                     }
                     this.sendRenameRequest(file.fileName, newName, isDirectory)
                         .then(r => console.log(r))
-                    // console.log("rename request " + this.state.globalId);
                 }
             },
             allowOutsideClick: () => !Swal.isLoading()
