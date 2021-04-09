@@ -1,15 +1,15 @@
 export const fields = [
-  { name: "avgRamUsage", label: "Average RAM Usage" },
-  { name: "avgGpuUsage", label: "Average GPU Usage" },
-  { name: "quarterlyCpuUsage", label: "Quarterly CPU Usage" },
-  { name: "diskUtilization", label: "Disk Utilization" },
+  { name: "avgRamUsage", label: "Average RAM Usage", inputType: 'number' },
+  { name: "avgGpuUsage", label: "Average GPU Usage", inputType: 'number' },
+  { name: "quarterlyCpuUsage", label: "Quarterly CPU Usage", inputType: 'number' },
+  { name: "diskUtilization", label: "Disk Utilization", inputType: 'number' },
   { name: "name", label: "Name" },
   { name: "location", label: "Location" },
-  { name: "latitude", label: "Latitude" },
-  { name: "longitude", label: "Longitude" },
+  { name: "latitude", label: "Latitude", inputType: 'number' },
+  { name: "longitude", label: "Longitude", inputType: 'number' },
   { name: "status", label: "Status" },
-  { name: "lastTimeOnline", label: "Last Time Online" },
-  { name: "timeLog", label: "Time Log" },
+  //{ name: "lastTimeOnline", label: "Last Time Online" },
+  //{ name: "timeLog", label: "Time Log" },
   { name: "groupName", label: "Group Name" },
 ];
 
