@@ -123,12 +123,6 @@ class FileManagerTable extends React.Component {
         }
     }
 
-
-    sendDeleteRequest() {
-        console.log("Delete, ID: " + this.state.globalId);
-        this.toggleDeletePopup(true);
-    }
-
     renderTableHeader() {
         return (
             <tr className="header-row">
@@ -256,9 +250,92 @@ class FileManagerTable extends React.Component {
         }
     }
 
+    sendFileDeleteRequest = async (name) => {
+        try {
+            const requestOptions = {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    email: config.email,
+                    password: config.password,
+                }),
+            };
+            var response = await fetch(config.url, requestOptions);
+            if (response.status == 200) {
+                var x = await response.json();
+                const token = x.accessToken;
+
+                const requestOptions2 = {
+                    method: "POST",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer " + token,
+                    },
+                    body: JSON.stringify({
+                        fileName: name,
+                        user: this.state.user.email,
+                        path: this.state.activeFolder
+                    })
+                };
+
+                var response1 = await fetch('https://si-grupa5.herokuapp.com/api/web/user/file/delete', requestOptions2)
+                    .then((res) => {
+                        this.updateResponse();
+                    }).catch((error) => {
+                        console.log(error);
+                    });
+                console.log(response1);
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    sendFolderDeleteRequest = async (name) => {
+        try {
+            const requestOptions = {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    email: config.email,
+                    password: config.password,
+                }),
+            };
+            var response = await fetch(config.url, requestOptions);
+            if (response.status == 200) {
+                var x = await response.json();
+                const token = x.accessToken;
+
+                const requestOptions2 = {
+                    method: "POST",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer " + token,
+                    },
+                    body: JSON.stringify({
+                        folderName: name,
+                        user: this.state.user.email,
+                        path: this.state.activeFolder
+                    })
+                };
+
+                var response1 = await fetch('https://si-grupa5.herokuapp.com/api/web/user/folder/delete', requestOptions2)
+                    .then((res) => {
+                        this.updateResponse();
+                    }).catch((error) => {
+                        console.log(error);
+                    });
+                console.log(response1);
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
     handleDelete(id) {
         var file = this.state.responseObject[id];
-        console.log('file ' + file.data.type)
 
         this.state.globalId = id;
         if(file.data.type === 'directory') {
@@ -272,8 +349,7 @@ class FileManagerTable extends React.Component {
                 confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // TODO: send delete request here for directory
-                    console.log("delete directory " + this.state.globalId)
+                    this.sendFolderDeleteRequest(file.fileName)
                     Swal.fire(
                         'Deleted!',
                         'Your directory has been deleted.',
@@ -292,8 +368,8 @@ class FileManagerTable extends React.Component {
                 confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // TODO: send delete request here for file
                     console.log("delete file " + this.state.globalId)
+                    this.sendFileDeleteRequest(file.fileName)
                     Swal.fire(
                         'Deleted!',
                         'Your file has been deleted.',
@@ -305,8 +381,69 @@ class FileManagerTable extends React.Component {
 
     }
 
+    sendRenameRequest = async (oldFileName, newFileName, isDirectory) => {
+        const fileSplit = oldFileName.split('.');
+        let extension = '.'
+        extension = extension.concat(fileSplit[fileSplit.length-1]);
+        let finalName = newFileName.concat(extension);
+        if(isDirectory) {
+            finalName = newFileName;
+        }
+        try {
+            const requestOptions = {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    email: config.email,
+                    password: config.password,
+                }),
+            };
+
+            var response = await fetch(config.url, requestOptions);
+            if (response.status == 200) {
+                var x = await response.json();
+                const token = x.accessToken;
+
+                const requestOptions2 = {
+                    method: "POST",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer " + token,
+                    },
+                    body: JSON.stringify({
+                        user: this.state.user.email,
+                        path: this.state.activeFolder,
+                        oldName: oldFileName,
+                        newName: finalName
+                    })
+                };
+
+                var response1 = await fetch('https://si-grupa5.herokuapp.com/api/web/user/rename', requestOptions2)
+                    .then((res) => {
+                        Swal.fire({
+                            title: "File manager",
+                            text: "File/folder renamed successfully",
+                            type: "success",
+                        });
+
+                        this.updateResponse();
+
+                    }).catch((error) => {
+                        console.log(error);
+                    });
+                console.log(response1);
+
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
     handleRename(id) {
         this.state.globalId = id;
+        var file = this.state.responseObject[id];
+
         Swal.fire({
             title: 'Change file name',
             input: 'text',
@@ -323,7 +460,13 @@ class FileManagerTable extends React.Component {
                     )
                 } else {
                     // TODO: send rename request here
-                    console.log("rename request " + this.state.globalId);
+                    let isDirectory = false;
+                    if (file.data.type === 'directory') {
+                        isDirectory = true;
+                    }
+                    this.sendRenameRequest(file.fileName, newName, isDirectory)
+                        .then(r => console.log(r))
+                    // console.log("rename request " + this.state.globalId);
                 }
             },
             allowOutsideClick: () => !Swal.isLoading()
