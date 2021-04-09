@@ -12,7 +12,7 @@ import './device_table.scss'
 import request, { wsEndpoint } from "../../service";
 import { showSwalToast } from "../../utils/utils";
 
-const DeviceTable = ({ devices, selectDevice, push, user, activeDevices }) => {
+const DeviceTable = ({ devices, selectDevice, push, user, activeDevices, groupId }) => {
 
     const editDevice = (device) => {
         selectDevice(device);
@@ -82,7 +82,7 @@ const DeviceTable = ({ devices, selectDevice, push, user, activeDevices }) => {
 
     return (
         <React.Fragment>
-            <CustomTable data={devices} fields={tableFields}>
+            <CustomTable data={devices} fields={tableFields} groupId = {groupId}>
                 <TableSlot slot='actions' render={dataRow => (
                     <div className='actions'>
                         {canConnectToDevice(dataRow) && (

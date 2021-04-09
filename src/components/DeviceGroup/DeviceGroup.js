@@ -6,6 +6,8 @@ import { fetchDevicesForGroup, updateDevicesTableForGroup } from "../../store/mo
 import { Spinner } from "../Spinner/Spinner";
 import CustomPagination from "../CustomTable/components/CustomPagination";
 
+import {DragDropContext} from 'react-beautiful-dnd'
+
 
 const DeviceGroup = ({ group, deviceTable, fetchDevicesForGroup, updateDevicesTableForGroup }) => {
 
@@ -44,29 +46,30 @@ const DeviceGroup = ({ group, deviceTable, fetchDevicesForGroup, updateDevicesTa
     }
 
     return (
-        <div className='group'>
-            <div className='tab' onClick={toggleArrow}>
-                <button className={hidden ? 'collapsed' : 'expanded'}/>
-                <h2>{group.name}</h2>
+
+            <div className='group'>
+                <div className='tab' onClick={toggleArrow}>
+                    <button className={hidden ? 'collapsed' : 'expanded'}/>
+                    <h2>{group.name}</h2>
+                </div>
+                {!hidden && (
+                    <React.Fragment>
+                        {async ? <Spinner/> : devices.length !== 0 ? (
+                            <React.Fragment>
+                                <DeviceTable devices={devices} groupId = {group.groupId}/>
+                                <CustomPagination totalCount={deviceTable.totalCount}
+                                                page={deviceTable.page}
+                                                perPage={deviceTable.perPage}
+                                                handleChangePage={handleChangePage}
+                                                handleChangePerPage={handleChangePerPage}
+                                />
+                            </React.Fragment>
+                        ) : null
+                        }
+                        {subGroupsRendered || null}
+                    </React.Fragment>
+                )}
             </div>
-            {!hidden && (
-                <React.Fragment>
-                    {async ? <Spinner/> : devices.length !== 0 ? (
-                        <React.Fragment>
-                            <DeviceTable devices={devices}/>
-                            <CustomPagination totalCount={deviceTable.totalCount}
-                                              page={deviceTable.page}
-                                              perPage={deviceTable.perPage}
-                                              handleChangePage={handleChangePage}
-                                              handleChangePerPage={handleChangePerPage}
-                            />
-                        </React.Fragment>
-                    ) : null
-                    }
-                    {subGroupsRendered || null}
-                </React.Fragment>
-            )}
-        </div>
     )
 }
 

@@ -9,6 +9,8 @@ import { RouteLink } from "../../store/modules/menu/menu";
 import { Spinner } from "../../components/Spinner/Spinner";
 import request, { wsEndpoint } from "../../service";
 
+import {DragDropContext} from 'react-beautiful-dnd'
+
 const getRootGroups = (groups) => {
     const parentGroups = [];
 
@@ -39,8 +41,10 @@ const Devices = ({ allGroups, fetchAllDevices, fetchAllGroups, push, devicesAsyn
 
     const rootGroups = getRootGroups(allGroups).map((grupa) => {
         return (
-            <DeviceGroup group={grupa}
-                         key={grupa.groupId}/>
+            <DragDropContext onDragEnd = {result => console.log(result)}>
+                <DeviceGroup group={grupa}
+                            key={grupa.groupId}/>
+            </DragDropContext>
         );
     });
 

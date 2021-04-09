@@ -15,12 +15,14 @@ import classnames from 'classnames';
 
 import './custom_table.scss'
 
+import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd'
+import uuid from 'react-uuid'
 
 export function TableSlot({ slot, render }) {
     return <div></div>
 }
 
-export default function CustomTable({ data, fields, children }) {
+export default function CustomTable({ data, fields, children, groupId }) {
 
     const [tableData, setTableData] = useState(data);
     const [allData, setAllData] = useState(data);
@@ -135,6 +137,7 @@ export default function CustomTable({ data, fields, children }) {
                     </Select>
                 </FormControl>
                 : null}
+            
             <Table className='custom-table'>
                 <TableHead>
                     <TableRow className={'header-row'} key={'header-row'}>
@@ -161,15 +164,34 @@ export default function CustomTable({ data, fields, children }) {
                         ))}
                     </TableRow>
                 </TableHead>
-                <TableBody>
-                    {tableData.map((row, rowIndex) => (
-                        <TableRow key={row.id ?? rowIndex}>
-                            {activeFields.map((field, index) => (
-                                renderDataRowCell(row, field, index)
+                <Droppable droppableId = {`${uuid()}`} key = {`${uuid()}`}>
+                    {(provided, snapshot) => (
+                        <TableBody
+                            {...provided.droppableProps}
+                            ref = {provided.innerRef}
+                            >
+                            {provided.placeholder}
+                            {tableData.map((row, rowIndex) => (
+                                <Draggable
+                                    draggableId = {`${row.id ?? rowIndex}`}
+                                    key = {row.id ?? rowIndex}
+                                    index = {rowIndex}
+                                >
+                                    {(provided, snapshot) => (
+                                        <TableRow key={row.id ?? rowIndex} ref = {provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                                            {activeFields.map((field, index) => (
+                                                renderDataRowCell(row, field, index)
+                                            ))}
+                                        </TableRow>
+                                        
+                                    )}
+                                    
+                                </Draggable>
                             ))}
-                        </TableRow>
-                    ))}
-                </TableBody>
+                        </TableBody>
+                    )}
+                    
+                </Droppable>
             </Table>
         </TableContainer>
     );
