@@ -9,7 +9,7 @@ export const RouteLink = {
     AddDevice: '/manage-device',
     ManageDevice: '/manage-device',
     ManageGroup: '/manage-group',
-    EmailVerification: '/email-verification',
+    EmailVerification: '/verify-email',
     Terminal: '/terminal',
     RemoteControl: '/remotecontrol',
     TwoFactorAuthentication: '/security',

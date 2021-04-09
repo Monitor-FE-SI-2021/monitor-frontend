@@ -16,16 +16,6 @@ function EmailVerification() {
         verifyEmail(data);
     }, [verifyEmail])
     
-    const switchRoute = (link) => {
-        push(link);
-    };
-
-    const handleSubmit = (e) => {
-
-        e.preventDefault();
-        switchRoute(RouteLink.Devices);
-    };
-
     return (
         <div className="formDiv">
             <h3>Email verification</h3>
