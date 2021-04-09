@@ -248,3 +248,19 @@ export const times = [
       value: "23:00:00",
   },
 ];
+
+export const queryFields = [
+    { name: "(SELECT avg(RamUsage) FROM DEVICE_STATUS_LOG dsl where BEGIN_PLACEHOLDER < dsl.TimeStamp and dsl.TimeStamp < END_PLACEHOLDER and dsl.DeviceId = d.DeviceId)", label: "Average RAM Usage", inputType: 'number' },
+    { name: "(SELECT avg(GPUUsage) FROM DEVICE_STATUS_LOG dsl where BEGIN_PLACEHOLDER < dsl.TimeStamp and dsl.TimeStamp < END_PLACEHOLDER and dsl.DeviceId = d.DeviceId))", label: "Average GPU Usage", inputType: 'number' },
+    { name: "(SELECT avg(CpuUsage) FROM DEVICE_STATUS_LOG dsl where BEGIN_PLACEHOLDER < dsl.TimeStamp and dsl.TimeStamp < END_PLACEHOLDER and dsl.DeviceId = d.DeviceId))", label: "Quarterly CPU Usage", inputType: 'number' },
+    { name: "(SELECT avg(HDDUsage) FROM DEVICE_STATUS_LOG dsl where BEGIN_PLACEHOLDER < dsl.TimeStamp and dsl.TimeStamp < END_PLACEHOLDER and dsl.DeviceId = d.DeviceId))", label: "Disk Utilization", inputType: 'number' },
+    { name: "d.name", label: "Name" },
+    { name: "d.location", label: "Location" },
+    { name: "d.latitude", label: "Latitude", inputType: 'number' },
+    { name: "d.longitude", label: "Longitude", inputType: 'number' },
+    { name: "d.status", label: "Status" },
+    //{ name: "d.lastTimeOnline", label: "Last Time Online" },
+    //{ name: "d.timeLog", label: "Time Log" },
+    { name: "d.groupName", label: "Group Name" },
+];
+

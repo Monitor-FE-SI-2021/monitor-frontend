@@ -5,7 +5,7 @@ import { formatQuery } from 'react-querybuilder';
 
 import request from "../../service";
 
-import { fields, frequencies, devices } from './constants';
+import { fields, frequencies, devices, queryFields } from './constants';
 import ReportTiming from './ReportTiming';
 
 import Button from '@material-ui/core/Button';
@@ -128,8 +128,8 @@ const Reports = ({ user, push }) => {
         e.preventDefault();
 
         const selectClause = selectedColumns.join(', ');
-        const fromClause = "DEVICES";
-        const whereClause = "( " + formatQuery(queryValue, 'sql') + " ) and groupId = " + (selectedGroup.group.groupId == -1 ? "groupId" : selectedGroup.group.groupId);
+        const fromClause = "DEVICES d";
+        const whereClause = "( " + formatQuery(queryValue, 'sql') + " ) and d.groupId = " + (selectedGroup.group.groupId == -1 ? "d.groupId" : selectedGroup.group.groupId);
 
         const finalQuery = "SELECT " + selectClause + " FROM " + fromClause + " WHERE " + whereClause;
         console.log(finalQuery);
@@ -241,7 +241,7 @@ const Reports = ({ user, push }) => {
                     <h3 className="queryBuilderTitle"> What do you want in your report? </h3>
                     <QueryBuilder
                         title="reportBuilder"
-                        fields={fields}
+                        fields={queryFields}
                         onQueryChange={changeQuery}
                         showNotToggle={true}
                     />
@@ -250,7 +250,7 @@ const Reports = ({ user, push }) => {
                 <div>
                     <h3 className="queryBuilderTitle"> Which columns do you want in your report? </h3>
 
-                    {fields.map((inputField, index) => (
+                    {queryFields.map((inputField, index) => (
                         <div key={index}>
                             <Checkbox
                                 value={inputField.name}
