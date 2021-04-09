@@ -8,7 +8,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 
 
 const config = require("../Terminal/config");
-const userFiles = "https://si-grupa5.herokuapp.com/api/web/user/fileList";
+const userFiles = "https://si-grupa5.herokuapp.com/api/web/user/file-tree";
 const folderIconUrl = "https://img.icons8.com/color/40/000000/folder-invoices--v2.png";
 const fileIconUrl = "https://img.icons8.com/office/40/000000/document--v2.png";
 
@@ -31,7 +31,7 @@ class FileManagerTable extends React.Component {
             checkedFiles: []
         }
         this.getCheckedFiles = this.getCheckedFiles.bind(this)
-        this.handleAddFile = this.handleAddFile.bind(this)
+        this.handleCheckFile = this.handleCheckFile.bind(this)
         this.updateResponse();
     }
 
@@ -156,7 +156,7 @@ class FileManagerTable extends React.Component {
                         <td className="file-manipulation file-rename centriraj" onClick={() => { this.handleRename(id) }}>
                             <FaPencilAlt size={20} />
                         </td>
-                        <Checkbox onChange={(e) => { this.handleAddFile(e, id)}} className="file-checkbox file-manipulation" color="default"/>
+                        <Checkbox onChange={(e) => { this.handleCheckFile(e, id)}} className="file-checkbox file-manipulation" color="default"/>
                     </div>
                 </tr>
             )
@@ -257,26 +257,52 @@ class FileManagerTable extends React.Component {
     }
 
     handleDelete(id) {
+        var file = this.state.responseObject[id];
+        console.log('file ' + file.data.type)
+
         this.state.globalId = id;
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You cannot return the file after you delete it",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // TODO: send delete request here
-                console.log("delete file " + this.state.globalId)
-                Swal.fire(
-                    'Deleted!',
-                    'Your file has been deleted.',
-                    'success'
-                )
-            }
-        })
+        if(file.data.type === 'directory') {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "The directory is not empty",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // TODO: send delete request here for directory
+                    console.log("delete directory " + this.state.globalId)
+                    Swal.fire(
+                        'Deleted!',
+                        'Your directory has been deleted.',
+                        'success'
+                    )
+                }
+            })
+        } else {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You cannot return the file after you delete it",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // TODO: send delete request here for file
+                    console.log("delete file " + this.state.globalId)
+                    Swal.fire(
+                        'Deleted!',
+                        'Your file has been deleted.',
+                        'success'
+                    )
+                }
+            })
+        }
+
     }
 
     handleRename(id) {
@@ -304,7 +330,7 @@ class FileManagerTable extends React.Component {
         })
     }
 
-    handleAddFile(e, id) {
+    handleCheckFile(e, id) {
         let fileList = this.state.checkedFiles
         let availableFiles = this.state.responseObject;
         let selectedFile = availableFiles.find(ele => ele.id == id)
@@ -416,7 +442,7 @@ class FileManagerTable extends React.Component {
                     })
                 };
 
-                return await fetch('https://si-grupa5.herokuapp.com/api/web/user/file/getText', requestOptions2)
+                return await fetch('https://si-grupa5.herokuapp.com/api/web/user/file/get-text', requestOptions2)
                     .then((res) => {
                         return res.json().then((res) => {
                             console.log(res.text);
