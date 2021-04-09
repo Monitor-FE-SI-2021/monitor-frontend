@@ -37,6 +37,22 @@ label {
     cursor: pointer;
 }
 
+/* On mouse-over */
+.backToProfile:hover {background: #eee;}
+
+.backToProfile
+{
+    box-sizing: border-box;
+    width:100%;
+    margin: auto;
+    padding: 10px;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    border: 0;
+    background-color: #fafafa;
+    font-size:80%;
+
+}
 
 
 .Nav_link {

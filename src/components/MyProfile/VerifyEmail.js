@@ -1,21 +1,27 @@
-import request, { authEndpoint, users } from "../../../service";
-import { STORAGE_KEY } from "../../../utils/consts"
+import {STORAGE_KEY} from "../../utils/consts";
+import request,{authEndpoint} from "../../service";
+const neki = "http://localhost:3333/getUserDetails";
 
 
-const neki = "https://localhost:3333/getUserDetails";
-const token = window.localStorage.getItem(STORAGE_KEY);
 export const getUserDetails = () => {
     return request(neki).then(res => {
         if (res && res.status === 200) {
             return res;
         }
+    }).catch(error=>{
+        console.log(error)
     })
 }
-export const verifyEmail = ({ email }) => {
+export const verifyEmail = ({ email}) => {
 
-    return request(authEndpoint + '/checkIfEmailVerified', "POST", {
-        email
-    }).then(res => {
+    const data = {
+        email:email.email
+    };
+
+    return request("http://localhost:3333/checkIfEmailVerified", "POST",
+        data
+    ).then(res => {
+
         if (res && res.status === 200) {
             if (res.data.verified === "true") {
                 return {
@@ -24,14 +30,20 @@ export const verifyEmail = ({ email }) => {
                 }
             }
         }
-    });
+    }).catch(error=>{
+    console.log(error)
+})
 
 }
 
 export const sendVerificationEmail = ({ email }) => {
-    return request(authEndpoint + '/sendVerificationEmail', "PUT", {
-        email
-    }).then(res => {
+
+    const data = {
+        email:email.email
+    };
+    return request("http://localhost:3333/sendVerificationEmail", "PUT",
+        data
+    ).then(res => {
         if (res && res.status === 200) {
             return res;
         }
@@ -41,24 +53,28 @@ export const sendVerificationEmail = ({ email }) => {
 }
 
 export const checkIfEmailExists = ({ email }) => {
-    return request(authEndpoint + '/checkIfEmailExists', "POST", {
-        email
-    }).then(res => {
+    const data = {
+        email:email.email
+    };
+
+    return request("http://localhost:3333/checkIfEmailExists", "POST",
+        data
+    ).then(res => {
+        console.log(res)
         if (res && res.status === 200) {
-            if (res.data.exists === "true") {
-                return {
-                    status: 200,
-                    message: "Email is already in use!"
-                }
-            }
+            return res.data.exists
         }
     });
 }
 export const changeEmailForUser = ({ email }) => {
 
-    return request(authEndpoint + '/sendVerificationEmail/' + token, "PUT", {
-        email
-    }).then(res => {
+    const data = {
+        email:email.email
+    };
+
+    return request("http://localhost:3333/sendVerificationEmail", "PUT",
+        data
+    ).then(res => {
         if (res && res.status === 200) {
             return res;
         }
