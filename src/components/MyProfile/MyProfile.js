@@ -7,7 +7,7 @@ import {
     checkIfEmailExists,
     getUserDetails,
     sendVerificationEmail,
-    verifyEmail,
+    checkIfEmailVerified,
     regexEmail
 } from "./VerifyEmail";
 import request from "../../service";
@@ -65,7 +65,7 @@ function MyProfile() {
         const user = {
             email: formData.email
         }
-        verifyEmail(user).then(r => {
+        checkIfEmailVerified(user).then(r => {
             if (r && r.status === 200) {
                 if (r.message === "Email already verified!") {
                     showSwalToast(r.message);

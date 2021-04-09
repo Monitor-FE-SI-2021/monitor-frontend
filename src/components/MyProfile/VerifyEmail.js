@@ -1,7 +1,7 @@
 import { STORAGE_KEY } from "../../utils/consts";
 import request, { authEndpoint } from "../../service";
+import { showSwalToast } from "../../utils/utils";
 const neki = "http://localhost:3333/getUserDetails";
-
 
 export const getUserDetails = () => {
     return request(neki).then(res => {
@@ -12,7 +12,7 @@ export const getUserDetails = () => {
         console.log(error)
     })
 }
-export const verifyEmail = ({ email }) => {
+export const checkIfEmailVerified = ({ email }) => {
 
     const data = {
         email: email.email
@@ -75,6 +75,17 @@ export const changeEmailForUser = ({ email }) => {
     return request("http://localhost:3333/sendVerificationEmail", "PUT",
         data
     ).then(res => {
+        if (res && res.status === 200) {
+            return res;
+        }
+    });
+
+
+}
+
+export const verifyEmail = ({ token }) => {
+    return request("http://localhost:3333/verifyEmail"  + "/" + token, "PUT").then(res => {
+        showSwalToast(res);
         if (res && res.status === 200) {
             return res;
         }

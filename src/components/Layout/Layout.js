@@ -15,6 +15,7 @@ import Terminal from "../Terminal/Terminal";
 import RemoteControl from "../../pages/RemoteControl/RemoteControl";
 import securityQuestions from "../securityQuestions/Questions"
 import MyProfile from "../MyProfile/MyProfile"
+import EmailVerification from "../MyProfile/EmailVerification"
 import ManageGroup from "../../pages/ManageGroup/ManageGroup";
 
 const Layout = ({ isMenuExpanded, loginAsync, userAsync, user }) => {
@@ -41,6 +42,7 @@ const Layout = ({ isMenuExpanded, loginAsync, userAsync, user }) => {
                     <Route path={RouteLink.TwoFactorAuthentication} component={TwoFactorAuthentication}/>
                     <Route path={RouteLink.Terminal} component={Terminal}/>
                     <Route path={RouteLink.MyProfile} component={MyProfile}/>
+                    <Route path={RouteLink.EmailVerification} component={EmailVerification}/>
                     <Route path={RouteLink.securityQuestions} component={securityQuestions}/>
                     <Route
                         path={RouteLink.RemoteControl + "/:name?/:tab?"}
