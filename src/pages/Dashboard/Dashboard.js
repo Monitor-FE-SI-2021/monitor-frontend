@@ -2,10 +2,31 @@ import React from "react";
 import { connect } from "react-redux";
 import MachineIcon from "../../assets/icons/machine.png";
 import DonutChart from "./components/charts/DonutChart";
+import BarChart from "./components/charts/BarChart";
 import ActiveMachine from "./components/ActiveMachine";
-import request, { devices } from "../../service";
+import request, { devices, errors } from "../../service";
 import GoogleMapMonitors from "./components/GoogleMapMonitors";
 import "./dashboard.scss";
+import {Bar} from "react-chartjs-2";
+import {STORAGE_KEY} from "../../utils/consts";
+
+let barChart = {
+
+    labels: ['100', '200', '300', '400', '500'],
+    datasets:[
+        {
+            label:"Number of errors of type",
+            data:[
+                1,
+                2,
+                3,
+                4,
+                8
+            ],
+            backgroundColor:'rgba(75, 192, 192, 0.6)'
+        }
+    ]
+}
 
 let ramUsageChart = {
     labels: ["Used", "Not used"],
@@ -91,11 +112,15 @@ let clickedMachine = null
 let allMachinesUsage = null
 let lastDisconnected = null
 
+export let barchartMaxValue = 50
+
 const Dashboard = ({ user }) => {
     let activeMachines = []
     const [machines, setMachines] = React.useState([]);
     const [active, setActive] = React.useState([...activeMachines]);
     const [showCharts, setShowCharts] = React.useState(false);
+    const [chartType, setChartType] = React.useState(true)
+
 
     function filterActive(activeMachines, allMachines) {
         return activeMachines ? activeMachines.filter((machine) => {
@@ -118,6 +143,32 @@ const Dashboard = ({ user }) => {
                 setCharts(res, machine);
             })
             .catch((err) => console.log(err));
+
+/*
+        fetch(errors + "/DateInterval", {
+            method: "GET",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + window.localStorage.getItem(STORAGE_KEY),
+            },
+            body: JSON.stringify({
+                deviceUID: machine.deviceUid,
+                startDate: "2021-01-09T11:42:10.180Z",
+                endDate: "2021-04-09T11:42:10.180Z"
+            }),
+        })
+            .then((res) => console.log(res.json()))*/
+
+        request(errors + "/DateInterval", "get", {
+            deviceUID: machine.deviceUid,
+            startDate: "2021-01-09T11:42:10.180Z",
+            endDate: "2021-04-09T11:42:10.180Z"
+        })
+            .then((res) => console.log(res.data.data))
+
+
+
     }
 
     /*
@@ -235,30 +286,38 @@ const Dashboard = ({ user }) => {
                 {showCharts && (
                     <div>
                         <h2 className="machineName">{clickedMachine?.name}</h2>
-                        <div className="chartContainer">
+                        <button onClick={() => {setChartType(!chartType)}}>Change</button>
+                        { chartType && (
+                            <div className="chartContainer">
+                                <div className="row">
+                                    <DonutChart
+                                        displayTitle="Average RAM usage"
+                                        chartData={ramUsageChart}
+                                    />
+                                    <DonutChart
+                                        displayTitle="Average CPU usage"
+                                        chartData={cpuUsageChart}
+                                    />
+                                </div>
+                                <div className="row">
+                                    <DonutChart
+                                        displayTitle="Average GPU usage"
+                                        chartData={gpuUsageChart}
+                                    />
+                                    <DonutChart
+                                        displayTitle="Average disk usage"
+                                        chartData={hddUsageChart}
+                                    />
+                                </div>
 
-                            <div className="row">
-                                <DonutChart
-                                    displayTitle="Average RAM usage"
-                                    chartData={ramUsageChart}
-                                />
-                                <DonutChart
-                                    displayTitle="Average CPU usage"
-                                    chartData={cpuUsageChart}
-                                />
                             </div>
-                            <div className="row">
-                                <DonutChart
-                                    displayTitle="Average GPU usage"
-                                    chartData={gpuUsageChart}
-                                />
-                                <DonutChart
-                                    displayTitle="Average disk usage"
-                                    chartData={hddUsageChart}
-                                />
-                            </div>
+                        )}
+                        { !chartType && (
+                            <div className="chartContainer">
+                                    <BarChart chartData={barChart}/>
 
-                        </div>
+                            </div>
+                        )}
                     </div>
                 )}
             </div>
