@@ -1,9 +1,23 @@
 import DeviceTable from "../DeviceTable/DeviceTable";
+import { useEffect } from "react"
+import {fetchAllDevices} from "../../store/modules/devices/actions";
+import { connect } from "react-redux";
 
-const AllDevices = () => {
+const AllDevices = ({ allDevices }) => {
+
+    useEffect(() => {
+        fetchAllDevices()
+    }, [fetchAllDevices])
+
     return (
-        <h3>OK</h3>
+        <div>
+            <DeviceTable devices={allDevices} />
+        </div>
+
     )
 }
 
-export default AllDevices
+export default connect(state => {
+    const allDevices = state.devices
+    return allDevices
+},{ fetchAllDevices })(AllDevices)
