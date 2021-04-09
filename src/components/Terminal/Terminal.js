@@ -19,13 +19,15 @@ firebase.initializeApp({
   appId: config.appId,
 });
 var counterOfSavedLogs = 0;
+var counterOfTabCommands = -1;
+
 
 const Terminal = (props) => {
   //console.log("IP ", props);
   const inputText = React.useRef();
 
   const [put, setPut] = React.useState(props.machine.path);
-  const [tabCommands, setTabCommands] = React.useState()
+  const [tabCommands, setTabCommands] = React.useState([]);
 
     React.useEffect(()=>{
       request(wsEndpoint + "/agent/command", "POST", {
@@ -38,9 +40,29 @@ const Terminal = (props) => {
       let modified = res.data.message.replace(/\\n/g, "\n");
       modified = modified.replace(/\\r/g, "\r");
       let novaLista = modified.split("\n");
-      console.log(novaLista);
+      let pomocnaLista = [];
+      if(modified!==" "){
+      novaLista.splice(0,7);
+      novaLista = novaLista.map((item, index) => {
+        item = item.replace(/ +/g, ' ').trim(); //pretvara vise razmaka u jedan
+        item = item.split(" "); //splita po razmacima
+        if(item[0].includes("d")){
+          item.splice(0,3); //   
+          //console.log("Item je:" + item.toString().replace(/[, ]+/g, " ").trim());
+          pomocnaLista.push(item.toString().replace(/[, ]+/g, " ").trim());
+        }
+      })
 
-      setTabCommands(modified)  
+   /*   novaLista[5] = novaLista[5].replace(/ +/g, ' ').trim(); //pretvara vise razmaka u jedan
+      novaLista[5] = novaLista[5].split(" "); //splita po razmacima
+      novaLista[5].splice(0,3); // 
+      console.log(novaLista[5].toString().replace(/[, ]+/g, " ").trim());*/
+
+      //pomocnaLista.splice(pomocnaLista.length-3,pomocnaLista.length-1);
+      console.log("Pomocna lista: \n" + pomocnaLista);
+
+      setTabCommands(pomocnaLista)  
+    }
     })
     .catch(function (e) {
       console.log(e)
@@ -63,8 +85,12 @@ const Terminal = (props) => {
     inputText.current.focus();
   });
 
+  React.useEffect(() => {
+    inputText.current.focus();
+  }, [inputText]);
+
   const logsHistory = (e) => {
-    if (e.key === "ArrowUp" || e.key === "ArrowDown") e.preventDefault();
+    if (e.key === "ArrowUp" || e.key === "ArrowDown" || e.key === "Tab") e.preventDefault();
     switch (e.keyCode) {
       case 38:
         
@@ -84,7 +110,11 @@ const Terminal = (props) => {
         }
         break;
       case 9:
-        console.log("Tab ", tabCommands)
+        if(inputText.current.value.includes("cd ") && tabCommands.length > 0){
+          counterOfTabCommands++;
+          if(counterOfTabCommands === tabCommands.length) counterOfTabCommands=0;
+          inputText.current.value = "cd " + tabCommands[counterOfTabCommands];
+        }
       break;
     }
   };
