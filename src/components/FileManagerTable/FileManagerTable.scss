@@ -109,3 +109,17 @@
     margin-right: 0px;
   }
 }
+
+
+.swalItem{
+  margin: 6px 0;
+}
+
+.swal-text{
+  max-height: 16em;  /* To be adjusted as you like */
+  overflow-y: scroll;
+  width: 100%;
+  text-align: left;
+}
+
+

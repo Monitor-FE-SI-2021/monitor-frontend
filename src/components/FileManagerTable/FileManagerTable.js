@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './FileManagerTable.scss';
 import request from "../../service";
 import DragAndDrop from '../DragAndDrop/DragAndDrop';
 import Swal from "sweetalert2";
 import { FaPencilAlt, FaTrash } from 'react-icons/fa';
 import Checkbox from '@material-ui/core/Checkbox';
-
+import {fetchAllGroups} from '../../store/modules/groups/actions';
 
 const config = require("../Terminal/config");
 const userFiles = "https://si-grupa5.herokuapp.com/api/web/user/file-tree";
@@ -121,8 +121,8 @@ class FileManagerTable extends React.Component {
                 link: "testLink"
             });
         }
-    }
-
+    }   
+    
     renderTableHeader() {
         return (
             <tr className="header-row">
@@ -602,6 +602,68 @@ class FileManagerTable extends React.Component {
 
     }
 
+    /*constructSwalItem(grupa) {
+        return (
+            
+        );
+    }*/
+
+
+    async sendToAgents() {
+        
+        console.log("KLIKNO SE");
+
+        const url = 'https://si-2021.167.99.244.168.nip.io/api/group/MyAssignedGroups';
+        var arrayOfGroups = [];
+        
+        const response = await request(url, 'GET');
+        
+        arrayOfGroups = response.data.data.subGroups;
+
+        var html = '<div class="swal-text">';
+        
+        for(var i = 0; i < arrayOfGroups.length; i++) {
+            html = html + this.getTableForGroups(arrayOfGroups[i]);
+
+        }
+        
+
+        html = html + '</div>';
+       
+
+        Swal.fire({
+            html: html.toString(),
+            width: '50%'
+        })
+    }
+
+    getTableForGroups(group) {
+        
+        
+        var html = '';
+        if( typeof group.subGroups !== 'undefined' && group.subGroups.length > 0) {
+            html = html + '<div >';
+            for(var i = 0; i < group.subGroups.length; i++) {
+            html = html + this.getTableForGroups(group.subGroups[i]);
+        }
+        html = html + '</div>';
+
+        }
+        else {
+        html = '<div class="swalItem">';
+        html = html + '<div class="form-check">';
+        html = html + `<label class="form-check-label" for="${group.groupId}">`
+        html = html + group.name;
+        html = html + "</label>";
+        html = html + `<input class="form-check-input " type="checkbox" value="" id="${group.groupId}">`;
+        html = html + "</div>";
+        
+        }
+        
+        return html;
+    }
+
+
     clickNewFolder() {
         console.log("Napravi novi folder");
 
@@ -646,6 +708,7 @@ class FileManagerTable extends React.Component {
             <div>
                 <button onClick={() => this.clickUp()} disabled={this.state.activeFolder == '.' ? "disabled" : ""}>Go UP</button>
                 <button onClick={() => this.clickNewFolder()} >New folder</button>
+                <button onClick={() => this.sendToAgents()}>Odaberi grupe</button>
                 <button disabled="disabled">{this.state.activeFolder}</button>
                 <div className="table-wrapper">
                     <table >
