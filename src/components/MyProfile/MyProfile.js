@@ -22,11 +22,15 @@ function MyProfile() {
         message: "Email is valid!"
     }
     const [correct, setCorrect] = React.useState(status);
+
     const initialEmailValue = {
         email: ""
     };
+    const initialMobileValue = {
+        phone: ""
+    };
     const [emailValue, setEmailValue] = React.useState(initialEmailValue)
-
+    const [mobileValue, setMobileValue] = React.useState(initialEmailValue)
 
     const initialFormData = {
         name: "",
@@ -45,7 +49,11 @@ function MyProfile() {
                 const objekat = {
                     email: res.data.email
                 };
+                const objekatMobitel = {
+                    phone: res.data.phone
+                };
                 setEmailValue(objekat)
+                setMobileValue(objekatMobitel)
             }
         })
 
@@ -124,7 +132,16 @@ function MyProfile() {
 
     }
 
+    //////////////////////////////////////////////////////////////////Mobile Phone///////////////////////////////
+    const handleMobileChange = (e) => {
+        e.preventDefault()
+        setMobileValue({
+            ...mobileValue,
+            [e.target.name]: e.target.value.trim()
+        });
+        console.log(mobileValue)
 
+    };
     if (showInitialForm) {
         return (
             <div className="formDiv">
@@ -162,7 +179,7 @@ function MyProfile() {
                     <h1>CHANGE YOUR PHONE NUMBER</h1>
 
                     <label htmlFor="Number">Mobile phone: </label>
-                    <input type='text' value={formData.phone}/>
+                    <input type='text' name="phone" value={mobileValue} onChange={handleMobileChange}/>
 
 
                     <input className='custom-btn' type="button" value="CHANGE NUMBER"/>
