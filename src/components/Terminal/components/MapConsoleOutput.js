@@ -14,7 +14,8 @@ const MapConsoleOutput = ({
   ip,
   id,
   setPut,
-  user
+  user,
+  setTabCommands
 }) => {
   const scrollRef = React.useRef();
 
@@ -23,41 +24,33 @@ const MapConsoleOutput = ({
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
   }); 
 
-  if (consoleOutput.length > 1) {
-    //console.log( consoleOutput[consoleOutput.length-1])
-    if (consoleOutput[consoleOutput.length - 1]) {
-      let item = consoleOutput[consoleOutput.length - 1].toString();
-
-      const isCommandValid = item.includes("Valid Command!");
-      if (isCommandValid) {
-        const command = item.toString().split("!")[1];
-        console.log("Item string ", command);
-        console.log("Path ", path)
-
-        fetch(wsEndpoint + "/agent/command", {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + token,
-          },
-          body: JSON.stringify({
+  React.useEffect(()=>{
+    if (consoleOutput.length > 1) {
+      //console.log( consoleOutput[consoleOutput.length-1])
+      if (consoleOutput[consoleOutput.length - 1]) {
+        let item = consoleOutput[consoleOutput.length - 1].toString();
+  
+        const isCommandValid = item.includes("Valid Command!");
+        if (isCommandValid) {
+          const command = item.toString().split("!")[1];
+          console.log("Item string ", command);
+          console.log("Path ", path)
+  
+           request(wsEndpoint + "/agent/command", "POST", {
             deviceUid: id,
             command: command,
             path: path,
             user: user.email,
-          }),
-        })
-          .then((res) => res.json())
+            })
           .then((res) => {
-            console.log(res);
-            token = res.token;
+            setPut(res.data.path)
+            //console.log("path u request", res.data.path);
             const clone = [...consoleOutput];
-            let modified = res.message.replace(/\\n/g, "\n");
+            let modified = res.data.message.replace(/\\n/g, "\n");
             modified = modified.replace(/\\r/g, "\r");
             console.log(modified);
             clone[clone.length - 1] = modified;
-            setPut(res.path);
+            
             if (clone != "" || clone != null) updateConsoleOutput(clone);
             //else updateConsoleOutput("Server Response error");
             if(!clone.includes("Valid Command!")){
@@ -68,6 +61,7 @@ const MapConsoleOutput = ({
           })
           .catch(function (e) {
             console.log(e);
+            console.log("A JA NECU DA SE KRIJEM")
             const clone = [...consoleOutput];
             // updateNewLog("Poziv nije uspio", name);
             if(!clone.includes("Valid Command!")){
@@ -77,9 +71,12 @@ const MapConsoleOutput = ({
             clone[clone.length - 1] = "Poziv nije uspio";
             updateConsoleOutput(clone);
           });
+        }
       }
     }
-  }
+  }, [consoleOutput])
+
+  
 
   return (
     <div className="console-output" ref={scrollRef}>
