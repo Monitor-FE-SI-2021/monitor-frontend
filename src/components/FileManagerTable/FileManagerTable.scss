@@ -1,6 +1,6 @@
 .table-wrapper {
-  margin: 0 auto;
-  width: 700px;
+  margin: 15px;
+  width: 1000px;
   height: 400px;
   overflow-y: scroll;
   border-bottom: 2px solid black;
@@ -10,6 +10,9 @@
     //background-color: white;
     width: 100%;
     border-collapse: collapse;
+    border-radius:6px;
+    -moz-border-radius:6px;
+    color: #5b77bd;;
     //border-top: 2px solid black;
     //border-left: 2px solid black;
   }
@@ -65,11 +68,8 @@
   }
 
   .header-row {
-    background: linear-gradient(
-      to top,
-      rgba(235, 189, 73, 0.6),
-      rgba(235, 189, 73, 0)
-    );
+    background: #5b77bd;
+    color: white;
   }
 
   .centriraj {
@@ -94,4 +94,13 @@
     width: 25px;
     height: 25px;
   }
+}
+button {
+  border: 0;
+  padding: 10px;
+  margin-left: 15px;
+  margin-top: 5px;
+  background:#5b77bd;
+  color: whitesmoke;
+  cursor: pointer;
 }

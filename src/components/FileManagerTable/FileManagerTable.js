@@ -8,7 +8,7 @@ import Swal from "sweetalert2";
 
 
 const config = require("../Terminal/config");
-const userFiles = "https://si-grupa5.herokuapp.com/api/web/user/fileList";
+const userFiles = "https://si-grupa5.herokuapp.com/api/web/user/file-tree";
 const folderIconUrl = "https://img.icons8.com/color/40/000000/folder-invoices--v2.png";
 const fileIconUrl = "https://img.icons8.com/office/40/000000/document--v2.png";
 
@@ -293,7 +293,8 @@ class FileManagerTable extends React.Component {
 
     addFolder = async (newFolder) => {
 
-        this.state.activeFolder += '/' + newFolder;
+        //this.state.activeFolder += '/' + newFolder;
+        //var path = this.state.activeFolder + '/' + newFolder;
 
         try {
             const requestOptions = {
@@ -318,14 +319,13 @@ class FileManagerTable extends React.Component {
                         Authorization: "Bearer " + token,
                     },
                     body: JSON.stringify({
-                        fileName: 'new.file',
-                        base64: '',
-                        user: this.state.user.email,
-                        path: this.state.activeFolder
+                        path: this.state.activeFolder,
+                        folderName: newFolder,
+                        user: this.state.user.email
                     })
                 };
 
-                var response1 = await fetch('https://si-grupa5.herokuapp.com/api/web/user/file/put', requestOptions2)
+                var response1 = await fetch('https://si-grupa5.herokuapp.com/api/web/user/folder/create', requestOptions2)
                     .then((res) => {
                         console.log(res.json());
 
@@ -380,7 +380,7 @@ class FileManagerTable extends React.Component {
                     })
                 };
 
-                return await fetch('https://si-grupa5.herokuapp.com/api/web/user/file/getText', requestOptions2)
+                return await fetch('https://si-grupa5.herokuapp.com/api/web/user/file/get-text', requestOptions2)
                     .then((res) => {
                         return res.json().then((res) => {
                             console.log(res.text);
@@ -443,6 +443,7 @@ class FileManagerTable extends React.Component {
                 <button onClick={() => this.clickNewFolder()} >New folder</button>
                 <button disabled="disabled">{this.state.activeFolder}</button>
                 <div className="table-wrapper">
+                
                     <table >
                         <tbody>
                             {this.renderTableHeader()}
