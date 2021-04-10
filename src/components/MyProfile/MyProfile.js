@@ -16,6 +16,7 @@ import {showSwalToast} from "../../utils/utils";
 function MyProfile() {
 
     const [showInitialForm, setInitialForm] = React.useState(true);
+    const [showMobileForm, setMobileForm] = React.useState(false);
     const status = {
         state: "valid",
         message: "Email is valid!"
@@ -148,11 +149,31 @@ function MyProfile() {
                     <input className='custom-btn' type="button" value="CHANGE PASSWORD"/>
                     <input className='custom-btn' type="button" value="VERIFY OR CHANGE EMAIL"
                            onClick={() => setInitialForm(false)}/>
-                    <input className='custom-btn' type="button" value="VERIFY OR CHANGE MOBILE PHONE"/>
+                    <input className='custom-btn' type="button" value="VERIFY OR CHANGE MOBILE PHONE"
+                           onClick={() => {setMobileForm(true); setInitialForm(false)}}/>
                 </form>
             </div>
         );
     }
+    else if (showMobileForm) {
+        return (
+            <div className="formDiv">
+                <form className="form">
+                    <h1>CHANGE YOUR PHONE NUMBER</h1>
+
+                    <label htmlFor="Number">Mobile phone: </label>
+                    <input type='text' value={formData.phone}/>
+
+
+                    <input className='custom-btn' type="button" value="CHANGE NUMBER"/>
+                </form>
+                <div>
+                    <button className="backToProfile" onClick={() => setInitialForm(true)}>Back to profile</button>
+                </div>
+            </div>
+        );
+    }
+    else
     return (
         <div className="formDiv">
             <form className="form">
