@@ -93,7 +93,7 @@ const Content = ({
 // ));
 
   return (
-    <Paper style={{width: "100%"}}>
+    <Paper style={{}}>
       <Scheduler
           data={transformedTask}
           height={400}

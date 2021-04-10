@@ -24,53 +24,40 @@ const UsersTable = ({ users, tasks } ) => {
 
     const [hidden, setHidden] = useState(true);
 
-    const [tableFields, setTableFields] = useState([
-        {
-            name: 'name',
-            title: 'Name',
-        },
-        {
-            name: 'lastname',
-            title: 'Lastname',
-        },
-        {
-            name: 'email',
-            title: 'Email',
-        },
-        {
-            name: 'phone',
-            title: 'Phone number',
-        },
-        {
-            title: 'Calendar',
-            slot: 'actions',
-        }
-    ])
-
     return (
-        <div>
+        <div className="grid-container">
             <div className="tableWrap">
-               <CustomTable data={tableData} fields={tableFields}>
 
-                   <TableSlot slot='actions' render={dataRow => (
-                      <div>
-                        < CalendarToday className='calendar-btn' onClick={() => viewCalendar(dataRow)}/>
-                      </div>
-                    )}/>
-
-                </CustomTable>
+              <table>
+                <tr>
+                   <th id="table-header">Name</th>
+                   <th id="table-header">Lastname</th>
+                   <th id="table-header">Calendar</th>
+                </tr>
+                {users.map(user => 
+                  <tr>
+                    <th>{user.name}</th>
+                    <th>{user.lastname}</th>
+                    <th>
+                       < CalendarToday className='calendar-btn' onClick={() => viewCalendar(user)}/>
+                    </th>
+                </tr>)}
+               </table>
+                
+            </div>
+           
+            <div className="scheduler">
+                  {!hidden && (
+                    <React.Fragment>
+                       {<MyScheduler tasks={ tasks }/>}    
+                    </React.Fragment>
+                  )}
             </div>
 
-            <br></br>
-
-            <div>
-            {/* KOMPONENTA */}
-               {!hidden && (
-                  <React.Fragment>
-                      {<MyScheduler tasks={ tasks }/>}    
-                  </React.Fragment>
-               )}
+            <div className="map">
+                   
             </div>
+            
         </div>
     )
 }
