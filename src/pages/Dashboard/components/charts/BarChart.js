@@ -22,8 +22,8 @@ class BarChart extends Component{
                 options={{
                     maintainAspectRatio: false, 
                     title:{
-                        display: 'Disk utilization last hour',
-                        text: 'Disk utilization last hour',
+                        display: 'Number of errors of type',
+                        text: 'Number of errors of type',
                         fontSize: 25
                     },
                     scales: {

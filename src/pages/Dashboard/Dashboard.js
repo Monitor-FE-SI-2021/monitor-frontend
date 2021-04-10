@@ -23,11 +23,11 @@ let barChart = {
         {
             label:"Number of errors of type",
             data:[
-                1,
-                2,
-                3,
-                4,
-                8
+                0,
+                0,
+                0,
+                0,
+                0
             ],
             backgroundColor:'rgba(75, 192, 192, 0.6)'
         }
@@ -83,10 +83,6 @@ function convertStatistics(statistic) {
     return [Math.round(statistic * 100), Math.round((1 - statistic) * 100)];
 }
 
-function convertDateFormat(date) {
-    return new Date(date.getFullYear(), date.getMonth()-1, date.getDate()).toISOString()
-}
-
 const allMachinesString = "All machines"
 
 let removedMachine = null
@@ -95,7 +91,7 @@ let allMachinesUsage = null
 let lastDisconnected = null
 let allErrors = []
 
-export let barchartMaxValue = 50
+export let barchartMaxValue = 10
 
 const Dashboard = ({ user }) => {
     
@@ -126,28 +122,28 @@ const Dashboard = ({ user }) => {
     }
 
     function getStatistics(machine, startDate, endDate) {
-        startDate = convertDateFormat(startDate)
-        endDate = convertDateFormat(endDate)
-        console.log(machine)
-        request(devices + "/GetDeviceLogs?deviceId=" + machine.deviceId + "&startDate=" + startDate + "&endDate=" + endDate)
-            .then((res) => res.data.data)
-            .then((res) => {
-                console.log(res)
-                setCharts(res, machine);
-            })
-            .catch((err) => console.log(err));
 
         request(errors + "/DateInterval?DeviceUID=" + machine.deviceUid + "&StartDate=" + startDate + "&EndDate" + endDate)
             .then((res) => res.data.data)
             .then((res) => {
-                console.log(res)
-                barchartMaxValue = res.errorNumber + 10
+                console.log([res])
+                setErrorCharts([res])
             })
 
+        request(devices + "/GetDeviceLogs?deviceId=" + machine.deviceId + "&startDate=" + startDate + "&endDate=" + endDate)
+            .then((res) => res.data.data)
+            .then((res) => {
+                setCharts(res, machine);
+            })
+            .catch((err) => console.log(err));
     }
 
     function getAllDevicesStatistics(startDate, endDate) {
-        request(devices + "/GetAverageHardwareUsageForUser?startDate=" + convertDateFormat(startDate) + "&endDate" + convertDateFormat(endDate))
+        request(errors + "/AllDateInterval?StartDate=" + startDate + "&EndDate" + endDate)
+            .then((res) => allErrors = res.data.data)
+            .then(() => setErrorCharts(allErrors))
+
+        request(devices + "/GetAverageHardwareUsageForUser?startDate=" + startDate + "&endDate" + endDate)
             .then((res) => {
                 allMachinesUsage = res.data.data
                 setCharts(allMachinesUsage, { name: allMachinesString })
@@ -155,6 +151,9 @@ const Dashboard = ({ user }) => {
     }
 
     function datePickerChange(startDate, endDate) {
+        startDate = startDate.toISOString()
+        endDate = endDate.toISOString()
+        console.log(startDate, endDate)
         if (clickedMachine?.name === allMachinesString) {
             getAllDevicesStatistics(startDate, endDate)
         }
@@ -171,8 +170,9 @@ const Dashboard = ({ user }) => {
                 numberOfEachError[Math.floor(error.code / 100)] += error.errorCodeNumber
             })
         })
-        const numberOfErrors = numberOfEachError.reduce((a,b) => a+b, 0)
-        barchartMaxValue = numberOfErrors + (10 - numberOfErrors % 10)
+        barchartMaxValue = numberOfEachError.reduce((a,b) => a+b, 0)
+        if (barchartMaxValue === 0 || barchartMaxValue % 10 !== 0)
+            barchartMaxValue = barchartMaxValue + (10 - barchartMaxValue % 10)
         barChart.datasets[0].data = numberOfEachError
     }
 
@@ -190,15 +190,7 @@ const Dashboard = ({ user }) => {
             })
             .catch((err) => console.log(err));
 
-        request(devices + "/GetAverageHardwareUsageForUser")
-            .then((res) => {
-                allMachinesUsage = res.data.data
-                setCharts(allMachinesUsage, { name: allMachinesString })
-            })
-
-        request(errors + "/AllDateInterval?StartDate=" + convertDateFormat(startDate) + "&EndDate" + convertDateFormat(endDate))
-            .then((res) => allErrors = res.data.data)
-            .then(() => setErrorCharts(allErrors))
+        getAllDevicesStatistics(startDate.toISOString(), endDate.toISOString())
 
     }, []);
 
@@ -221,6 +213,7 @@ const Dashboard = ({ user }) => {
             if (cloned.length === 0 || removedMachine?.deviceId === clickedMachine?.deviceId) {
                 clickedMachine = { name: allMachinesString }
                 setCharts(allMachinesUsage, clickedMachine)
+                setErrorCharts(allErrors)
             }
             setActive(cloned);
         }
@@ -259,8 +252,8 @@ const Dashboard = ({ user }) => {
                                     img={MachineIcon}
                                     onDisconnect={disconnectMachine}
                                     getStatistics={getStatistics}
-                                    sDate={startDate}
-                                    eDate={endDate}
+                                    sDate={startDate.toISOString()}
+                                    eDate={endDate.toISOString()}
                                 />
                             ))
                         ) : (
@@ -295,7 +288,7 @@ const Dashboard = ({ user }) => {
                          onChange={date => {
                              date.setHours(23, 59, 59);
                              setEndDate(date)
-                             datePickerChange(date, endDate)
+                             datePickerChange(startDate, date)
                         }}
                          minDate={startDate}
                          className="my-custom-input" // custom class
@@ -343,6 +336,7 @@ const Dashboard = ({ user }) => {
                 <GoogleMapMonitors
                     activeMachines={active}
                     allMachines={machines}
+                    allErrors={allErrors}
                 />
             </div>
 
