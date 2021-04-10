@@ -9,9 +9,12 @@ import GoogleMapMonitors from "./components/GoogleMapMonitors";
 
 import "react-modern-calendar-datepicker/lib/DatePicker.css";
 import DatePicker from "react-modern-calendar-datepicker";
+import { utils } from "react-modern-calendar-datepicker";
 import "./dashboard.scss";
 import {Bar} from "react-chartjs-2";
 import {STORAGE_KEY} from "../../utils/consts";
+import { LiveTv } from "@material-ui/icons";
+
 
 let barChart = {
 
@@ -75,39 +78,13 @@ let hddUsageChart = {
     ],
 };
 
-// let activeMachines = [
-//     {
-//         deviceUid: "fc548ecb-12ec-4ad5-8672-9d5a9565ff60",
-//         name: "Desktop PC 1",
-//         location: "Sarajevo - BBI",
-//         ip: "255.255.255.0",
-//         path: "C:/user/programfiles",
-//     },
-//         {
-//         deviceUid: "92649d24-fc46-44c6-b085-356977dbb782",
-//         name: "Desktop PC 2",
-//         location: "Sarajevo - BBI",
-//         ip: "255.255.255.0",
-//         path: "C:/user/programfiles",
-//     },
-//     {
-//         deviceUid: "eed19402-67c5-4978-9ad2-513cd5db6376",
-//         name: "Desktop PC 1",
-//         location: "Sarajevo - SCC",
-//         ip: "255.255.255.0",
-//         path: "C:/user/programfiles",
-//     },
-//     {
-//         deviceUid: "d3143e54-d497-402f-82ef-b1b213c1d172",
-//         name: "Desktop PC 2",
-//         location: "Sarajevo - SCC",
-//         ip: "255.255.255.0",
-//         path: "C:/user/programfiles",
-//     }
-// ];
 
 function convertStatistics(statistic) {
     return [Math.round(statistic * 100), Math.round((1 - statistic) * 100)];
+}
+
+function convertDateFormat(date) {
+    return new Date(date.year, date.month-1, date.day+1).toISOString()
 }
 
 const allMachinesString = "All machines"
@@ -121,17 +98,12 @@ export let barchartMaxValue = 50
 
 const Dashboard = ({ user }) => {
     let end = new Date();
-    const endDefaultValue = {
+    let endDefaultValue = {
         year: end.getFullYear(),
         month: end.getMonth()+1,
         day: end.getUTCDate()
     };
-    let start = new Date(end.getTime() - (7 * 24 * 60 * 60 * 1000));
-    const startDefaultValue = {
-        year: start.getFullYear(),
-        month: start.getMonth()+1,
-        day: start.getUTCDate()
-    };
+    
     let activeMachines = []
     const [machines, setMachines] = React.useState([]);
     const [active, setActive] = React.useState([...activeMachines]);
@@ -139,13 +111,19 @@ const Dashboard = ({ user }) => {
     const [chartType, setChartType] = React.useState(true)
 
 
-
-    const [endDate, setEndDate] = React.useState(endDefaultValue);
+    const [endDate, setEndDate] = React.useState(utils().getToday());
     const endformatInputValue = () => {
         if (!endDate) return '';
         return `${endDate.day}/${endDate.month}/${endDate.year}`;
       };
     
+    let st= new Date(endDate.year,endDate.month-1,endDate.day);
+    let start = new Date(st.getTime() - (7 * 24 * 60 * 60 * 1000));
+    let startDefaultValue = {
+        year: start.getFullYear(),
+        month: start.getMonth()+1,
+        day: start.getDate()
+    };
     const [startDate, setStartDate] = React.useState(startDefaultValue);
     const startformatInputValue = () => {
         if (!startDate) return '';
@@ -165,13 +143,12 @@ const Dashboard = ({ user }) => {
         }) : [];
     }
 
-    console.log(startDate, endDate)
-
-    function getStatistics(machine) {
-        console.log(machine)
-        request(devices + "/GetDeviceLogs?deviceId=" + machine.deviceId)
+    function getStatistics(machine, startDate, endDate) {
+        console.log(machine, convertDateFormat(startDate), convertDateFormat(endDate))
+        request(devices + "/GetDeviceLogs?deviceId=" + machine.deviceId + "&startDate=" + convertDateFormat(startDate) + "&endDate=" + convertDateFormat(endDate))
             .then((res) => res.data.data)
             .then((res) => {
+                console.log(res)
                 setCharts(res, machine);
             })
             .catch((err) => console.log(err));
@@ -191,7 +168,7 @@ const Dashboard = ({ user }) => {
             }),
         })
             .then((res) => console.log(res.json()))*/
-
+/*
         request(errors + "/DateInterval", "get", {
             deviceUID: machine.deviceUid,
             startDate: "2021-01-09T11:42:10.180Z",
@@ -199,33 +176,25 @@ const Dashboard = ({ user }) => {
         })
             .then((res) => console.log(res.data.data))
 
-
-
+*/
     }
 
-    /*
-        React.useEffect(() => {
-            request(devices + "/AllDevices")
-                .then((res) => {
-                    const allMachines = res.data.data;
-                    setMachines(allMachines);
-                    console.log(allMachines)
-                    request("https://si-grupa5.herokuapp.com/api/agent/online")
-                        .then((res) => {
-                            console.log(res)
-                            setActive(filterActive(res?.data, allMachines));
-                        })
-                })
-                .catch((err) => console.log(err));
+    function getAllDevicesStatistics(startDate, endDate) {
+        request(devices + "/GetAverageHardwareUsageForUser?startDate=" + convertDateFormat(startDate) + "&endDate" + convertDateFormat(endDate))
+            .then((res) => {
+                allMachinesUsage = res.data.data
+                setCharts(allMachinesUsage, { name: allMachinesString })
+            })
+    }
 
-            request(devices + "/GetAverageHardwareUsageForUser")
-                .then((res) => {
-                    allMachinesUsage = res.data.data
-                    console.log(allMachinesUsage)
-                    setCharts(allMachinesUsage, { name: "All machines"})
-                })
-        }, []);
-    */
+    function datePickerChange(startDate, endDate) {
+        if (clickedMachine?.name === allMachinesString) {
+            getAllDevicesStatistics(startDate, endDate)
+        }
+        else {
+            getStatistics(clickedMachine, startDate, endDate)
+        }
+    }
 
     React.useEffect(() => {
         request(devices + "/AllDevices")
@@ -305,6 +274,8 @@ const Dashboard = ({ user }) => {
                                     img={MachineIcon}
                                     onDisconnect={disconnectMachine}
                                     getStatistics={getStatistics}
+                                    sDate={startDate}
+                                    eDate={endDate}
                                 />
                             ))
                         ) : (
@@ -323,22 +294,29 @@ const Dashboard = ({ user }) => {
                         <div className="pickers">
                             <h5 className="picker-h5">Date Range Input</h5>
                             <DatePicker
-                                className="picker"
-                                value={startDate}
-                                onChange={setStartDate}
-                                formatInputText={startformatInputValue} // format value
+                             className="picker"
+                             value={startDate}
+                             onChange={(date) => {
+                                 setStartDate(date)
+                                 datePickerChange(date, endDate)
+                             }}
+                             maximumDate={endDate}
+                             formatInputText={startformatInputValue} // format value
 
-                                inputClassName="my-custom-input" // custom class
-                                shouldHighlightWeekends
+                             inputClassName="my-custom-input" // custom class
+                             shouldHighlightWeekends
                             />
                             <DatePicker
-                                className="picker"
-                                value={endDate}
-                                onChange={setEndDate}
-                                formatInputText={endformatInputValue} // format value
-
-                                inputClassName="my-custom-input" // custom class
-                                shouldHighlightWeekends
+                             className="picker"
+                             value={endDate}
+                             onChange={(date) => {
+                                 setEndDate(date)
+                                 datePickerChange(startDate, date)
+                             }}
+                             formatInputText={endformatInputValue} // format value
+                             minimumDate={startDate}
+                             inputClassName="my-custom-input" // custom class
+                             shouldHighlightWeekends
                             />
                         </div>
 

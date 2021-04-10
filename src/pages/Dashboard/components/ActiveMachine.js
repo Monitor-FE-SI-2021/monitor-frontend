@@ -7,12 +7,12 @@ import Avatar from "./MachineAvatar.js";
 
 import './ActiveMachine.scss';
 
-const ActiveMachine = ({data, img, onDisconnect, getStatistics}) => {
+const ActiveMachine = ({data, img, onDisconnect, getStatistics, sDate, eDate}) => {
     const [remoteAccessOpen, setRemoteAccessOpen] = useState(false);
     const popup = useRef();
 
     const handleOnClick = debounce(
-        () => getStatistics(data),
+        () => getStatistics(data, sDate, eDate),
         300
     );
 
