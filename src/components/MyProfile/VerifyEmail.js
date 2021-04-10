@@ -1,6 +1,8 @@
 import { STORAGE_KEY } from "../../utils/consts";
 import request, { authEndpoint } from "../../service";
 import { showSwalToast } from "../../utils/utils";
+import { history} from "../../store/store";
+
 const neki = "http://localhost:3333/getUserDetails";
 
 export const getUserDetails = () => {
@@ -15,7 +17,7 @@ export const getUserDetails = () => {
 export const checkIfEmailVerified = ({ email }) => {
 
     const data = {
-        email: email.email
+        email: email
     };
 
     return request("http://localhost:3333/checkIfEmailVerified", "POST",
@@ -23,11 +25,13 @@ export const checkIfEmailVerified = ({ email }) => {
     ).then(res => {
 
         if (res && res.status === 200) {
-            if (res.data.verified === "true") {
+            if (res.data.verified === true) {
                 return {
                     status: 200,
                     message: "Email already verified!"
                 }
+            } else {
+                return res;
             }
         }
     }).catch(error => {
@@ -47,7 +51,11 @@ export const sendVerificationEmail = ({ email }) => {
         if (res && res.status === 200) {
             return res;
         }
-    });
+    }).catch(
+        err => {
+            console.log('c');
+        }
+    );
 
 
 }
@@ -84,15 +92,19 @@ export const changeEmailForUser = ({ email }) => {
 }
 
 export const verifyEmail = ({ token }) => {
+
     return request("http://localhost:3333/verifyEmail"  + "/" + token, "PUT").then(res => {
-        showSwalToast(res);
         if (res && res.status === 200) {
+            showSwalToast('Email successfully verified!', 'success');
+            setTimeout(() => {
+                history.push('/my-profile')
+            }, 2000)
             return res;
         }
     });
 
-
 }
+
 export const regexEmail = ({ email }) => {
     console.log(email);
     var pattern = new RegExp(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g);

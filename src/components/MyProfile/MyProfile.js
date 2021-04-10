@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { useState } from "react";
+import React, {useEffect} from "react";
+import {useState} from "react";
 import './MyProfile.css';
 
 import {
@@ -11,7 +11,8 @@ import {
     regexEmail
 } from "./VerifyEmail";
 import request from "../../service";
-import { showSwalToast } from "../../utils/utils";
+import {showSwalToast} from "../../utils/utils";
+
 function MyProfile() {
 
     const [showInitialForm, setInitialForm] = React.useState(true);
@@ -66,19 +67,25 @@ function MyProfile() {
             email: formData.email
         }
         checkIfEmailVerified(user).then(r => {
+            // console.log(r);
             if (r && r.status === 200) {
                 if (r.message === "Email already verified!") {
-                    showSwalToast(r.message);
-
+                    showSwalToast(r.message, 'success');
+                } else {
+                    sendVerificationEmail(user).then(r => {
+                        if (r && r.status === 200) {
+                            showSwalToast('Email sent', 'success');
+                        }
+                    });
                 }
-                sendVerificationEmail(user).then(r => {
-                    if (r && r.status === 200) {
-                        showSwalToast(r.message, 'success');
-                    }
-                });
             }
-        });
-
+        }, err => {
+            console.log(err);
+        }).catch(
+            err => {
+                console.log(err);
+            }
+        );
 
 
     }
@@ -99,8 +106,7 @@ function MyProfile() {
             checkIfEmailExists(user).then(r => {
                 if (r === true) {
                     showSwalToast("Email is already in use!");
-                }
-                else {
+                } else {
                     changeEmailForUser(user).then(res => {
                         if (res && res.status === 200) {
                             showSwalToast(res.data.message, 'success');
@@ -118,10 +124,6 @@ function MyProfile() {
     }
 
 
-
-
-
-
     if (showInitialForm) {
         return (
             <div className="formDiv">
@@ -129,23 +131,24 @@ function MyProfile() {
                     <h1>Personal Information</h1>
 
                     <label htmlFor="Name">Name: </label>
-                    <input type='text' value={formData.name} disabled />
+                    <input type='text' value={formData.name} disabled/>
 
                     <label htmlFor="Surname">Surname: </label>
-                    <input type='text' value={formData.lastname} disabled />
+                    <input type='text' value={formData.lastname} disabled/>
 
                     <label htmlFor="Address">Address: </label>
-                    <input type='text' value={formData.address} disabled />
+                    <input type='text' value={formData.address} disabled/>
 
                     <label htmlFor="Number">Mobile phone: </label>
-                    <input type='text' value={formData.phone} disabled />
+                    <input type='text' value={formData.phone} disabled/>
 
                     <label htmlFor="Email">Email: </label>
-                    <input type='text' value={formData.email} disabled />
+                    <input type='text' value={formData.email} disabled/>
 
-                    <input className='custom-btn' type="button" value="CHANGE PASSWORD" />
-                    <input className='custom-btn' type="button" value="VERIFY OR CHANGE EMAIL" onClick={() => setInitialForm(false)} />
-                    <input className='custom-btn' type="button" value="VERIFY OR CHANGE MOBILE PHONE" />
+                    <input className='custom-btn' type="button" value="CHANGE PASSWORD"/>
+                    <input className='custom-btn' type="button" value="VERIFY OR CHANGE EMAIL"
+                           onClick={() => setInitialForm(false)}/>
+                    <input className='custom-btn' type="button" value="VERIFY OR CHANGE MOBILE PHONE"/>
                 </form>
             </div>
         );
@@ -154,17 +157,17 @@ function MyProfile() {
         <div className="formDiv">
             <form className="form">
                 <h1>Email Verification</h1>
-                <input className='custom-btn' type="button" value="VERIFY EMAIL" onClick={handleVerify} />
+                <input className='custom-btn' type="button" value="VERIFY EMAIL" onClick={handleVerify}/>
 
             </form>
             <form className="form">
                 <h1>Change Email</h1>
                 <label htmlFor="Email">Email: </label>
-                <input type='text' name="email" value={emailValue.email} onChange={handleChange} />
+                <input type='text' name="email" value={emailValue.email} onChange={handleChange}/>
                 <p className={correct.state}>{correct.message}</p>
-                <input className='custom-btn' type="button" value="CHANGE EMAIL" onClick={handleChangeEmail} />
+                <input className='custom-btn' type="button" value="CHANGE EMAIL" onClick={handleChangeEmail}/>
             </form>
-            <div >
+            <div>
                 <button className="backToProfile" onClick={() => setInitialForm(true)}>Back to profile</button>
             </div>
         </div>
