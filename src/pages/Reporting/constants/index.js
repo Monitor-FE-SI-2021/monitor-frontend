@@ -40,19 +40,19 @@ export const devices = [
 export const options = [
   {
       label: "Daily",
-      value: "daily",
+      value: "Daily",
   },
   {
       label: "Weekly",
-      value: "weekly",
+      value: "Weekly",
   },
   {
       label: "Monthly",
-      value: "monthly",
+      value: "Monthly",
   },
   {
       label: "Yearly",
-      value: "yearly",
+      value: "Yearly",
   },
 ];
 
