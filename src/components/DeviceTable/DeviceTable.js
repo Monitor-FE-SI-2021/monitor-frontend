@@ -42,7 +42,8 @@ const DeviceTable = ({
                          deviceTable,
                          group,
                          updateDevicesTableForGroup,
-                         updateActiveDevice
+                         updateActiveDevice,
+                         showGroup
                      }) => {
 
     const [statusFilterOpened, setStatusFilterOpened] = React.useState(false);
@@ -86,7 +87,11 @@ const DeviceTable = ({
             name: 'name',
             title: 'Naziv',
             sort: true,
-        },
+        }].concat(showGroup ? [{
+            name: 'group',
+            title: 'Grupa',
+            sort: true,
+        }] : []).concat([
         {
             name: 'location',
             title: 'Lokacija',
@@ -111,8 +116,9 @@ const DeviceTable = ({
             width: '20%',
             align: 'right',
             slot: 'actions'
-        }]
+        }])
     )
+   
 
     const renderDeviceStatus = device => {
 

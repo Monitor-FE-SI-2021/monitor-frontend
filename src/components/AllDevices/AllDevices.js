@@ -17,7 +17,7 @@ const AllDevices = ({ devicesSearchText }) => {
 
     return (
         <div>
-            <DeviceTable devices={searchedDevices} />
+            <DeviceTable devices={searchedDevices} showGroup={true}/>
         </div>
     )
 }
