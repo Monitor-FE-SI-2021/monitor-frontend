@@ -4,9 +4,10 @@ import React from 'react';
 import { CalendarToday } from "@material-ui/icons";
 import dayjs from 'dayjs';
 import './UsersTable.scss';
+import MyScheduler from '../../pages/Tasks/components/MyScheduler';
 
 
-const UsersTable = ({ users} ) => {
+const UsersTable = ({ users, tasks } ) => {
     const [tableData, setTableData] = useState(users);
     const [selectedUser, setSelectedUser] = useState({"name" : "prvi", "lastname" : "prvi", "email" : "mail", "phone" : "telefon"})
     const downloadTableRow = (tableRow) => {
@@ -66,7 +67,7 @@ const UsersTable = ({ users} ) => {
             {/* KOMPONENTA */}
                {!hidden && (
                   <React.Fragment>
-                      {<UsersTable users={users}/>}    
+                      {<MyScheduler tasks={ tasks }/>}    
                   </React.Fragment>
                )}
             </div>
