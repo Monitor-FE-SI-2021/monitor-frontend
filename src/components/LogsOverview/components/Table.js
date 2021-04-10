@@ -23,11 +23,11 @@ export default function Table({ columns, data }) {
   const [filterInput, setFilterInput] = useState("");
 
   // Update the state when input changes
-  const handleFilterChange = e => {
-    const value = e.target.value || undefined;
-    setFilter("user_id", value);
-    setFilterInput(value);
-  };
+  // const handleFilterChange = e => {
+  //   const value = e.target.value || undefined;
+  //   setFilter("user_id", value);
+  //   setFilterInput(value);
+  // };
 
   // filtrira po device id-u
   /*useEffect(() => {
@@ -42,7 +42,7 @@ export default function Table({ columns, data }) {
   */
   return (
     <>
-    <input className="searchBar" value={filterInput} onChange={handleFilterChange} placeholder={"Search by User ID"}/>
+    {/* <input className="searchBar" value={filterInput} onChange={handleFilterChange} placeholder={"Search by User ID"}/> */}
 
     <table className="customTable" {...getTableProps()}>
       <thead>
