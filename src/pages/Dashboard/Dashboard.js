@@ -278,17 +278,18 @@ const Dashboard = ({ user }) => {
                          className="picker"
                          selected={startDate}
                          onChange={date => {
+                            date.setHours(0, 0, 0);
                             setStartDate(date)
                             datePickerChange(date, endDate)
                          }}
                          maxDate={endDate}
-                         
                          className="my-custom-input" // custom class
                         />
                         <DatePicker
                          className="picker"
                          selected={endDate}
                          onChange={date => {
+                             date.setHours(23, 59, 59);
                              setEndDate(date)
                              datePickerChange(date, endDate)
                         }}
