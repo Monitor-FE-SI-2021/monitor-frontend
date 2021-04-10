@@ -52,34 +52,12 @@ const MapConsoleOutput = ({
             clone[clone.length - 1] = modified;
             
             if (clone != "" || clone != null) updateConsoleOutput(clone);
-<<<<<<< HEAD
-  
-            updateNewLog(clone, name);
-
-            //     request(wsEndpoint + "/agent/command", "POST", {
-            //   deviceUid: id,
-            //   command: "ls",
-            //   path: path,
-            //   user: user.email,
-            //   })
-            // .then((res) => {
-
-            //   let modified = res.data.message.replace(/\\n/g, "\n");
-            //   modified = modified.replace(/\\r/g, "\r");
-            //   setTabCommands(modified)  
-            // })
-            // .catch(function (e) {
-            //   console.log(e)
-            // })
-  
-=======
             //else updateConsoleOutput("Server Response error");
             if(!clone.includes("Valid Command!")){
               window.localStorage.setItem("response", clone);
               addNewLog();
             }
             //setPut(res.path)
->>>>>>> 522944f5e7ea0ae1f8d60cd2840e7f27b8abaf25
           })
           .catch(function (e) {
             console.log(e);

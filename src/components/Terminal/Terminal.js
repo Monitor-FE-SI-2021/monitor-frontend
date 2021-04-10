@@ -4,11 +4,8 @@ import UseOnEnter from "./components/UseOnEnter";
 import MapConsoleOutput from "./components/MapConsoleOutput";
 import "./terminal.scss";
 import { connect } from "react-redux";
-<<<<<<< HEAD
 import request, { wsEndpoint } from "../../service";
-=======
 import { STORAGE_KEY } from "../../utils/consts";
->>>>>>> 522944f5e7ea0ae1f8d60cd2840e7f27b8abaf25
 //merge
 // import firebase from "firebase/app";
 // import "firebase/firestore";

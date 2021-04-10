@@ -6,29 +6,6 @@ import request, { authEndpoint, forgotPassword, resetPassword, users, userSecuri
 const endpoint = 'https://si-2021.167.99.244.168.nip.io/api';
 const getLogs = `${endpoint}/user/GetAllUsers`;
 
-<<<<<<< HEAD
-    //console.log("-----firebase-----")
-    var db = firebase.firestore();
-    var collectionRef = db.collection("saved_logs")
-                            .doc(comp_name)
-                            .collection("commands")
-                            .orderBy("createdAt")
-                            .limit(100);
-
-    return collectionRef //.where("capital", "==", true)
-            .get()
-            .then((querySnapshot) => {
-                querySnapshot.forEach((doc) => {
-                    var response = doc.data()
-                    //console.log(doc.id, " => ", " args:"+response.args+
-                    //" command_type "+response.command_type+" response "+response.response+" "+response.createdAt);
-                    savedLogs.push(logsConverter.fromFirestore(doc));
-                });
-                return savedLogs;
-            })
-            .catch((error) => {
-                console.log("Error getting documents: ", error);
-=======
 async function retrieveLogsFromDatabase(deviceId) {
     var logs = [];
     console.log("device id: "+deviceId)
@@ -43,7 +20,6 @@ async function retrieveLogsFromDatabase(deviceId) {
                     });
                     return logs;
                 }
->>>>>>> 522944f5e7ea0ae1f8d60cd2840e7f27b8abaf25
             });
 
     // console.log("-----firebase-----")
@@ -108,13 +84,8 @@ componentDidMount() {
 
 renderLogs = async() => {
     try {
-<<<<<<< HEAD
-        var res = await retrieveDataFromFirebase(this.props.name)
-        //console.log("data "+ JSON.stringify(res, null, 4));
-=======
         var res = await retrieveLogsFromDatabase(this.props.deviceId)
         // console.log("data "+ JSON.stringify(res, null, 4));
->>>>>>> 522944f5e7ea0ae1f8d60cd2840e7f27b8abaf25
         // this will re render the view with new data
         this.setState({
             Logs: res.map((log) => (
