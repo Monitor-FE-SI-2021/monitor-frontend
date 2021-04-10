@@ -237,11 +237,10 @@ class FileManagerTable extends React.Component {
     }
 
     displayFormattedDate(date) {
-        return date.substring(8, 10) + ". " + date.substring(4, 7) + date.substring(10, 21);
+        return date.substring(8, 11) + date.substring(4, 7) + date.substring(10, 21);
     }
 
-    handleClick = async (id) => {
-        console.log("proslijedio sam id: ",id);
+    handleClick = async (selectedId) => {
         //#region Help ako treba neki request poslat TODO
         /*aaaaaa
         try{
@@ -312,7 +311,7 @@ class FileManagerTable extends React.Component {
         //*/
         //#endregion
 
-        var file = this.state.responseObject[id];
+        var file = this.state.responseObject.find(file => file.id == selectedId);
         if (file.data.type == 'file') {
             if(file.data.extension != '.txt') return;
 
