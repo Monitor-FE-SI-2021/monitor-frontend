@@ -6,10 +6,10 @@ import BarChart from "./components/charts/BarChart";
 import ActiveMachine from "./components/ActiveMachine";
 import request, { devices, errors } from "../../service";
 import GoogleMapMonitors from "./components/GoogleMapMonitors";
+import DatePicker from "react-datepicker";
 
-import "react-modern-calendar-datepicker/lib/DatePicker.css";
-import DatePicker from "react-modern-calendar-datepicker";
-import { utils } from "react-modern-calendar-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
 import "./dashboard.scss";
 import {Bar} from "react-chartjs-2";
 import {STORAGE_KEY} from "../../utils/consts";
@@ -84,7 +84,7 @@ function convertStatistics(statistic) {
 }
 
 function convertDateFormat(date) {
-    return new Date(date.year, date.month-1, date.day+1).toISOString()
+    return new Date(date.getFullYear(), date.getMonth()-1, date.getDate()).toISOString()
 }
 
 const allMachinesString = "All machines"
@@ -98,38 +98,19 @@ let allErrors = []
 export let barchartMaxValue = 50
 
 const Dashboard = ({ user }) => {
-    let end = new Date();
-    let endDefaultValue = {
-        year: end.getFullYear(),
-        month: end.getMonth()+1,
-        day: end.getUTCDate()
-    };
     
     let activeMachines = []
     const [machines, setMachines] = React.useState([]);
     const [active, setActive] = React.useState([...activeMachines]);
     const [showCharts, setShowCharts] = React.useState(false);
+    let end = new Date();
+    const [endDate, setEndDate] = React.useState(end);
+    let start = new Date(end.getTime() - (7 * 24 * 60 * 60 * 1000));
+    const [startDate, setStartDate] = React.useState(start);
     const [chartType, setChartType] = React.useState(true)
 
 
-    const [endDate, setEndDate] = React.useState(utils().getToday());
-    const endformatInputValue = () => {
-        if (!endDate) return '';
-        return `${endDate.day}/${endDate.month}/${endDate.year}`;
-      };
     
-    let st= new Date(endDate.year,endDate.month-1,endDate.day);
-    let start = new Date(st.getTime() - (7 * 24 * 60 * 60 * 1000));
-    let startDefaultValue = {
-        year: start.getFullYear(),
-        month: start.getMonth()+1,
-        day: start.getDate()
-    };
-    const [startDate, setStartDate] = React.useState(startDefaultValue);
-    const startformatInputValue = () => {
-        if (!startDate) return '';
-        return `${startDate.day}/${startDate.month}/${startDate.year}`;
-      };
     
     function filterActive(activeMachines, allMachines) {
         return activeMachines ? activeMachines.filter((machine) => {
@@ -296,32 +277,30 @@ const Dashboard = ({ user }) => {
 
 
                         <div className="pickers">
-                            <h5 className="picker-h5">Date Range Input</h5>
-                            <DatePicker
-                             className="picker"
-                             value={startDate}
-                             onChange={(date) => {
-                                 setStartDate(date)
-                                 datePickerChange(date, endDate)
-                             }}
-                             maximumDate={endDate}
-                             formatInputText={startformatInputValue} // format value
-
-                             inputClassName="my-custom-input" // custom class
-                             shouldHighlightWeekends
-                            />
-                            <DatePicker
-                             className="picker"
-                             value={endDate}
-                             onChange={(date) => {
-                                 setEndDate(date)
-                                 datePickerChange(startDate, date)
-                             }}
-                             formatInputText={endformatInputValue} // format value
-                             minimumDate={startDate}
-                             inputClassName="my-custom-input" // custom class
-                             shouldHighlightWeekends
-                            />
+                        <h5 className="picker-h5">Date Range Input</h5>
+                        <DatePicker
+                         className="picker"
+                         selected={startDate}
+                         onChange={date => {
+                            date.setHours(0, 0, 0);
+                            setStartDate(date)
+                            datePickerChange(date, endDate)
+                         }}
+                         maxDate={endDate}
+                         className="my-custom-input" // custom class
+                        />
+                        <DatePicker
+                         className="picker"
+                         selected={endDate}
+                         onChange={date => {
+                             date.setHours(23, 59, 59);
+                             setEndDate(date)
+                             datePickerChange(date, endDate)
+                        }}
+                         minDate={startDate}
+                         className="my-custom-input" // custom class
+                        />
+                       
                         </div>
 
                         <button onClick={() => {setChartType(!chartType)}}>Change</button>
