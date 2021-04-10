@@ -164,7 +164,7 @@ export default function CustomTable({ data, fields, children, groupId }) {
                         ))}
                     </TableRow>
                 </TableHead>
-                <Droppable droppableId = {`${uuid()}`} key = {`${uuid()}`}>
+                <Droppable droppableId = {`${uuid()}`} >
                     {(provided, snapshot) => (
                         <TableBody
                             {...provided.droppableProps}
@@ -173,7 +173,7 @@ export default function CustomTable({ data, fields, children, groupId }) {
                             {provided.placeholder}
                             {tableData.map((row, rowIndex) => (
                                 <Draggable
-                                    draggableId = {`${row.id ?? rowIndex}`}
+                                    draggableId = {`${data[rowIndex].deviceUid}`}
                                     key = {row.id ?? rowIndex}
                                     index = {rowIndex}
                                 >
