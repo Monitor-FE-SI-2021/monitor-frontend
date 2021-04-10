@@ -5,10 +5,10 @@ import DonutChart from "./components/charts/DonutChart";
 import ActiveMachine from "./components/ActiveMachine";
 import request, { devices } from "../../service";
 import GoogleMapMonitors from "./components/GoogleMapMonitors";
+import DatePicker from "react-datepicker";
 
-import "react-modern-calendar-datepicker/lib/DatePicker.css";
-import DatePicker from "react-modern-calendar-datepicker";
-import { utils } from "react-modern-calendar-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
 import "./dashboard.scss";
 import { LiveTv } from "@material-ui/icons";
 
@@ -97,36 +97,17 @@ let allMachinesUsage = null
 let lastDisconnected = null
 
 const Dashboard = ({ user }) => {
-    let end = new Date();
-    let endDefaultValue = {
-        year: end.getFullYear(),
-        month: end.getMonth()+1,
-        day: end.getUTCDate()
-    };
     
     let activeMachines = []
     const [machines, setMachines] = React.useState([]);
     const [active, setActive] = React.useState([...activeMachines]);
     const [showCharts, setShowCharts] = React.useState(false);
+    let end = new Date();
+    const [endDate, setEndDate] = React.useState(end);
    
-    const [endDate, setEndDate] = React.useState(utils().getToday());
-    const endformatInputValue = () => {
-        if (!endDate) return '';
-        return `${endDate.day}/${endDate.month}/${endDate.year}`;
-      };
-    
-    let st= new Date(endDate.year,endDate.month-1,endDate.day);
-    let start = new Date(st.getTime() - (7 * 24 * 60 * 60 * 1000));
-    let startDefaultValue = {
-        year: start.getFullYear(),
-        month: start.getMonth()+1,
-        day: start.getDate()
-    };
-    const [startDate, setStartDate] = React.useState(startDefaultValue);
-    const startformatInputValue = () => {
-        if (!startDate) return '';
-        return `${startDate.day}/${startDate.month}/${startDate.year}`;
-      };
+    let start = new Date(end.getTime() - (7 * 24 * 60 * 60 * 1000));
+   
+    const [startDate, setStartDate] = React.useState(start);
     
     function filterActive(activeMachines, allMachines) {
         return activeMachines ? activeMachines.filter((machine) => {
@@ -272,22 +253,18 @@ const Dashboard = ({ user }) => {
                         <h5 className="picker-h5">Date Range Input</h5>
                         <DatePicker
                          className="picker"
-                         value={startDate}
-                         onChange={setStartDate}
-                         maximumDate={endDate}
-                         formatInputText={startformatInputValue} // format value
+                         selected={startDate}
+                         onChange={date => setStartDate(date)}
+                         maxDate={endDate}
                          
-                         inputClassName="my-custom-input" // custom class
-                         shouldHighlightWeekends
+                         className="my-custom-input" // custom class
                         />
                         <DatePicker
                          className="picker"
-                         value={endDate}
-                         onChange={setEndDate}
-                         formatInputText={endformatInputValue} // format value
-                         minimumDate={startDate}
-                         inputClassName="my-custom-input" // custom class
-                         shouldHighlightWeekends
+                         selected={endDate}
+                         onChange={date => setEndDate(date)}
+                         minDate={startDate}
+                         className="my-custom-input" // custom class
                         />
                        
                         </div>
