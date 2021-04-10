@@ -18,7 +18,7 @@ import { LiveTv } from "@material-ui/icons";
 
 let barChart = {
 
-    labels: ['100', '200', '300', '400', '500'],
+    labels: ['0', '100', '200', '300', '400', '500'],
     datasets:[
         {
             label:"Number of errors of type",
@@ -93,6 +93,7 @@ let removedMachine = null
 let clickedMachine = null
 let allMachinesUsage = null
 let lastDisconnected = null
+let allErrors = []
 
 export let barchartMaxValue = 50
 
@@ -144,8 +145,10 @@ const Dashboard = ({ user }) => {
     }
 
     function getStatistics(machine, startDate, endDate) {
-        console.log(machine, convertDateFormat(startDate), convertDateFormat(endDate))
-        request(devices + "/GetDeviceLogs?deviceId=" + machine.deviceId + "&startDate=" + convertDateFormat(startDate) + "&endDate=" + convertDateFormat(endDate))
+        startDate = convertDateFormat(startDate)
+        endDate = convertDateFormat(endDate)
+        console.log(machine)
+        request(devices + "/GetDeviceLogs?deviceId=" + machine.deviceId + "&startDate=" + startDate + "&endDate=" + endDate)
             .then((res) => res.data.data)
             .then((res) => {
                 console.log(res)
@@ -153,30 +156,13 @@ const Dashboard = ({ user }) => {
             })
             .catch((err) => console.log(err));
 
-/*
-        fetch(errors + "/DateInterval", {
-            method: "GET",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-                Authorization: "Bearer " + window.localStorage.getItem(STORAGE_KEY),
-            },
-            body: JSON.stringify({
-                deviceUID: machine.deviceUid,
-                startDate: "2021-01-09T11:42:10.180Z",
-                endDate: "2021-04-09T11:42:10.180Z"
-            }),
-        })
-            .then((res) => console.log(res.json()))*/
-/*
-        request(errors + "/DateInterval", "get", {
-            deviceUID: machine.deviceUid,
-            startDate: "2021-01-09T11:42:10.180Z",
-            endDate: "2021-04-09T11:42:10.180Z"
-        })
-            .then((res) => console.log(res.data.data))
+        request(errors + "/DateInterval?DeviceUID=" + machine.deviceUid + "&StartDate=" + startDate + "&EndDate" + endDate)
+            .then((res) => res.data.data)
+            .then((res) => {
+                console.log(res)
+                barchartMaxValue = res.errorNumber + 10
+            })
 
-*/
     }
 
     function getAllDevicesStatistics(startDate, endDate) {
@@ -196,6 +182,20 @@ const Dashboard = ({ user }) => {
         }
     }
 
+    function setErrorCharts(errorList) {
+        let numberOfEachError = [0,0,0,0,0,0]
+        errorList.forEach((machine) => {
+            const errorsByType = machine.errorTypeInfos
+            errorsByType.forEach((error) => {
+                numberOfEachError[Math.floor(error.code / 100)] += error.errorCodeNumber
+            })
+        })
+        const numberOfErrors = numberOfEachError.reduce((a,b) => a+b, 0)
+        barchartMaxValue = numberOfErrors + (10 - numberOfErrors % 10)
+        barChart.datasets[0].data = numberOfEachError
+    }
+
+
     React.useEffect(() => {
         request(devices + "/AllDevices")
             .then((res) => {
@@ -214,6 +214,10 @@ const Dashboard = ({ user }) => {
                 allMachinesUsage = res.data.data
                 setCharts(allMachinesUsage, { name: allMachinesString })
             })
+
+        request(errors + "/AllDateInterval?StartDate=" + convertDateFormat(startDate) + "&EndDate" + convertDateFormat(endDate))
+            .then((res) => allErrors = res.data.data)
+            .then(() => setErrorCharts(allErrors))
 
     }, []);
 
