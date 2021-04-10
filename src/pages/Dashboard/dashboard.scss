@@ -18,7 +18,8 @@
 h1,
 h2,
 h3,
-h4 {
+h4,
+h5 {
   color: #353535;
 }
 
@@ -82,4 +83,20 @@ h4 {
   width: 100%;
   box-shadow: 0 10px 20px #ccc;
   border-radius: 25px;
+}
+
+.my-custom-input{
+  margin: 0 0 0 10px;
+  width: 150px;
+  border-radius: 6px;
+	box-shadow: 0 1px 3px #ccc;
+}
+
+.picker-h5{
+  margin: 0 8px
+}
+.pickers{
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

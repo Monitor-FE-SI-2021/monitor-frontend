@@ -6,6 +6,9 @@ import BarChart from "./components/charts/BarChart";
 import ActiveMachine from "./components/ActiveMachine";
 import request, { devices, errors } from "../../service";
 import GoogleMapMonitors from "./components/GoogleMapMonitors";
+
+import "react-modern-calendar-datepicker/lib/DatePicker.css";
+import DatePicker from "react-modern-calendar-datepicker";
 import "./dashboard.scss";
 import {Bar} from "react-chartjs-2";
 import {STORAGE_KEY} from "../../utils/consts";
@@ -107,6 +110,8 @@ function convertStatistics(statistic) {
     return [Math.round(statistic * 100), Math.round((1 - statistic) * 100)];
 }
 
+const allMachinesString = "All machines"
+
 let removedMachine = null
 let clickedMachine = null
 let allMachinesUsage = null
@@ -115,6 +120,18 @@ let lastDisconnected = null
 export let barchartMaxValue = 50
 
 const Dashboard = ({ user }) => {
+    let end = new Date();
+    const endDefaultValue = {
+        year: end.getFullYear(),
+        month: end.getMonth()+1,
+        day: end.getUTCDate()
+    };
+    let start = new Date(end.getTime() - (7 * 24 * 60 * 60 * 1000));
+    const startDefaultValue = {
+        year: start.getFullYear(),
+        month: start.getMonth()+1,
+        day: start.getUTCDate()
+    };
     let activeMachines = []
     const [machines, setMachines] = React.useState([]);
     const [active, setActive] = React.useState([...activeMachines]);
@@ -122,6 +139,19 @@ const Dashboard = ({ user }) => {
     const [chartType, setChartType] = React.useState(true)
 
 
+
+    const [endDate, setEndDate] = React.useState(endDefaultValue);
+    const endformatInputValue = () => {
+        if (!endDate) return '';
+        return `${endDate.day}/${endDate.month}/${endDate.year}`;
+      };
+    
+    const [startDate, setStartDate] = React.useState(startDefaultValue);
+    const startformatInputValue = () => {
+        if (!startDate) return '';
+        return `${startDate.day}/${startDate.month}/${startDate.year}`;
+      };
+    
     function filterActive(activeMachines, allMachines) {
         return activeMachines ? activeMachines.filter((machine) => {
             const existingMachine = allMachines.find(({ deviceUid }) => {
@@ -134,6 +164,8 @@ const Dashboard = ({ user }) => {
             return existingMachine;
         }) : [];
     }
+
+    console.log(startDate, endDate)
 
     function getStatistics(machine) {
         console.log(machine)
@@ -211,7 +243,7 @@ const Dashboard = ({ user }) => {
         request(devices + "/GetAverageHardwareUsageForUser")
             .then((res) => {
                 allMachinesUsage = res.data.data
-                setCharts(allMachinesUsage, { name: "All machines" })
+                setCharts(allMachinesUsage, { name: allMachinesString })
             })
 
     }, []);
@@ -233,7 +265,7 @@ const Dashboard = ({ user }) => {
             cloned.splice(index, 1);
             lastDisconnected = machine
             if (cloned.length === 0 || removedMachine?.deviceId === clickedMachine?.deviceId) {
-                clickedMachine = { name: "All machines" }
+                clickedMachine = { name: allMachinesString }
                 setCharts(allMachinesUsage, clickedMachine)
             }
             setActive(cloned);
@@ -248,7 +280,7 @@ const Dashboard = ({ user }) => {
                        }, machine) => {
         if (machine === lastDisconnected) return
         clickedMachine = machine
-        if (machine?.name === "All machines" || removedMachine?.deviceId !== machine?.deviceId) {
+        if (machine?.name === allMachinesString || removedMachine?.deviceId !== machine?.deviceId) {
             cpuUsageChart.datasets[0].data = convertStatistics(averageCPUUsage);
             gpuUsageChart.datasets[0].data = convertStatistics(averageGPUUsage);
             hddUsageChart.datasets[0].data = convertStatistics(averageHDDUsage);
@@ -286,6 +318,30 @@ const Dashboard = ({ user }) => {
                 {showCharts && (
                     <div>
                         <h2 className="machineName">{clickedMachine?.name}</h2>
+
+
+                        <div className="pickers">
+                            <h5 className="picker-h5">Date Range Input</h5>
+                            <DatePicker
+                                className="picker"
+                                value={startDate}
+                                onChange={setStartDate}
+                                formatInputText={startformatInputValue} // format value
+
+                                inputClassName="my-custom-input" // custom class
+                                shouldHighlightWeekends
+                            />
+                            <DatePicker
+                                className="picker"
+                                value={endDate}
+                                onChange={setEndDate}
+                                formatInputText={endformatInputValue} // format value
+
+                                inputClassName="my-custom-input" // custom class
+                                shouldHighlightWeekends
+                            />
+                        </div>
+
                         <button onClick={() => {setChartType(!chartType)}}>Change</button>
                         { chartType && (
                             <div className="chartContainer">
@@ -309,9 +365,10 @@ const Dashboard = ({ user }) => {
                                         chartData={hddUsageChart}
                                     />
                                 </div>
-
                             </div>
                         )}
+
+
                         { !chartType && (
                             <div className="chartContainer">
                                     <BarChart chartData={barChart}/>
