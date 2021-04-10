@@ -292,10 +292,6 @@ class FileManagerTable extends React.Component {
     }
 
     addFolder = async (newFolder) => {
-
-        //this.state.activeFolder += '/' + newFolder;
-        //var path = this.state.activeFolder + '/' + newFolder;
-
         try {
             const requestOptions = {
                 method: "POST",
