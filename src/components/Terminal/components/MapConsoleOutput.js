@@ -1,7 +1,7 @@
 import React from "react";
 import Prompt from "./Prompt";
 import request, { wsEndpoint } from "../../../service";
-import updateNewLog from "./UpdateLogInFirebase";
+import addNewLog from "./SaveLogToFirebase";
 import config from "../config";
 //push
 const MapConsoleOutput = ({
@@ -52,6 +52,7 @@ const MapConsoleOutput = ({
             clone[clone.length - 1] = modified;
             
             if (clone != "" || clone != null) updateConsoleOutput(clone);
+<<<<<<< HEAD
   
             updateNewLog(clone, name);
 
@@ -71,12 +72,24 @@ const MapConsoleOutput = ({
             //   console.log(e)
             // })
   
+=======
+            //else updateConsoleOutput("Server Response error");
+            if(!clone.includes("Valid Command!")){
+              window.localStorage.setItem("response", clone);
+              addNewLog();
+            }
+            //setPut(res.path)
+>>>>>>> 522944f5e7ea0ae1f8d60cd2840e7f27b8abaf25
           })
           .catch(function (e) {
             console.log(e);
             console.log("A JA NECU DA SE KRIJEM")
             const clone = [...consoleOutput];
-            updateNewLog("Poziv nije uspio", name);
+            // updateNewLog("Poziv nije uspio", name);
+            if(!clone.includes("Valid Command!")){
+              window.localStorage.setItem("response", "Poziv nije uspio");
+              addNewLog();
+            }
             clone[clone.length - 1] = "Poziv nije uspio";
             updateConsoleOutput(clone);
           });

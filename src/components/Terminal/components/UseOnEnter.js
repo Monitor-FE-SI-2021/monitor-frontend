@@ -63,22 +63,24 @@ const UseOnEnter = () => {
       )}
         //console.log("Name ", name)
       if(args.length>1){
-        addNewLog({
-          command_type: args[0].toString(),
-          args: args[1].toString(),
-          response: ""
-        }, name)
-        return updateConsoleOutput(consoleOutput => consoleOutput.concat("Valid Command!" + newInput2 + "!")),setCounter(counter=>counter+1); 
-        //return updateConsoleOutput(consoleOutput => consoleOutput.concat("Valid Command!" + args[0].toString() + " " + args[1].toString() + "!")),setCounter(counter=>counter+1); 
+        // addNewLog({
+        //   command_type: args[0].toString(),
+        //   args: args[1].toString(),
+        //   response: ""
+        // }, name)
+        window.localStorage.setItem("command_type", args[0].toString())
+        window.localStorage.setItem("args", args[1].toString())
+        return updateConsoleOutput(consoleOutput => consoleOutput.concat("Valid Command!" + args[0].toString() + " " + args[1].toString() + "!")),setCounter(counter=>counter+1); 
       }
       else {
-        addNewLog({
-          command_type: args[0].toString(),
-          args: "",
-          response: ""
-        }, name)
-        return updateConsoleOutput(consoleOutput => consoleOutput.concat("Valid Command!" + newInput2 + "!")),setCounter(counter=>counter+1);
-        //return updateConsoleOutput(consoleOutput => consoleOutput.concat("Valid Command!" + args[0].toString() + "!")),setCounter(counter=>counter+1); 
+        // addNewLog({
+        //   command_type: args[0].toString(),
+        //   args: "",
+        //   response: ""
+        // }, name)
+        window.localStorage.setItem("command_type", args[0].toString())
+        window.localStorage.setItem("args", "")
+        return updateConsoleOutput(consoleOutput => consoleOutput.concat("Valid Command!" + args[0].toString() + "!")),setCounter(counter=>counter+1); 
       }
     }
   };

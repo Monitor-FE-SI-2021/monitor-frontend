@@ -6,6 +6,8 @@ import './RemoteAccess.scss';
 
 import Terminal from '../../components/Terminal/Terminal';
 import RemoteControl from '../RemoteControl/RemoteControl';
+import DropDownList from '../../components/LogsOverview/LogsOverview'
+import LogsOverview from '../../components/LogsOverview/LogsOverview';
 
 const RemoteAccess = ({ machine }) => {
 	return (
@@ -20,6 +22,9 @@ const RemoteAccess = ({ machine }) => {
 					<Tab>
 						<span className='react-tabs__tab__label'>Screenshot</span>
 					</Tab>
+					<Tab>
+						<span className='react-tabs__tab__label'>History</span>
+					</Tab>
 				</TabList>
 
 				<TabPanel>
@@ -29,6 +34,11 @@ const RemoteAccess = ({ machine }) => {
 				<TabPanel>
 					<RemoteControl machine={machine} />
 				</TabPanel>
+
+				<TabPanel>
+					<LogsOverview machine={machine}/>
+				</TabPanel>
+				
 			</Tabs>
 		</div>
 	);

@@ -4,20 +4,24 @@ import UseOnEnter from "./components/UseOnEnter";
 import MapConsoleOutput from "./components/MapConsoleOutput";
 import "./terminal.scss";
 import { connect } from "react-redux";
+<<<<<<< HEAD
 import request, { wsEndpoint } from "../../service";
+=======
+import { STORAGE_KEY } from "../../utils/consts";
+>>>>>>> 522944f5e7ea0ae1f8d60cd2840e7f27b8abaf25
 //merge
-import firebase from "firebase/app";
-import "firebase/firestore";
+// import firebase from "firebase/app";
+// import "firebase/firestore";
 import HistoryLogs from "./components/SavedLogs";
 const config = require("./config");
-firebase.initializeApp({
-  apiKey: config.apiKey,
-  authDomain: config.authDomain,
-  projectId: config.projectId,
-  storageBucket: config.storageBucket,
-  messagingSenderId: config.messagingSenderId,
-  appId: config.appId,
-});
+// firebase.initializeApp({
+//   apiKey: config.apiKey,
+//   authDomain: config.authDomain,
+//   projectId: config.projectId,
+//   storageBucket: config.storageBucket,
+//   messagingSenderId: config.messagingSenderId,
+//   appId: config.appId,
+// });
 var counterOfSavedLogs = 0;
 var counterOfTabCommands = -1;
 
@@ -91,6 +95,12 @@ const Terminal = (props) => {
   counterOfSavedLogs = counter;
   //pravljenje novog brancha
   React.useEffect(() => {
+    const token = localStorage.getItem(STORAGE_KEY);
+    console.log("TOKEN: "+token);
+    console.log("setting device_id to local storage "+props.machine.deviceId);
+    console.log("setting user to local storage "+props.user)
+    window.localStorage.setItem("device_id", props.machine.deviceId);
+    window.localStorage.setItem("userId", props.user.userId);
     inputText.current.value = "";
     inputText.current.focus();
   });
@@ -135,6 +145,7 @@ const Terminal = (props) => {
         <HistoryLogs
           path={props.machine.path}
           name={props.machine.name}
+          deviceId={props.machine.deviceId}
         />
         <MapConsoleOutput
           name={props.machine.name}
