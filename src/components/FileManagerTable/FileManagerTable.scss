@@ -105,8 +105,15 @@
   }
 
   .sort-strelica:hover {
-    transition: 0.2s ease-in-out;
+    transition: 0.3s ease-in-out;
     background-color: #ffca26;
     border-radius: 100%;
+  }
+
+  .file-name-div {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    padding-left: 8px;
   }
 }

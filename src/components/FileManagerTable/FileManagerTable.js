@@ -8,7 +8,7 @@ import Swal from "sweetalert2";
 
 
 const config = require("../Terminal/config");
-const userFiles = "https://si-grupa5.herokuapp.com/api/web/user/fileList";
+const userFiles = "https://si-grupa5.herokuapp.com/api/web/user/file-tree";
 const folderIconUrl = "https://img.icons8.com/color/40/000000/folder-invoices--v2.png";
 const fileIconUrl = "https://img.icons8.com/office/40/000000/document--v2.png";
 
@@ -159,14 +159,8 @@ class FileManagerTable extends React.Component {
     renderTableHeader() {
         return (
             <tr className="header-row">
-                {/* <th>ID</th> */}
                 <th>
-                    <div style={{
-                        display: "flex",
-                        justifyContent: "left",
-                        alignItems: "center",
-                        paddingLeft: "8px"
-                    }}>
+                    <div className="file-name-div">
                         <span>File name</span>
                         <img onClick={() => {this.sortFilesDescending()}} className="sort-strelica" src="https://img.icons8.com/material-rounded/24/000000/sort-down.png"></img>
                         <img onClick={() => {this.sortFilesAscending()}} className="sort-strelica" src="https://img.icons8.com/material-rounded/24/000000/sort-up.png"/>
@@ -179,8 +173,8 @@ class FileManagerTable extends React.Component {
                         alignItems: "center"
                     }}>
                         <span>Date added</span>
-                        <img onClick={() => {}} className="sort-strelica" src="https://img.icons8.com/material-rounded/24/000000/sort-down.png"></img>
-                        <img onClick={() => {}} className="sort-strelica" src="https://img.icons8.com/material-rounded/24/000000/sort-up.png"/>
+                        <img onClick={() => {this.sortDateDescending()}} className="sort-strelica" src="https://img.icons8.com/material-rounded/24/000000/sort-down.png"></img>
+                        <img onClick={() => {this.sortDateAscending()}} className="sort-strelica" src="https://img.icons8.com/material-rounded/24/000000/sort-up.png"/>
                     </div>
                 </th>
                 <th colSpan="2" className="centriraj">File manipulation</th>
@@ -188,7 +182,7 @@ class FileManagerTable extends React.Component {
         )
     }
 
-    sortFilesDescending() {
+    sortFilesDescending = () => {
         this.state.responseObject.sort((f1, f2) => {
             let name1 = f1.fileName.toUpperCase(),
                 name2 = f2.fileName.toUpperCase();
@@ -197,7 +191,7 @@ class FileManagerTable extends React.Component {
         this.setState(this.state);
     }
 
-    sortFilesAscending() {
+    sortFilesAscending = () => {
         this.state.responseObject.sort((f1, f2) => {
             let name1 = f1.fileName.toUpperCase(),
                 name2 = f2.fileName.toUpperCase();
@@ -206,18 +200,35 @@ class FileManagerTable extends React.Component {
         this.setState(this.state);
     }
 
+    sortDateDescending = () => {
+        this.state.responseObject.sort((f1, f2) => {
+            let date1 = new Date(f1.data.birthtime),
+                date2 = new Date(f2.data.birthtime);
+            return date1 == date2 ? 0 : date1 > date2 ? -1 : 1;
+        });
+        this.setState(this.state);
+    }
+
+    sortDateAscending = () => {
+        this.state.responseObject.sort((f1, f2) => {
+            let date1 = new Date(f1.data.birthtime),
+                date2 = new Date(f2.data.birthtime);
+            return date1 == date2 ? 0 : date1 > date2 ? 1 : -1;
+        });
+        this.setState(this.state);
+    }
+
     renderTableData() {
         return this.state.responseObject.map((oneObject, index) => {
             const { id, fileName, link } = oneObject;
-            console.log("Ovo je moje: ",oneObject)
+            let date = new Date(oneObject.data.birthtime).toString();
             return (
                 <tr>
-                    {/* <td className="id">{id}</td> */}
                     <td className="file-download pomjereni-naziv file-icon" onClick={() => { this.handleClick(id) }} >
-                        <img className="file-icon" src={oneObject.data.type == "file" ? fileIconUrl : folderIconUrl}></img>
+                        <img className="file-icon" src={oneObject.data.type == "file" ? fileIconUrl : (oneObject.fileName == "LOADING..." ? "" : folderIconUrl)}></img>
                         {fileName}
                     </td>
-                    <td className="date-style">08.04.2021 23:22</td>
+                    <td className="date-style">{oneObject.fileName == "LOADING..." ? " " : this.displayFormattedDate(date)}</td>
                     <td className="file-manipulation file-delete centriraj" onClick={() => { this.handleDelete(id) }}>Delete</td>
                     <td className="file-manipulation file-rename centriraj" onClick={() => { this.handleRename(id) }}>Rename</td>
                 </tr>
@@ -225,7 +236,12 @@ class FileManagerTable extends React.Component {
         })
     }
 
+    displayFormattedDate(date) {
+        return date.substring(8, 10) + ". " + date.substring(4, 7) + date.substring(10, 21);
+    }
+
     handleClick = async (id) => {
+        console.log("proslijedio sam id: ",id);
         //#region Help ako treba neki request poslat TODO
         /*aaaaaa
         try{
@@ -422,10 +438,10 @@ class FileManagerTable extends React.Component {
                     })
                 };
 
-                return await fetch('https://si-grupa5.herokuapp.com/api/web/user/file/getText', requestOptions2)
+                return await fetch('https://si-grupa5.herokuapp.com/api/web/user/file/get-text', requestOptions2)
                     .then((res) => {
                         return res.json().then((res) => {
-                            console.log(res.text);
+                            //console.log(res.text);
                             returnable = res.text;
                             return res.text;
                         });
