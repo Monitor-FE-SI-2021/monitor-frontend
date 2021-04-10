@@ -296,8 +296,16 @@ const Dashboard = ({ user }) => {
                        <br></br>
                         </div>
                         <div className="stats">
-                        <button onClick={() => {setChartType(chartType = true)}}>Hardware Usage</button>
-                        <button onClick={() => {setChartType(chartType = false)}}>Errors</button>
+                        <button id="usage" onClick={() => {
+                            setChartType(chartType = true);
+                            document.getElementById("usage").style.backgroundColor = "white";
+                            document.getElementById("errors").style.backgroundColor = "#F8FAFB";
+                        }}>Hardware Usage</button>
+                        <button id="errors" onClick={() => {
+                            setChartType(chartType = false);
+                            document.getElementById("errors").style.backgroundColor = "white";
+                            document.getElementById("usage").style.backgroundColor = "#F8FAFB";
+                            }}>Errors</button>
                         </div>
                         { chartType && (
                             <div className="chartContainer">

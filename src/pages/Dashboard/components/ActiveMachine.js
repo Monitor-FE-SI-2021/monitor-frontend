@@ -15,7 +15,7 @@ const ActiveMachine = ({data, img, onDisconnect, getStatistics, sDate, eDate}) =
         () => getStatistics(data, sDate, eDate),
         300
     );
-
+    
     return (
         <>
             <div
