@@ -7,12 +7,12 @@ import Avatar from "./MachineAvatar.js";
 
 import './ActiveMachine.scss';
 
-const ActiveMachine = ({data, img, onDisconnect, getStatistics}) => {
+const ActiveMachine = ({data, img, onDisconnect, getStatistics, sDate, eDate}) => {
     const [remoteAccessOpen, setRemoteAccessOpen] = useState(false);
     const popup = useRef();
 
     const handleOnClick = debounce(
-        () => getStatistics(data),
+        () => getStatistics(data, sDate, eDate),
         300
     );
 
@@ -32,7 +32,7 @@ const ActiveMachine = ({data, img, onDisconnect, getStatistics}) => {
                     <div className="card-info">
                         <h3>{data.name}</h3>
                         <h3>{data.location}</h3>
-                        <p>{new Date(data.lastTimeOnline).toGMTString()}</p>
+                        <p>{new Date(data.lastTimeOnline).toLocaleString()}</p>
                     </div>
                 </div>
                 <div className="card-actions">

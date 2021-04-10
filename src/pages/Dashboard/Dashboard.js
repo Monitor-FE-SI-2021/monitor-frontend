@@ -2,15 +2,37 @@ import React from "react";
 import { connect } from "react-redux";
 import MachineIcon from "../../assets/icons/machine.png";
 import DonutChart from "./components/charts/DonutChart";
+import BarChart from "./components/charts/BarChart";
 import ActiveMachine from "./components/ActiveMachine";
-import request, { devices } from "../../service";
+import request, { devices, errors } from "../../service";
 import GoogleMapMonitors from "./components/GoogleMapMonitors";
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
 
 import "./dashboard.scss";
+import {Bar} from "react-chartjs-2";
+import {STORAGE_KEY} from "../../utils/consts";
 import { LiveTv } from "@material-ui/icons";
+
+
+let barChart = {
+
+    labels: ['100', '200', '300', '400', '500'],
+    datasets:[
+        {
+            label:"Number of errors of type",
+            data:[
+                1,
+                2,
+                3,
+                4,
+                8
+            ],
+            backgroundColor:'rgba(75, 192, 192, 0.6)'
+        }
+    ]
+}
 
 let ramUsageChart = {
     labels: ["Used", "Not used"],
@@ -56,45 +78,23 @@ let hddUsageChart = {
     ],
 };
 
-// let activeMachines = [
-//     {
-//         deviceUid: "fc548ecb-12ec-4ad5-8672-9d5a9565ff60",
-//         name: "Desktop PC 1",
-//         location: "Sarajevo - BBI",
-//         ip: "255.255.255.0",
-//         path: "C:/user/programfiles",
-//     },
-//         {
-//         deviceUid: "92649d24-fc46-44c6-b085-356977dbb782",
-//         name: "Desktop PC 2",
-//         location: "Sarajevo - BBI",
-//         ip: "255.255.255.0",
-//         path: "C:/user/programfiles",
-//     },
-//     {
-//         deviceUid: "eed19402-67c5-4978-9ad2-513cd5db6376",
-//         name: "Desktop PC 1",
-//         location: "Sarajevo - SCC",
-//         ip: "255.255.255.0",
-//         path: "C:/user/programfiles",
-//     },
-//     {
-//         deviceUid: "d3143e54-d497-402f-82ef-b1b213c1d172",
-//         name: "Desktop PC 2",
-//         location: "Sarajevo - SCC",
-//         ip: "255.255.255.0",
-//         path: "C:/user/programfiles",
-//     }
-// ];
 
 function convertStatistics(statistic) {
     return [Math.round(statistic * 100), Math.round((1 - statistic) * 100)];
 }
 
+function convertDateFormat(date) {
+    return new Date(date.getFullYear(), date.getMonth()-1, date.getDate()).toISOString()
+}
+
+const allMachinesString = "All machines"
+
 let removedMachine = null
 let clickedMachine = null
 let allMachinesUsage = null
 let lastDisconnected = null
+
+export let barchartMaxValue = 50
 
 const Dashboard = ({ user }) => {
     
@@ -104,10 +104,12 @@ const Dashboard = ({ user }) => {
     const [showCharts, setShowCharts] = React.useState(false);
     let end = new Date();
     const [endDate, setEndDate] = React.useState(end);
-   
     let start = new Date(end.getTime() - (7 * 24 * 60 * 60 * 1000));
-   
     const [startDate, setStartDate] = React.useState(start);
+    const [chartType, setChartType] = React.useState(true)
+
+
+    
     
     function filterActive(activeMachines, allMachines) {
         return activeMachines ? activeMachines.filter((machine) => {
@@ -122,40 +124,58 @@ const Dashboard = ({ user }) => {
         }) : [];
     }
 
-   
-    function getStatistics(machine) {
-        console.log(machine)
-        request(devices + "/GetDeviceLogs?deviceId=" + machine.deviceId)
+    function getStatistics(machine, startDate, endDate) {
+        console.log(machine, convertDateFormat(startDate), convertDateFormat(endDate))
+        request(devices + "/GetDeviceLogs?deviceId=" + machine.deviceId + "&startDate=" + convertDateFormat(startDate) + "&endDate=" + convertDateFormat(endDate))
             .then((res) => res.data.data)
             .then((res) => {
+                console.log(res)
                 setCharts(res, machine);
             })
             .catch((err) => console.log(err));
+
+/*
+        fetch(errors + "/DateInterval", {
+            method: "GET",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + window.localStorage.getItem(STORAGE_KEY),
+            },
+            body: JSON.stringify({
+                deviceUID: machine.deviceUid,
+                startDate: "2021-01-09T11:42:10.180Z",
+                endDate: "2021-04-09T11:42:10.180Z"
+            }),
+        })
+            .then((res) => console.log(res.json()))*/
+/*
+        request(errors + "/DateInterval", "get", {
+            deviceUID: machine.deviceUid,
+            startDate: "2021-01-09T11:42:10.180Z",
+            endDate: "2021-04-09T11:42:10.180Z"
+        })
+            .then((res) => console.log(res.data.data))
+
+*/
     }
 
-    /*
-        React.useEffect(() => {
-            request(devices + "/AllDevices")
-                .then((res) => {
-                    const allMachines = res.data.data;
-                    setMachines(allMachines);
-                    console.log(allMachines)
-                    request("https://si-grupa5.herokuapp.com/api/agent/online")
-                        .then((res) => {
-                            console.log(res)
-                            setActive(filterActive(res?.data, allMachines));
-                        })
-                })
-                .catch((err) => console.log(err));
+    function getAllDevicesStatistics(startDate, endDate) {
+        request(devices + "/GetAverageHardwareUsageForUser?startDate=" + convertDateFormat(startDate) + "&endDate" + convertDateFormat(endDate))
+            .then((res) => {
+                allMachinesUsage = res.data.data
+                setCharts(allMachinesUsage, { name: allMachinesString })
+            })
+    }
 
-            request(devices + "/GetAverageHardwareUsageForUser")
-                .then((res) => {
-                    allMachinesUsage = res.data.data
-                    console.log(allMachinesUsage)
-                    setCharts(allMachinesUsage, { name: "All machines"})
-                })
-        }, []);
-    */
+    function datePickerChange(startDate, endDate) {
+        if (clickedMachine?.name === allMachinesString) {
+            getAllDevicesStatistics(startDate, endDate)
+        }
+        else {
+            getStatistics(clickedMachine, startDate, endDate)
+        }
+    }
 
     React.useEffect(() => {
         request(devices + "/AllDevices")
@@ -173,7 +193,7 @@ const Dashboard = ({ user }) => {
         request(devices + "/GetAverageHardwareUsageForUser")
             .then((res) => {
                 allMachinesUsage = res.data.data
-                setCharts(allMachinesUsage, { name: "All machines" })
+                setCharts(allMachinesUsage, { name: allMachinesString })
             })
 
     }, []);
@@ -195,7 +215,7 @@ const Dashboard = ({ user }) => {
             cloned.splice(index, 1);
             lastDisconnected = machine
             if (cloned.length === 0 || removedMachine?.deviceId === clickedMachine?.deviceId) {
-                clickedMachine = { name: "All machines" }
+                clickedMachine = { name: allMachinesString }
                 setCharts(allMachinesUsage, clickedMachine)
             }
             setActive(cloned);
@@ -210,7 +230,7 @@ const Dashboard = ({ user }) => {
                        }, machine) => {
         if (machine === lastDisconnected) return
         clickedMachine = machine
-        if (machine?.name === "All machines" || removedMachine?.deviceId !== machine?.deviceId) {
+        if (machine?.name === allMachinesString || removedMachine?.deviceId !== machine?.deviceId) {
             cpuUsageChart.datasets[0].data = convertStatistics(averageCPUUsage);
             gpuUsageChart.datasets[0].data = convertStatistics(averageGPUUsage);
             hddUsageChart.datasets[0].data = convertStatistics(averageHDDUsage);
@@ -235,6 +255,8 @@ const Dashboard = ({ user }) => {
                                     img={MachineIcon}
                                     onDisconnect={disconnectMachine}
                                     getStatistics={getStatistics}
+                                    sDate={startDate}
+                                    eDate={endDate}
                                 />
                             ))
                         ) : (
@@ -248,13 +270,17 @@ const Dashboard = ({ user }) => {
                 {showCharts && (
                     <div>
                         <h2 className="machineName">{clickedMachine?.name}</h2>
-                        
+
+
                         <div className="pickers">
                         <h5 className="picker-h5">Date Range Input</h5>
                         <DatePicker
                          className="picker"
                          selected={startDate}
-                         onChange={date => setStartDate(date)}
+                         onChange={date => {
+                            setStartDate(date)
+                            datePickerChange(date, endDate)
+                         }}
                          maxDate={endDate}
                          
                          className="my-custom-input" // custom class
@@ -262,37 +288,49 @@ const Dashboard = ({ user }) => {
                         <DatePicker
                          className="picker"
                          selected={endDate}
-                         onChange={date => setEndDate(date)}
+                         onChange={date => {
+                             setEndDate(date)
+                             datePickerChange(date, endDate)
+                        }}
                          minDate={startDate}
                          className="my-custom-input" // custom class
                         />
                        
                         </div>
-                        
-                        <div className="chartContainer">
 
-                            <div className="row">
-                                <DonutChart
-                                    displayTitle="Average RAM usage"
-                                    chartData={ramUsageChart}
-                                />
-                                <DonutChart
-                                    displayTitle="Average CPU usage"
-                                    chartData={cpuUsageChart}
-                                />
+                        <button onClick={() => {setChartType(!chartType)}}>Change</button>
+                        { chartType && (
+                            <div className="chartContainer">
+                                <div className="row">
+                                    <DonutChart
+                                        displayTitle="Average RAM usage"
+                                        chartData={ramUsageChart}
+                                    />
+                                    <DonutChart
+                                        displayTitle="Average CPU usage"
+                                        chartData={cpuUsageChart}
+                                    />
+                                </div>
+                                <div className="row">
+                                    <DonutChart
+                                        displayTitle="Average GPU usage"
+                                        chartData={gpuUsageChart}
+                                    />
+                                    <DonutChart
+                                        displayTitle="Average disk usage"
+                                        chartData={hddUsageChart}
+                                    />
+                                </div>
                             </div>
-                            <div className="row">
-                                <DonutChart
-                                    displayTitle="Average GPU usage"
-                                    chartData={gpuUsageChart}
-                                />
-                                <DonutChart
-                                    displayTitle="Average disk usage"
-                                    chartData={hddUsageChart}
-                                />
-                            </div>
+                        )}
 
-                        </div>
+
+                        { !chartType && (
+                            <div className="chartContainer">
+                                    <BarChart chartData={barChart}/>
+
+                            </div>
+                        )}
                     </div>
                 )}
             </div>
