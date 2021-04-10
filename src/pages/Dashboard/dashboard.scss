@@ -147,8 +147,33 @@ h5 {
 .picker-h5{
   margin: 0 8px
 }
-.pickers{
+.pickers, .stats{
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.statistics{
+  width:50%
+}
+.react-datepicker__input-container input {
+  height: 30px;
+}
+.stats{
+  width:100%
+}
+.stats button{
+  border-radius: 10px;
+	background-color: transparent;
+	box-shadow: 0 2px 5px #ccc;
+	width: 45%;
+	height: 30px;
+	margin: 3% 0 0 2.5%;
+	border: #ccc;
+	font-size: 14px;
+	cursor: pointer;
+}
+.stats button:hover {
+	background-color: white;
+	
 }

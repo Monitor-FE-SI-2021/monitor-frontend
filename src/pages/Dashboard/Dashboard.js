@@ -103,7 +103,7 @@ const Dashboard = ({ user }) => {
     const [endDate, setEndDate] = React.useState(end);
     let start = new Date(end.getTime() - (7 * 24 * 60 * 60 * 1000));
     const [startDate, setStartDate] = React.useState(start);
-    const [chartType, setChartType] = React.useState(true)
+    let [chartType, setChartType] = React.useState(true)
 
 
     
@@ -265,12 +265,12 @@ const Dashboard = ({ user }) => {
                 </div>
 
                 {showCharts && (
-                    <div>
+                    <div className="statistics">
                         <h2 className="machineName">{clickedMachine?.name}</h2>
-
+                    <br></br>
 
                         <div className="pickers">
-                        <h5 className="picker-h5">Date Range Input</h5>
+                        <h5 className="picker-h5">Date range:</h5>
                         <DatePicker
                          className="picker"
                          selected={startDate}
@@ -293,10 +293,12 @@ const Dashboard = ({ user }) => {
                          minDate={startDate}
                          className="my-custom-input" // custom class
                         />
-                       
+                       <br></br>
                         </div>
-
-                        <button onClick={() => {setChartType(!chartType)}}>Change</button>
+                        <div className="stats">
+                        <button onClick={() => {setChartType(chartType = true)}}>Hardware Usage</button>
+                        <button onClick={() => {setChartType(chartType = false)}}>Errors</button>
+                        </div>
                         { chartType && (
                             <div className="chartContainer">
                                 <div className="row">
