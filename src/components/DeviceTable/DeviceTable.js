@@ -88,9 +88,10 @@ const DeviceTable = ({
             title: 'Naziv',
             sort: true,
         }].concat(showGroup ? [{
-            name: 'group',
+            name: 'groupName',
             title: 'Grupa',
             sort: true,
+            slot:'groupName'
         }] : []).concat([
         {
             name: 'location',
