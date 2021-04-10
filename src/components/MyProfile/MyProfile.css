@@ -25,8 +25,8 @@ label {
     width: 100%;
     margin: 0 0 0 0;
     padding: 10px;
-    -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
+    font-size: medium;
 }
 
 
@@ -62,11 +62,27 @@ body {
 .invalid{
     color: red;
 }
-.form p {
+.formChange {
+    max-width: 320px;
+    margin: auto;
+    padding: 20px;
+    background: #fafafa;
+    border: 1px solid #ccc;
+}
+.formChange input {
+    box-sizing: border-box;
+    width: 100%;
+    margin: 0 0 0 0;
+    padding: 10px;
+    -webkit-box-sizing: border-box;
+    font-size: medium;
+}
+.formChange p{
     height: min-content;
     font-size: small;
-    text-align: center;
-    margin-bottom: 10%;
-    margin-top: 0;
     padding: 0;
+    margin: 1% 0 5% 0;
+}
+.formChange h1 {
+    margin: 0 0 20px 0;
 }
