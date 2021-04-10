@@ -45,10 +45,20 @@ const Terminal = (props) => {
       novaLista.splice(0,7);
       novaLista = novaLista.map((item, index) => {
         item = item.replace(/ +/g, ' ').trim(); //pretvara vise razmaka u jedan
+        // item = item.replace("AM", "")
+        // item = item.replace("PM", "")
+        let ima = false;
+        if(item.match(/\b((1[0-2]|0?[1-9]):([0-5][0-9]) ([AaPp][Mm]))/)){
+          ima = true;
+          console.log("USO")
+        }
         item = item.split(" "); //splita po razmacima
+        
         if(item[0].includes("d")){
-          item.splice(0,3); //   
-          //console.log("Item je:" + item.toString().replace(/[, ]+/g, " ").trim());
+          if(ima)
+            item.splice(0,4);
+          else
+            item.splice(0,3); //   
           pomocnaLista.push(item.toString().replace(/[, ]+/g, " ").trim());
         }
       })

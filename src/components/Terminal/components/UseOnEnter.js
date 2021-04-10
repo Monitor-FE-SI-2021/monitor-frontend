@@ -54,8 +54,10 @@ const UseOnEnter = () => {
       const argument = String(commands[args[0]]);
 
       const newConsoleLine = String(commands[args[0]]) || "Invalid Command";
+      //newInput2 = "\""+newInput2 + "\""
+      //console.log("Input ", newInput2)
       
-      if(newConsoleLine==="Invalid Command" || args.length-1!==parseInt(argument)){
+      if(newConsoleLine==="Invalid Command"){
       return updateConsoleOutput(consoleOutput =>
         consoleOutput.concat("Invalid Command"), setCounter(brojac=>brojac+1)
       )}
@@ -66,7 +68,8 @@ const UseOnEnter = () => {
           args: args[1].toString(),
           response: ""
         }, name)
-        return updateConsoleOutput(consoleOutput => consoleOutput.concat("Valid Command!" + args[0].toString() + " " + args[1].toString() + "!")),setCounter(counter=>counter+1); 
+        return updateConsoleOutput(consoleOutput => consoleOutput.concat("Valid Command!" + newInput2 + "!")),setCounter(counter=>counter+1); 
+        //return updateConsoleOutput(consoleOutput => consoleOutput.concat("Valid Command!" + args[0].toString() + " " + args[1].toString() + "!")),setCounter(counter=>counter+1); 
       }
       else {
         addNewLog({
@@ -74,7 +77,8 @@ const UseOnEnter = () => {
           args: "",
           response: ""
         }, name)
-        return updateConsoleOutput(consoleOutput => consoleOutput.concat("Valid Command!" + args[0].toString() + "!")),setCounter(counter=>counter+1); 
+        return updateConsoleOutput(consoleOutput => consoleOutput.concat("Valid Command!" + newInput2 + "!")),setCounter(counter=>counter+1);
+        //return updateConsoleOutput(consoleOutput => consoleOutput.concat("Valid Command!" + args[0].toString() + "!")),setCounter(counter=>counter+1); 
       }
     }
   };
