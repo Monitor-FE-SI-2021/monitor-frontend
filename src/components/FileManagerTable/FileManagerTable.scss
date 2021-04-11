@@ -56,7 +56,7 @@
   .file-manipulation {
     display: flex;
     align-items: center;
-    margin-right: 60px;
+    margin-right: 20px;
   }
 
   .file-delete:hover {
@@ -136,6 +136,20 @@
   }
 }
 
+.top-button {
+  border: 0;
+  padding: 10px;
+  margin-left: 15px;
+  margin-top: 5px;
+  background:#5b77bd;
+  color: whitesmoke;
+  cursor: pointer;
+}
+
+.disable-button {
+  pointer-events: none;
+  background: #A7AABD;
+}
 
 .swalItem{
   margin: 6px 0;
@@ -150,13 +164,3 @@
 
 
 
-}
-button {
-  border: 0;
-  padding: 10px;
-  margin-left: 15px;
-  margin-top: 5px;
-  background:#5b77bd;
-  color: whitesmoke;
-  cursor: pointer;
-}

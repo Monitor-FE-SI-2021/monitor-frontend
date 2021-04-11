@@ -627,10 +627,6 @@ class FileManagerTable extends React.Component {
         confirmButtonText: "Copy",
         showLoaderOnConfirm: true,
         preConfirm: (newPath) => {
-          let isDirectory = false;
-          if (file.data.type === "directory") {
-            isDirectory = true;
-          }
           this.sendCopyRequest(newPath, file.fileName).then((r) =>
             console.log(r)
           );
@@ -653,10 +649,6 @@ class FileManagerTable extends React.Component {
         confirmButtonText: "Move",
         showLoaderOnConfirm: true,
         preConfirm: (newPath) => {
-          let isDirectory = false;
-          if (file.data.type === "directory") {
-            isDirectory = true;
-          }
           this.sendMoveRequest(newPath, file.fileName).then((r) =>
             console.log(r)
           );
@@ -899,10 +891,10 @@ class FileManagerTable extends React.Component {
     render() {
         return (
             <div>
-                <button onClick={() => this.clickUp()} disabled={this.state.activeFolder == '.' ? "disabled" : ""}>Go UP</button>
-                <button onClick={() => this.clickNewFolder()} >New folder</button>
-                <button onClick={() => this.sendToAgents()}>Odaberi grupe</button>
-                <button disabled="disabled">{this.state.activeFolder}</button>
+                <button className="top-button" onClick={() => this.clickUp()} disabled={this.state.activeFolder == '.' ? "disabled" : ""}>Go UP</button>
+                <button className="top-button" onClick={() => this.clickNewFolder()} >New folder</button>
+                <button className="top-button" onClick={() => this.sendToAgents()}>Odaberi grupe</button>
+                <button className="top-button disable-button">{this.state.activeFolder}</button>
                 <div className="table-wrapper">
 
                     <table >
