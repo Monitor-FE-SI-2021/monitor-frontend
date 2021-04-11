@@ -12,11 +12,10 @@ import {
   TodayButton,
   AppointmentTooltip
 } from '@devexpress/dx-react-scheduler-material-ui';
-import dayjs from "dayjs";
-import ScheduleIcon from '@material-ui/icons/Schedule';
+import DescriptionIcon from '@material-ui/icons/Description';
 
 
-function MyScheduler({ tasks }) {
+function UserScheduler({ tasks }) {
   const [currentDate, currentDateChange] = useState(new Date())
 
   const transformedTask = tasks.map((task) => (
@@ -59,38 +58,13 @@ const Content = ({
   <AppointmentTooltip.Content
   {...restProps}
   >
-    {/* <div style={{ padding: 10 }}>
-      <div style={{ paddingBottom: 16, letterSpacing: "0.01em"}}>
-        <div className="row" style={{ color: "rgba(0, 0, 0, 0.54)", fontSize: "1.25rem", fontWeight: 700}}>{restProps.appointmentData.title}</div>
-      </div>
-      <div className="row" style={{ displey: "flex" }}>
-        <div><ScheduleIcon style={{ float: "left", color: "rgba(0, 0, 0, 0.54)", marginLeft: 10}}></ScheduleIcon></div>
-        <div style={{ marginLeft: 50, paddingBottom: 16}}>
-          <div className="row" style={{ fontSize: "0.875rem" }}>{dayjs(restProps.appointmentData.startDate).format('dddd, MMMM D, YYYY')}</div>
-          <div >{dayjs(restProps.appointmentData.startDate).format('h:mm A')} - {dayjs(restProps.appointmentData.endDate).format('h:mm A')}</div>
-        </div>
-      </div>
-        <div>{restProps.appointmentData.description}</div>
-    </div> */}
-    <div style={{ marginLeft: 30, paddingTop: 10}}>{restProps.appointmentData.description}</div>
+    <div style={{ marginLeft: 20, paddingTop: 10}}>
+      <DescriptionIcon style={{ float: "left", marginRight: 20, color: "rgba(0, 0, 0, 0.54)"}}></DescriptionIcon>
+      <div>{restProps.appointmentData.description}</div>
+    </div>
     {children}
   </AppointmentTooltip.Content>
 );
-
-// const Content = withStyles(style, { name: 'Content' })(({
-//   children, appointmentData, classes, ...restProps
-// }) => (
-//   <AppointmentTooltip.Content {...restProps} appointmentData={appointmentData}>
-//     <Grid container alignItems="center">
-//       <Grid item xs={2} className={classes.textCenter}>
-//         <Room className={classes.icon} />
-//       </Grid>
-//       <Grid item xs={10}>
-//         <span>{appointmentData.location}</span>
-//       </Grid>
-//     </Grid>
-//   </AppointmentTooltip.Content>
-// ));
 
   return (
     <Paper style={{}}>
@@ -100,17 +74,17 @@ const Content = ({
         >
           <ViewState
             currentDate={currentDate}
-            defaultCurrentViewName="Week"
+            defaultCurrentViewName="Day"
             onCurrentDateChange={currentDateChange}
           />
 
           <DayView
             startDayHour={8}
-            endDayHour={21}
+            endDayHour={22}
           />
           <WeekView
             startDayHour={8}
-            endDayHour={21}
+            endDayHour={22}
           />
 
           <Toolbar />
@@ -126,4 +100,4 @@ const Content = ({
   );
 }
 
-export default MyScheduler;
+export default UserScheduler;
