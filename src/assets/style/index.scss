@@ -5,7 +5,7 @@
 html {
     box-sizing: border-box;
     font-size: 16px;
-    font-family: Roboto, sans-serif;
+    font-family: Mulish, sans-serif;
 }
 
 html, body, #app, #root {
@@ -23,7 +23,8 @@ html, body, #app, #root {
 
 * {
     box-sizing: inherit;
-    font-family: Roboto, sans-serif;
+  font-family: Roboto, sans-serif;
+    font-family: Mulish, sans-serif;
 
     &:before,
     &:after {

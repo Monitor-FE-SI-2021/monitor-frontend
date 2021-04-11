@@ -38,11 +38,6 @@
     width: 100%;
 }
 
-html,
-body {
-    font-family: arial, sans-serif;
-}
-
 select {
     box-sizing: border-box;
     width: 100%;

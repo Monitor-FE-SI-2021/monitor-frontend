@@ -15,6 +15,14 @@ export const answerCheck  = 'https://si-2021.167.99.244.168.nip.io:3333/answerCh
 export const devices = `${endpoint}/device`
 export const groups = `${endpoint}/group`
 export const users = `${endpoint}/user`
+export const userTasks = `${endpoint}/UserTasks/All`
+
+const getErrorMessage = (response) => {
+
+    const data = response?.data;
+
+    return data?.message || data?.title || response?.statusText || "Došlo je do greške."
+}
 
 const request = async (
     url = '',
@@ -63,7 +71,7 @@ const request = async (
                     removeAllData();
                 }
 
-                const errMessage = response?.data?.message || response?.data?.title || response?.statusText || "Došlo je do greške.";
+                const errMessage = getErrorMessage(response);
 
                 showSwalToast(errMessage)
 

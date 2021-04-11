@@ -1,125 +1,85 @@
 .dashboard {
-    display: flex;
+  display: flex;
 }
 
 .chartContainer {
-    display: flex;
+  display: flex;
 }
 
 .machineName {
-    text-align: center;
+  text-align: center;
 }
 
 .row {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
-h1, h2, h3, h4 {
-    color: #353535;
+h1,
+h2,
+h3,
+h4 {
+  color: #353535;
 }
 
 .machine-cards {
-    width: 40%;
+  width: 40%;
 }
 
 .chart {
-    width: 100%;
-    margin: 7%;
-}
-
-.card {
-    border-radius: 10px;
-    box-shadow: 0 2px 5px #ccc;
-    height: 200px;
-    margin-bottom: 10px;
-}
-
-.card:hover {
-    background-color: #ffffff;
-}
-
-.img-info {
-    display: flex;
-    height: 140px;
-    text-align: left;
-    width: 100%;
-}
-
-.card-actions {
-    height: 40px;
-    border-radius: 10px;
-}
-
-.card-actions button {
-    border-radius: 10px;
-    background-color: transparent;
-    box-shadow: 0 2px 5px #ccc;
-    width: 95%;
-    height: 100%;
-    margin: 0 0 0 2.5%;
-    border: #ccc;
-    font-size: 14px;
-}
-
-.card-img {
-    padding: 5%;
-    width: 30%;
-    height: 100%;
-}
-
-.card-img img {
-    height: 100%;
-}
-
-.card-info {
-    padding: 5% 0% 5% 5%;
-    width: 70%;
-}
-
-.card-info h3 {
-    margin: 3px;
-}
-
-.card-info p {
-    font-family: "Roboto", sans-serif;
-    padding: 5px
+  width: 100%;
+  margin: 7%;
 }
 
 .page-devices {
-    margin: 20px;
+  margin: 20px;
 }
 
 .scrollable {
-    overflow: hidden;
-    padding: 5%;
+  overflow: auto;
+  padding: 5%;
+  flex-basis: 0;
+  flex-grow: 1;
+}
+
+.no-active-machines {
+  text-align: center;
+  color: #737373;
+  font-size: 20px;
+  font-weight: 400;
 }
 
 #fm {
-    width: 22px;
-    height: 30px;
+  width: 22px;
+  height: 30px;
 }
 
 #ss {
-    width: 30px;
-    height: 30px;
-    margin-right: 5px;
+  width: 30px;
+  height: 30px;
+  margin-right: 5px;
 }
 
 .page {
-    overflow-y: auto;
+  overflow-y: scroll;
 }
 
 #card-buttons {
-    padding: 5px;
-    margin-left: auto;
-    margin-top: auto;
-    display: flex;
+  padding: 5px;
+  margin-left: auto;
+  margin-top: auto;
+  display: flex;
 }
 
 .icon {
-    width: 24px;
-    height: 24px;
+  width: 24px;
+  height: 24px;
 }
 
-
+.googleMapMonitors {
+  margin-top: 5vw;
+  bottom: 30px;
+  width: 100%;
+  box-shadow: 0 10px 20px #ccc;
+  border-radius: 25px;
+}

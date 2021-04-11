@@ -49,7 +49,7 @@ function MyProfile({ token, push, location }) {
     const path = location?.pathname;
 
     useEffect(() => {
-        if (!PROFILE_TABS[path]) {
+        if (!Object.values(PROFILE_TABS).includes(path)) {
             handleTabChange(PROFILE_TABS.SETTINGS)
         }
     }, [])
