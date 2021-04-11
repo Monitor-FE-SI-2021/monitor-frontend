@@ -13,7 +13,8 @@ export const RouteLink = {
     RemoteControl: '/remotecontrol',
     TwoFactorAuthentication: '/security',
     FileManagerView: '/file-manager',
-    SecurityQuestions: '/securityQuestions'
+    SecurityQuestions: '/securityQuestions',
+    Tasks: '/tasks'
 }
 
 const initialState = {
@@ -48,6 +49,11 @@ const initialState = {
             link: RouteLink.SecurityQuestions,
             name: 'Security Questions',
             icon: ""
+        },
+        {
+            link: RouteLink.Tasks,
+            name: "Users",
+            icon: "",
         }
     ],
 };
