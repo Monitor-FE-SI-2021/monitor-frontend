@@ -16,6 +16,8 @@ import request, { wsEndpoint, devices } from "../../service";
 import { TextField } from "@material-ui/core";
 import { DragDropContext } from "react-beautiful-dnd"
 import { showSwalToast } from "../../utils/utils";
+import AllDevices from "../../components/AllDevices/AllDevices";
+
 
 const getRootGroups = (groupTree) => {
     const parentGroups = [];
@@ -75,6 +77,13 @@ const Devices = ({
 
         // Set async
         updateDevicesTableForGroup({
+            groupId: source.droppableId,
+            data: {
+                async: true
+            },
+        });
+
+        updateDevicesTableForGroup({
             groupId: destination.droppableId,
             data: {
                 async: true
@@ -111,6 +120,10 @@ const Devices = ({
                 showSwalToast(`Uspješno premještena mašina '${draggedDevice.name}'`, 'success');
 
             }).finally(() => {
+            updateDevicesTableForGroup({
+                groupId: source.droppableId,
+                data: { async: false },
+            });
             updateDevicesTableForGroup({
                 groupId: destination.droppableId,
                 data: { async: false },
@@ -163,9 +176,12 @@ const Devices = ({
                            onChange={searchDevices}
                 />
             </div>
-            <div className={'groups-list'}>
-                {async ? <Spinner color={'inherit'}/> : rootGroups}
-            </div>
+            {groupsSearchText === "" && devicesSearchText !== "" ?
+                <AllDevices/>
+                :
+                <div className={'groups-list'}>
+                    {async ? <Spinner color={'inherit'}/> : rootGroups}
+                </div>}
         </div>
     );
 };

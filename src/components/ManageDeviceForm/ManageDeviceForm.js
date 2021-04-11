@@ -104,7 +104,7 @@ const ManageDeviceForm = ({ selectedDevice, group, groupOptions, fetchAllGroups,
             temp.longitude = ""
 
         temp.group = values.group ? "" : emptyFieldError
-        temp.installationCode = values.installationCode ? "" : emptyFieldError
+        temp.installationCode = values.installationCode || editMode ? "" : emptyFieldError
         setErrors(temp)
 
         return Object.values(temp).every(x => x === "")

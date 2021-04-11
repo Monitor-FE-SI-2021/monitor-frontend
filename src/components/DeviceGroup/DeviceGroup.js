@@ -50,7 +50,7 @@ const DeviceGroup = ({
 
     const fetchDataDebounced = useCallback(
         debounce(fetchData, 400),
-        []
+        [deviceTable]
     );
 
     useEffect(() => {
@@ -120,7 +120,7 @@ const DeviceGroup = ({
             </div>
             {!hidden && (
                 <React.Fragment>
-                    {!subGroupsRendered?.length && <DeviceTable devices={devices} group={group} hasDragAndDrop={true}/>}
+                    {!subGroupsRendered?.length && <DeviceTable devices={devices} group={group} showGroup={false} hasDragAndDrop={true}/>}
                     {subGroupsRendered || null}
                 </React.Fragment>
             )}
