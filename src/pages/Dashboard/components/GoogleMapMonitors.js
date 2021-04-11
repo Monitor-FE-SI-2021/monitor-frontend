@@ -131,10 +131,9 @@ class GoogleMapMonitors extends Component {
             <div className="legend-wrapper">
                 <div className="legend-bg">
                     <ul id="legend-list">
-                        <li id="first-list-item">prvi element</li>
-                        <li id="second-list-item">drugi element</li>
-                        <li id="third-list-item">treci element</li>
-
+                        <li id="first-list-item"> online</li>
+                        <li id="second-list-item"> offline</li>
+                        <li id="third-list-item"> critical</li>
                     </ul>
                 </div>
 

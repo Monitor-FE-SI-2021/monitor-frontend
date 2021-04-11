@@ -110,14 +110,21 @@ html, body, #app, #root {
 }
 
 #legend-list #first-list-item:before {
-  background-image: url(../icons/file-icon.png);
+  background-image: url(../icons/blue-icon.png);
+  background-size: cover;
+}
+#legend-list #third-list-item:before {
+
+  background-image: url(../icons/red-icon.png);
+  background-size: cover;
 }
 
 #legend-list #second-list-item:before {
-  background-image: url(../icons/disconnect.png);
+  background-image: url(../icons/yellow-icon.png);
+  background-size: cover;
 }
-
-#legend-list #third-list-item:before {
-  background-image: url(../icons/terminal.png);
+li{
+  color: #524c4c;
+  padding: 1px;
+  border-bottom-style: ridge;
 }
-
