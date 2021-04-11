@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import React from 'react';
-import './Login.css';
+import './Login.scss';
 import { requestResetPassword } from "../../store/modules/login/login";
 import { push } from 'connected-react-router';
 import { showSwalToast } from "../../utils/utils";

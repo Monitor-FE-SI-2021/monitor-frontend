@@ -9,7 +9,7 @@ import {
     UPDATE_ACTIVE_DEVICE
 } from "./types";
 import request, { devices } from "../../../service";
-import { DEVICE_STATUS } from "./devices";
+import { ALL_DEVICES_TABLE_KEY, DEVICE_STATUS } from "./devices";
 
 export function fetchAllDevices() {
 
@@ -82,6 +82,60 @@ export function fetchDevicesForGroup({
                 })
             }).finally(() => {
                 dispatch({ type: SET_DEVICES_ASYNC_FOR_GROUP, groupId: groupId, async: false });
+            })
+    }
+}
+
+export function fetchAllDevicesForUser({
+                                           page = 1,
+                                           perPage = 10,
+                                           status = DEVICE_STATUS.ACTIVE,
+                                           sortField = 'name',
+                                           sortOrder = 'desc'
+                                       }) {
+    return (dispatch, getState) => {
+
+        const deviceTable = getState().devices.deviceTables?.[ALL_DEVICES_TABLE_KEY];
+
+        if (deviceTable?.async) {
+            return;
+        }
+
+        const { searchText } = getState().devices;
+
+        const queryData = {
+            page: page,
+            per_page: perPage,
+            name: searchText ?? '',
+            location: searchText ?? '',
+            status,
+            sort_by: `${sortField}_${sortOrder}`
+        }
+
+        const searchParams = new URLSearchParams(queryData);
+
+        dispatch({ type: SET_DEVICES_ASYNC_FOR_GROUP, groupId: ALL_DEVICES_TABLE_KEY, async: true });
+
+        return request(devices + `/AllDevicesForUser?${searchParams}`).then(response => response.data)
+            .then(r => {
+
+                const { devices, deviceCount } = r.data;
+
+                return dispatch({
+                    type: UPDATE_DEVICES_TABLE_FOR_GROUP,
+                    groupId: ALL_DEVICES_TABLE_KEY,
+                    data: {
+                        devices: devices,
+                        totalCount: deviceCount,
+                        page,
+                        perPage,
+                        status,
+                        sortField,
+                        sortOrder
+                    }
+                })
+            }).finally(() => {
+                dispatch({ type: SET_DEVICES_ASYNC_FOR_GROUP, groupId: ALL_DEVICES_TABLE_KEY, async: false });
             })
     }
 }

@@ -1,10 +1,15 @@
 import React from 'react';
-import './Login.css';
+import './Login.scss';
 import { connect } from "react-redux";
-import { doLogin } from "../../store/modules/login/login";      
+import { doLogin } from "../../store/modules/login/login";
 import { push } from "connected-react-router";
+import { AsyncButton } from "../../components/AsyncButton/AsyncButton";
 
-function Login({ doLogin, push }) {
+function Login({ doLogin, push, loginAsync, userAsync }) {
+
+    const async = loginAsync || userAsync;
+
+    console.log(async);
 
     const switchRoute = (link) => {
         push(link);
@@ -34,25 +39,31 @@ function Login({ doLogin, push }) {
         };
 
         doLogin(user).then(r => {
-            updateFormData(initialFormData);
+            // updateFormData(initialFormData);
         })
     };
 
     return (
-        <div className="formDiv">
-            <form class="form">
+        <div className="login formDiv">
+            <form className="form" onSubmit={e => e.preventDefault()}>
                 <h1>LOGIN</h1>
-                
+
                 <input name="email" placeholder="Email" value={formData.email} onChange={handleChange}/>
                 <input name="password" type='password'
                        placeholder="Password"
                        value={formData.password}
                        onChange={handleChange}/>
-                <input class = "submitButton" type="submit" value="LOG IN" onClick={handleSubmit}/>
-                <input id = "forgotPasswordButton" type="button" value="Forgot password?" onClick={()=>switchRoute('/forgot-password-type')}/>
+                <AsyncButton onClick={handleSubmit}
+                             async={async}
+                             className='custom-btn login-btn'>Login</AsyncButton>
+                <input id="forgotPasswordButton" type="button" value="Forgot password?"
+                       onClick={() => switchRoute('/forgot-password-type')}/>
             </form>
         </div>
     );
 }
 
-export default connect(state => ({}), { doLogin, push })(Login)
+export default connect(state => ({
+    loginAsync: state.login.loginAsync,
+    userAsync: state.login.userAsync,
+}), { doLogin, push })(Login)
