@@ -1,7 +1,7 @@
 .table-wrapper {
   margin: 0 auto;
-  width: 700px;
-  height: 400px;
+  width: 800px;
+  height: 500px;
   overflow-y: scroll;
   border-bottom: 2px solid black;
   margin-bottom: 10px;
@@ -72,11 +72,12 @@
   }
 
   .header-row {
-    background: linear-gradient(
-      to top,
-      rgba(235, 189, 73, 0.6),
-      rgba(235, 189, 73, 0)
-    );
+    background-color: rgba(91, 119, 189);
+    // background: linear-gradient(
+    //   to top,
+    //   rgba(255, 189, 73, 0.6),
+    //   rgba(235, 189, 73, 0)
+    // );
   }
 
   .centriraj {
@@ -97,9 +98,34 @@
     padding-right: 3px;
   }
 
-  .back-button {
-    width: 25px;
-    height: 25px;
+  .date-style {
+    color: #a7aabd;
+    width: 27%;
+  }
+
+  .center-vertical {
+    vertical-align: middle;
+  }
+
+  .centriraj-datum {
+    vertical-align: middle;
+    text-align: left;
+  }
+
+  .sort-strelica:hover {
+    transition: 0.3s ease-in-out;
+    background-color: #93abf6;
+    border-radius: 100%;
+  }
+
+  .file-name-div {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+  }
+
+  .file-name-offset {
+    padding-left: 8px;
   }
 
   .file-manipulation-wrapper {

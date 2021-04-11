@@ -9,7 +9,8 @@ import {fetchAllGroups} from '../../store/modules/groups/actions';
 
 const config = require("../Terminal/config");
 const userFiles = "https://si-grupa5.herokuapp.com/api/web/user/file-tree";
-const folderIconUrl = "https://img.icons8.com/color/40/000000/folder-invoices--v2.png";
+
+const folderIconUrl = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHg9IjBweCIgeT0iMHB4Igp3aWR0aD0iNDgiIGhlaWdodD0iNDgiCnZpZXdCb3g9IjAgMCAxNzIgMTcyIgpzdHlsZT0iIGZpbGw6IzAwMDAwMDsiPjxnIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0ibm9uemVybyIgc3Ryb2tlPSJub25lIiBzdHJva2Utd2lkdGg9IjEiIHN0cm9rZS1saW5lY2FwPSJidXR0IiBzdHJva2UtbGluZWpvaW49Im1pdGVyIiBzdHJva2UtbWl0ZXJsaW1pdD0iMTAiIHN0cm9rZS1kYXNoYXJyYXk9IiIgc3Ryb2tlLWRhc2hvZmZzZXQ9IjAiIGZvbnQtZmFtaWx5PSJub25lIiBmb250LXdlaWdodD0ibm9uZSIgZm9udC1zaXplPSJub25lIiB0ZXh0LWFuY2hvcj0ibm9uZSIgc3R5bGU9Im1peC1ibGVuZC1tb2RlOiBub3JtYWwiPjxwYXRoIGQ9Ik0wLDE3MnYtMTcyaDE3MnYxNzJ6IiBmaWxsPSJub25lIj48L3BhdGg+PGc+PHBhdGggZD0iTTE0My4zMzMzMyw0M2gtNjQuNWwtMTQuMzMzMzMsLTE0LjMzMzMzaC0zNS44MzMzM2MtNy44ODMzMywwIC0xNC4zMzMzMyw2LjQ1IC0xNC4zMzMzMywxNC4zMzMzM3YyOC42NjY2N2gxNDMuMzMzMzN2LTE0LjMzMzMzYzAsLTcuODgzMzMgLTYuNDUsLTE0LjMzMzMzIC0xNC4zMzMzMywtMTQuMzMzMzN6IiBmaWxsPSIjNWI3N2JkIj48L3BhdGg+PHBhdGggZD0iTTE0My4zMzMzMyw0M2gtMTE0LjY2NjY3Yy03Ljg4MzMzLDAgLTE0LjMzMzMzLDYuNDUgLTE0LjMzMzMzLDE0LjMzMzMzdjcxLjY2NjY3YzAsNy44ODMzMyA2LjQ1LDE0LjMzMzMzIDE0LjMzMzMzLDE0LjMzMzMzaDExNC42NjY2N2M3Ljg4MzMzLDAgMTQuMzMzMzMsLTYuNDUgMTQuMzMzMzMsLTE0LjMzMzMzdi03MS42NjY2N2MwLC03Ljg4MzMzIC02LjQ1LC0xNC4zMzMzMyAtMTQuMzMzMzMsLTE0LjMzMzMzeiIgZmlsbD0iIzkzYWJmNiI+PC9wYXRoPjwvZz48L2c+PC9zdmc+";
 const fileIconUrl = "https://img.icons8.com/office/40/000000/document--v2.png";
 
 let tokenGlobal = '';
@@ -24,7 +25,7 @@ class FileManagerTable extends React.Component {
                     fileName: "LOADING...",
                     link: 'linkDoFajla',
                     data: {}
-                },
+                }
             ],
             globalId: -1,
             activeFolder: '.',
@@ -128,23 +129,72 @@ class FileManagerTable extends React.Component {
     renderTableHeader() {
         return (
             <tr className="header-row">
-                {/* <th>ID</th> */}
-                <th className="centriraj-lijevo pomjereni-naziv">Filename</th>
-                <th colSpan="3" className="centriraj">File manipulation</th>
+                <th>
+                    <div className="file-name-div file-name-offset">
+                        <span>File name</span>
+                        <img onClick={() => {this.sortFilesDescending()}} className="sort-strelica" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAAWklEQVRIie2PsQ2AMBDEToCUHRENLEHJ2ulMS0FEHoLSnAew7yRjTB+ABcjUk4H5zjUUGqOkFNiUJE3RF3vgwRGSByPv5JWRb/KHSBt5IdJWfolswPqL3Jh+nMnK13/HbjBeAAAAAElFTkSuQmCC"></img>
+                        <img onClick={() => {this.sortFilesAscending()}} className="sort-strelica" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAAVklEQVRIie3PsQ2AMAxE0RODIkUMwQyMHCg+FaIhAoPToHsD/LMls38BCjD1is+clp7x3JFGPGfkJv5t5GH83QgwBuKHctUaGhubpBq4qUpaQ1+YWZ4dI9Lbm/Wdan8AAAAASUVORK5CYII="/>
+                    </div>
+                </th>
+                <th>
+                    <div className="file-name-div">
+                        <span>Date added</span>
+                        <img onClick={() => {this.sortDateDescending()}} className="sort-strelica" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAAWklEQVRIie2PsQ2AMBDEToCUHRENLEHJ2ulMS0FEHoLSnAew7yRjTB+ABcjUk4H5zjUUGqOkFNiUJE3RF3vgwRGSByPv5JWRb/KHSBt5IdJWfolswPqL3Jh+nMnK13/HbjBeAAAAAElFTkSuQmCC"></img>
+                        <img onClick={() => {this.sortDateAscending()}} className="sort-strelica" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAAVklEQVRIie3PsQ2AMAxE0RODIkUMwQyMHCg+FaIhAoPToHsD/LMls38BCjD1is+clp7x3JFGPGfkJv5t5GH83QgwBuKHctUaGhubpBq4qUpaQ1+YWZ4dI9Lbm/Wdan8AAAAASUVORK5CYII="/>
+                    </div>
+                </th>
+                <th colSpan="2" className="centriraj">File manipulation</th>
             </tr>
         )
+    }
+
+    sortFilesDescending = () => {
+        this.state.responseObject.sort((f1, f2) => {
+            let name1 = f1.fileName.toUpperCase(),
+                name2 = f2.fileName.toUpperCase();
+            return name1 == name2 ? 0 : name1 > name2 ? -1 : 1;
+        });
+        this.setState(this.state);
+    }
+
+    sortFilesAscending = () => {
+        this.state.responseObject.sort((f1, f2) => {
+            let name1 = f1.fileName.toUpperCase(),
+                name2 = f2.fileName.toUpperCase();
+            return name1 == name2 ? 0 : name1 > name2 ? 1 : -1;
+        });
+        this.setState(this.state);
+    }
+
+    sortDateDescending = () => {
+        this.state.responseObject.sort((f1, f2) => {
+            let date1 = new Date(f1.data.birthtime),
+                date2 = new Date(f2.data.birthtime);
+            return date1 == date2 ? 0 : date1 > date2 ? -1 : 1;
+        });
+        this.setState(this.state);
+    }
+
+    sortDateAscending = () => {
+        this.state.responseObject.sort((f1, f2) => {
+            let date1 = new Date(f1.data.birthtime),
+                date2 = new Date(f2.data.birthtime);
+            return date1 == date2 ? 0 : date1 > date2 ? 1 : -1;
+        });
+        this.setState(this.state);
     }
 
     renderTableData() {
         return this.state.responseObject.map((oneObject, index) => {
             const { id, fileName, link } = oneObject;
+            let date = new Date(oneObject.data.birthtime).toString();
             return (
                 <tr>
-                    {/* <td className="id">{id}</td> */}
                     <td className="file-download pomjereni-naziv file-icon" onClick={() => { this.handleClick(id) }} >
-                        <img className="file-icon" src={oneObject.data.type == "file" ? fileIconUrl : folderIconUrl}></img>
+                        <img className="file-icon" src={oneObject.data.type == "file" ? fileIconUrl : (oneObject.fileName == "LOADING..." ? "" : folderIconUrl)}></img>
                         {fileName}
                     </td>
+                    <td className="date-style">{oneObject.fileName == "LOADING..." ? " " : this.displayFormattedDate(date)}</td>
                     <div className="file-manipulation-wrapper">
                         <td className="file-manipulation file-delete centriraj" onClick={() => { this.handleDelete(id) }}>
                             <FaTrash size={20} />
@@ -165,78 +215,12 @@ class FileManagerTable extends React.Component {
         })
     }
 
-    handleClick = async (id) => {
-        //#region Help ako treba neki request poslat TODO
-        /*aaaaaa
-        try{
-            const requestOptions = {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                  email: config.email,
-                  password: config.password,
-                }),
-              };
-      
-            var response = await fetch(config.url, requestOptions);
-            if(response.status == 200)
-            {
-                var x = await response.json();
-                const token = x.accessToken;
-                const requestOptions1 = {
-                    method: "POST",
-                    headers: {
-                        Accept: "application/json",
-                        "Content-Type": "application/json",
-                        Authorization: "Bearer " + token,
-                    },
-                    body: JSON.stringify({
-                    user: config.email,
-                    }),
-                };
+    displayFormattedDate(date) {
+        return date.substring(8, 11) + date.substring(4, 7) + date.substring(10, 21);
+    }
 
-                const requestOptions2 = {
-                    method: "POST",
-                    headers: {
-                        Accept: "application/json",
-                        "Content-Type": "application/json",
-                        Authorization: "Bearer " + token,
-                    },
-                    body: JSON.stringify({
-                        user: config.email,
-                        base64Data : "string",
-                        fileName : "test"+this.state.responseObject.length+".txt",
-                        path : "/"
-                    }),
-                };
-    
-                console.log("Download file with id " + id);
-                var response = await fetch(userFiles, requestOptions1)
-                .then((res) => {
-                    console.log(res.json());
-                }).catch((error) => {
-                    console.log(error);
-                }); 
-                
-                console.log(response);
-
-                
-                var response1 = await fetch('https://si-grupa5.herokuapp.com/api/web/user/file/put', requestOptions2)
-                .then((res) => {
-                    console.log(res.json());
-                }).catch((error) => {
-                    console.log(error);
-                }); 
-                console.log(response1);
-    
-            }
-        } catch(e){
-            console.log(e);
-        }
-        //*/
-        //#endregion
-
-        var file = this.state.responseObject[id];
+    handleClick = async (selectedId) => {
+        var file = this.state.responseObject.find(file => file.id == selectedId);
         if (file.data.type == 'file') {
             if(file.data.extension != '.txt') return;
 
@@ -796,7 +780,7 @@ class FileManagerTable extends React.Component {
                 return await fetch('https://si-grupa5.herokuapp.com/api/web/user/file/get-text', requestOptions2)
                     .then((res) => {
                         return res.json().then((res) => {
-                            console.log(res.text);
+                            //console.log(res.text);
                             returnable = res.text;
                             return res.text;
                         });
