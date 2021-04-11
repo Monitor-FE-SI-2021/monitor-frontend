@@ -131,9 +131,9 @@ const Devices = ({
         })
     }
 
-    const rootGroups = (Boolean(groupsSearchText) ? searchedGroups : getRootGroups(allGroups)).map((grupa) => {
+    const rootGroups = (Boolean(groupsSearchText) ? searchedGroups : getRootGroups(allGroups)).map((grupa, index) => {
         return (
-            <DragDropContext onDragEnd={onDragEnd}>
+            <DragDropContext onDragEnd={onDragEnd} key={grupa?.groupId || index}>
                 <DeviceGroup group={grupa}
                              key={grupa.groupId}/>
             </DragDropContext>

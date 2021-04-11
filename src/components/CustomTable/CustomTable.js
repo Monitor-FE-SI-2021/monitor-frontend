@@ -24,12 +24,12 @@ export default function CustomTable({
                                         data,
                                         fields,
                                         children,
-                                        groupId,
                                         handleSort,
                                         activeSortField,
                                         activeSortOrder,
                                         async,
-                                        hasDragAndDrop
+                                        hasDragAndDrop,
+                                        droppableId,
                                     }) {
 
     const activeFields = (fields || []).filter(field => field.disabled !== undefined ? !field.disabled : true);
@@ -60,7 +60,7 @@ export default function CustomTable({
         if (hasDragAndDrop) {
             return (
                 <Droppable
-                    droppableId={`${groupId}`}>
+                    droppableId={`${droppableId}`}>
                     {(provided, snapshot) => (
                         <TableBody {...provided.droppableProps} ref={provided.innerRef}>
                             {data.map((row, rowIndex) => (
@@ -105,7 +105,7 @@ export default function CustomTable({
     const renderNoResultsMessage = () => {
         if (hasDragAndDrop) {
             return (
-                <Droppable droppableId={`${groupId}`}>
+                <Droppable droppableId={`${droppableId}`}>
                     {(provided, snapshot) => (
                         <div {...provided.droppableProps} ref={provided.innerRef} className='no-results-message'>
                             Nema rezultata.

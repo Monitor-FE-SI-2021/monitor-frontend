@@ -43,7 +43,7 @@ const DeviceTable = ({
                          group,
                          updateDevicesTableForGroup,
                          updateActiveDevice,
-                         hasDragAndDrop,
+                         hasDragAndDrop = false,
                          showGroup,
                      }) => {
 
@@ -191,9 +191,9 @@ const DeviceTable = ({
                              fields={tableFields}
                              activeSortField={deviceTable.sortField}
                              activeSortOrder={deviceTable.sortOrder}
-                             groupId={group.groupId}
                              handleSort={handleSort}
-                             hasDragAndDrop>
+                             droppableId={group?.groupId ?? null}
+                             hasDragAndDrop={hasDragAndDrop}>
                     <TableSlot slot='actions' render={dataRow => (
                         <div className='actions'>
                             {canConnectToDevice(dataRow) && (
