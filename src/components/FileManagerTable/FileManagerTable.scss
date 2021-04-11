@@ -4,7 +4,6 @@
   height: 400px;
   overflow-y: scroll;
   border-bottom: 2px solid black;
-  margin-bottom: 10px;
 
   table {
     //background-color: white;
@@ -43,14 +42,21 @@
 
   .file-download,
   .file-rename,
-  .file-delete {
+  .file-delete,
+  .file-copy,
+  .file-move {
     transition: 0.2s ease-in-out;
     cursor: pointer;
   }
 
+  .file-download {
+    width: 70%;
+  }
+
   .file-manipulation {
-    cursor: pointer;
-    width: 14%;
+    display: flex;
+    align-items: center;
+    margin-right: 60px;
   }
 
   .file-delete:hover {
@@ -90,10 +96,60 @@
     padding-right: 3px;
   }
 
-  .back-button {
-    width: 25px;
-    height: 25px;
+  .date-style {
+    color: #a7aabd;
+    width: 27%;
   }
+
+  .center-vertical {
+    vertical-align: middle;
+  }
+
+  .centriraj-datum {
+    vertical-align: middle;
+    text-align: left;
+  }
+
+  .sort-strelica:hover {
+    transition: 0.3s ease-in-out;
+    background-color: #93abf6;
+    border-radius: 100%;
+  }
+
+  .file-name-div {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+  }
+
+  .file-name-offset {
+    padding-left: 8px;
+  }
+
+  .file-manipulation-wrapper {
+    display: flex;
+    justify-content: center;
+  }
+
+  .file-checkbox {
+    margin-right: 0px;
+  }
+}
+
+
+.swalItem{
+  margin: 6px 0;
+}
+
+.swal-text{
+  max-height: 16em;  /* To be adjusted as you like */
+  overflow-y: scroll;
+  width: 100%;
+  text-align: left;
+}
+
+
+
 }
 button {
   border: 0;
