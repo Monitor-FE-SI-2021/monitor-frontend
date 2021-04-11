@@ -32,11 +32,13 @@ export default function addNewLog() {
     const timestamp = Date.now();
     const time = new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit',day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'}).format(timestamp)
     const endPoint = "https://si-2021.167.99.244.168.nip.io/api/user-comand-logs?"
+    let niz = window.localStorage.getItem("response").replace(/,/g, '\n').split('\n\n')
+    //console.log("RESPONSE ", niz[niz.length-1]);
     return request(endPoint, "POST", {
         UserId: window.localStorage.getItem("userId"),
         DeviceId: window.localStorage.getItem("device_id"),
         Command: window.localStorage.getItem("command_type") +" "+ window.localStorage.getItem("args"),
-        Response: window.localStorage.getItem("response").replace(",","\n"),
+        Response: niz[niz.length-1],//window.localStorage.getItem("response").replace(",","\n"),
         Time: time.replace(/\//g, "-").replace(',', "").replace('PM', "").replace('AM', "")
     }).then(res => {
         console.log("response saved!")

@@ -8,7 +8,7 @@ const getLogs = `${endpoint}/user/GetAllUsers`;
 
 async function retrieveLogsFromDatabase(deviceId) {
     var logs = [];
-    console.log("device id: "+deviceId)
+    //console.log("device id: "+deviceId)
   
     var url = `${endpoint}/user-command-logs/CommandLogsForDevice?deviceId=${deviceId}`
   

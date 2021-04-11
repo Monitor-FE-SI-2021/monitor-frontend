@@ -8,8 +8,8 @@ const endpoint = 'https://si-2021.167.99.244.168.nip.io/api';
 
 async function retrieveLogsFromDatabase(user_id, deviceId) {
   var logs = [];
-  console.log("device id: "+deviceId)
-  console.log("user_id: "+user_id)
+  //console.log("device id: "+deviceId)
+  //console.log("user_id: "+user_id)
 
   var url = ""
 
@@ -17,7 +17,7 @@ async function retrieveLogsFromDatabase(user_id, deviceId) {
       url = `${endpoint}/user-command-logs/CommandLogsForDevice?deviceId=${deviceId}`
   else url = `${endpoint}/user-command-logs/CommandLogsForDeviceAndUser?deviceId=${deviceId}&userId=${user_id}`
 
-  console.log("saljem url "+url);
+  //console.log("saljem url "+url);
   return request(url)
           .then(r => {
               if (r.status === 200) {
