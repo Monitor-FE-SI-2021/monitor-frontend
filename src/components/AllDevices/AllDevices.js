@@ -18,7 +18,7 @@ const AllDevices = ({ deviceTable, devicesSearchText, fetchAllDevicesForUser }) 
 
     const fetchDataDebounced = useCallback(
         debounce(fetchData, 400),
-        []
+        [deviceTable]
     );
 
     useEffect(() => {
@@ -41,10 +41,8 @@ const AllDevices = ({ deviceTable, devicesSearchText, fetchAllDevicesForUser }) 
 
 export default connect((state) => {
 
-    const deviceTable = state.devices.deviceTables?.[ALL_DEVICES_TABLE_KEY] || {};
-
     return {
-        deviceTable,
+        deviceTable: state.devices.deviceTables?.[ALL_DEVICES_TABLE_KEY] || {},
         devicesSearchText: state.devices.searchText
     }
-}, {fetchAllDevicesForUser})(AllDevices)
+}, { fetchAllDevicesForUser })(AllDevices)

@@ -95,7 +95,7 @@ export function fetchAllDevicesForUser({
                                        }) {
     return (dispatch, getState) => {
 
-        const deviceTable = getState().devices.deviceTables?.['all'];
+        const deviceTable = getState().devices.deviceTables?.[ALL_DEVICES_TABLE_KEY];
 
         if (deviceTable?.async) {
             return;

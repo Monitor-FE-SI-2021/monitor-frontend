@@ -65,7 +65,6 @@ const DeviceTable = ({
                 deviceUid: activeDevice.deviceUid,
                 user: user?.email,
             }).then(r => {
-                console.log(r);
                 if (r?.data?.type === DEVICE_WS_STATUS.IN_USE) {
                     showSwalToast("Uređaj je uspješno konektovan.", 'success')
                     updateActiveDevice(activeDevice.deviceUid, { status: r.data.type })
@@ -93,7 +92,6 @@ const DeviceTable = ({
         {
             name: 'groupName',
             title: 'Grupa',
-            width: '25%',
             disabled: !showGroup,
         },
         {
@@ -230,6 +228,7 @@ const DeviceTable = ({
 export default connect((state, ownProps) => {
 
         const { group } = ownProps;
+
         const groupId = group?.groupId || ALL_DEVICES_TABLE_KEY;
 
         const deviceTable = state.devices.deviceTables?.[groupId] || {};

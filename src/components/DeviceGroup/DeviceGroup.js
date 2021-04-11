@@ -50,7 +50,7 @@ const DeviceGroup = ({
 
     const fetchDataDebounced = useCallback(
         debounce(fetchData, 400),
-        []
+        [deviceTable]
     );
 
     useEffect(() => {
