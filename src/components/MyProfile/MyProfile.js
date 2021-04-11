@@ -19,7 +19,6 @@ import {requestResetPassword} from "../../store/modules/login/login";
 import {push} from "connected-react-router";
 
 function MyProfile({token,push}) {
-    token= localStorage.getItem('authorization')
     const switchRoute = (link) => {
         push(link);
     };
@@ -207,14 +206,12 @@ function MyProfile({token,push}) {
             password: passwordValue.password
         }
             checkPassword(user).then(res => {
-
                 if (res && res.status === 200) {
-                    console.log(res)
+
                     showSwalToast(res.data.message, 'success');
-                    if(token) {
-                        switchRoute('/password-reset/' + token);
-                        token = null;
-                    }
+
+                        switchRoute('/password-reset/' + res.data.token);
+
 
 
                 } else if (res && res.status === 400) {

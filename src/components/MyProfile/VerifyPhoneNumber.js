@@ -14,15 +14,15 @@ export const sendVerificationSMS = ({ phone }) => {
         }
     }).catch(
         err => {
-            console.log('c');
+
         }
     );
 
 
 }
 export const regexPhoneNumber = ({ phone }) => {
-    console.log(phone);
-    var pattern = new RegExp(/(\+387(67|66|65|64|63|62|61|60)|(0)(67|66|65|64|63|62|61|60))[0-9]{3}[0-9]{3,4}/g);
+
+    var pattern = new RegExp(/(\+387(67|66|65|64|63|62|61|60))[0-9]{3}[0-9]{3,4}/g);
     return pattern.test(phone);
 }
 
