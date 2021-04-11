@@ -358,7 +358,9 @@ class FileManagerTable extends React.Component {
     }
 
     handleDelete = async (id) => {
-        var file = this.state.responseObject[id];
+        // var file = this.state.responseObject[id];
+        var file = this.state.responseObject.find(file => file.id == id);
+
         var directoryPath = this.state.activeFolder + '/' + file.data.name;
         var path = directoryPath.trim('/').split('/');
 
@@ -584,7 +586,8 @@ class FileManagerTable extends React.Component {
 
   handleRename(id) {
         this.state.globalId = id;
-        var file = this.state.responseObject[id];
+        // var file = this.state.responseObject[id];
+      var file = this.state.responseObject.find(file => file.id == id);
 
         Swal.fire({
             title: 'Change file name',
@@ -615,8 +618,7 @@ class FileManagerTable extends React.Component {
 
     handleCopy(id) {
       this.state.globalId = id;
-      var file = this.state.responseObject[id];
-
+        var file = this.state.responseObject.find(file => file.id == id);
       Swal.fire({
         title: "Copy file",
         input: "text",
@@ -636,8 +638,8 @@ class FileManagerTable extends React.Component {
     }
 
     handleMove(id) {
-      this.state.globalId = id;
-      var file = this.state.responseObject[id];
+        this.state.globalId = id;
+        var file = this.state.responseObject.find(file => file.id == id);
 
       Swal.fire({
         title: "Move file",
