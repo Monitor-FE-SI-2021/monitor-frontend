@@ -127,22 +127,23 @@ const Reports = ({ user, push }) => {
     const submitReportForm = async (e) => {
         e.preventDefault();
 
-        const selectClause = selectedColumns.join(', ');
+        const selectClause = selectedColumns
         const fromClause = "DEVICES d";
-        const whereClause = "( " + formatQuery(queryValue, 'sql') + " ) and d.groupId = " + (selectedGroup.group.groupId == -1 ? "d.groupId" : selectedGroup.group.groupId);
+        const whereClause = JSON.parse(formatQuery(queryValue, 'json_without_ids').replaceAll('"operator":', '"operator_str":'));
+        const groupClause = selectedGroup.group.groupId;
 
-        const finalQuery = "SELECT " + selectClause + " FROM " + fromClause + " WHERE " + whereClause;
-        console.log(finalQuery);
+        const finalQuery = {select: selectClause, where: whereClause, group: groupClause, freq: frequencyInfo.frequency.value};
+        console.log(JSON.stringify(finalQuery));
 
         const body = {
             name: title,
             userId: user.userId,
-            query: finalQuery,
+            query: JSON.stringify(finalQuery),
             nextDate: calculateDate(),
             frequency: frequencyInfo.frequency.value,
             sendEmail: sendEmailValue,
         };
-
+        
         const response = await request("https://si-2021.167.99.244.168.nip.io/api/report/CreateReport", "POST", body);
         if (response.status === 200) {
             window.alert("Uspjesno kreiran report!");
@@ -241,7 +242,7 @@ const Reports = ({ user, push }) => {
                     <h3 className="queryBuilderTitle"> What do you want in your report? </h3>
                     <QueryBuilder
                         title="reportBuilder"
-                        fields={queryFields}
+                        fields={fields}
                         onQueryChange={changeQuery}
                         showNotToggle={true}
                     />
@@ -250,7 +251,7 @@ const Reports = ({ user, push }) => {
                 <div>
                     <h3 className="queryBuilderTitle"> Which columns do you want in your report? </h3>
 
-                    {queryFields.map((inputField, index) => (
+                    {fields.map((inputField, index) => (
                         <div key={index}>
                             <Checkbox
                                 value={inputField.name}
