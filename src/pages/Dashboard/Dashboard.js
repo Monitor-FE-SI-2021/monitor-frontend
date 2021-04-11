@@ -7,6 +7,7 @@ import ActiveMachine from "./components/ActiveMachine";
 import request, { devices, errors } from "../../service";
 import GoogleMapMonitors from "./components/GoogleMapMonitors";
 import DatePicker from "react-datepicker";
+import {Spinner} from "../../components/Spinner/Spinner"
 
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -91,11 +92,21 @@ let allMachinesUsage = null
 let lastDisconnected = null
 let allErrors = []
 
+function machineNameAndLocation(machine) {
+    if (!machine) return ""
+    let name = machine.name
+    if (name !== allMachinesString) {
+        name += " (" + machine.location + ")"
+    }
+    return name
+}
+
 export let barchartMaxValue = 10
 
 const Dashboard = ({ user }) => {
     
     let activeMachines = []
+    const [async, setAsync] = React.useState(true)
     const [machines, setMachines] = React.useState([]);
     const [active, setActive] = React.useState([...activeMachines]);
     const [showCharts, setShowCharts] = React.useState(false);
@@ -122,7 +133,6 @@ const Dashboard = ({ user }) => {
     }
 
     function getStatistics(machine, startDate, endDate) {
-
         request(errors + "/DateInterval?DeviceUID=" + machine.deviceUid + "&StartDate=" + startDate + "&EndDate" + endDate)
             .then((res) => res.data.data)
             .then((res) => {
@@ -135,7 +145,8 @@ const Dashboard = ({ user }) => {
             .then((res) => {
                 setCharts(res, machine);
             })
-            .catch((err) => console.log(err));
+            .catch((err) => {
+                console.log(err)});
     }
 
     function getAllDevicesStatistics(startDate, endDate) {
@@ -182,17 +193,24 @@ const Dashboard = ({ user }) => {
             .then((res) => {
                 const allMachines = res.data.data;
                 setMachines(allMachines);
+                setAsync(true)
                 request("https://si-grupa5.herokuapp.com/api/agent/online")
                     .then((res) => {
                         setActive(filterActive(res?.data, allMachines));
                     })
+                    .finally(() => setAsync(false))
                 // setActive(filterActive(activeMachines, allMachines))
             })
-            .catch((err) => console.log(err));
+            .catch((err) => {
+                console.log(err)
+                setAsync(false)
+            })
 
         getAllDevicesStatistics(startDate.toISOString(), endDate.toISOString())
 
     }, []);
+
+    console.log(clickedMachine)
 
     const disconnectMachine = (machine) => {
         removedMachine = machine
@@ -206,16 +224,20 @@ const Dashboard = ({ user }) => {
                 deviceUid: machine.deviceUid,
                 user: user.email
             })
-                .then((res) => console.log(res))
-                .catch((err) => console.log(err))
-            cloned.splice(index, 1);
-            lastDisconnected = machine
-            if (cloned.length === 0 || removedMachine?.deviceId === clickedMachine?.deviceId) {
-                clickedMachine = { name: allMachinesString }
-                setCharts(allMachinesUsage, clickedMachine)
-                setErrorCharts(allErrors)
-            }
+                .then((res) => {
+                    console.log(res.status)
+                    cloned.splice(index, 1);
+                    lastDisconnected = machine
+                    if (cloned.length === 0 || removedMachine?.deviceId === clickedMachine?.deviceId) {
+                        clickedMachine = { name: allMachinesString }
+                        setCharts(allMachinesUsage, clickedMachine)
+                        setErrorCharts(allErrors)
+                }
             setActive(cloned);
+                })
+                .catch((err) => {
+                   // console.log(clickedMachine)
+                    console.log(err)})
         }
     };
 
@@ -244,7 +266,9 @@ const Dashboard = ({ user }) => {
                 <div className="row machine-cards">
                     <h1>List of active machines</h1>
                     <div className="scrollable">
-                        {active?.length ? (
+                        {
+                        async ? <Spinner/> : 
+                        (active?.length ? (
                             active.map((machine, id) => (
                                 <ActiveMachine
                                     key={id}
@@ -260,13 +284,13 @@ const Dashboard = ({ user }) => {
                             <div className='no-active-machines'>
                                 No active machines.
                             </div>
-                        )}
+                        ))}
                     </div>
                 </div>
 
                 {showCharts && (
                     <div className="statistics">
-                        <h2 className="machineName">{clickedMachine?.name}</h2>
+                        <h2 className="machineName">{machineNameAndLocation(clickedMachine)}</h2>
                     <br></br>
 
                         <div className="pickers">
