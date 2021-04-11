@@ -170,7 +170,7 @@ const Dashboard = ({ user }) => {
                 numberOfEachError[Math.floor(error.code / 100)] += error.errorCodeNumber
             })
         })
-        barchartMaxValue = numberOfEachError.reduce((a,b) => a+b, 0)
+        barchartMaxValue = Math.max(...numberOfEachError)
         if (barchartMaxValue === 0 || barchartMaxValue % 10 !== 0)
             barchartMaxValue = barchartMaxValue + (10 - barchartMaxValue % 10)
         barChart.datasets[0].data = numberOfEachError
