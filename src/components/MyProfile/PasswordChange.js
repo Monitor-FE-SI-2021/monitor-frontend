@@ -6,7 +6,7 @@ export const checkPassword = ({ password }) => {
         password: password
     };
     //kad se deploya ide ruta (authEndpoint + '/checkPassword')
-    return request("http://localhost:3333/checkPassword", "POST",
+    return request(authEndpoint + "/checkPassword", "POST",
         data
     ).then(res => {
         if (res && res.status === 200) {

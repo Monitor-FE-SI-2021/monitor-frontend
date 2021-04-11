@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import React, { useEffect } from 'react';
-import './MyProfile.css';
+import './MyProfile.scss';
 import { push } from 'connected-react-router';
 import { RouteLink } from "../../store/modules/menu/menu";
 import { verifyEmail } from "./VerifyEmail";

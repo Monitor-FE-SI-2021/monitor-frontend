@@ -13,8 +13,8 @@ export const RouteLink = {
     Terminal: '/terminal',
     RemoteControl: '/remotecontrol',
     TwoFactorAuthentication: '/security',
-    secutityQuestions : '/securityQuestions',
-    MyProfile:'/my-profile'
+    secutityQuestions: '/securityQuestions',
+    MyProfile: '/my-profile'
 }
 
 const initialState = {
@@ -35,16 +35,6 @@ const initialState = {
             name: "Reporting",
             icon: "",
         },
-        {
-            link: RouteLink.TwoFactorAuthentication,
-            name: 'Two Factor Authentication',
-            icon: ""
-        },
-         {
-             link: RouteLink.secutityQuestions,
-             name: 'Security Questions',
-             icon: ""
-         },
         {
             link: RouteLink.MyProfile,
             name: 'My profile',

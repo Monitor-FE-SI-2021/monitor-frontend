@@ -6,7 +6,7 @@ export const sendVerificationSMS = ({ phone }) => {
         phone: phone
     };
     //kad se deploya ide ruta (authEndpoint + '/newPhoneNumber')
-    return request("http://localhost:3333/newPhoneNumber", "PUT",
+    return request(authEndpoint + "/newPhoneNumber", "PUT",
         data
     ).then(res => {
         if (res && res.status === 200) {

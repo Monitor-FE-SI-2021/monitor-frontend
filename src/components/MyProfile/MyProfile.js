@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-import './MyProfile.css';
+import './MyProfile.scss';
 
 import {
     changeEmailForUser,
@@ -10,18 +10,61 @@ import {
     checkIfEmailVerified,
     regexEmail
 } from "./VerifyEmail";
-import request from "../../service";
 import { showSwalToast } from "../../utils/utils";
 import { regexPhoneNumber, sendVerificationSMS } from "./VerifyPhoneNumber";
-import {checkPassword} from "./PasswordChange";
-import {connect} from "react-redux";
-import {requestResetPassword} from "../../store/modules/login/login";
-import {push} from "connected-react-router";
+import { checkPassword } from "./PasswordChange";
+import { connect } from "react-redux";
+import { push } from "connected-react-router";
+import { AppBar, Box, Tab, Tabs } from "@material-ui/core";
+import TwoFactorAuthentication from "../TwoFactorAuthentication/TwoFactorAuthentication";
+import Questions from "../securityQuestions/Questions";
 
-function MyProfile({token,push}) {
+const PROFILE_TABS = {
+    SETTINGS: '/my-profile/settings',
+    TWO_FACTOR_AUTH: '/my-profile/2fa',
+    QUESTIONS: '/my-profile/questions',
+}
+
+function TabPanel(props) {
+    const { children, value, path, ...other } = props;
+
+    return (
+        <div
+            role="tabpanel"
+            hidden={value !== path}
+            id={`simple-tabpanel-${path}`}
+            {...other}
+        >
+            {value === path && (
+                <Box p={3}>
+                    {children}
+                </Box>
+            )}
+        </div>
+    );
+}
+
+function MyProfile({ token, push, location }) {
+
+    const path = location?.pathname;
+
+    useEffect(() => {
+        if (!PROFILE_TABS[path]) {
+            handleTabChange(PROFILE_TABS.SETTINGS)
+        }
+    }, [])
+
     const switchRoute = (link) => {
         push(link);
     };
+
+    const [selectedTab, setSelectedTab] = useState(path);
+
+    const handleTabChange = (path) => {
+        setSelectedTab(path);
+        switchRoute(path);
+    }
+
     const [showInitialForm, setInitialForm] = React.useState(true);
     const [showMobileForm, setMobileForm] = React.useState(false);
     const [showPasswordForm, setPasswordForm] = React.useState(false);
@@ -205,111 +248,162 @@ function MyProfile({token,push}) {
         const user = {
             password: passwordValue.password
         }
-            checkPassword(user).then(res => {
-                if (res && res.status === 200) {
+        checkPassword(user).then(res => {
+            if (res && res.status === 200) {
 
-                    showSwalToast(res.data.message, 'success');
+                showSwalToast(res.data.message, 'success');
 
-                        switchRoute('/password-reset/' + res.data.token);
+                switchRoute('/password-reset/' + res.data.token);
 
 
-
-                } else if (res && res.status === 400) {
-                    showSwalToast(res.data.message);
-                    setPasswordValue(initialPasswordValue)
-                }
-            });
+            } else if (res && res.status === 400) {
+                showSwalToast(res.data.message);
+                setPasswordValue(initialPasswordValue)
+            }
+        });
         setPasswordValue(initialPasswordValue)
-        }
-
-
-    if (showInitialForm) {
-        return (
-            <div className="formDiv">
-                <form className="form">
-                    <h1>Personal Information</h1>
-
-                    <label htmlFor="Name">Name: </label>
-                    <input type='text' value={formData.name} disabled />
-
-                    <label htmlFor="Surname">Surname: </label>
-                    <input type='text' value={formData.lastname} disabled />
-
-                    <label htmlFor="Address">Address: </label>
-                    <input type='text' value={formData.address} disabled />
-
-                    <label htmlFor="Number">Mobile phone: </label>
-                    <input type='text' value={formData.phone} disabled />
-
-                    <label htmlFor="Email">Email: </label>
-                    <input type='text' value={formData.email} disabled />
-
-                    <input className='custom-btn' type="button" value="Change password"
-                           onClick={() => { setInitialForm(false); setMobileForm(false); setPasswordForm(true) }} />
-                    <input className='custom-btn' type="button" value="Verify or change email"
-                        onClick={() => { setInitialForm(false); setMobileForm(false); setPasswordForm(false) }} />
-                    <input className='custom-btn' type="button" value="Change mobile phone number"
-                        onClick={() => { setMobileForm(true); setInitialForm(false); setPasswordForm(false)}} />
-                </form>
-            </div>
-        );
     }
-    else if (showMobileForm) {
-        return (
-            <div className="formDiv">
-                <form className="formChange">
-                    <h1>Change your phone number</h1>
 
-                    <label htmlFor="Number">Enter a new mobile phone number: </label>
-                    <input type='text' name="phone" value={mobileValue.phone} onChange={handleMobileChange} />
-                    <p className={correctPhone.state}>{correctPhone.message}</p>
-                    <input className='custom-btn' type="button" value="Change number" onClick={handleClickMobileChange} />
-                </form>
-                <div>
-                    <button className="backToProfile" onClick={() => setInitialForm(true)}>Back to profile</button>
+    const renderMyProfile = () => {
+        if (showInitialForm) {
+            return (
+                <div className="formDiv">
+                    <form className="form">
+                        <h1>Personal Information</h1>
+
+                        <label htmlFor="Name">Name: </label>
+                        <input type='text' value={formData.name} disabled/>
+
+                        <label htmlFor="Surname">Surname: </label>
+                        <input type='text' value={formData.lastname} disabled/>
+
+                        <label htmlFor="Address">Address: </label>
+                        <input type='text' value={formData.address} disabled/>
+
+                        <label htmlFor="Number">Mobile phone: </label>
+                        <input type='text' value={formData.phone} disabled/>
+
+                        <label htmlFor="Email">Email: </label>
+                        <input type='text' value={formData.email} disabled/>
+
+                        <input className='custom-btn' type="button" value="Change password"
+                               onClick={() => {
+                                   setInitialForm(false);
+                                   setMobileForm(false);
+                                   setPasswordForm(true)
+                               }}/>
+                        <input className='custom-btn' type="button" value="Verify or change email"
+                               onClick={() => {
+                                   setInitialForm(false);
+                                   setMobileForm(false);
+                                   setPasswordForm(false)
+                               }}/>
+                        <input className='custom-btn' type="button" value="Change mobile phone number"
+                               onClick={() => {
+                                   setMobileForm(true);
+                                   setInitialForm(false);
+                                   setPasswordForm(false)
+                               }}/>
+                    </form>
                 </div>
-            </div>
-        );
+            );
+        } else if (showMobileForm) {
+            return (
+                <div className="formDiv">
+                    <form className="formChange">
+                        <h1>Change your phone number</h1>
+
+                        <label htmlFor="Number">Enter a new mobile phone number: </label>
+                        <input type='text' name="phone" value={mobileValue.phone} onChange={handleMobileChange}/>
+                        <p className={correctPhone.state}>{correctPhone.message}</p>
+                        <input className='custom-btn' type="button" value="Change number"
+                               onClick={handleClickMobileChange}/>
+                    </form>
+                    <div>
+                        <button className="backToProfile" onClick={() => setInitialForm(true)}>Back to profile</button>
+                    </div>
+                </div>
+            );
+        } else if (showPasswordForm) {
+            return (
+                <div className="formDiv">
+                    <form className="formChange">
+                        <h1>Change your password</h1>
+
+                        <label htmlFor="Number">Enter your current password: </label>
+                        <input type='text' name="password" value={passwordValue.password}
+                               onChange={handlePasswordChange}/>
+                        <p></p>
+                        <input className='custom-btn' type="button" value="Confirm"
+                               onClick={handleClickPasswordChange}/>
+                    </form>
+                    <div>
+                        <button className="backToProfile" onClick={() => {
+                            setInitialForm(true);
+                            setPasswordValue(initialPasswordValue)
+                        }}>Back to profile
+                        </button>
+                    </div>
+                </div>
+            );
+        } else
+            return (
+                <div className="formDiv">
+                    <form className="form">
+                        <h1>Email Verification</h1>
+                        <input className='custom-btn' type="button" value="Verify email" onClick={handleVerify}/>
+
+                    </form>
+                    <form className="formChange">
+                        <h1>Change Email</h1>
+                        <label htmlFor="Email">Enter a new email address: </label>
+                        <input type='text' name="email" value={emailValue.email} onChange={handleChange}/>
+                        <p className={correctEmail.state}>{correctEmail.message}</p>
+                        <input className='custom-btn' type="button" value="Change email" onClick={handleChangeEmail}/>
+                    </form>
+                    <div>
+                        <button className="backToProfile" onClick={() => setInitialForm(true)}>Back to profile</button>
+                    </div>
+                </div>
+            );
     }
-    else if (showPasswordForm) {
-        return (
-            <div className="formDiv">
-                <form className="formChange">
-                    <h1>Change your password</h1>
 
-                    <label htmlFor="Number">Enter your current password: </label>
-                    <input type='text' name="password" value={passwordValue.password} onChange={handlePasswordChange} />
-                    <p></p>
-                    <input className='custom-btn' type="button" value="Confirm" onClick={handleClickPasswordChange}/>
-                </form>
-                <div>
-                    <button className="backToProfile" onClick={() => {setInitialForm(true); setPasswordValue(initialPasswordValue)}}>Back to profile</button>
-                </div>
-            </div>
-        );
-    }
-    else
-        return (
-            <div className="formDiv">
-                <form className="form">
-                    <h1>Email Verification</h1>
-                    <input className='custom-btn' type="button" value="Verify email" onClick={handleVerify} />
+    return (
+        <div className='my-profile page'>
+            <AppBar position="static" className='profile-tabs'>
+                <Tabs value={selectedTab}
+                      TabIndicatorProps={{
+                          style: {
+                              backgroundColor: "white",
+                          }
+                      }}>
+                    <Tab onClick={() => handleTabChange(PROFILE_TABS.SETTINGS)}
+                         value={PROFILE_TABS.SETTINGS}
+                         label="Profile"
+                         className='single-tab'/>
+                    <Tab onClick={() => handleTabChange(PROFILE_TABS.TWO_FACTOR_AUTH)}
+                         value={PROFILE_TABS.TWO_FACTOR_AUTH}
+                         label="Two Factor Auth"
+                         className='single-tab'/>
+                    <Tab onClick={() => handleTabChange(PROFILE_TABS.QUESTIONS)}
+                         value={PROFILE_TABS.QUESTIONS}
+                         label="Security Questions"
+                         className='single-tab'/>
+                </Tabs>
+            </AppBar>
+            <TabPanel value={selectedTab} path={'/my-profile/settings'}>
+                {renderMyProfile()}
+            </TabPanel>
+            <TabPanel value={selectedTab} path={'/my-profile/2fa'}>
+                <TwoFactorAuthentication/>
+            </TabPanel>
+            <TabPanel value={selectedTab} path={'/my-profile/questions'}>
+                <Questions/>
+            </TabPanel>
+        </div>
+    )
 
-                </form>
-                <form className="formChange">
-                    <h1>Change Email</h1>
-                    <label htmlFor="Email">Enter a new email address: </label>
-                    <input type='text' name="email" value={emailValue.email} onChange={handleChange} />
-                    <p className={correctEmail.state}>{correctEmail.message}</p>
-                    <input className='custom-btn' type="button" value="Change email" onClick={handleChangeEmail} />
-                </form>
-                <div>
-                    <button className="backToProfile" onClick={() => setInitialForm(true)}>Back to profile</button>
-                </div>
-            </div>
 
-
-        );
 }
 
-export default connect(state => ({}), {push})(MyProfile);
+export default connect(state => ({}), { push })(MyProfile);

@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import React from 'react';
-import './Login.css';
+import './Login.scss';
 import { requestForgotPassword } from "../../store/modules/login/login";
 
 function EmailSubmit({ requestForgotPassword }) {

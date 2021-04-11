@@ -1,13 +1,10 @@
-import { STORAGE_KEY } from "../../utils/consts";
 import request, { authEndpoint } from "../../service";
 import { showSwalToast } from "../../utils/utils";
 import { history } from "../../store/store";
 
-const neki = "http://localhost:3333/getUserDetails";
-
 export const getUserDetails = () => {
     //kad se deploya ide ruta (authEndpoint + '/getUserDetails')
-    return request(neki).then(res => {
+    return request(authEndpoint + "/getUserDetails").then(res => {
         if (res && res.status === 200) {
             return res;
         }
@@ -21,7 +18,7 @@ export const checkIfEmailVerified = ({ email }) => {
         email: email
     };
     //kad se deploya ide ruta (authEndpoint + '/checkIfEmailVerified')
-    return request("http://localhost:3333/checkIfEmailVerified", "POST",
+    return request(authEndpoint + "/checkIfEmailVerified", "POST",
         data
     ).then(res => {
 
@@ -47,7 +44,7 @@ export const sendVerificationEmail = ({ email }) => {
         email: email.email
     };
     //kad se deploya ide ruta (authEndpoint + '/sendVerificationEmail')
-    return request("http://localhost:3333/sendVerificationEmail", "PUT",
+    return request(authEndpoint + "/sendVerificationEmail", "PUT",
         data
     ).then(res => {
         if (res && res.status === 200) {
@@ -67,7 +64,7 @@ export const checkIfEmailExists = ({ email }) => {
         email: email.email
     };
     //kad se deploya ide ruta (authEndpoint + '/checkIfEmailExists')
-    return request("http://localhost:3333/checkIfEmailExists", "POST",
+    return request(authEndpoint + "/checkIfEmailExists", "POST",
         data
     ).then(res => {
         console.log(res)
@@ -82,7 +79,7 @@ export const changeEmailForUser = ({ email }) => {
         email: email.email
     };
     //kad se deploya ide ruta (authEndpoint + '/sendVerificationEmail')
-    return request("http://localhost:3333/sendVerificationEmail", "PUT",
+    return request(authEndpoint + "/sendVerificationEmail", "PUT",
         data
     ).then(res => {
         if (res && res.status === 200) {
@@ -95,7 +92,7 @@ export const changeEmailForUser = ({ email }) => {
 
 export const verifyEmail = ({ token }) => {
     //kad se deploya ide ruta (authEndpoint + '/verifyEmail')
-    return request("http://localhost:3333/verifyEmail" + "/" + token, "PUT").then(res => {
+    return request(authEndpoint + "/verifyEmail" + "/" + token, "PUT").then(res => {
         if (res && res.status === 200) {
             showSwalToast('Email successfully verified!', 'success');
             setTimeout(() => {
