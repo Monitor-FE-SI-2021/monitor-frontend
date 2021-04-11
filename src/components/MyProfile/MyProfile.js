@@ -13,11 +13,14 @@ import {
 import request from "../../service";
 import { showSwalToast } from "../../utils/utils";
 import { regexPhoneNumber, sendVerificationSMS } from "./VerifyPhoneNumber";
+import {checkPassword} from "./PasswordChange";
 
 function MyProfile() {
 
     const [showInitialForm, setInitialForm] = React.useState(true);
     const [showMobileForm, setMobileForm] = React.useState(false);
+    const [showPasswordForm, setPasswordForm] = React.useState(false);
+
     const statusEmail = {
         state: "",
         message: ""
@@ -29,14 +32,20 @@ function MyProfile() {
         message: ""
     }
     const [correctPhone, setCorrectPhone] = React.useState(statusPhone);
+
     const initialEmailValue = {
         email: ""
     };
     const initialMobileValue = {
         phone: ""
     };
+    const initialPasswordValue = {
+        password: ""
+    };
+
     const [emailValue, setEmailValue] = React.useState(initialEmailValue)
     const [mobileValue, setMobileValue] = React.useState(initialMobileValue)
+    const [passwordValue, setPasswordValue] = React.useState(initialPasswordValue)
 
     const initialFormData = {
         name: "",
@@ -174,6 +183,39 @@ function MyProfile() {
         }
     }
 
+
+    //////////////////////////////////////////////////////////////////Password Change///////////////////////////////
+
+    const handlePasswordChange = (e) => {
+        e.preventDefault()
+        setPasswordValue({
+            ...passwordValue,
+            [e.target.name]: e.target.value.trim()
+        });
+    };
+
+    const handleClickPasswordChange = (e) => {
+        e.preventDefault()
+
+        const user = {
+            password: passwordValue.password
+        }
+            checkPassword(user).then(res => {
+
+                if (res && res.status === 200) {
+                    console.log(res)
+                    showSwalToast(res.data.message, 'success');
+
+
+                } else if (res && res.status === 400) {
+                    showSwalToast(res.data.message);
+                    setPasswordValue(initialPasswordValue)
+                }
+            });
+        setPasswordValue(initialPasswordValue)
+        }
+
+
     if (showInitialForm) {
         return (
             <div className="formDiv">
@@ -195,11 +237,12 @@ function MyProfile() {
                     <label htmlFor="Email">Email: </label>
                     <input type='text' value={formData.email} disabled />
 
-                    <input className='custom-btn' type="button" value="Change password" />
+                    <input className='custom-btn' type="button" value="Change password"
+                           onClick={() => { setInitialForm(false); setMobileForm(false); setPasswordForm(true) }} />
                     <input className='custom-btn' type="button" value="Verify or change email"
-                        onClick={() => { setInitialForm(false); setMobileForm(false) }} />
+                        onClick={() => { setInitialForm(false); setMobileForm(false); setPasswordForm(false) }} />
                     <input className='custom-btn' type="button" value="Change mobile phone number"
-                        onClick={() => { setMobileForm(true); setInitialForm(false) }} />
+                        onClick={() => { setMobileForm(true); setInitialForm(false); setPasswordForm(false)}} />
                 </form>
             </div>
         );
@@ -217,6 +260,23 @@ function MyProfile() {
                 </form>
                 <div>
                     <button className="backToProfile" onClick={() => setInitialForm(true)}>Back to profile</button>
+                </div>
+            </div>
+        );
+    }
+    else if (showPasswordForm) {
+        return (
+            <div className="formDiv">
+                <form className="formChange">
+                    <h1>Change your password</h1>
+
+                    <label htmlFor="Number">Enter your current password: </label>
+                    <input type='text' name="password" value={passwordValue.password} onChange={handlePasswordChange} />
+                    <p></p>
+                    <input className='custom-btn' type="button" value="Confirm" onClick={handleClickPasswordChange}/>
+                </form>
+                <div>
+                    <button className="backToProfile" onClick={() => {setInitialForm(true); setPasswordValue(initialPasswordValue)}}>Back to profile</button>
                 </div>
             </div>
         );
