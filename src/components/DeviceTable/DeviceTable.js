@@ -1,5 +1,5 @@
 import CustomTable, { TableSlot } from '../CustomTable/CustomTable';
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CastConnected } from "@material-ui/icons";
 import { Edit } from "@material-ui/icons";
 import dayjs from 'dayjs';
@@ -43,6 +43,7 @@ const DeviceTable = ({
                          group,
                          updateDevicesTableForGroup,
                          updateActiveDevice,
+                         hasDragAndDrop = false,
                          showGroup,
                      }) => {
 
@@ -190,7 +191,9 @@ const DeviceTable = ({
                              fields={tableFields}
                              activeSortField={deviceTable.sortField}
                              activeSortOrder={deviceTable.sortOrder}
-                             handleSort={handleSort}>
+                             handleSort={handleSort}
+                             droppableId={group?.groupId ?? null}
+                             hasDragAndDrop={hasDragAndDrop}>
                     <TableSlot slot='actions' render={dataRow => (
                         <div className='actions'>
                             {canConnectToDevice(dataRow) && (
