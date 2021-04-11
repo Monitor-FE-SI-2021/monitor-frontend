@@ -2,7 +2,7 @@ import {render} from '@testing-library/react';
 import React, {Component, useState} from 'react';
 import {withGoogleMap, GoogleMap, Marker, InfoWindow} from "react-google-maps"
 import request, {devices} from "../../../service";
-
+import './GoogleMapMonitors.scss';
 const greenMarkerURL = "http://maps.google.com/mapfiles/ms/micons/green-dot.png"
 const redMarkerURL = "http://maps.google.com/mapfiles/ms/micons/red-dot.png"
 const yellowMarkerURL = "http://maps.google.com/mapfiles/ms/micons/yellow-dot.png"
@@ -130,10 +130,13 @@ class GoogleMapMonitors extends Component {
         <div className="map-legend">
             <div className="legend-wrapper">
                 <div className="legend-bg">
+                    <p>Legend</p>
                     <ul id="legend-list">
-                        <li id="first-list-item"> online</li>
-                        <li id="second-list-item"> offline</li>
-                        <li id="third-list-item"> critical</li>
+
+                        <li id="first-list-item"> Online</li>
+                        <li id="second-list-item"> Offline</li>
+                        <li id="third-list-item"> Warning</li>
+                        <li id="fourth-list-item"> Critical</li>
                     </ul>
                 </div>
             </div>
