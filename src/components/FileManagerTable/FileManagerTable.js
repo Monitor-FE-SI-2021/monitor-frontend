@@ -9,7 +9,7 @@ import Swal from "sweetalert2";
 
 const config = require("../Terminal/config");
 const userFiles = "https://si-grupa5.herokuapp.com/api/web/user/file-tree";
-const folderIconUrl = "https://img.icons8.com/color/40/000000/folder-invoices--v2.png";
+const folderIconUrl = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHg9IjBweCIgeT0iMHB4Igp3aWR0aD0iNDgiIGhlaWdodD0iNDgiCnZpZXdCb3g9IjAgMCAxNzIgMTcyIgpzdHlsZT0iIGZpbGw6IzAwMDAwMDsiPjxnIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0ibm9uemVybyIgc3Ryb2tlPSJub25lIiBzdHJva2Utd2lkdGg9IjEiIHN0cm9rZS1saW5lY2FwPSJidXR0IiBzdHJva2UtbGluZWpvaW49Im1pdGVyIiBzdHJva2UtbWl0ZXJsaW1pdD0iMTAiIHN0cm9rZS1kYXNoYXJyYXk9IiIgc3Ryb2tlLWRhc2hvZmZzZXQ9IjAiIGZvbnQtZmFtaWx5PSJub25lIiBmb250LXdlaWdodD0ibm9uZSIgZm9udC1zaXplPSJub25lIiB0ZXh0LWFuY2hvcj0ibm9uZSIgc3R5bGU9Im1peC1ibGVuZC1tb2RlOiBub3JtYWwiPjxwYXRoIGQ9Ik0wLDE3MnYtMTcyaDE3MnYxNzJ6IiBmaWxsPSJub25lIj48L3BhdGg+PGc+PHBhdGggZD0iTTE0My4zMzMzMyw0M2gtNjQuNWwtMTQuMzMzMzMsLTE0LjMzMzMzaC0zNS44MzMzM2MtNy44ODMzMywwIC0xNC4zMzMzMyw2LjQ1IC0xNC4zMzMzMywxNC4zMzMzM3YyOC42NjY2N2gxNDMuMzMzMzN2LTE0LjMzMzMzYzAsLTcuODgzMzMgLTYuNDUsLTE0LjMzMzMzIC0xNC4zMzMzMywtMTQuMzMzMzN6IiBmaWxsPSIjNWI3N2JkIj48L3BhdGg+PHBhdGggZD0iTTE0My4zMzMzMyw0M2gtMTE0LjY2NjY3Yy03Ljg4MzMzLDAgLTE0LjMzMzMzLDYuNDUgLTE0LjMzMzMzLDE0LjMzMzMzdjcxLjY2NjY3YzAsNy44ODMzMyA2LjQ1LDE0LjMzMzMzIDE0LjMzMzMzLDE0LjMzMzMzaDExNC42NjY2N2M3Ljg4MzMzLDAgMTQuMzMzMzMsLTYuNDUgMTQuMzMzMzMsLTE0LjMzMzMzdi03MS42NjY2N2MwLC03Ljg4MzMzIC02LjQ1LC0xNC4zMzMzMyAtMTQuMzMzMzMsLTE0LjMzMzMzeiIgZmlsbD0iIzkzYWJmNiI+PC9wYXRoPjwvZz48L2c+PC9zdmc+";
 const fileIconUrl = "https://img.icons8.com/office/40/000000/document--v2.png";
 
 class FileManagerTable extends React.Component {
@@ -160,21 +160,17 @@ class FileManagerTable extends React.Component {
         return (
             <tr className="header-row">
                 <th>
-                    <div className="file-name-div">
+                    <div className="file-name-div file-name-offset">
                         <span>File name</span>
-                        <img onClick={() => {this.sortFilesDescending()}} className="sort-strelica" src="https://img.icons8.com/material-rounded/24/000000/sort-down.png"></img>
-                        <img onClick={() => {this.sortFilesAscending()}} className="sort-strelica" src="https://img.icons8.com/material-rounded/24/000000/sort-up.png"/>
+                        <img onClick={() => {this.sortFilesDescending()}} className="sort-strelica" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAAWklEQVRIie2PsQ2AMBDEToCUHRENLEHJ2ulMS0FEHoLSnAew7yRjTB+ABcjUk4H5zjUUGqOkFNiUJE3RF3vgwRGSByPv5JWRb/KHSBt5IdJWfolswPqL3Jh+nMnK13/HbjBeAAAAAElFTkSuQmCC"></img>
+                        <img onClick={() => {this.sortFilesAscending()}} className="sort-strelica" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAAVklEQVRIie3PsQ2AMAxE0RODIkUMwQyMHCg+FaIhAoPToHsD/LMls38BCjD1is+clp7x3JFGPGfkJv5t5GH83QgwBuKHctUaGhubpBq4qUpaQ1+YWZ4dI9Lbm/Wdan8AAAAASUVORK5CYII="/>
                     </div>
                 </th>
                 <th>
-                    <div style={{
-                        display: "flex",
-                        justifyContent: "left",
-                        alignItems: "center"
-                    }}>
+                    <div className="file-name-div">
                         <span>Date added</span>
-                        <img onClick={() => {this.sortDateDescending()}} className="sort-strelica" src="https://img.icons8.com/material-rounded/24/000000/sort-down.png"></img>
-                        <img onClick={() => {this.sortDateAscending()}} className="sort-strelica" src="https://img.icons8.com/material-rounded/24/000000/sort-up.png"/>
+                        <img onClick={() => {this.sortDateDescending()}} className="sort-strelica" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAAWklEQVRIie2PsQ2AMBDEToCUHRENLEHJ2ulMS0FEHoLSnAew7yRjTB+ABcjUk4H5zjUUGqOkFNiUJE3RF3vgwRGSByPv5JWRb/KHSBt5IdJWfolswPqL3Jh+nMnK13/HbjBeAAAAAElFTkSuQmCC"></img>
+                        <img onClick={() => {this.sortDateAscending()}} className="sort-strelica" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAAVklEQVRIie3PsQ2AMAxE0RODIkUMwQyMHCg+FaIhAoPToHsD/LMls38BCjD1is+clp7x3JFGPGfkJv5t5GH83QgwBuKHctUaGhubpBq4qUpaQ1+YWZ4dI9Lbm/Wdan8AAAAASUVORK5CYII="/>
                     </div>
                 </th>
                 <th colSpan="2" className="centriraj">File manipulation</th>

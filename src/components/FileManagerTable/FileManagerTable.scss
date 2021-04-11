@@ -65,11 +65,12 @@
   }
 
   .header-row {
-    background: linear-gradient(
-      to top,
-      rgba(235, 189, 73, 0.6),
-      rgba(235, 189, 73, 0)
-    );
+    background-color: rgba(91, 119, 189);
+    // background: linear-gradient(
+    //   to top,
+    //   rgba(255, 189, 73, 0.6),
+    //   rgba(235, 189, 73, 0)
+    // );
   }
 
   .centriraj {
@@ -91,7 +92,7 @@
   }
 
   .date-style {
-    color: gray;
+    color: #a7aabd;
     width: 27%;
   }
 
@@ -106,7 +107,7 @@
 
   .sort-strelica:hover {
     transition: 0.3s ease-in-out;
-    background-color: #ffca26;
+    background-color: #93abf6;
     border-radius: 100%;
   }
 
@@ -114,6 +115,9 @@
     display: flex;
     justify-content: left;
     align-items: center;
+  }
+
+  .file-name-offset {
     padding-left: 8px;
   }
 }
