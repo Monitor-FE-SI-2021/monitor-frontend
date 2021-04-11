@@ -40,7 +40,9 @@
 
   .file-download,
   .file-rename,
-  .file-delete {
+  .file-delete,
+  .file-copy,
+  .file-move {
     transition: 0.2s ease-in-out;
     cursor: pointer;
   }

@@ -3,7 +3,7 @@ import './FileManagerTable.scss';
 import request from "../../service";
 import DragAndDrop from '../DragAndDrop/DragAndDrop';
 import Swal from "sweetalert2";
-import { FaPencilAlt, FaTrash } from 'react-icons/fa';
+import { FaCopy, FaCut, FaPencilAlt, FaTrash } from "react-icons/fa";
 import Checkbox from '@material-ui/core/Checkbox';
 import {fetchAllGroups} from '../../store/modules/groups/actions';
 
@@ -151,6 +151,12 @@ class FileManagerTable extends React.Component {
                         </td>
                         <td className="file-manipulation file-rename centriraj" onClick={() => { this.handleRename(id) }}>
                             <FaPencilAlt size={20} />
+                        </td>
+                        <td className="file-manipulation file-copy centriraj" onClick={() => { this.handleCopy(id) }}>
+                            <FaCopy size={20} />
+                        </td>
+                        <td className="file-manipulation file-move centriraj" onClick={() => { this.handleMove(id) }}>
+                            <FaCut size={20} />
                         </td>
                         <Checkbox onChange={(e) => { this.handleCheckFile(e, id)}} className="file-checkbox file-manipulation" color="default"/>
                     </div>
@@ -484,7 +490,115 @@ class FileManagerTable extends React.Component {
         }
     }
 
-    handleRename(id) {
+    
+
+  sendCopyRequest = async (newPath, name) => {
+    try {
+      const requestOptions = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: config.email,
+          password: config.password,
+        }),
+      };
+
+      var response = await fetch(config.url, requestOptions);
+      if (response.status == 200) {
+        var x = await response.json();
+        const token = x.accessToken;
+
+        const requestOptions2 = {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+          body: JSON.stringify({
+            user: this.state.user.email,
+            oldPath: this.state.activeFolder,
+            name: name,
+            newPath: newPath,
+          }),
+        };
+
+        var response1 = await fetch(
+          "https://si-grupa5.herokuapp.com/api/web/user/copy",
+          requestOptions2
+        )
+          .then((res) => {
+            Swal.fire({
+              title: "File manager",
+              text: "File/folder copied successfully",
+              type: "success",
+            });
+
+            this.updateResponse();
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  sendMoveRequest = async (newPath, name) => {
+    try {
+      const requestOptions = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: config.email,
+          password: config.password,
+        }),
+      };
+
+      var response = await fetch(config.url, requestOptions);
+      if (response.status == 200) {
+        var x = await response.json();
+        const token = x.accessToken;
+
+        const requestOptions2 = {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+          body: JSON.stringify({
+            user: this.state.user.email,
+            oldPath: this.state.activeFolder,
+            name: name,
+            newPath: newPath,
+          }),
+        };
+
+        var response1 = await fetch(
+          "https://si-grupa5.herokuapp.com/api/web/user/move",
+          requestOptions2
+        )
+          .then((res) => {
+            Swal.fire({
+              title: "File manager",
+              text: "File/folder copied successfully",
+              type: "success",
+            });
+
+            this.updateResponse();
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  
+  handleRename(id) {
         this.state.globalId = id;
         var file = this.state.responseObject[id];
 
@@ -513,6 +627,58 @@ class FileManagerTable extends React.Component {
             },
             allowOutsideClick: () => !Swal.isLoading()
         })
+    }
+
+    handleCopy(id) {
+      this.state.globalId = id;
+      var file = this.state.responseObject[id];
+  
+      Swal.fire({
+        title: "Copy file",
+        input: "text",
+        inputAttributes: {
+          autocapitalize: "off",
+        },
+        showCancelButton: true,
+        confirmButtonText: "Copy",
+        showLoaderOnConfirm: true,
+        preConfirm: (newPath) => {
+          let isDirectory = false;
+          if (file.data.type === "directory") {
+            isDirectory = true;
+          }
+          this.sendCopyRequest(newPath, file.fileName).then((r) =>
+            console.log(r)
+          );
+        },
+        allowOutsideClick: () => !Swal.isLoading(),
+      });
+    }
+  
+    handleMove(id) {
+      this.state.globalId = id;
+      var file = this.state.responseObject[id];
+  
+      Swal.fire({
+        title: "Move file",
+        input: "text",
+        inputAttributes: {
+          autocapitalize: "off",
+        },
+        showCancelButton: true,
+        confirmButtonText: "Move",
+        showLoaderOnConfirm: true,
+        preConfirm: (newPath) => {
+          let isDirectory = false;
+          if (file.data.type === "directory") {
+            isDirectory = true;
+          }
+          this.sendMoveRequest(newPath, file.fileName).then((r) =>
+            console.log(r)
+          );
+        },
+        allowOutsideClick: () => !Swal.isLoading(),
+      });
     }
 
     handleCheckFile(e, id) {
