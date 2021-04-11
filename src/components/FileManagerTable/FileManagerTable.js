@@ -12,6 +12,7 @@ const userFiles = "https://si-grupa5.herokuapp.com/api/web/user/file-tree";
 const folderIconUrl = "https://img.icons8.com/color/40/000000/folder-invoices--v2.png";
 const fileIconUrl = "https://img.icons8.com/office/40/000000/document--v2.png";
 
+let tokenGlobal = '';
 class FileManagerTable extends React.Component {
     constructor(props) {
         super(props);
@@ -56,6 +57,7 @@ class FileManagerTable extends React.Component {
             if (response.status == 200) {
                 var x = await response.json();
                 const token = x.accessToken;
+                tokenGlobal = token;
                 const requestOptions1 = {
                     method: "POST",
                     headers: {
@@ -332,14 +334,59 @@ class FileManagerTable extends React.Component {
         }
     }
 
-    handleDelete(id) {
+    checkIfDirectoryIsEmpty = async(path) => {
+        const requestOptions1 = {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + tokenGlobal,
+            },
+            body: JSON.stringify({
+                user: this.state.user.email,
+            }),
+        };
+
+        var response = await fetch(userFiles, requestOptions1);
+        if(response.status == 200) {
+            var data = await response.json();
+            var files = data.children;
+            for (var i = 1; i < path.length; i++) {
+                for (var j = 0; j < files.length; j++) {
+                    if (path[i] == files[j].name && files[j].type == 'directory') {
+                        files = files[j].children;
+                    }
+                }
+            }
+            //if folder has nothing inside, return true
+            if (files.length === 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    handleDelete = async (id) => {
         var file = this.state.responseObject[id];
+        var directoryPath = this.state.activeFolder + '/' + file.data.name;
+        var path = directoryPath.trim('/').split('/');
 
         this.state.globalId = id;
         if(file.data.type === 'directory') {
+            let isDirectoryEmpty = false;
+            let popupText = '';
+            await this.checkIfDirectoryIsEmpty(path)
+                .then(r => isDirectoryEmpty = r)
+
+            if(isDirectoryEmpty) {
+                popupText = 'The directory is empty'
+            } else {
+                popupText = 'The directory is not empty'
+            }
             Swal.fire({
                 title: 'Are you sure?',
-                text: "The directory is not empty",
+                text: popupText,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
