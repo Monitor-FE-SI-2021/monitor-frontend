@@ -1,27 +1,50 @@
 import DeviceTable from "../DeviceTable/DeviceTable";
-import { useEffect, useState } from "react"
+import { useCallback, useEffect } from "react"
 import { connect } from "react-redux";
-import request, {devices} from "../../service";
+import './all_devices.scss';
+import { fetchAllDevicesForUser } from "../../store/modules/devices/actions";
+import { debounce } from "lodash/function";
+import { ALL_DEVICES_TABLE_KEY } from "../../store/modules/devices/devices";
 
-const AllDevices = ({ devicesSearchText }) => {
+const AllDevices = ({ deviceTable, devicesSearchText, fetchAllDevicesForUser }) => {
 
-    const [searchedDevices, setSearchedDevices] = useState([{}])
+    const fetchData = () => fetchAllDevicesForUser({
+        page: deviceTable.page,
+        perPage: deviceTable.perPage,
+        status: deviceTable.status,
+        sortField: deviceTable.sortField,
+        sortOrder: deviceTable.sortOrder
+    });
+
+    const fetchDataDebounced = useCallback(
+        debounce(fetchData, 400),
+        []
+    );
 
     useEffect(() => {
-        request(devices + `/AllDevices?name=${devicesSearchText}&location=${devicesSearchText}`)
-            .then(response => response.data)
-            .then(r => {
-                setSearchedDevices(r.data)
-            })
+        fetchData();
+    }, [deviceTable.page, deviceTable.perPage, deviceTable.status, deviceTable.sortField, deviceTable.sortOrder]);
+
+
+    // search useEffect so i can debounce it
+    useEffect(() => {
+        fetchDataDebounced();
     }, [devicesSearchText])
 
     return (
-        <div>
-            <DeviceTable devices={searchedDevices} showGroup={true}/>
+        <div className='all-devices'>
+            <DeviceTable devices={deviceTable?.devices ?? []}
+                         showGroup={true}/>
         </div>
     )
 }
 
-export default connect((state) => ({
-    devicesSearchText: state.devices.searchText
-}),{})(AllDevices)
+export default connect((state) => {
+
+    const deviceTable = state.devices.deviceTables?.[ALL_DEVICES_TABLE_KEY] || {};
+
+    return {
+        deviceTable,
+        devicesSearchText: state.devices.searchText
+    }
+}, {fetchAllDevicesForUser})(AllDevices)

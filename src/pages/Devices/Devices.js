@@ -96,13 +96,11 @@ const Devices = ({
                 />
             </div>
             {groupsSearchText === "" && devicesSearchText !== "" ?
-            <div>
-                <AllDevices />
-            </div>
+                <AllDevices/>
                 :
-            <div className={'groups-list'}>
-                {async ? <Spinner color={'inherit'}/> : rootGroups}
-            </div> }
+                <div className={'groups-list'}>
+                    {async ? <Spinner color={'inherit'}/> : rootGroups}
+                </div>}
         </div>
     );
 };

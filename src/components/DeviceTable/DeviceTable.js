@@ -13,7 +13,7 @@ import request, { wsEndpoint } from "../../service";
 import { showSwalToast } from "../../utils/utils";
 import FilterList from "@material-ui/icons/FilterList";
 import { Checkbox, Chip, FormControl, Input, ListItemText, MenuItem, Select } from "@material-ui/core";
-import { DEVICE_STATUS } from "../../store/modules/devices/devices";
+import { ALL_DEVICES_TABLE_KEY, DEVICE_STATUS } from "../../store/modules/devices/devices";
 import CustomPagination from "../CustomTable/components/CustomPagination";
 
 const DEVICE_WS_STATUS = {
@@ -43,12 +43,14 @@ const DeviceTable = ({
                          group,
                          updateDevicesTableForGroup,
                          updateActiveDevice,
-                         showGroup
+                         showGroup,
                      }) => {
 
     const [statusFilterOpened, setStatusFilterOpened] = React.useState(false);
 
     const async = deviceTable?.async;
+
+    const deviceTableKey = group ? group.groupId : ALL_DEVICES_TABLE_KEY;
 
     const editDevice = (device) => {
         selectDevice(device);
@@ -87,12 +89,13 @@ const DeviceTable = ({
             name: 'name',
             title: 'Naziv',
             sort: true,
-        }].concat(showGroup ? [{
+        },
+        {
             name: 'groupName',
             title: 'Grupa',
-            sort: true,
-            slot:'groupName'
-        }] : []).concat([
+            width: '25%',
+            disabled: !showGroup,
+        },
         {
             name: 'location',
             title: 'Lokacija',
@@ -102,12 +105,11 @@ const DeviceTable = ({
             name: 'status',
             title: 'Status',
             slot: 'status',
-            sort: true,
         },
         {
             name: 'LastTimeOnline',
             title: 'Posljednji put online',
-            width: '30%',
+            width: '20%',
             sort: true,
             slot: 'lastTimeOnline'
         },
@@ -117,9 +119,9 @@ const DeviceTable = ({
             width: '20%',
             align: 'right',
             slot: 'actions'
-        }])
-    )
-   
+        }]
+    );
+
 
     const renderDeviceStatus = device => {
 
@@ -138,7 +140,7 @@ const DeviceTable = ({
     const handleFiltersChange = (name, value) => {
 
         updateDevicesTableForGroup({
-            groupId: group.groupId,
+            groupId: deviceTableKey,
             data: {
                 [name]: value
             }
@@ -146,15 +148,15 @@ const DeviceTable = ({
     }
 
     const handleChangePage = (page) => {
-        updateDevicesTableForGroup({ groupId: group.groupId, data: { page } })
+        updateDevicesTableForGroup({ groupId: deviceTableKey, data: { page } })
     }
 
     const handleChangePerPage = (perPage) => {
-        updateDevicesTableForGroup({ groupId: group.groupId, data: { perPage } })
+        updateDevicesTableForGroup({ groupId: deviceTableKey, data: { perPage } })
     }
 
     const handleSort = (field, order) => {
-        updateDevicesTableForGroup({ groupId: group.groupId, data: { sortField: field, sortOrder: order } })
+        updateDevicesTableForGroup({ groupId: deviceTableKey, data: { sortField: field, sortOrder: order } })
     }
 
     return (
@@ -228,7 +230,7 @@ const DeviceTable = ({
 export default connect((state, ownProps) => {
 
         const { group } = ownProps;
-        const groupId = group?.groupId || null;
+        const groupId = group?.groupId || ALL_DEVICES_TABLE_KEY;
 
         const deviceTable = state.devices.deviceTables?.[groupId] || {};
 
@@ -237,8 +239,7 @@ export default connect((state, ownProps) => {
             user: state.login.user,
             deviceTable
         }
-    }
-    ,
+    },
     {
         selectDevice,
         push,

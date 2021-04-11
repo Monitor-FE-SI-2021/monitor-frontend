@@ -14,6 +14,8 @@ export const DEVICE_STATUS = {
     INACTIVE: 'notactive'
 }
 
+export const ALL_DEVICES_TABLE_KEY = 'all';
+
 const defaultDeviceTableInfo = {
     devices: [],
     async: false,

@@ -47,7 +47,7 @@ export default function CustomTable({ data, fields, children, handleSort, active
 
     return (
         <TableContainer component={Paper} className={'custom-table-container'}>
-            <Table className='custom-table'>
+            <Table stickyHeader className='custom-table'>
                 <TableHead>
                     <TableRow className={'header-row'} key={'header-row'}>
                         {activeFields.map(field => (
