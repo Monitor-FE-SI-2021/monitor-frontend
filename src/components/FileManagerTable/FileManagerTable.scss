@@ -40,14 +40,21 @@
 
   .file-download,
   .file-rename,
-  .file-delete {
+  .file-delete,
+  .file-copy,
+  .file-move {
     transition: 0.2s ease-in-out;
     cursor: pointer;
   }
 
+  .file-download {
+    width: 70%;
+  }
+
   .file-manipulation {
-    cursor: pointer;
-    width: 14%;
+    display: flex;
+    align-items: center;
+    margin-right: 60px;
   }
 
   .file-delete:hover {
@@ -94,4 +101,27 @@
     width: 25px;
     height: 25px;
   }
+
+  .file-manipulation-wrapper {
+    display: flex;
+    justify-content: center;
+  }
+
+  .file-checkbox {
+    margin-right: 0px;
+  }
 }
+
+
+.swalItem{
+  margin: 6px 0;
+}
+
+.swal-text{
+  max-height: 16em;  /* To be adjusted as you like */
+  overflow-y: scroll;
+  width: 100%;
+  text-align: left;
+}
+
+
