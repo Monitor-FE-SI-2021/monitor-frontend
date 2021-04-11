@@ -55,7 +55,7 @@ const UseOnEnter = () => {
 
       const newConsoleLine = String(commands[args[0]]) || "Invalid Command";
       //newInput2 = "\""+newInput2 + "\""
-      //console.log("Input ", newInput2)
+      console.log("Input ", newConsoleLine)
       
       if(newConsoleLine==="Invalid Command"){
       return updateConsoleOutput(consoleOutput =>

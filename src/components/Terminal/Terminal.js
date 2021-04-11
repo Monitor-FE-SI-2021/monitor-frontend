@@ -165,7 +165,7 @@ const Terminal = (props) => {
             type="text"
             ref={inputText}
             onKeyPress={({ target: { value }, key }) =>
-              onEnter(value, key, props.machine.name, props.machine.path)
+              onEnter(value, key, props.machine.name, put)
             }
             onKeyDown={logsHistory}
           />
