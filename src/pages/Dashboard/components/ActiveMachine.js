@@ -22,6 +22,7 @@ const ActiveMachine = ({data, img, onDisconnect, getStatistics, sDate, eDate}) =
                 className="card"
                 id={data.deviceId}
                 onClick={handleOnClick}
+                
                 onDoubleClick={() => remoteAccessOpen ? popup.current.focus() : setRemoteAccessOpen(true)}
             >
                 <div className="img-info">

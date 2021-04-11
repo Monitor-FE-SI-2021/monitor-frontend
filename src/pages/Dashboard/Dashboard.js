@@ -84,6 +84,8 @@ function convertStatistics(statistic) {
     return [Math.round(statistic * 100), Math.round((1 - statistic) * 100)];
 }
 
+
+
 const allMachinesString = "All machines"
 
 let removedMachine = null
@@ -114,10 +116,8 @@ const Dashboard = ({ user }) => {
     const [endDate, setEndDate] = React.useState(end);
     let start = new Date(end.getTime() - (7 * 24 * 60 * 60 * 1000));
     const [startDate, setStartDate] = React.useState(start);
-    let [chartType, setChartType] = React.useState(true)
+    var [chartType, setChartType] = React.useState(true)
 
-
-    
     
     function filterActive(activeMachines, allMachines) {
         return activeMachines ? activeMachines.filter((machine) => {
@@ -189,6 +189,7 @@ const Dashboard = ({ user }) => {
 
 
     React.useEffect(() => {
+   
         request(devices + "/AllDevices")
             .then((res) => {
                 const allMachines = res.data.data;
@@ -207,7 +208,7 @@ const Dashboard = ({ user }) => {
             })
 
         getAllDevicesStatistics(startDate.toISOString(), endDate.toISOString())
-
+        
     }, []);
 
     console.log(clickedMachine)
@@ -265,7 +266,9 @@ const Dashboard = ({ user }) => {
             <div className="dashboard">
                 <div className="row machine-cards">
                     <h1>List of active machines</h1>
-                    <div className="scrollable">
+                    <div className="scrollable"
+                    
+                    >
                         {
                         async ? <Spinner/> : 
                         (active?.length ? (
@@ -278,6 +281,7 @@ const Dashboard = ({ user }) => {
                                     getStatistics={getStatistics}
                                     sDate={startDate.toISOString()}
                                     eDate={endDate.toISOString()}
+                                    
                                 />
                             ))
                         ) : (
@@ -291,8 +295,9 @@ const Dashboard = ({ user }) => {
                 {showCharts && (
                     <div className="statistics">
                         <h2 className="machineName">{machineNameAndLocation(clickedMachine)}</h2>
+                        
                     <br></br>
-
+                        
                         <div className="pickers">
                         <h5 className="picker-h5">Date range:</h5>
                         <DatePicker
@@ -320,18 +325,22 @@ const Dashboard = ({ user }) => {
                        <br></br>
                         </div>
                         <div className="stats">
-                        <button id="usage" onClick={() => {
+                        <button style={chartType ? {backgroundColor : "white"} : {backgroundColor : "#F8FAFB"}} id="usage" onClick={() => {
                             setChartType(chartType = true);
-                            document.getElementById("usage").style.backgroundColor = "white";
-                            document.getElementById("errors").style.backgroundColor = "#F8FAFB";
-                        }}>Hardware Usage</button>
-                        <button id="errors" onClick={() => {
+                            
+                        }}>
+                          
+        
+                            Hardware Usage</button>
+                        <button style={chartType ? {backgroundColor : "#F8FAFB"} : {backgroundColor : "white"}} id="errors" onClick={() => {
                             setChartType(chartType = false);
-                            document.getElementById("errors").style.backgroundColor = "white";
-                            document.getElementById("usage").style.backgroundColor = "#F8FAFB";
-                            }}>Errors</button>
+                            
+                            }}>
+                            
+                            Errors</button>
                         </div>
                         { chartType && (
+                            
                             <div className="chartContainer">
                                 <div className="row">
                                     <DonutChart
@@ -359,13 +368,13 @@ const Dashboard = ({ user }) => {
 
                         { !chartType && (
                             <div className="chartContainer">
-                                    <BarChart chartData={barChart}/>
+                                <BarChart chartData={barChart}/>
 
                             </div>
                         )}
                     </div>
                 )}
-            </div>
+                 </div>
             <div className="googleMapMonitors">
                 <GoogleMapMonitors
                     activeMachines={active}
@@ -375,6 +384,7 @@ const Dashboard = ({ user }) => {
             </div>
 
         </div>
+        
     );
 };
 
