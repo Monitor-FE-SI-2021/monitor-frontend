@@ -6,25 +6,18 @@
   border-bottom: 2px solid black;
 
   table {
-    //background-color: white;
     width: 100%;
     border-collapse: collapse;
     border-radius:6px;
     -moz-border-radius:6px;
     color: #5b77bd;;
-    //border-top: 2px solid black;
-    //border-left: 2px solid black;
   }
 
-  //th,
   tr:hover:not(tr:first-of-type) {
-    //border-bottom: 1px solid black;
-    //text-align: center;
     background-color: #ebebeb;
   }
 
   th {
-    //background-color: #f9f9f9;
     font-size: 18px;
     height: 50px;
     text-transform: uppercase;
@@ -32,12 +25,10 @@
 
   td {
     height: 50px;
-    //border-right: 2px solid black;
   }
 
   th {
     border-bottom: 2px solid black;
-    //border-right: 2px solid black;
   }
 
   .file-download,
@@ -156,7 +147,7 @@
 }
 
 .swal-text{
-  max-height: 16em;  /* To be adjusted as you like */
+  max-height: 16em;
   overflow-y: scroll;
   width: 100%;
   text-align: left;

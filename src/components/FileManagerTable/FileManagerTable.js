@@ -1,18 +1,14 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import './FileManagerTable.scss';
 import request from "../../service";
 import DragAndDrop from '../DragAndDrop/DragAndDrop';
 import Swal from "sweetalert2";
-import { FaCopy, FaCut, FaPencilAlt, FaTrash } from "react-icons/fa";
+import {FaCopy, FaCut, FaPencilAlt, FaTrash} from "react-icons/fa";
 import Checkbox from '@material-ui/core/Checkbox';
-import {fetchAllGroups} from '../../store/modules/groups/actions';
-
 const config = require("../Terminal/config");
 const userFiles = "https://si-grupa5.herokuapp.com/api/web/user/file-tree";
-
 const folderIconUrl = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHg9IjBweCIgeT0iMHB4Igp3aWR0aD0iNDgiIGhlaWdodD0iNDgiCnZpZXdCb3g9IjAgMCAxNzIgMTcyIgpzdHlsZT0iIGZpbGw6IzAwMDAwMDsiPjxnIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0ibm9uemVybyIgc3Ryb2tlPSJub25lIiBzdHJva2Utd2lkdGg9IjEiIHN0cm9rZS1saW5lY2FwPSJidXR0IiBzdHJva2UtbGluZWpvaW49Im1pdGVyIiBzdHJva2UtbWl0ZXJsaW1pdD0iMTAiIHN0cm9rZS1kYXNoYXJyYXk9IiIgc3Ryb2tlLWRhc2hvZmZzZXQ9IjAiIGZvbnQtZmFtaWx5PSJub25lIiBmb250LXdlaWdodD0ibm9uZSIgZm9udC1zaXplPSJub25lIiB0ZXh0LWFuY2hvcj0ibm9uZSIgc3R5bGU9Im1peC1ibGVuZC1tb2RlOiBub3JtYWwiPjxwYXRoIGQ9Ik0wLDE3MnYtMTcyaDE3MnYxNzJ6IiBmaWxsPSJub25lIj48L3BhdGg+PGc+PHBhdGggZD0iTTE0My4zMzMzMyw0M2gtNjQuNWwtMTQuMzMzMzMsLTE0LjMzMzMzaC0zNS44MzMzM2MtNy44ODMzMywwIC0xNC4zMzMzMyw2LjQ1IC0xNC4zMzMzMywxNC4zMzMzM3YyOC42NjY2N2gxNDMuMzMzMzN2LTE0LjMzMzMzYzAsLTcuODgzMzMgLTYuNDUsLTE0LjMzMzMzIC0xNC4zMzMzMywtMTQuMzMzMzN6IiBmaWxsPSIjNWI3N2JkIj48L3BhdGg+PHBhdGggZD0iTTE0My4zMzMzMyw0M2gtMTE0LjY2NjY3Yy03Ljg4MzMzLDAgLTE0LjMzMzMzLDYuNDUgLTE0LjMzMzMzLDE0LjMzMzMzdjcxLjY2NjY3YzAsNy44ODMzMyA2LjQ1LDE0LjMzMzMzIDE0LjMzMzMzLDE0LjMzMzMzaDExNC42NjY2N2M3Ljg4MzMzLDAgMTQuMzMzMzMsLTYuNDUgMTQuMzMzMzMsLTE0LjMzMzMzdi03MS42NjY2N2MwLC03Ljg4MzMzIC02LjQ1LC0xNC4zMzMzMyAtMTQuMzMzMzMsLTE0LjMzMzMzeiIgZmlsbD0iIzkzYWJmNiI+PC9wYXRoPjwvZz48L2c+PC9zdmc+";
 const fileIconUrl = "https://img.icons8.com/office/40/000000/document--v2.png";
-
 let tokenGlobal = '';
 class FileManagerTable extends React.Component {
     constructor(props) {
@@ -38,16 +34,11 @@ class FileManagerTable extends React.Component {
     }
 
     updateResponse = async () => {
-
-        console.log(this.state.user);
-
-        console.log('I live');
         var path_arr = this.state.activeFolder.trim('/').split('/');
-        console.log(path_arr);
         try {
             const requestOptions = {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {"Content-Type": "application/json"},
                 body: JSON.stringify({
                     email: config.email,
                     password: config.password,
@@ -76,16 +67,12 @@ class FileManagerTable extends React.Component {
                         console.log(res.json().then(data => {
 
                             // Dobio djecu
-                            console.log(data);
                             var files = data.children;
 
                             for (var i = 1; i < path_arr.length; i++) {
-                                console.log(path_arr[i]);
                                 for (var j = 0; j < files.length; j++) {
-                                    console.log('---' + files[j].name);
                                     if (path_arr[i] == files[j].name && files[j].type == 'directory') {
                                         files = files[j].children;
-                                        console.log('EVOMEEEEEEE')
                                         break;
                                     }
                                 }
@@ -102,12 +89,11 @@ class FileManagerTable extends React.Component {
                                 }
                             });
 
-                            this.setState({ responseObject: files });
+                            this.setState({responseObject: files});
                         }));
                     }).catch((error) => {
                         console.log(error);
                     });
-
 
 
             }
@@ -132,15 +118,27 @@ class FileManagerTable extends React.Component {
                 <th>
                     <div className="file-name-div file-name-offset">
                         <span>File name</span>
-                        <img onClick={() => {this.sortFilesDescending()}} className="sort-strelica" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAAWklEQVRIie2PsQ2AMBDEToCUHRENLEHJ2ulMS0FEHoLSnAew7yRjTB+ABcjUk4H5zjUUGqOkFNiUJE3RF3vgwRGSByPv5JWRb/KHSBt5IdJWfolswPqL3Jh+nMnK13/HbjBeAAAAAElFTkSuQmCC"></img>
-                        <img onClick={() => {this.sortFilesAscending()}} className="sort-strelica" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAAVklEQVRIie3PsQ2AMAxE0RODIkUMwQyMHCg+FaIhAoPToHsD/LMls38BCjD1is+clp7x3JFGPGfkJv5t5GH83QgwBuKHctUaGhubpBq4qUpaQ1+YWZ4dI9Lbm/Wdan8AAAAASUVORK5CYII="/>
+                        <img onClick={() => {
+                            this.sortFilesDescending()
+                        }} className="sort-strelica"
+                             src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAAWklEQVRIie2PsQ2AMBDEToCUHRENLEHJ2ulMS0FEHoLSnAew7yRjTB+ABcjUk4H5zjUUGqOkFNiUJE3RF3vgwRGSByPv5JWRb/KHSBt5IdJWfolswPqL3Jh+nMnK13/HbjBeAAAAAElFTkSuQmCC"></img>
+                        <img onClick={() => {
+                            this.sortFilesAscending()
+                        }} className="sort-strelica"
+                             src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAAVklEQVRIie3PsQ2AMAxE0RODIkUMwQyMHCg+FaIhAoPToHsD/LMls38BCjD1is+clp7x3JFGPGfkJv5t5GH83QgwBuKHctUaGhubpBq4qUpaQ1+YWZ4dI9Lbm/Wdan8AAAAASUVORK5CYII="/>
                     </div>
                 </th>
                 <th>
                     <div className="file-name-div">
                         <span>Date added</span>
-                        <img onClick={() => {this.sortDateDescending()}} className="sort-strelica" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAAWklEQVRIie2PsQ2AMBDEToCUHRENLEHJ2ulMS0FEHoLSnAew7yRjTB+ABcjUk4H5zjUUGqOkFNiUJE3RF3vgwRGSByPv5JWRb/KHSBt5IdJWfolswPqL3Jh+nMnK13/HbjBeAAAAAElFTkSuQmCC"></img>
-                        <img onClick={() => {this.sortDateAscending()}} className="sort-strelica" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAAVklEQVRIie3PsQ2AMAxE0RODIkUMwQyMHCg+FaIhAoPToHsD/LMls38BCjD1is+clp7x3JFGPGfkJv5t5GH83QgwBuKHctUaGhubpBq4qUpaQ1+YWZ4dI9Lbm/Wdan8AAAAASUVORK5CYII="/>
+                        <img onClick={() => {
+                            this.sortDateDescending()
+                        }} className="sort-strelica"
+                             src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAAWklEQVRIie2PsQ2AMBDEToCUHRENLEHJ2ulMS0FEHoLSnAew7yRjTB+ABcjUk4H5zjUUGqOkFNiUJE3RF3vgwRGSByPv5JWRb/KHSBt5IdJWfolswPqL3Jh+nMnK13/HbjBeAAAAAElFTkSuQmCC"></img>
+                        <img onClick={() => {
+                            this.sortDateAscending()
+                        }} className="sort-strelica"
+                             src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAAVklEQVRIie3PsQ2AMAxE0RODIkUMwQyMHCg+FaIhAoPToHsD/LMls38BCjD1is+clp7x3JFGPGfkJv5t5GH83QgwBuKHctUaGhubpBq4qUpaQ1+YWZ4dI9Lbm/Wdan8AAAAASUVORK5CYII="/>
                     </div>
                 </th>
                 <th colSpan="2" className="centriraj">File manipulation</th>
@@ -186,29 +184,42 @@ class FileManagerTable extends React.Component {
 
     renderTableData() {
         return this.state.responseObject.map((oneObject, index) => {
-            const { id, fileName, link } = oneObject;
+            const {id, fileName, link} = oneObject;
             let date = new Date(oneObject.data.birthtime).toString();
             return (
                 <tr>
-                    <td className="file-download pomjereni-naziv file-icon" onClick={() => { this.handleClick(id) }} >
-                        <img className="file-icon" src={oneObject.data.type == "file" ? fileIconUrl : (oneObject.fileName == "LOADING..." ? "" : folderIconUrl)}></img>
+                    <td className="file-download pomjereni-naziv file-icon" onClick={() => {
+                        this.handleClick(id)
+                    }}>
+                        <img className="file-icon"
+                             src={oneObject.data.type == "file" ? fileIconUrl : (oneObject.fileName == "LOADING..." ? "" : folderIconUrl)}></img>
                         {fileName}
                     </td>
                     <td className="date-style">{oneObject.fileName == "LOADING..." ? " " : this.displayFormattedDate(date)}</td>
                     <div className="file-manipulation-wrapper">
-                        <td className="file-manipulation file-delete centriraj" onClick={() => { this.handleDelete(id) }}>
-                            <FaTrash size={20} />
+                        <td className="file-manipulation file-delete centriraj" onClick={() => {
+                            this.handleDelete(id)
+                        }}>
+                            <FaTrash size={20}/>
                         </td>
-                        <td className="file-manipulation file-rename centriraj" onClick={() => { this.handleRename(id) }}>
-                            <FaPencilAlt size={20} />
+                        <td className="file-manipulation file-rename centriraj" onClick={() => {
+                            this.handleRename(id)
+                        }}>
+                            <FaPencilAlt size={20}/>
                         </td>
-                        <td className="file-manipulation file-copy centriraj" onClick={() => { this.handleCopy(id) }}>
-                            <FaCopy size={20} />
+                        <td className="file-manipulation file-copy centriraj" onClick={() => {
+                            this.handleCopy(id)
+                        }}>
+                            <FaCopy size={20}/>
                         </td>
-                        <td className="file-manipulation file-move centriraj" onClick={() => { this.handleMove(id) }}>
-                            <FaCut size={20} />
+                        <td className="file-manipulation file-move centriraj" onClick={() => {
+                            this.handleMove(id)
+                        }}>
+                            <FaCut size={20}/>
                         </td>
-                        <Checkbox onChange={(e) => { this.handleCheckFile(e, id)}} className="file-checkbox file-manipulation" color="default"/>
+                        <Checkbox onChange={(e) => {
+                            this.handleCheckFile(e, id)
+                        }} className="file-checkbox file-manipulation" color="default"/>
                     </div>
                 </tr>
             )
@@ -222,11 +233,9 @@ class FileManagerTable extends React.Component {
     handleClick = async (selectedId) => {
         var file = this.state.responseObject.find(file => file.id == selectedId);
         if (file.data.type == 'file') {
-            if(file.data.extension != '.txt') return;
+            if (file.data.extension != '.txt') return;
 
             //Kliknut file
-            console.log("Ja sam file prikazi me");
-
             var text = await this.getText(file);
 
             var myWindow = window.open("", "textFeild", "width=600,height=600");
@@ -234,10 +243,7 @@ class FileManagerTable extends React.Component {
             myWindow.document.write(text);
         } else {
             //Kliknut folder
-            console.log("Ja sam folder otvori me");
-
             this.state.activeFolder += '/' + file.data.name;
-            console.log(this.state.activeFolder);
             this.updateResponse();
         }
     }
@@ -246,7 +252,7 @@ class FileManagerTable extends React.Component {
         try {
             const requestOptions = {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {"Content-Type": "application/json"},
                 body: JSON.stringify({
                     email: config.email,
                     password: config.password,
@@ -287,7 +293,7 @@ class FileManagerTable extends React.Component {
         try {
             const requestOptions = {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {"Content-Type": "application/json"},
                 body: JSON.stringify({
                     email: config.email,
                     password: config.password,
@@ -324,7 +330,7 @@ class FileManagerTable extends React.Component {
         }
     }
 
-    checkIfDirectoryIsEmpty = async(path) => {
+    checkIfDirectoryIsEmpty = async (path) => {
         const requestOptions1 = {
             method: "POST",
             headers: {
@@ -338,7 +344,7 @@ class FileManagerTable extends React.Component {
         };
 
         var response = await fetch(userFiles, requestOptions1);
-        if(response.status == 200) {
+        if (response.status == 200) {
             var data = await response.json();
             var files = data.children;
             for (var i = 1; i < path.length; i++) {
@@ -358,20 +364,19 @@ class FileManagerTable extends React.Component {
     }
 
     handleDelete = async (id) => {
-        // var file = this.state.responseObject[id];
         var file = this.state.responseObject.find(file => file.id == id);
 
         var directoryPath = this.state.activeFolder + '/' + file.data.name;
         var path = directoryPath.trim('/').split('/');
 
         this.state.globalId = id;
-        if(file.data.type === 'directory') {
+        if (file.data.type === 'directory') {
             let isDirectoryEmpty = false;
             let popupText = '';
             await this.checkIfDirectoryIsEmpty(path)
                 .then(r => isDirectoryEmpty = r)
 
-            if(isDirectoryEmpty) {
+            if (isDirectoryEmpty) {
                 popupText = 'The directory is empty'
             } else {
                 popupText = 'The directory is not empty'
@@ -405,7 +410,6 @@ class FileManagerTable extends React.Component {
                 confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    console.log("delete file " + this.state.globalId)
                     this.sendFileDeleteRequest(file.fileName)
                     Swal.fire(
                         'Deleted!',
@@ -421,15 +425,15 @@ class FileManagerTable extends React.Component {
     sendRenameRequest = async (oldFileName, newFileName, isDirectory) => {
         const fileSplit = oldFileName.split('.');
         let extension = '.'
-        extension = extension.concat(fileSplit[fileSplit.length-1]);
+        extension = extension.concat(fileSplit[fileSplit.length - 1]);
         let finalName = newFileName.concat(extension);
-        if(isDirectory) {
+        if (isDirectory) {
             finalName = newFileName;
         }
         try {
             const requestOptions = {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {"Content-Type": "application/json"},
                 body: JSON.stringify({
                     email: config.email,
                     password: config.password,
@@ -477,117 +481,115 @@ class FileManagerTable extends React.Component {
     }
 
 
+    sendCopyRequest = async (newPath, name) => {
+        try {
+            const requestOptions = {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({
+                    email: config.email,
+                    password: config.password,
+                }),
+            };
 
-  sendCopyRequest = async (newPath, name) => {
-    try {
-      const requestOptions = {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: config.email,
-          password: config.password,
-        }),
-      };
+            var response = await fetch(config.url, requestOptions);
+            if (response.status == 200) {
+                var x = await response.json();
+                const token = x.accessToken;
 
-      var response = await fetch(config.url, requestOptions);
-      if (response.status == 200) {
-        var x = await response.json();
-        const token = x.accessToken;
+                const requestOptions2 = {
+                    method: "POST",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer " + token,
+                    },
+                    body: JSON.stringify({
+                        user: this.state.user.email,
+                        oldPath: this.state.activeFolder,
+                        name: name,
+                        newPath: newPath,
+                    }),
+                };
 
-        const requestOptions2 = {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + token,
-          },
-          body: JSON.stringify({
-            user: this.state.user.email,
-            oldPath: this.state.activeFolder,
-            name: name,
-            newPath: newPath,
-          }),
-        };
+                var response1 = await fetch(
+                    "https://si-grupa5.herokuapp.com/api/web/user/copy",
+                    requestOptions2
+                )
+                    .then((res) => {
+                        Swal.fire({
+                            title: "File manager",
+                            text: "File/folder copied successfully",
+                            type: "success",
+                        });
 
-        var response1 = await fetch(
-          "https://si-grupa5.herokuapp.com/api/web/user/copy",
-          requestOptions2
-        )
-          .then((res) => {
-            Swal.fire({
-              title: "File manager",
-              text: "File/folder copied successfully",
-              type: "success",
-            });
+                        this.updateResponse();
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    };
 
-            this.updateResponse();
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
+    sendMoveRequest = async (newPath, name) => {
+        try {
+            const requestOptions = {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({
+                    email: config.email,
+                    password: config.password,
+                }),
+            };
 
-  sendMoveRequest = async (newPath, name) => {
-    try {
-      const requestOptions = {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: config.email,
-          password: config.password,
-        }),
-      };
+            var response = await fetch(config.url, requestOptions);
+            if (response.status == 200) {
+                var x = await response.json();
+                const token = x.accessToken;
 
-      var response = await fetch(config.url, requestOptions);
-      if (response.status == 200) {
-        var x = await response.json();
-        const token = x.accessToken;
+                const requestOptions2 = {
+                    method: "POST",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer " + token,
+                    },
+                    body: JSON.stringify({
+                        user: this.state.user.email,
+                        oldPath: this.state.activeFolder,
+                        name: name,
+                        newPath: newPath,
+                    }),
+                };
 
-        const requestOptions2 = {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + token,
-          },
-          body: JSON.stringify({
-            user: this.state.user.email,
-            oldPath: this.state.activeFolder,
-            name: name,
-            newPath: newPath,
-          }),
-        };
+                var response1 = await fetch(
+                    "https://si-grupa5.herokuapp.com/api/web/user/move",
+                    requestOptions2
+                )
+                    .then((res) => {
+                        Swal.fire({
+                            title: "File manager",
+                            text: "File/folder moved successfully",
+                            type: "success",
+                        });
 
-        var response1 = await fetch(
-          "https://si-grupa5.herokuapp.com/api/web/user/move",
-          requestOptions2
-        )
-          .then((res) => {
-            Swal.fire({
-              title: "File manager",
-              text: "File/folder copied successfully",
-              type: "success",
-            });
+                        this.updateResponse();
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    };
 
-            this.updateResponse();
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  handleRename(id) {
+    handleRename(id) {
         this.state.globalId = id;
-        // var file = this.state.responseObject[id];
-      var file = this.state.responseObject.find(file => file.id == id);
+        var file = this.state.responseObject.find(file => file.id == id);
 
         Swal.fire({
             title: 'Change file name',
@@ -599,7 +601,7 @@ class FileManagerTable extends React.Component {
             confirmButtonText: 'Rename',
             showLoaderOnConfirm: true,
             preConfirm: (newName) => {
-                if(newName.length === 0) {
+                if (newName.length === 0) {
                     Swal.showValidationMessage(
                         'File name cannot be empty!'
                     )
@@ -609,7 +611,6 @@ class FileManagerTable extends React.Component {
                         isDirectory = true;
                     }
                     this.sendRenameRequest(file.fileName, newName, isDirectory)
-                        .then(r => console.log(r))
                 }
             },
             allowOutsideClick: () => !Swal.isLoading()
@@ -617,46 +618,42 @@ class FileManagerTable extends React.Component {
     }
 
     handleCopy(id) {
-      this.state.globalId = id;
+        this.state.globalId = id;
         var file = this.state.responseObject.find(file => file.id == id);
-      Swal.fire({
-        title: "Copy file",
-        input: "text",
-        inputAttributes: {
-          autocapitalize: "off",
-        },
-        showCancelButton: true,
-        confirmButtonText: "Copy",
-        showLoaderOnConfirm: true,
-        preConfirm: (newPath) => {
-          this.sendCopyRequest(newPath, file.fileName).then((r) =>
-            console.log(r)
-          );
-        },
-        allowOutsideClick: () => !Swal.isLoading(),
-      });
+        Swal.fire({
+            title: "Copy file",
+            input: "text",
+            inputAttributes: {
+                autocapitalize: "off",
+            },
+            showCancelButton: true,
+            confirmButtonText: "Copy",
+            showLoaderOnConfirm: true,
+            preConfirm: (newPath) => {
+                this.sendCopyRequest(newPath, file.fileName)
+            },
+            allowOutsideClick: () => !Swal.isLoading(),
+        });
     }
 
     handleMove(id) {
         this.state.globalId = id;
         var file = this.state.responseObject.find(file => file.id == id);
 
-      Swal.fire({
-        title: "Move file",
-        input: "text",
-        inputAttributes: {
-          autocapitalize: "off",
-        },
-        showCancelButton: true,
-        confirmButtonText: "Move",
-        showLoaderOnConfirm: true,
-        preConfirm: (newPath) => {
-          this.sendMoveRequest(newPath, file.fileName).then((r) =>
-            console.log(r)
-          );
-        },
-        allowOutsideClick: () => !Swal.isLoading(),
-      });
+        Swal.fire({
+            title: "Move file",
+            input: "text",
+            inputAttributes: {
+                autocapitalize: "off",
+            },
+            showCancelButton: true,
+            confirmButtonText: "Move",
+            showLoaderOnConfirm: true,
+            preConfirm: (newPath) => {
+                this.sendMoveRequest(newPath, file.fileName)
+            },
+            allowOutsideClick: () => !Swal.isLoading(),
+        });
     }
 
     handleCheckFile(e, id) {
@@ -664,12 +661,11 @@ class FileManagerTable extends React.Component {
         let availableFiles = this.state.responseObject;
         let selectedFile = availableFiles.find(ele => ele.id == id)
 
-        if(e.target.checked) {
+        if (e.target.checked) {
             fileList.push(selectedFile);
-        }
-        else {
-            for( let i = 0; i < fileList.length; i++){
-                if ( fileList[i].id === id) {
+        } else {
+            for (let i = 0; i < fileList.length; i++) {
+                if (fileList[i].id === id) {
                     fileList.splice(i, 1);
                 }
             }
@@ -686,7 +682,7 @@ class FileManagerTable extends React.Component {
         try {
             const requestOptions = {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {"Content-Type": "application/json"},
                 body: JSON.stringify({
                     email: config.email,
                     password: config.password,
@@ -714,8 +710,6 @@ class FileManagerTable extends React.Component {
 
                 var response1 = await fetch('https://si-grupa5.herokuapp.com/api/web/user/folder/create', requestOptions2)
                     .then((res) => {
-                        console.log(res.json());
-
                         Swal.fire({
                             title: "File manager",
                             text: "Datoteka uspješno poslana!",
@@ -727,8 +721,6 @@ class FileManagerTable extends React.Component {
                     }).catch((error) => {
                         console.log(error);
                     });
-                console.log(response1);
-
             }
         } catch (e) {
             console.log(e);
@@ -741,7 +733,7 @@ class FileManagerTable extends React.Component {
         try {
             const requestOptions = {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {"Content-Type": "application/json"},
                 body: JSON.stringify({
                     email: config.email,
                     password: config.password,
@@ -770,7 +762,6 @@ class FileManagerTable extends React.Component {
                 return await fetch('https://si-grupa5.herokuapp.com/api/web/user/file/get-text', requestOptions2)
                     .then((res) => {
                         return res.json().then((res) => {
-                            //console.log(res.text);
                             returnable = res.text;
                             return res.text;
                         });
@@ -778,7 +769,6 @@ class FileManagerTable extends React.Component {
                     }).catch((error) => {
                         console.log(error);
                     });
-
 
 
             }
@@ -789,17 +779,8 @@ class FileManagerTable extends React.Component {
 
     }
 
-    /*constructSwalItem(grupa) {
-        return (
-
-        );
-    }*/
-
 
     async sendToAgents() {
-
-        console.log("KLIKNO SE");
-
         const url = 'https://si-2021.167.99.244.168.nip.io/api/group/MyAssignedGroups';
         var arrayOfGroups = [];
 
@@ -809,7 +790,7 @@ class FileManagerTable extends React.Component {
 
         var html = '<div class="swal-text">';
 
-        for(var i = 0; i < arrayOfGroups.length; i++) {
+        for (var i = 0; i < arrayOfGroups.length; i++) {
             html = html + this.getTableForGroups(arrayOfGroups[i]);
 
         }
@@ -828,22 +809,21 @@ class FileManagerTable extends React.Component {
 
 
         var html = '';
-        if( typeof group.subGroups !== 'undefined' && group.subGroups.length > 0) {
+        if (typeof group.subGroups !== 'undefined' && group.subGroups.length > 0) {
             html = html + '<div >';
-            for(var i = 0; i < group.subGroups.length; i++) {
-            html = html + this.getTableForGroups(group.subGroups[i]);
-        }
-        html = html + '</div>';
+            for (var i = 0; i < group.subGroups.length; i++) {
+                html = html + this.getTableForGroups(group.subGroups[i]);
+            }
+            html = html + '</div>';
 
-        }
-        else {
-        html = '<div class="swalItem">';
-        html = html + '<div class="form-check">';
-        html = html + `<label class="form-check-label" for="${group.groupId}">`
-        html = html + group.name;
-        html = html + "</label>";
-        html = html + `<input class="form-check-input " type="checkbox" value="" id="${group.groupId}">`;
-        html = html + "</div>";
+        } else {
+            html = '<div class="swalItem">';
+            html = html + '<div class="form-check">';
+            html = html + `<label class="form-check-label" for="${group.groupId}">`
+            html = html + group.name;
+            html = html + "</label>";
+            html = html + `<input class="form-check-input " type="checkbox" value="" id="${group.groupId}">`;
+            html = html + "</div>";
 
         }
 
@@ -852,9 +832,6 @@ class FileManagerTable extends React.Component {
 
 
     clickNewFolder() {
-        console.log("Napravi novi folder");
-
-
 
         Swal.fire({
             title: 'New folder name:',
@@ -878,11 +855,6 @@ class FileManagerTable extends React.Component {
 
 
         return
-        /*
-        //#region Dodavanje praznog fajla u novi folder
-        
-        //#endregion
-        */
     }
 
     getCheckedFiles() {
@@ -893,22 +865,26 @@ class FileManagerTable extends React.Component {
     render() {
         return (
             <div>
-                <button className="top-button" onClick={() => this.clickUp()} disabled={this.state.activeFolder == '.' ? "disabled" : ""}>Go UP</button>
-                <button className="top-button" onClick={() => this.clickNewFolder()} >New folder</button>
+                <button className="top-button" onClick={() => this.clickUp()}
+                        disabled={this.state.activeFolder == '.' ? "disabled" : ""}>Go UP
+                </button>
+                <button className="top-button" onClick={() => this.clickNewFolder()}>New folder</button>
                 <button className="top-button" onClick={() => this.sendToAgents()}>Odaberi grupe</button>
                 <button className="top-button disable-button">{this.state.activeFolder}</button>
                 <div className="table-wrapper">
 
-                    <table >
+                    <table>
                         <tbody>
-                            {this.renderTableHeader()}
-                            {this.renderTableData()}
+                        {this.renderTableHeader()}
+                        {this.renderTableData()}
                         </tbody>
                     </table>
                 </div>
-                <DragAndDrop updateView={this.updateResponse} activePath={this.state.activeFolder} user={this.state.user}></DragAndDrop>
+                <DragAndDrop updateView={this.updateResponse} activePath={this.state.activeFolder}
+                             user={this.state.user}></DragAndDrop>
             </div>
         )
     }
 }
+
 export default FileManagerTable;
