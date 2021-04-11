@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import React from 'react';
-import './Login.css';
+import './Login.scss';
 import { push } from "connected-react-router";
 
 function ChooseTypeOfReset({push}) {

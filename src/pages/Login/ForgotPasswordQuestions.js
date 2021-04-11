@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from "react-redux";
-import './Login.css';
+import './Login.scss';
 import { fetchAllUsersQuestions, checkAnswers } from "../../store/modules/login/login";
 import { Spinner } from "../../components/Spinner/Spinner";
 import { useState } from 'react';

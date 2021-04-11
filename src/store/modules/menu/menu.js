@@ -9,9 +9,12 @@ export const RouteLink = {
     AddDevice: '/manage-device',
     ManageDevice: '/manage-device',
     ManageGroup: '/manage-group',
+    EmailVerification: '/verify-email',
     Terminal: '/terminal',
     RemoteControl: '/remotecontrol',
     TwoFactorAuthentication: '/security',
+    secutityQuestions: '/securityQuestions',
+    MyProfile: '/my-profile',
     FileManagerView: '/file-manager',
     SecurityQuestions: '/securityQuestions',
     Tasks: '/tasks'
@@ -36,18 +39,13 @@ const initialState = {
             icon: "",
         },
         {
-            link: RouteLink.TwoFactorAuthentication,
-            name: 'Two Factor Authentication',
+            link: RouteLink.MyProfile,
+            name: 'My Profile',
             icon: ""
         },
         {
             link: RouteLink.FileManagerView,
             name: 'File Manager',
-            icon: ""
-        },
-        {
-            link: RouteLink.SecurityQuestions,
-            name: 'Security Questions',
             icon: ""
         },
         {
