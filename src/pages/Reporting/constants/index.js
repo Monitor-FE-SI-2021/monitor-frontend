@@ -10,7 +10,7 @@ export const fields = [
   { name: "status", label: "Status" },
   //{ name: "lastTimeOnline", label: "Last Time Online" },
   //{ name: "timeLog", label: "Time Log" },
-  { name: "groupName", label: "Group Name" },
+  //{ name: "groupName", label: "Group Name" },
 ];
 
 export const frequencies = [
