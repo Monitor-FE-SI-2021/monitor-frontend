@@ -20,10 +20,10 @@ const ReportTable = ({ reports }) => {
             title: 'Date',
             slot: 'startDate',
         },
-        {
-            name: 'frequency',
-            title: 'Frequency',
-        },
+        // {
+        //     name: 'frequency',
+        //     title: 'Frequency',
+        // },
         {
             name: 'actions',
             title: 'Download',

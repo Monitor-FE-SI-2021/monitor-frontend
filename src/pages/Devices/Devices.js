@@ -9,6 +9,7 @@ import { RouteLink } from "../../store/modules/menu/menu";
 import { Spinner } from "../../components/Spinner/Spinner";
 import request, { wsEndpoint } from "../../service";
 import { TextField } from "@material-ui/core";
+import AllDevices from "../../components/AllDevices/AllDevices";
 
 
 const getRootGroups = (groupTree) => {
@@ -94,9 +95,14 @@ const Devices = ({
                            onChange={searchDevices}
                 />
             </div>
+            {groupsSearchText === "" && devicesSearchText !== "" ?
+            <div>
+                <AllDevices />
+            </div>
+                :
             <div className={'groups-list'}>
                 {async ? <Spinner color={'inherit'}/> : rootGroups}
-            </div>
+            </div> }
         </div>
     );
 };

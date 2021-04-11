@@ -47,7 +47,7 @@ function NewPassword({ requestResetPassword, push }) {
 
     return (
         <div className="formDiv">
-            <form id="login-form">
+            <form class="form">
                 <h3>Reset your password</h3>
                 <input name="password" type='password'
                        placeholder="New password"
@@ -57,7 +57,7 @@ function NewPassword({ requestResetPassword, push }) {
                        placeholder="Confirm password"
                        value={formData.repeatedPassword}
                        onChange={handleChange}/>
-                <input id="submitButton" type="submit" value="Reset password" onClick={handleSubmit}/>
+                <input class="submitButton" type="submit" value="Reset password" onClick={handleSubmit}/>
             </form>
         </div>
     );

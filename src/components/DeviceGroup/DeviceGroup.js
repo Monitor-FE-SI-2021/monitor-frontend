@@ -120,7 +120,7 @@ const DeviceGroup = ({
             </div>
             {!hidden && (
                 <React.Fragment>
-                    {!subGroupsRendered?.length && <DeviceTable devices={devices} group={group}/>}
+                    {!subGroupsRendered?.length && <DeviceTable devices={devices} group={group} showGroup={false}/>}
                     {subGroupsRendered || null}
                 </React.Fragment>
             )}
