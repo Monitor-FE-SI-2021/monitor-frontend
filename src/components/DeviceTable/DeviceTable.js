@@ -1,5 +1,5 @@
 import CustomTable, { TableSlot } from '../CustomTable/CustomTable';
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CastConnected } from "@material-ui/icons";
 import { Edit } from "@material-ui/icons";
 import dayjs from 'dayjs';
@@ -150,6 +150,10 @@ const DeviceTable = ({
         updateDevicesTableForGroup({ groupId: group.groupId, data: { sortField: field, sortOrder: order } })
     }
 
+    useEffect(() => {
+        
+    },[deviceTable])
+
     return (
         <div className='device-table'>
             <FilterList className='filter-btn' onClick={() => setStatusFilterOpened(true)}/>
@@ -183,6 +187,7 @@ const DeviceTable = ({
                              fields={tableFields}
                              activeSortField={deviceTable.sortField}
                              activeSortOrder={deviceTable.sortOrder}
+                             groupId={group.groupId}
                              handleSort={handleSort}>
                     <TableSlot slot='actions' render={dataRow => (
                         <div className='actions'>
