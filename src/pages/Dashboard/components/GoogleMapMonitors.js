@@ -136,7 +136,6 @@ class GoogleMapMonitors extends Component {
                         <li id="third-list-item"> critical</li>
                     </ul>
                 </div>
-
             </div>
             </div>
             <div className="map-wrapper">
@@ -145,7 +144,6 @@ class GoogleMapMonitors extends Component {
                 loadingElement={<div style={{ height: "100%" }} />}
                 containerElement={<div style={{ height: "400px" }} />}
                 mapElement={<div style={{ height: "100%", width:"100%", borderRadius: "25px", border: "1px solid #ccc" }} />}
-                
             />
             </div>
             </div>
