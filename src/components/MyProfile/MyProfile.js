@@ -14,9 +14,15 @@ import request from "../../service";
 import { showSwalToast } from "../../utils/utils";
 import { regexPhoneNumber, sendVerificationSMS } from "./VerifyPhoneNumber";
 import {checkPassword} from "./PasswordChange";
+import {connect} from "react-redux";
+import {requestResetPassword} from "../../store/modules/login/login";
+import {push} from "connected-react-router";
 
-function MyProfile() {
-
+function MyProfile({token,push}) {
+    token= localStorage.getItem('authorization')
+    const switchRoute = (link) => {
+        push(link);
+    };
     const [showInitialForm, setInitialForm] = React.useState(true);
     const [showMobileForm, setMobileForm] = React.useState(false);
     const [showPasswordForm, setPasswordForm] = React.useState(false);
@@ -205,6 +211,10 @@ function MyProfile() {
                 if (res && res.status === 200) {
                     console.log(res)
                     showSwalToast(res.data.message, 'success');
+                    if(token) {
+                        switchRoute('/password-reset/' + token);
+                        token = null;
+                    }
 
 
                 } else if (res && res.status === 400) {
@@ -305,4 +315,4 @@ function MyProfile() {
         );
 }
 
-export default MyProfile
+export default connect(state => ({}), {push})(MyProfile);
