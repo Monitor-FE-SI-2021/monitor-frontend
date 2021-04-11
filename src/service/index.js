@@ -16,6 +16,13 @@ export const devices = `${endpoint}/device`
 export const groups = `${endpoint}/group`
 export const users = `${endpoint}/user`
 
+const getErrorMessage = (response) => {
+
+    const data = response?.data;
+
+    return data?.message || data?.title || response?.statusText || "Došlo je do greške."
+}
+
 const request = async (
     url = '',
     method = 'get',
@@ -62,8 +69,8 @@ const request = async (
                 if (response && response.status === 401) {
                     removeAllData();
                 }
-                console.log(response)
-                const errMessage = response?.data?.message || response?.data?.title || response?.statusText || "Došlo je do greške.";
+
+                const errMessage = getErrorMessage(response);
 
                 showSwalToast(errMessage)
 
