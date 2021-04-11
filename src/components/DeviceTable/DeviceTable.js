@@ -42,7 +42,8 @@ const DeviceTable = ({
                          deviceTable,
                          group,
                          updateDevicesTableForGroup,
-                         updateActiveDevice
+                         updateActiveDevice,
+                         hasDragAndDrop
                      }) => {
 
     const [statusFilterOpened, setStatusFilterOpened] = React.useState(false);
@@ -151,8 +152,8 @@ const DeviceTable = ({
     }
 
     useEffect(() => {
-        
-    },[deviceTable])
+
+    }, [deviceTable])
 
     return (
         <div className='device-table'>
@@ -188,7 +189,8 @@ const DeviceTable = ({
                              activeSortField={deviceTable.sortField}
                              activeSortOrder={deviceTable.sortOrder}
                              groupId={group.groupId}
-                             handleSort={handleSort}>
+                             handleSort={handleSort}
+                             hasDragAndDrop>
                     <TableSlot slot='actions' render={dataRow => (
                         <div className='actions'>
                             {canConnectToDevice(dataRow) && (

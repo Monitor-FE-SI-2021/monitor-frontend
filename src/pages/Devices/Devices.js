@@ -2,7 +2,12 @@ import { connect } from "react-redux";
 import "./Devices.scss";
 import DeviceGroup from "../../components/DeviceGroup/DeviceGroup";
 import React, { useEffect } from 'react';
-import { fetchAllDevices, searchDevicesAction, setActiveGlobal, updateDevicesTableForGroup } from "../../store/modules/devices/actions";
+import {
+    fetchAllDevices,
+    searchDevicesAction,
+    setActiveGlobal,
+    updateDevicesTableForGroup
+} from "../../store/modules/devices/actions";
 import { fetchAllGroups, searchGroupsAction } from "../../store/modules/groups/actions";
 import { push } from "connected-react-router";
 import { RouteLink } from "../../store/modules/menu/menu";
@@ -53,32 +58,63 @@ const Devices = ({
         fetchAllDevices();
         fetchAllGroups();
     }, [fetchAllDevices, fetchAllGroups])
-    
+
     const onDragEnd = (result) => {
-        
-        const { destination, source, draggableId} = result;
 
-        if(destination == null){
+        const { destination, source, draggableId } = result;
+
+        if (destination == null) {
             return;
         }
-        if(destination.droppableId === source.droppableId){
+        if (destination.droppableId === source.droppableId) {
             return;
         }
 
-        const draggedDevice = (deviceTables[source.droppableId].devices.splice(source.index, 1)[0]);
-        deviceTables[source.droppableId].totalCount = deviceTables[source.droppableId].devices.length;
-        deviceTables[destination.droppableId].devices.splice(destination.index, 0, draggedDevice);
-        deviceTables[destination.droppableId].totalCount = deviceTables[destination.droppableId].devices.length;
+        // Splice source devices inplace
+        const draggedDevice = deviceTables[source.droppableId].devices[source.index];
 
-        updateDevicesTableForGroup({groupId:source.droppableId, data:deviceTables[source.droppableId]});
-        updateDevicesTableForGroup({groupId:destination.droppableId, data:deviceTables[destination.droppableId]});
+        // Set async
+        updateDevicesTableForGroup({
+            groupId: destination.droppableId,
+            data: {
+                async: true
+            },
+        });
 
         request(devices + `/${destination.droppableId}`, 'PUT', draggedDevice)
             .then(r => {
-                console.log(r.data);
+
+                // Splice source devices inplace
+                deviceTables[source.droppableId].devices.splice(source.index, 1)
+
+                // SOURCE GROUP
+                updateDevicesTableForGroup({
+                    groupId: source.droppableId,
+                    data: {
+                        totalCount: deviceTables[source.droppableId].devices.length,
+                        devices: deviceTables[source.droppableId].devices,
+                    }
+                });
+
+                // Splice destination devices inplace
+                deviceTables[destination.droppableId].devices.splice(destination.index, 0, draggedDevice);
+
+                // DESTINATION GROUP
+                updateDevicesTableForGroup({
+                    groupId: destination.droppableId,
+                    data: {
+                        totalCount: deviceTables[destination.droppableId].devices.length,
+                        devices: deviceTables[destination.droppableId].devices,
+                    },
+                });
+
                 showSwalToast(`Uspješno premještena mašina '${draggedDevice.name}'`, 'success');
+
             }).finally(() => {
-            push(RouteLink.Devices);
+            updateDevicesTableForGroup({
+                groupId: destination.droppableId,
+                data: { async: false },
+            });
         })
     }
 
@@ -86,8 +122,8 @@ const Devices = ({
         return (
             <DragDropContext onDragEnd={onDragEnd}>
                 <DeviceGroup group={grupa}
-                    key={grupa.groupId}/>
-            </DragDropContext>   
+                             key={grupa.groupId}/>
+            </DragDropContext>
         );
     });
 
@@ -143,4 +179,12 @@ export default connect((state) => ({
     searchedGroups: state.groups.searchedGroups,
     devicesSearchText: state.devices.searchText,
     deviceTables: state.devices.deviceTables
-}), { updateDevicesTableForGroup, fetchAllDevices, fetchAllGroups, push, setActiveGlobal, searchGroupsAction, searchDevicesAction })(Devices);
+}), {
+    updateDevicesTableForGroup,
+    fetchAllDevices,
+    fetchAllGroups,
+    push,
+    setActiveGlobal,
+    searchGroupsAction,
+    searchDevicesAction
+})(Devices);

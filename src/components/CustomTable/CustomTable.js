@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -14,14 +14,23 @@ import classnames from 'classnames';
 import { Droppable, Draggable } from "react-beautiful-dnd"
 import './custom_table.scss'
 import { Spinner } from "../Spinner/Spinner";
-import { PersonalVideoRounded } from '@material-ui/icons';
 
 
 export function TableSlot({ slot, render }) {
     return <div></div>
 }
 
-export default function CustomTable({ data, fields, children, groupId, handleSort, activeSortField, activeSortOrder, async }) {
+export default function CustomTable({
+                                        data,
+                                        fields,
+                                        children,
+                                        groupId,
+                                        handleSort,
+                                        activeSortField,
+                                        activeSortOrder,
+                                        async,
+                                        hasDragAndDrop
+                                    }) {
 
     const activeFields = (fields || []).filter(field => field.disabled !== undefined ? !field.disabled : true);
 
@@ -45,6 +54,73 @@ export default function CustomTable({ data, fields, children, groupId, handleSor
                 {renderedCell}
             </TableCell>
         );
+    }
+
+    const renderTableBody = () => {
+        if (hasDragAndDrop) {
+            return (
+                <Droppable
+                    droppableId={`${groupId}`}>
+                    {(provided, snapshot) => (
+                        <TableBody {...provided.droppableProps} ref={provided.innerRef}>
+                            {data.map((row, rowIndex) => (
+                                <Draggable
+                                    draggableId={`${data[rowIndex].deviceUid}`}
+                                    key={`${data[rowIndex].deviceUid}`}
+                                    index={rowIndex}>
+                                    {(provided, snapshot) => (
+                                        <TableRow
+                                            key={row.id ?? rowIndex}
+                                            ref={provided.innerRef}
+                                            {...provided.draggableProps}
+                                            {...provided.dragHandleProps}
+                                            style={{
+                                                backgroundColor: snapshot.isDragging ? "white" : "inherit",
+                                                ...provided.draggableProps.style
+                                            }}>
+                                            {activeFields.map((field, index) => (
+                                                renderDataRowCell(row, field, index)
+                                            ))}
+                                        </TableRow>)}
+                                </Draggable>))}
+                            {provided.placeholder}
+                        </TableBody>)}
+                </Droppable>
+            )
+        } else {
+            return (
+                <TableBody>
+                    {data.map((row, rowIndex) => (
+                        <TableRow key={row.id ?? rowIndex}>
+                            {activeFields.map((field, index) => (
+                                renderDataRowCell(row, field, index)
+                            ))}
+                        </TableRow>
+                    ))}
+                </TableBody>
+            )
+        }
+    }
+
+    const renderNoResultsMessage = () => {
+        if (hasDragAndDrop) {
+            return (
+                <Droppable droppableId={`${groupId}`}>
+                    {(provided, snapshot) => (
+                        <div {...provided.droppableProps} ref={provided.innerRef} className='no-results-message'>
+                            Nema rezultata.
+                            {provided.placeholder}
+                        </div>
+                    )}
+                </Droppable>
+            )
+        } else {
+            return (
+                <div className='no-results-message'>
+                    Nema rezultata.
+                </div>
+            )
+        }
     }
 
     return (
@@ -86,44 +162,11 @@ export default function CustomTable({ data, fields, children, groupId, handleSor
                     </TableRow>
                 </TableHead>
                 {(!async && data.length !== 0) && (
-                <Droppable 
-                    droppableId={`${groupId}`}>
-                {(provided, snapshot) => (
-                    <TableBody {...provided.droppableProps} ref={provided.innerRef}>
-                        {data.map((row, rowIndex) => (
-                            <Draggable 
-                                draggableId = {`${data[rowIndex].deviceUid}`}
-                                key = {`${data[rowIndex].deviceUid}`}
-                                index = {rowIndex}>
-                            {(provided, snapshot) => (
-                                <TableRow 
-                                    key={row.id ?? rowIndex}
-                                    ref={provided.innerRef}
-                                    {...provided.draggableProps}
-                                    {...provided.dragHandleProps}
-                                    style={{
-                                        backgroundColor: snapshot.isDragging ? "white" : "inherit",
-                                        ...provided.draggableProps.style
-                                    }}>
-                                    {activeFields.map((field, index) => (
-                                        renderDataRowCell(row, field, index)
-                                    ))}
-                                </TableRow>)}
-                            </Draggable>))}
-                        {provided.placeholder}
-                    </TableBody>)}
-                </Droppable>)}
+                    renderTableBody()
+                )}
             </Table>
             {async ? <Spinner/> : data?.length !== 0 ? null : (
-                <Droppable droppableId={`${groupId}`}>
-                {(provided,snapshot) => (
-                        <div {...provided.droppableProps} ref={provided.innerRef} className='no-results-message'>
-                            Nema rezultata.
-                            {provided.placeholder}
-                        </div>
-                )}
-                </Droppable>
-                
+                renderNoResultsMessage()
             )}
         </TableContainer>
     );
