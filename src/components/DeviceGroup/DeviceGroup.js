@@ -6,8 +6,6 @@ import { fetchDevicesForGroup, updateDevicesTableForGroup } from "../../store/mo
 import { Spinner } from "../Spinner/Spinner";
 import CustomPagination from "../CustomTable/components/CustomPagination";
 
-import {DragDropContext} from 'react-beautiful-dnd'
-
 
 const DeviceGroup = ({ group, deviceTable, fetchDevicesForGroup, updateDevicesTableForGroup }) => {
 

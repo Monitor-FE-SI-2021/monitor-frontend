@@ -15,14 +15,16 @@ import classnames from 'classnames';
 
 import './custom_table.scss'
 
-import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd'
+import { Spinner } from "../Spinner/Spinner";
+
+import { Draggable, Droppable } from 'react-beautiful-dnd'
 import uuid from 'react-uuid'
 
 export function TableSlot({ slot, render }) {
     return <div></div>
 }
 
-export default function CustomTable({ data, fields, children, groupId }) {
+export default function CustomTable({ data, fields, children, groupId, async }) {
 
     const [tableData, setTableData] = useState(data);
     const [allData, setAllData] = useState(data);
@@ -75,6 +77,9 @@ export default function CustomTable({ data, fields, children, groupId }) {
         }
     }, [filter]);
 
+    useEffect(() => {
+        setTableData(data);
+    }, [data])
 
     const handleChange = (event) => {
         if (filter[0] === event.target.value) {
@@ -164,17 +169,17 @@ export default function CustomTable({ data, fields, children, groupId }) {
                         ))}
                     </TableRow>
                 </TableHead>
-                <Droppable droppableId = {`${uuid()}`} >
+                <Droppable droppableId = {`${groupId}`} >
                     {(provided, snapshot) => (
                         <TableBody
                             {...provided.droppableProps}
                             ref = {provided.innerRef}
                             >
-                            {provided.placeholder}
+                            
                             {tableData.map((row, rowIndex) => (
                                 <Draggable
                                     draggableId = {`${data[rowIndex].deviceUid}`}
-                                    key = {row.id ?? rowIndex}
+                                    key = {`${data[rowIndex].deviceUid}`}
                                     index = {rowIndex}
                                 >
                                     {(provided, snapshot) => (
@@ -188,11 +193,24 @@ export default function CustomTable({ data, fields, children, groupId }) {
                                     
                                 </Draggable>
                             ))}
+
+                            {provided.placeholder}
                         </TableBody>
                     )}
                     
                 </Droppable>
             </Table>
+            {async ? <Spinner/> : data?.length !== 0 ? null : (
+                <Droppable droppableId={`${groupId}`}>
+                {(provided, snapshot) => (
+                    <div className='no-results-message'
+                        {...provided.droppableProps}
+                        ref = {provided.innerRef}>
+                        Nema rezultata.
+                    </div>
+                )}
+                </Droppable>
+            )}
         </TableContainer>
     );
 }

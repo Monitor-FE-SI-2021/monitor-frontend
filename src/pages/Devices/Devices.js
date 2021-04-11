@@ -22,7 +22,7 @@ const getRootGroups = (groups) => {
 
 }
 
-const Devices = ({ allGroups, fetchAllDevices, fetchAllGroups, push, devicesAsync, groupsAsync, setActiveGlobal }) => {
+const Devices = ({ allGroups, fetchAllDevices, fetchAllGroups, push, devicesAsync, groupsAsync, setActiveGlobal, deviceTables }) => {
 
     useEffect(() => {
         request(wsEndpoint + "/agent/online")
@@ -39,9 +39,34 @@ const Devices = ({ allGroups, fetchAllDevices, fetchAllGroups, push, devicesAsyn
     }, [fetchAllDevices, fetchAllGroups])
 
 
+    const onDragEnd = (result) => {
+
+        const { destination, source, draggableId} = result;
+
+        console.log(result);
+        console.log(deviceTables);
+
+        if(destination == null){
+            return;
+        }
+        if(destination.droppableId === source.droppableId){
+            return;
+        }
+
+        const draggedDevice = (deviceTables[source.droppableId].devices.splice(source.index, 1)[0]);
+        deviceTables[source.droppableId].totalCount = deviceTables[source.droppableId].devices.length;
+        deviceTables[destination.droppableId].devices.splice(destination.index, 0, draggedDevice);
+        deviceTables[destination.droppableId].totalCount = deviceTables[destination.droppableId].devices.length;
+
+        console.log(deviceTables[source.droppableId]);
+        console.log(deviceTables[destination.droppableId]);
+        console.log(deviceTables[source.droppableId].devices);
+        console.log(deviceTables[destination.droppableId].devices);
+    }
+
     const rootGroups = getRootGroups(allGroups).map((grupa) => {
         return (
-            <DragDropContext onDragEnd = {result => console.log(result)}>
+            <DragDropContext onDragEnd = {onDragEnd}>
                 <DeviceGroup group={grupa}
                             key={grupa.groupId}/>
             </DragDropContext>
@@ -65,5 +90,6 @@ export default connect((state) => ({
     allDevices: state.devices.devices,
     allGroups: state.groups.groups,
     devicesAsync: state.devices.async,
-    groupsAsync: state.groups.async
+    groupsAsync: state.groups.async,
+    deviceTables: state.devices.deviceTables
 }), { fetchAllDevices, fetchAllGroups, push, setActiveGlobal })(Devices);
