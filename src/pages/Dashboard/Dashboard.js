@@ -19,7 +19,7 @@ import { LiveTv } from "@material-ui/icons";
 
 let barChart = {
 
-    labels: ['0', '100', '200', '300', '400', '500'],
+    labels: ['Type 0', 'Type 100', 'Type 200', 'Type 300', 'Type 400', 'Type 500'],
     datasets:[
         {
             label:"Number of errors of type",
