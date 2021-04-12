@@ -36,29 +36,6 @@ const UseOnEnter = () => {
     
     if (key === "Enter") {
       //console.log("Proba")
-    const requestOptions = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: config.email, password:  config.password})
-  };
-
-  try {
-      var response = await fetch(config.url, requestOptions);
-     //console.log(response.status)
-      
-      //console.log(x);
-      if(response.status == 200)
-      {
-          var x = await response.json();
-          //console.log(JSON.stringify(x.accessToken));
-          token = x.accessToken
-      }
-      else{
-        //console.log("Error");
-      }
-  }catch(e){
-    
-  }
   
     
       let newInput = value;
@@ -77,26 +54,32 @@ const UseOnEnter = () => {
       const argument = String(commands[args[0]]);
 
       const newConsoleLine = String(commands[args[0]]) || "Invalid Command";
+      //newInput2 = "\""+newInput2 + "\""
+      console.log("Input ", newConsoleLine)
       
-      if(newConsoleLine==="Invalid Command" || args.length-1!==parseInt(argument)){
+      if(newConsoleLine==="Invalid Command"){
       return updateConsoleOutput(consoleOutput =>
         consoleOutput.concat("Invalid Command"), setCounter(brojac=>brojac+1)
       )}
         //console.log("Name ", name)
       if(args.length>1){
-        addNewLog({
-          command_type: args[0].toString(),
-          args: args[1].toString(),
-          response: ""
-        }, name)
+        // addNewLog({
+        //   command_type: args[0].toString(),
+        //   args: args[1].toString(),
+        //   response: ""
+        // }, name)
+        window.localStorage.setItem("command_type", args[0].toString())
+        window.localStorage.setItem("args", args[1].toString())
         return updateConsoleOutput(consoleOutput => consoleOutput.concat("Valid Command!" + args[0].toString() + " " + args[1].toString() + "!")),setCounter(counter=>counter+1); 
       }
       else {
-        addNewLog({
-          command_type: args[0].toString(),
-          args: "",
-          response: ""
-        }, name)
+        // addNewLog({
+        //   command_type: args[0].toString(),
+        //   args: "",
+        //   response: ""
+        // }, name)
+        window.localStorage.setItem("command_type", args[0].toString())
+        window.localStorage.setItem("args", "")
         return updateConsoleOutput(consoleOutput => consoleOutput.concat("Valid Command!" + args[0].toString() + "!")),setCounter(counter=>counter+1); 
       }
     }

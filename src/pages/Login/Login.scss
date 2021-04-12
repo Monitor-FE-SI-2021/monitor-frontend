@@ -1,0 +1,57 @@
+.login {
+
+    &.formDiv {
+        margin: auto;
+        width: 30%;
+    }
+
+    .form {
+        max-width: 320px;
+        margin: auto;
+        padding: 20px;
+        background: #fafafa;
+        border: 1px solid #ccc;
+    }
+
+    .form h1 {
+        margin: 0 0 20px 0;
+    }
+
+    .form input {
+        box-sizing: border-box;
+        width: 100%;
+        margin: 0 0 20px 0;
+        padding: 10px;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+    }
+
+    .submitButton {
+        border: 0;
+        padding: 15px;
+        background: #5b77bd;
+        color: #fff;
+        cursor: pointer;
+    }
+
+    #forgotPasswordButton {
+        background: #eeebeb;
+        border: #fff;
+        width: 100%;
+    }
+
+    .Nav_link {
+        font-size: 13px;
+    }
+
+    .login-btn {
+        width: 100%;
+        margin: 10px 0;
+        border-radius: 0;
+        justify-content: center;
+
+        .spinner {
+            width: unset;
+        }
+    }
+}

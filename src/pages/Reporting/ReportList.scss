@@ -7,7 +7,7 @@
 
 .createReport {
     border: none;
-    background: rgba(64, 64, 64, 0.9);
+    background: rgba(73, 92, 143, 0.9);
     font-weight: 100;
     padding: 10px 20px;
     text-transform: uppercase;
@@ -53,7 +53,7 @@
         align-self: flex-end;
         .searchReport{
             border: none;
-            background: rgba(64, 64, 64, 0.9);
+            background: rgba(73, 92, 143, 0.9);
             font-weight: 100;
             padding: 10px 20px;
             text-transform: uppercase;
@@ -61,7 +61,6 @@
             border-radius: 6px;
             display: inline-block;
             align-self: flex-end;
-            transition: all 0.3s ease 0s;
             color: #fff;
             margin: 10px;
         }

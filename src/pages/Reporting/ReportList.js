@@ -9,60 +9,14 @@ import request from "../../service";
 import './ReportList.scss';
 import { frequenciesFilter } from './constants';
 
-const ReportList = ({push}) => {
+const ReportList = ({user,push}) => {
     const [reports, setReports] = useState([]);
     const [open, setOpen] = React.useState(false);
     const [filter, setFilter] = useState([]);
     const [selectedFrequency, setSelectedFrequency] = useState("noFilter");
     const [selectedName, setSelectedName] = useState("");
     
-    //za probu
-    let rep= [
-        {
-          "reportId": 0,
-          "name": "string",
-          "userId": 0,
-          "nextDate": "2021-04-03T12:53:19.367Z",
-          "frequency": "string",
-          "query": "string",
-          "sendEmail": true,
-          "deleted": true,
-          "reportInstances": [
-            {
-              "id": 0,
-              "reportId": 0,
-              "name": "string",
-              "uriLink": "string"
-            },
-            {
-                "id": 1,
-                "reportId": 0,
-                "name": "string0",
-                "uriLink": "string"
-              }
-          ]
-        },
-        {
-            "reportId": 1,
-            "name": "string",
-            "userId": 0,
-            "nextDate": "2021-04-03T12:53:19.367Z",
-            "frequency": "string",
-            "query": "string",
-            "sendEmail": true,
-            "deleted": true,
-            "reportInstances": [
-              {
-                "id": 2,
-                "reportId": 0,
-                "name": "string1",
-                "uriLink": "string"
-              }
-            ]
-          }
-      ];
-
-      const filterName = (event) => {
+    const filterName = (event) => {
         handleClose();
         if(selectedName  === "") {
             setFilter([]);
@@ -91,16 +45,11 @@ const ReportList = ({push}) => {
 
         if(frequencies === null && selectedName===""){
             setReports([]);
-            const res = await request("https://si-2021.167.99.244.168.nip.io/api/report/AllReportsForUser");
+            const res = await request('https://si-2021.167.99.244.168.nip.io/api/report/GetReports');
             for (let re of res.data.data) 
                 for (let r of re.reportInstances)
                     reports.push(r);
-            
-            //za probu
-            // for (let re of rep) 
-            //     for (let r of re.reportInstances)
-            //         reports.push(r);
-
+            console.log(res.data.data);
             setReports(reports);
             
         }
@@ -116,11 +65,10 @@ const ReportList = ({push}) => {
         }
         else{
             setSelectedFrequency("noFilter");
-            const res = await request('https://si-2021.167.99.244.168.nip.io/api/report/GetReports?' + `Name=${selectedName}`);
+            const res = await request('https://si-2021.167.99.244.168.nip.io/api/report/GetReportInstances?' + `Name=${selectedName}`);
             setReports([]);
             for (let repo of res.data.data) 
-                for (let r of repo.reportInstances)
-                    reports.push(r);
+                    reports.push(repo);
 
             setReports(reports);
         }
@@ -154,6 +102,10 @@ const ReportList = ({push}) => {
         setSelectedFrequency("noFilter");
     };
 
+    const closeFilter = (e) => {
+        if(e.key === "Escape") handleClose();
+    }
+
     return (
         <div className="reportingWrapper page">
              <div  className="header">
@@ -167,6 +119,7 @@ const ReportList = ({push}) => {
             {open ?
                 <FormControl className="filter"style={{ float: 'right' }}>
                     <Popover
+                    onKeyDown={closeFilter}
                     anchorOrigin={{
                         vertical: 'top',
                         horizontal: 'right',
@@ -209,4 +162,8 @@ const ReportList = ({push}) => {
         </div>
     )
 };
-export default connect(state => ({}), {push})(ReportList);
+export default connect(state => {
+    return {
+        user: state.login.user,
+    };
+}, {push})(ReportList);

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -11,6 +11,7 @@ import DownArrow from '@material-ui/icons/ArrowDropDown';
 import { getDeepProp } from "../../utils/utils";
 import classnames from 'classnames';
 
+import { Droppable, Draggable } from "react-beautiful-dnd"
 import './custom_table.scss'
 import { Spinner } from "../Spinner/Spinner";
 
@@ -19,7 +20,17 @@ export function TableSlot({ slot, render }) {
     return <div></div>
 }
 
-export default function CustomTable({ data, fields, children, handleSort, activeSortField, activeSortOrder, async }) {
+export default function CustomTable({
+                                        data,
+                                        fields,
+                                        children,
+                                        handleSort,
+                                        activeSortField,
+                                        activeSortOrder,
+                                        async,
+                                        hasDragAndDrop,
+                                        droppableId,
+                                    }) {
 
     const activeFields = (fields || []).filter(field => field.disabled !== undefined ? !field.disabled : true);
 
@@ -45,9 +56,76 @@ export default function CustomTable({ data, fields, children, handleSort, active
         );
     }
 
+    const renderTableBody = () => {
+        if (hasDragAndDrop) {
+            return (
+                <Droppable
+                    droppableId={`${droppableId}`}>
+                    {(provided, snapshot) => (
+                        <TableBody {...provided.droppableProps} ref={provided.innerRef}>
+                            {data.map((row, rowIndex) => (
+                                <Draggable
+                                    draggableId={`${data[rowIndex].deviceUid}`}
+                                    key={`${data[rowIndex].deviceUid}`}
+                                    index={rowIndex}>
+                                    {(provided, snapshot) => (
+                                        <TableRow
+                                            key={row.id ?? rowIndex}
+                                            ref={provided.innerRef}
+                                            {...provided.draggableProps}
+                                            {...provided.dragHandleProps}
+                                            style={{
+                                                backgroundColor: snapshot.isDragging ? "white" : "inherit",
+                                                ...provided.draggableProps.style
+                                            }}>
+                                            {activeFields.map((field, index) => (
+                                                renderDataRowCell(row, field, index)
+                                            ))}
+                                        </TableRow>)}
+                                </Draggable>))}
+                            {provided.placeholder}
+                        </TableBody>)}
+                </Droppable>
+            )
+        } else {
+            return (
+                <TableBody>
+                    {data.map((row, rowIndex) => (
+                        <TableRow key={row.id ?? rowIndex}>
+                            {activeFields.map((field, index) => (
+                                renderDataRowCell(row, field, index)
+                            ))}
+                        </TableRow>
+                    ))}
+                </TableBody>
+            )
+        }
+    }
+
+    const renderNoResultsMessage = () => {
+        if (hasDragAndDrop) {
+            return (
+                <Droppable droppableId={`${droppableId}`}>
+                    {(provided, snapshot) => (
+                        <div {...provided.droppableProps} ref={provided.innerRef} className='no-results-message'>
+                            Nema rezultata.
+                            {provided.placeholder}
+                        </div>
+                    )}
+                </Droppable>
+            )
+        } else {
+            return (
+                <div className='no-results-message'>
+                    Nema rezultata.
+                </div>
+            )
+        }
+    }
+
     return (
         <TableContainer component={Paper} className={'custom-table-container'}>
-            <Table className='custom-table'>
+            <Table stickyHeader className='custom-table'>
                 <TableHead>
                     <TableRow className={'header-row'} key={'header-row'}>
                         {activeFields.map(field => (
@@ -83,20 +161,12 @@ export default function CustomTable({ data, fields, children, handleSort, active
                         ))}
                     </TableRow>
                 </TableHead>
-                {(!async && data.length !== 0) && (<TableBody>
-                    {data.map((row, rowIndex) => (
-                        <TableRow key={row.id ?? rowIndex}>
-                            {activeFields.map((field, index) => (
-                                renderDataRowCell(row, field, index)
-                            ))}
-                        </TableRow>
-                    ))}
-                </TableBody>)}
+                {(!async && data.length !== 0) && (
+                    renderTableBody()
+                )}
             </Table>
             {async ? <Spinner/> : data?.length !== 0 ? null : (
-                <div className='no-results-message'>
-                    Nema rezultata.
-                </div>
+                renderNoResultsMessage()
             )}
         </TableContainer>
     );

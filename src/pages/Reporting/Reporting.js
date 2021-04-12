@@ -72,11 +72,11 @@ const Reports = ({ user, push }) => {
         
         const freq = frequencyInfo?.frequency?.value;
         switch(freq){
-            case "daily":
+            case "Daily":
                 const dailyHours = frequencyInfo.time.value.split(':');
                 dateCurrent.setHours(parseInt(dailyHours[0]) + 2, dailyHours[1], dailyHours[2]);
                 break;
-            case "weekly":
+            case "Weekly":
                 console.log(frequencyInfo, 'testbest weekly');
                 const daysMap = {
                     "Mon": 1,
@@ -91,13 +91,13 @@ const Reports = ({ user, push }) => {
                 const weeklyHours = frequencyInfo.time.value.split(':');
                 dateCurrent.setHours(parseInt(weeklyHours[0]) + 2, weeklyHours[1], weeklyHours[2]);
                 break;
-            case "monthly":
+            case "Monthly":
                 dateCurrent.setDate(frequencyInfo?.dayInMonth);
                 if(dateCurrent< new Date()) dateCurrent.setMonth(dateCurrent.getMonth() + 1);
                 const monthlyHours = frequencyInfo.time.value.split(':');
                 dateCurrent.setHours(parseInt(monthlyHours[0]) + 2, monthlyHours[1], monthlyHours[2]);
                 break;
-            case "yearly": 
+            case "Yearly": 
                 const monthsMap = {
                     "january": 0,
                     "february": 1,
