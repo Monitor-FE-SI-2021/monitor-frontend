@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import './assets/style/index.scss';
-import {ConnectedRouter, push} from "connected-react-router";
-import {connect, Provider} from "react-redux";
-import store, {history} from './store/store'
-import {Route, Switch} from 'react-router-dom';
+import { ConnectedRouter, push } from "connected-react-router";
+import { connect, Provider } from "react-redux";
+import store, { history } from './store/store'
+import { Route, Switch } from 'react-router-dom';
 import Layout from "./components/Layout/Layout";
 import Login from "./pages/Login/Login";
 import ForgotPasswordEmail from "./pages/Login/ForgotPasswordEmail";
@@ -25,7 +25,7 @@ const App = ({ user, getMe, push }) => {
         const token = localStorage.getItem(STORAGE_KEY);
 
         if (route === '/forgot-password-email' || route.slice(0, route.lastIndexOf('/')) === '/password-reset'
-        || route === '/forgot-password-questions' || route === '/forgot-password-type') {
+            || route === '/forgot-password-questions' || route === '/forgot-password-type') {
             return;
         }
 
@@ -36,7 +36,7 @@ const App = ({ user, getMe, push }) => {
 
         if (!user) {
             getMe().then(() => {
-                push(route);
+                push(route !== '/login' ? route : '/')
             })
         }
 
