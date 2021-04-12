@@ -3,7 +3,7 @@ import React from 'react';
 import './Login.scss';
 import { push } from "connected-react-router";
 
-function ChooseTypeOfReset({push}) {
+function ChooseTypeOfReset({ push }) {
 
     const switchRoute = (link) => {
         push(link);
@@ -20,13 +20,15 @@ function ChooseTypeOfReset({push}) {
     };
 
     return (
-        <div className="formDiv">
+        <div className="login formDiv">
             <form class="form">
                 <p>Choose how you want to reset your password:</p>
                 <input class="submitButton" type="submit" value="Get reset link" onClick={handleSubmitEmailLink}/>
-                <input class="submitButton" type="submit" value="Answer security questions" onClick={handleSubmitQuestions}/>
+                <input class="submitButton" type="submit" value="Answer security questions"
+                       onClick={handleSubmitQuestions}/>
             </form>
         </div>
     );
 }
+
 export default connect(state => ({}), { push })(ChooseTypeOfReset);

@@ -45,15 +45,17 @@ function Login({ doLogin, push, loginAsync, userAsync }) {
 
     return (
         <div className="login formDiv">
-            <form className="form" onSubmit={e => e.preventDefault()}>
+            <form className="form" onSubmit={handleSubmit}>
                 <h1>LOGIN</h1>
 
                 <input name="email" placeholder="Email" value={formData.email} onChange={handleChange}/>
-                <input name="password" type='password'
+                <input name="password"
+                       type='password'
                        placeholder="Password"
                        value={formData.password}
                        onChange={handleChange}/>
                 <AsyncButton onClick={handleSubmit}
+                             type={'submit'}
                              async={async}
                              className='custom-btn login-btn'>Login</AsyncButton>
                 <input id="forgotPasswordButton" type="button" value="Forgot password?"

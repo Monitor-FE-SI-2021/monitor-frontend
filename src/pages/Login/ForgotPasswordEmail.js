@@ -30,7 +30,7 @@ function EmailSubmit({ requestForgotPassword }) {
     };
 
     return (
-        <div className="formDiv">
+        <div className="login formDiv">
             <form class="form">
                 <p>Enter your email adress:</p>
                 <input name="email" type='email'

@@ -1,6 +1,7 @@
 import request, { authEndpoint } from "../../service";
 import { showSwalToast } from "../../utils/utils";
 import { history } from "../../store/store";
+import { STORAGE_KEY } from "../../utils/consts";
 
 export const getUserDetails = () => {
     //kad se deploya ide ruta (authEndpoint + '/getUserDetails')
@@ -96,7 +97,8 @@ export const verifyEmail = ({ token }) => {
         if (res && res.status === 200) {
             showSwalToast('Email successfully verified!', 'success');
             setTimeout(() => {
-                history.push('/my-profile')
+                localStorage.removeItem(STORAGE_KEY);
+                history.push('/login')
             }, 2000)
             return res;
         }
