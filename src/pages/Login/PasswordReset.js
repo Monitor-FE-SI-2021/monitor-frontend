@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import React from 'react';
-import './Login.css';
+import './Login.scss';
 import { requestResetPassword } from "../../store/modules/login/login";
 import { push } from 'connected-react-router';
 import { showSwalToast } from "../../utils/utils";
@@ -46,8 +46,8 @@ function NewPassword({ requestResetPassword, push }) {
     };
 
     return (
-        <div className="formDiv">
-            <form class="form">
+        <div className="login formDiv">
+            <form className="form">
                 <h3>Reset your password</h3>
                 <input name="password" type='password'
                        placeholder="New password"

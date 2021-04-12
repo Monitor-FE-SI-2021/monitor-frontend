@@ -1,72 +1,24 @@
-import { render } from '@testing-library/react';
+import {render} from '@testing-library/react';
 import React, {Component, useState} from 'react';
-import { withGoogleMap, GoogleMap, Marker, InfoWindow } from "react-google-maps"
-import request, { devices } from "../../../service";
-
-
-/*
-    function filterActive(activeMachines, allMachines) {
-        return activeMachines ? activeMachines.filter((machine) => {
-            const existingMachine = allMachines.find(({name, location}) => {
-                return machine.status !== "Disconnected" && name === machine.name && location === machine.location;
-            });
-            if (existingMachine) {
-                machine.deviceId = existingMachine.deviceId;
-                machine.lastTimeOnline = existingMachine.lastTimeOnline;
-            }
-            return existingMachine;
-        }) : [];
-    }
-
-    function filterInactiveMachines(machines, activeMachines) {
-        //console.log(machines);
-        let result = [];
-        
-        machines.map((machine) => {
-
-            let statusOfMachine = activeMachines.find(e => e.deviceId == machine.deviceId);
-            
-            if (statusOfMachine != undefined) {
-                result.push({
-                    deviceId: machine.deviceId, 
-                    name: machine.name,
-                    locationLongitude: machine.locationLongitude,
-                    locationLatitude: machine.locationLatitude,
-                    lastTimeOnline: machine.lastTimeOnline,
-                    imageURL: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
-                })
-            } else {
-                    result.push({
-                    deviceId: machine.deviceId, 
-                    name: machine.name,
-                    locationLongitude: machine.locationLongitude,
-                    locationLatitude: machine.locationLatitude,
-                    lastTimeOnline: machine.lastTimeOnline,
-                    imageURL: "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
-                })
-            }
-        })
-
-        return result;
-    }
-
-
- */
-const greenMarkerURL = "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
-const redMarkerURL = "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
+import {withGoogleMap, GoogleMap, Marker, InfoWindow} from "react-google-maps"
+import request, {devices} from "../../../service";
+import './GoogleMapMonitors.scss';
+const greenMarkerURL = "http://maps.google.com/mapfiles/ms/micons/green-dot.png"
+const redMarkerURL = "http://maps.google.com/mapfiles/ms/micons/red-dot.png"
+const yellowMarkerURL = "http://maps.google.com/mapfiles/ms/micons/yellow-dot.png"
+const ltBlueMarkerURL = "http://maps.google.com/mapfiles/ms/micons/ltblue-dot.png"
 
 function setActivityMarkers(activeMachines, allMachines) {
-        allMachines.map((machine) => {
-            const isActiveMachine = activeMachines.find(({ deviceUid }) => {
-                return machine.deviceUid === deviceUid
-            })
-            if (isActiveMachine) {
-                machine.imageURL = greenMarkerURL
-            }
-            else {
-                machine.imageURL = redMarkerURL
-            }
+    allMachines.map((machine) => {
+        const isActiveMachine = activeMachines.find(({deviceUid}) => {
+            return machine.deviceUid === deviceUid
         })
+        if (isActiveMachine) {
+            machine.imageURL = greenMarkerURL
+        } else {
+            machine.imageURL = ltBlueMarkerURL
+        }
+    })
 }
 
 function setNonLeapingLocations(machines) {
@@ -76,32 +28,53 @@ function setNonLeapingLocations(machines) {
                 && machine.locationLongitude === m.locationLongitude
         })
         if (machineSameLocation) {
-            machine.locationLatitude = machine.locationLatitude + (Math.random() -.5) / 30000;
-            machine.locationLongitude = machine.locationLongitude + (Math.random() -.5) / 30000;
+            machine.locationLatitude = machine.locationLatitude + (Math.random() - .5) / 30000;
+            machine.locationLongitude = machine.locationLongitude + (Math.random() - .5) / 30000;
         }
     })
 }
 
+function checkMachineErrors(errors, machines) {
+
+    machines.map((machine) => {
+        let statusCodesOfMachine = errors.find(e => e.deviceUID == machine.deviceUid);
+
+        if (statusCodesOfMachine != undefined) {
+
+            if (statusCodesOfMachine.errorInfo.filter(e => e.code >= 400 && e.code <= 561 || e.code === null || e.type == "RUNTIME").length != 0) {
+                machine.imageURL = redMarkerURL;
+                return;
+            } else if (statusCodesOfMachine.errorInfo.filter(e => e.code >= 300 && e.code < 400).length != 0) {
+                machine.imageURL = yellowMarkerURL;
+            }
+        }
+    })
+}
+
+
 class GoogleMapMonitors extends Component {
-/*
-    state = {
-        loading: true,
-        machines: []
-    };
+    /*
+        state = {
+            loading: true,
+            machines: []
+        };
 
-    async componentDidMount(){
-        const response = await request(devices + "/AllDevices");
-        this.setState({machines: response.data.data, loading:false})
-    }
+        async componentDidMount(){
+            const response = await request(devices + "/AllDevices");
+            this.setState({machines: response.data.data, loading:false})
+        }
 
-*/
+    */
     render() {
+
 
         let activeMachines = this.props.activeMachines
         let allMachines = this.props.allMachines
+        let allErrors = this.props.allErrors
 
         setNonLeapingLocations(allMachines)
-/*
+
+        /*
         let machinesReadyToMark = [];
         if (!this.state.loading) {
             let activeMachines = filterActive([], this.state.machines)
@@ -110,12 +83,13 @@ class GoogleMapMonitors extends Component {
         }
 */
         setActivityMarkers(activeMachines, allMachines)
+        checkMachineErrors(allErrors, allMachines)
 
         //when calling a marker, check if loading is true/false
 
         const MyMapComponent = withGoogleMap((props) => {
-            const [selectedMachine, setSelectedMachine] = useState(null)
-            return (
+                const [selectedMachine, setSelectedMachine] = useState(null)
+                return (
                     <GoogleMap
                         defaultZoom={8}
                         defaultCenter={{lat: 43.856, lng: 18.413}}
@@ -151,14 +125,31 @@ class GoogleMapMonitors extends Component {
         );
 
 
-        return(
-            <MyMapComponent
+        return (
+        <div className="map-wrapper">
+        <div className="map-legend">
+            <div className="legend-wrapper">
+                <div className="legend-bg">
+                    <p>Legend</p>
+                    <ul id="legend-list">
+
+                        <li id="first-list-item"> Online</li>
+                        <li id="second-list-item"> Offline</li>
+                        <li id="third-list-item"> Warning</li>
+                        <li id="fourth-list-item"> Critical</li>
+                    </ul>
+                </div>
+            </div>
+            </div>
+            <div className="map-wrapper">
+        <MyMapComponent
                 googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyDqy4jIX3sEoscEfuE-stH6oWMHNLaQIs8&v=3.exp&libraries=geometry,drawing,places"
-                loadingElement={<div style={{ height: `100%` }} />}
-                containerElement={<div style={{ height: `400px` }} />}
-                mapElement={<div style={{ height: `100%`, width:`100%`, borderRadius: `25px`, border: `1px solid #ccc` }} />}
-                
+                loadingElement={<div style={{ height: "100%" }} />}
+                containerElement={<div style={{ height: "400px" }} />}
+                mapElement={<div style={{ height: "100%", width:"100%", borderRadius: "25px", border: "1px solid #ccc" }} />}
             />
+            </div>
+            </div>
         );
     }
 
