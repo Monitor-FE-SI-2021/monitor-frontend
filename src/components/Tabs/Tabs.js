@@ -192,12 +192,12 @@ const Tabs = (props, machine) => {
                 >
                     Screenshot
                 </button>
-                <button
+                {/* <button
                     className={tab === "filemanager" ? "tabs active-tabs" : "tabs"}
                     onClick={() => toggleTab("filemanager")}
                 >
                     File Manager
-                </button>
+                </button> */}
             </div>
             <div className="content-tabs">
                 <div
