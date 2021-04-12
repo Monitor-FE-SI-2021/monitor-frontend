@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import { Bar } from 'react-chartjs-2';
+import { barchartMaxValue } from "../../Dashboard";
+
 
 class BarChart extends Component{
     constructor(props){
@@ -20,8 +22,8 @@ class BarChart extends Component{
                 options={{
                     maintainAspectRatio: false, 
                     title:{
-                        display: 'Disk utilization last hour',
-                        text: 'Disk utilization last hour',
+                        display: 'Number of errors of type',
+                        text: 'Number of errors of type',
                         fontSize: 25
                     },
                     scales: {
@@ -31,7 +33,7 @@ class BarChart extends Component{
                                     beginAtZero: true,
                                     steps: 20,
                                     stepValue: 5,
-                                    max: 100
+                                    max: barchartMaxValue
                                 }
                             }]  
                     }         

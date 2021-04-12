@@ -12,7 +12,7 @@ function CustomPagination({ page = 1, perPage = 10, totalCount = 10, handleChang
         <TablePagination
             component="div"
             count={totalCount}
-            rowsPerPageOptions={[1, 2, 5, 10]}
+            rowsPerPageOptions={[1, 5, 10, 25]}
             page={actualPage}
             onChangePage={(e, page) => handleChangePage(page + 1)}
             rowsPerPage={perPage}

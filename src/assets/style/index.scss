@@ -3,78 +3,79 @@
 @import "misc";
 
 html {
-    box-sizing: border-box;
-    font-size: 16px;
-    font-family: Mulish, sans-serif;
+  box-sizing: border-box;
+  font-size: 16px;
+  font-family: Mulish, sans-serif;
 }
 
 html, body, #app, #root {
-    padding: 0;
-    margin: 0;
-    height: 100%;
-    background: $pageBg;
-    display: flex;
-    flex-direction: column;
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  background: $pageBg;
+  display: flex;
+  flex-direction: column;
 }
 
 :root {
-    --main-color: #495c8f;
+  --main-color: #495c8f;
 }
 
 * {
-    box-sizing: inherit;
+  box-sizing: inherit;
   font-family: Roboto, sans-serif;
-    font-family: Mulish, sans-serif;
+  font-family: Mulish, sans-serif;
 
-    &:before,
-    &:after {
-        box-sizing: inherit;
-    }
+  &:before,
+  &:after {
+    box-sizing: inherit;
+  }
 }
 
 .app-loader {
-    height: 100vh;
-    margin: 0 !important
+  height: 100vh;
+  margin: 0 !important
 }
 
 .layout {
+  display: flex;
+  height: 100%;
+  max-height: 100vh;
+
+  .main-view {
     display: flex;
-    height: 100%;
-    max-height: 100vh;
+    flex-direction: column;
+    flex: 1;
+    align-items: flex-start;
+    background: $pageBg;
+    padding-left: $menuWidth;
+    //padding-top: $headerHeight;
+    transition: all 250ms ease-in-out;
+    overflow: auto;
+  }
+
+  .page {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 22px;
+    width: 100%;
+    flex: 1;
+    max-height: 100%;
+  }
+
+  &.menu-expanded {
+
+    .menu {
+      width: $menuExpandedWidth;
+    }
+
+    .header {
+      left: $menuExpandedWidth;
+    }
 
     .main-view {
-        display: flex;
-        flex-direction: column;
-        flex: 1;
-        align-items: flex-start;
-        background: $pageBg;
-        padding-left: $menuWidth;
-        //padding-top: $headerHeight;
-        transition: all 250ms ease-in-out;
-        overflow: auto;
+      padding-left: $menuExpandedWidth;
     }
-
-    .page {
-        display: flex;
-        flex-direction: column;
-        padding: 10px 22px;
-        width: 100%;
-        flex: 1;
-        max-height: 100%;
-    }
-
-    &.menu-expanded {
-
-        .menu {
-            width: $menuExpandedWidth;
-        }
-
-        .header {
-            left: $menuExpandedWidth;
-        }
-
-        .main-view {
-            padding-left: $menuExpandedWidth;
-        }
-    }
+  }
 }
+

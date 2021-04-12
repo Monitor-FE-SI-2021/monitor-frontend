@@ -1,0 +1,44 @@
+.ConsoleLogs {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+  }
+  
+.customTable {
+    width: 100%;
+    background-color: #FFFFFF;
+    border-collapse: collapse;
+    border-width: 1px;
+    border-color: #D4D4D4;
+    border-style: solid;
+    color: #000000;
+}
+  
+.customTable td, .customTable th {
+    border-width: 1px;
+    border-color: #D4D4D4;
+    border-style: solid;
+    padding: 0.6em;
+}
+  
+.customTable th::before {
+      border-top: 5px solid #22543d;
+      content: "";
+}
+  
+.customTable tr:nth-child(even) {
+    background: #E7E7E7;
+}
+  
+.customTable thead {
+    background-color: #FFFFFF;
+}
+  
+.searchBar {
+    padding: 0.6em;
+    margin-bottom: 1.2em;
+    font-size: 1em;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    box-shadow: none;
+}

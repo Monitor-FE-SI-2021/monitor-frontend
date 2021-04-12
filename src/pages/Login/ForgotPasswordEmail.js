@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import React from 'react';
-import './Login.css';
+import './Login.scss';
 import { requestForgotPassword } from "../../store/modules/login/login";
 
 function EmailSubmit({ requestForgotPassword }) {
@@ -30,7 +30,7 @@ function EmailSubmit({ requestForgotPassword }) {
     };
 
     return (
-        <div className="formDiv">
+        <div className="login formDiv">
             <form class="form">
                 <p>Enter your email adress:</p>
                 <input name="email" type='email'
