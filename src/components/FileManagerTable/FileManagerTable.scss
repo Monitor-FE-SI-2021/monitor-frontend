@@ -31,7 +31,7 @@
     border-bottom: 2px solid black;
   }
 
-  .file-download,
+  .file-name,
   .file-rename,
   .file-delete,
   .file-copy,
@@ -40,7 +40,7 @@
     cursor: pointer;
   }
 
-  .file-download {
+  .file-name {
     width: 70%;
   }
 
@@ -69,15 +69,11 @@
     color: white;
   }
 
-  .centriraj {
+  .center-data {
     text-align: center;
   }
 
-  .centriraj-lijevo {
-    text-align: left;
-  }
-
-  .pomjereni-naziv {
+  .fix-name {
     padding-left: 8px;
     vertical-align: middle;
   }
@@ -96,12 +92,7 @@
     vertical-align: middle;
   }
 
-  .centriraj-datum {
-    vertical-align: middle;
-    text-align: left;
-  }
-
-  .sort-strelica:hover {
+  .sort-arrow:hover {
     transition: 0.3s ease-in-out;
     background-color: #93abf6;
     border-radius: 100%;
@@ -111,6 +102,18 @@
     display: flex;
     justify-content: left;
     align-items: center;
+    width: 550px;
+  }
+
+  .file-date-added {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    width: 218px;
+  }
+
+  .manipulation {
+    width: 210px;
   }
 
   .file-name-offset {

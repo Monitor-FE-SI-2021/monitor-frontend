@@ -120,28 +120,28 @@ class FileManagerTable extends React.Component {
                         <span>File name</span>
                         <img onClick={() => {
                             this.sortFilesDescending()
-                        }} className="sort-strelica"
+                        }} className="sort-arrow"
                              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAAWklEQVRIie2PsQ2AMBDEToCUHRENLEHJ2ulMS0FEHoLSnAew7yRjTB+ABcjUk4H5zjUUGqOkFNiUJE3RF3vgwRGSByPv5JWRb/KHSBt5IdJWfolswPqL3Jh+nMnK13/HbjBeAAAAAElFTkSuQmCC"></img>
                         <img onClick={() => {
                             this.sortFilesAscending()
-                        }} className="sort-strelica"
+                        }} className="sort-arrow"
                              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAAVklEQVRIie3PsQ2AMAxE0RODIkUMwQyMHCg+FaIhAoPToHsD/LMls38BCjD1is+clp7x3JFGPGfkJv5t5GH83QgwBuKHctUaGhubpBq4qUpaQ1+YWZ4dI9Lbm/Wdan8AAAAASUVORK5CYII="/>
                     </div>
                 </th>
                 <th>
-                    <div className="file-name-div">
+                    <div className="file-date-added">
                         <span>Date added</span>
                         <img onClick={() => {
                             this.sortDateDescending()
-                        }} className="sort-strelica"
+                        }} className="sort-arrow"
                              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAAWklEQVRIie2PsQ2AMBDEToCUHRENLEHJ2ulMS0FEHoLSnAew7yRjTB+ABcjUk4H5zjUUGqOkFNiUJE3RF3vgwRGSByPv5JWRb/KHSBt5IdJWfolswPqL3Jh+nMnK13/HbjBeAAAAAElFTkSuQmCC"></img>
                         <img onClick={() => {
                             this.sortDateAscending()
-                        }} className="sort-strelica"
+                        }} className="sort-arrow"
                              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAAVklEQVRIie3PsQ2AMAxE0RODIkUMwQyMHCg+FaIhAoPToHsD/LMls38BCjD1is+clp7x3JFGPGfkJv5t5GH83QgwBuKHctUaGhubpBq4qUpaQ1+YWZ4dI9Lbm/Wdan8AAAAASUVORK5CYII="/>
                     </div>
                 </th>
-                <th colSpan="2" className="centriraj">File manipulation</th>
+                <th colSpan="2" className="center-data manipulation">File manipulation</th>
             </tr>
         )
     }
@@ -188,7 +188,7 @@ class FileManagerTable extends React.Component {
             let date = new Date(oneObject.data.birthtime).toString();
             return (
                 <tr>
-                    <td className="file-download pomjereni-naziv file-icon" onClick={() => {
+                    <td className="file-name fix-name file-icon" onClick={() => {
                         this.handleClick(id)
                     }}>
                         <img className="file-icon"
@@ -197,22 +197,22 @@ class FileManagerTable extends React.Component {
                     </td>
                     <td className="date-style">{oneObject.fileName == "LOADING..." ? " " : this.displayFormattedDate(date)}</td>
                     <div className="file-manipulation-wrapper">
-                        <td className="file-manipulation file-delete centriraj" onClick={() => {
+                        <td className="file-manipulation file-delete center-data" onClick={() => {
                             this.handleDelete(id)
                         }}>
                             <FaTrash size={20}/>
                         </td>
-                        <td className="file-manipulation file-rename centriraj" onClick={() => {
+                        <td className="file-manipulation file-rename center-data" onClick={() => {
                             this.handleRename(id)
                         }}>
                             <FaPencilAlt size={20}/>
                         </td>
-                        <td className="file-manipulation file-copy centriraj" onClick={() => {
+                        <td className="file-manipulation file-copy center-data" onClick={() => {
                             this.handleCopy(id)
                         }}>
                             <FaCopy size={20}/>
                         </td>
-                        <td className="file-manipulation file-move centriraj" onClick={() => {
+                        <td className="file-manipulation file-move center-data" onClick={() => {
                             this.handleMove(id)
                         }}>
                             <FaCut size={20}/>
@@ -496,7 +496,6 @@ class FileManagerTable extends React.Component {
             if (response.status == 200) {
                 var x = await response.json();
                 const token = x.accessToken;
-
                 const requestOptions2 = {
                     method: "POST",
                     headers: {
@@ -712,7 +711,7 @@ class FileManagerTable extends React.Component {
                     .then((res) => {
                         Swal.fire({
                             title: "File manager",
-                            text: "Datoteka uspješno poslana!",
+                            text: "Directory successfully sent!",
                             type: "success",
                         });
 
@@ -772,35 +771,24 @@ class FileManagerTable extends React.Component {
                     }).catch((error) => {
                         console.log(error);
                     });
-
-
             }
         } catch (e) {
             console.log(e);
         }
-
-
     }
 
 
     async sendToAgents() {
         const url = 'https://si-2021.167.99.244.168.nip.io/api/group/MyAssignedGroups';
         var arrayOfGroups = [];
-
         const response = await request(url, 'GET');
-
         arrayOfGroups = response.data.data.subGroups;
-
         var html = '<div class="swal-text">';
 
         for (var i = 0; i < arrayOfGroups.length; i++) {
             html = html + this.getTableForGroups(arrayOfGroups[i]);
-
         }
-
-
         html = html + '</div>';
-
 
         Swal.fire({
             html: html.toString(),
@@ -809,8 +797,6 @@ class FileManagerTable extends React.Component {
     }
 
     getTableForGroups(group) {
-
-
         var html = '';
         if (typeof group.subGroups !== 'undefined' && group.subGroups.length > 0) {
             html = html + '<div >';
@@ -818,7 +804,6 @@ class FileManagerTable extends React.Component {
                 html = html + this.getTableForGroups(group.subGroups[i]);
             }
             html = html + '</div>';
-
         } else {
             html = '<div class="swalItem">';
             html = html + '<div class="form-check">';
@@ -827,15 +812,12 @@ class FileManagerTable extends React.Component {
             html = html + "</label>";
             html = html + `<input class="form-check-input " type="checkbox" value="" id="${group.groupId}">`;
             html = html + "</div>";
-
         }
-
         return html;
     }
 
 
     clickNewFolder() {
-
         Swal.fire({
             title: 'New folder name:',
             input: 'text',
