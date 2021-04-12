@@ -5,7 +5,7 @@ import { formatQuery } from 'react-querybuilder';
 
 import request from "../../service";
 
-import { fields, frequencies, devices } from './constants';
+import { fields, frequencies, devices, queryFields } from './constants';
 import ReportTiming from './ReportTiming';
 
 import Button from '@material-ui/core/Button';
@@ -72,11 +72,11 @@ const Reports = ({ user, push }) => {
         
         const freq = frequencyInfo?.frequency?.value;
         switch(freq){
-            case "daily":
+            case "Daily":
                 const dailyHours = frequencyInfo.time.value.split(':');
                 dateCurrent.setHours(parseInt(dailyHours[0]) + 2, dailyHours[1], dailyHours[2]);
                 break;
-            case "weekly":
+            case "Weekly":
                 console.log(frequencyInfo, 'testbest weekly');
                 const daysMap = {
                     "Mon": 1,
@@ -91,13 +91,13 @@ const Reports = ({ user, push }) => {
                 const weeklyHours = frequencyInfo.time.value.split(':');
                 dateCurrent.setHours(parseInt(weeklyHours[0]) + 2, weeklyHours[1], weeklyHours[2]);
                 break;
-            case "monthly":
+            case "Monthly":
                 dateCurrent.setDate(frequencyInfo?.dayInMonth);
                 if(dateCurrent< new Date()) dateCurrent.setMonth(dateCurrent.getMonth() + 1);
                 const monthlyHours = frequencyInfo.time.value.split(':');
                 dateCurrent.setHours(parseInt(monthlyHours[0]) + 2, monthlyHours[1], monthlyHours[2]);
                 break;
-            case "yearly": 
+            case "Yearly": 
                 const monthsMap = {
                     "january": 0,
                     "february": 1,
@@ -126,15 +126,24 @@ const Reports = ({ user, push }) => {
 
     const submitReportForm = async (e) => {
         e.preventDefault();
-        const finalQuery = "( " + formatQuery(queryValue, 'sql') + " ) and groupId = " + (selectedGroup.group.groupId == -1 ? "groupId" : selectedGroup.group.groupId);
+
+        const selectClause = selectedColumns
+        const fromClause = "DEVICES d";
+        const whereClause = JSON.parse(formatQuery(queryValue, 'json_without_ids').replaceAll('"operator":', '"operator_str":'));
+        const groupClause = selectedGroup.group.groupId;
+
+        const finalQuery = {select: selectClause, where: whereClause, group: groupClause, freq: frequencyInfo.frequency.value};
+        console.log(JSON.stringify(finalQuery));
+
         const body = {
             name: title,
             userId: user.userId,
-            query: finalQuery,
+            query: JSON.stringify(finalQuery),
             nextDate: calculateDate(),
             frequency: frequencyInfo.frequency.value,
             sendEmail: sendEmailValue,
         };
+        
         const response = await request("https://si-2021.167.99.244.168.nip.io/api/report/CreateReport", "POST", body);
         if (response.status === 200) {
             window.alert("Uspjesno kreiran report!");
@@ -238,6 +247,7 @@ const Reports = ({ user, push }) => {
                         showNotToggle={true}
                     />
                 </div>
+                
                 <div>
                     <h3 className="queryBuilderTitle"> Which columns do you want in your report? </h3>
 
