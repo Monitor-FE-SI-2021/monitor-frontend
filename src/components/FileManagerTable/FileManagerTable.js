@@ -745,6 +745,9 @@ class FileManagerTable extends React.Component {
                 var x = await response.json();
                 const token = x.accessToken;
 
+                let pathToFile = new String(this.state.activeFolder);
+                pathToFile = pathToFile.substring(2,);
+
                 const requestOptions2 = {
                     method: "POST",
                     headers: {
@@ -755,7 +758,7 @@ class FileManagerTable extends React.Component {
                     body: JSON.stringify({
                         fileName: file.fileName,
                         user: this.state.user.email,
-                        path: this.state.activeFolder
+                        path: pathToFile
                     })
                 };
 
