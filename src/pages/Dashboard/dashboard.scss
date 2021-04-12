@@ -18,7 +18,8 @@
 h1,
 h2,
 h3,
-h4 {
+h4,
+h5 {
   color: #353535;
 }
 
@@ -83,3 +84,94 @@ h4 {
   box-shadow: 0 10px 20px #ccc;
   border-radius: 25px;
 }
+
+.my-custom-input{
+  margin: 0 0 0 10px;
+  width: 150px;
+  border-radius: 6px;
+	box-shadow: 0 1px 3px #ccc;
+  border: none;
+  text-align: center;
+  outline:none;
+}
+.react-datepicker__header {
+  text-align: center;
+  background-color: white;
+  border-bottom: 1px solid #353535;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  padding-top: 8px;
+  position: relative;
+
+}
+
+.react-datepicker__current-month{
+  font-size: 15px;
+  padding: 5px;
+  font-weight: normal;
+}
+.react-datepicker__day--selected {
+  
+  color:white  !important;
+}
+
+.react-datepicker {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: gray;
+  border: 5px;
+  border-radius: 5px;
+  display: inline-block;
+  position: relative;
+  margin: 5px;
+  padding: 10px;
+  box-shadow: 0 1px 3px #ccc;
+}
+.react-datepicker__day,
+.react-datepicker__day-name {
+  margin: 5px;
+  padding: 0px 5px 0px 5px;
+  color:gray
+}
+.react-datepicker__navigation--next {
+  margin: 12px 50px
+}
+.react-datepicker__navigation--previous {
+  margin: 12px 0px 0px 50px
+}
+.react-datepicker__day--keyboard-selected{
+  margin: 5px;
+  padding: 0px 5px 0px 5px;
+  color:gray;
+  background-color: white;
+}
+.picker-h5{
+  margin: 0 8px
+}
+.pickers, .stats{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.statistics{
+  width:50%
+}
+.react-datepicker__input-container input {
+  height: 30px;
+}
+.stats{
+  width:100%
+}
+.stats button{
+  border-radius: 10px;
+	background-color: transparent;
+	box-shadow: 0 2px 5px #ccc;
+	width: 45%;
+	height: 30px;
+	margin: 3% 0 0 2.5%;
+	border: #ccc;
+	font-size: 14px;
+	cursor: pointer;
+  outline:none;
+}
+

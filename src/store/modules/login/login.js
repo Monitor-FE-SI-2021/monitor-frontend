@@ -1,4 +1,11 @@
-import request, { authEndpoint, forgotPassword, resetPassword, users, userSecurityQuestions, answerCheck } from "../../../service";
+import request, {
+    authEndpoint,
+    forgotPassword,
+    resetPassword,
+    users,
+    userSecurityQuestions,
+    answerCheck
+} from "../../../service";
 import { STORAGE_KEY } from "../../../utils/consts";
 import { history } from "../../store";
 import { showSwalToast } from "../../../utils/utils";
@@ -12,7 +19,7 @@ export const SET_FORGOT_PASSWORD_ASYNC = 'SET_FORGOT_PASSWORD_ASYNC';
 export const SET_USER_SECURITY_QUESTIONS_ASYNC = 'SET_USER_SECURITY_QUESTIONS_ASYNC';
 export const SET_USER_SECURITY_QUESTIONS = 'SET_USER_SECURITY_QUESTIONS';
 export const SET_ANSWERS_ASYNC = 'SET_ANSWERS_ASYNC';
-export const SET_ANSWERS= 'SET_ANSWERS';
+export const SET_ANSWERS = 'SET_ANSWERS';
 
 
 const initialState = {
@@ -106,7 +113,7 @@ export const doLogin = ({ email, password }) => {
 
                 return res;
             } else if (res && res.status === 202) {
-                
+
                 let kod = prompt('Unesi Two Factor Authentication kod');
                 localStorage.setItem(STORAGE_KEY, res.data.accessToken);
 
@@ -137,7 +144,7 @@ export const getMe = () => {
     return dispatch => {
 
         dispatch({
-            type: SET_LOGIN_ASYNC,
+            type: SET_USER_ASYNC,
             async: true
         });
 
@@ -151,7 +158,7 @@ export const getMe = () => {
                 }
             }).finally(() => {
                 return dispatch({
-                    type: SET_LOGIN_ASYNC,
+                    type: SET_USER_ASYNC,
                     async: false
                 })
             })
@@ -206,13 +213,13 @@ export const requestForgotPassword = ({ email }) => {
         })
     }
 }
-    
+
 export function fetchAllUsersQuestions({ email }) {
 
     return dispatch => {
         dispatch({ type: SET_USER_SECURITY_QUESTIONS_ASYNC, async: true });
 
-        return request(userSecurityQuestions, "POST", {email}).then(response => response.data)
+        return request(userSecurityQuestions, "POST", { email }).then(response => response.data)
             .then(r => {
                 return dispatch({
                     type: SET_USER_SECURITY_QUESTIONS,
@@ -229,9 +236,9 @@ export function checkAnswers({ email, answers }) {
     return dispatch => {
         dispatch({ type: SET_ANSWERS_ASYNC, async: true });
 
-        return request(answerCheck, "POST", {email, answers}).then(response => response.data)
+        return request(answerCheck, "POST", { email, answers }).then(response => response.data)
             .then(r => {
-                if(r.correctAnswers == false) showSwalToast("Answers are not correct!");
+                if (r.correctAnswers == false) showSwalToast("Answers are not correct!");
                 else showSwalToast("Verified", 'success');
                 return dispatch({
                     type: SET_ANSWERS,

@@ -7,7 +7,7 @@ const ReportTable = ({ reports }) => {
     const [tableData, setTableData] = useState(reports);
 
     const downloadTableRow = (tableRow) => {
-        console.log(tableRow);
+        window.open(tableRow.uriLink);
     }
 
     const [tableFields, setTableFields] = useState([
@@ -16,9 +16,9 @@ const ReportTable = ({ reports }) => {
             title: 'Report name',
         },
         {
-            name: 'startDate',
+            name: 'date',
             title: 'Date',
-            slot: 'startDate',
+            slot: 'date',
         },
         // {
         //     name: 'frequency',
@@ -36,9 +36,9 @@ const ReportTable = ({ reports }) => {
     return (
         <CustomTable data={tableData} fields={tableFields}>
 
-            <TableSlot slot='startDate' render={(dataRow) => (
+            <TableSlot slot='date' render={(dataRow) => (
                 <div>
-                    {dayjs(dataRow.startDate).format('DD.MM.YYYY.')}
+                    {dayjs(dataRow.date).format('DD.MM.YYYY.')}
                 </div>
             )}/>
 
