@@ -7,7 +7,7 @@ const ReportTable = ({ reports }) => {
     const [tableData, setTableData] = useState(reports);
 
     const downloadTableRow = (tableRow) => {
-        console.log(tableRow);
+        window.open(tableRow.uriLink);
     }
 
     const [tableFields, setTableFields] = useState([

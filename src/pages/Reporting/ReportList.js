@@ -102,6 +102,10 @@ const ReportList = ({user,push}) => {
         setSelectedFrequency("noFilter");
     };
 
+    const closeFilter = (e) => {
+        if(e.key === "Escape") handleClose();
+    }
+
     return (
         <div className="reportingWrapper page">
              <div  className="header">
@@ -115,6 +119,7 @@ const ReportList = ({user,push}) => {
             {open ?
                 <FormControl className="filter"style={{ float: 'right' }}>
                     <Popover
+                    onKeyDown={closeFilter}
                     anchorOrigin={{
                         vertical: 'top',
                         horizontal: 'right',
