@@ -376,14 +376,9 @@ class FileManagerTable extends React.Component {
             await this.checkIfDirectoryIsEmpty(path)
                 .then(r => isDirectoryEmpty = r)
 
-            if (isDirectoryEmpty) {
-                popupText = 'The directory is empty'
-            } else {
-                popupText = 'The directory is not empty'
-            }
             Swal.fire({
                 title: 'Are you sure?',
-                text: popupText,
+                text: 'You cannot return the directory after you delete it',
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -391,15 +386,39 @@ class FileManagerTable extends React.Component {
                 confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    this.sendFolderDeleteRequest(file.fileName)
-                    Swal.fire(
-                        'Deleted!',
-                        'Your directory has been deleted.',
-                        'success'
-                    )
+                    if(!isDirectoryEmpty) {
+                        // directory is not empty
+                        Swal.fire({
+                            title: 'Are you sure?',
+                            text: "The directory is not empty!",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Yes, delete it!'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                this.sendFolderDeleteRequest(file.fileName)
+                                Swal.fire(
+                                    'Deleted!',
+                                    'Your file has been deleted.',
+                                    'success'
+                                )
+                            }
+                        })
+                    } else {
+                        // directory is empty
+                        this.sendFolderDeleteRequest(file.fileName)
+                        Swal.fire(
+                            'Deleted!',
+                            'Your directory has been deleted.',
+                            'success'
+                        )
+                    }
                 }
             })
         } else {
+            //deleting a basic file
             Swal.fire({
                 title: 'Are you sure?',
                 text: "You cannot return the file after you delete it",
