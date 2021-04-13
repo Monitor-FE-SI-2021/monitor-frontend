@@ -22,7 +22,7 @@ async function retrieveLogsFromDatabase(user_id, deviceId) {
           .then(r => {
               if (r.status === 200) {
                   r.data.data.forEach((log) => {
-                    logs.push({user_id: log.userId, command: log.command, response: log.response, date_time: log.time})
+                    logs.push({user_name: log.user.name + " " + log.user.lastname, command: log.command, response: log.response, date_time: log.time})
                   });
                   return logs;
               }
@@ -46,8 +46,8 @@ const ConsoleLogs = ({user_id, deviceId}) => {
         Header: "Console Logs",
         columns: [
           {
-            Header: "User ID",
-            accessor: "user_id"
+            Header: "User name",
+            accessor: "user_name"
           },
           {
             Header: "Command",

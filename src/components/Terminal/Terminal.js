@@ -33,47 +33,20 @@ const Terminal = (props) => {
     React.useEffect(()=>{
       request(wsEndpoint + "/agent/command", "POST", {
       deviceUid: props.machine.deviceUid,
-      command: "ls",
+      command: "Get-ChildItem -Directory -Name",
       path: put,
       user: props.user.email,
       })
     .then((res) => {
+      //->IZMJENA ELMIR
       let modified = res.data.message.replace(/\\n/g, "\n");
       modified = modified.replace(/\\r/g, "\r");
       let novaLista = modified.split("\n");
-      let pomocnaLista = [];
-      if(modified!==" "){
-      novaLista.splice(0,7);
-      novaLista = novaLista.map((item, index) => {
-        item = item.replace(/ +/g, ' ').trim(); //pretvara vise razmaka u jedan
-        // item = item.replace("AM", "")
-        // item = item.replace("PM", "")
-        let ima = false;
-        if(item.match(/\b((1[0-2]|0?[1-9]):([0-5][0-9]) ([AaPp][Mm]))/)){
-          ima = true;
-          console.log("USO")
-        }
-        item = item.split(" "); //splita po razmacima
-        
-        if(item[0].includes("d")){
-          if(ima)
-            item.splice(0,4);
-          else
-            item.splice(0,3); //   
-          pomocnaLista.push(item.toString().replace(/[, ]+/g, " ").trim());
-        }
-      })
 
-   /*   novaLista[5] = novaLista[5].replace(/ +/g, ' ').trim(); //pretvara vise razmaka u jedan
-      novaLista[5] = novaLista[5].split(" "); //splita po razmacima
-      novaLista[5].splice(0,3); // 
-      console.log(novaLista[5].toString().replace(/[, ]+/g, " ").trim());*/
+      console.log("Ovo je spisak fajlova: " + novaLista);
 
-      //pomocnaLista.splice(pomocnaLista.length-3,pomocnaLista.length-1);
-      console.log("Pomocna lista: \n" + pomocnaLista);
-
-      setTabCommands(pomocnaLista)  
-    }
+      setTabCommands(novaLista);
+      //IZMJENA ELMIR<-
     })
     .catch(function (e) {
       console.log(e)
