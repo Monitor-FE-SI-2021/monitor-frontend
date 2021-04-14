@@ -77,6 +77,7 @@ const MangeUserForm = ({ push }) => {
         if (!values.passwordRepeat.match(values.password)) {
             temp.passwordRepeat= "Polje nije saglasno sa poljem Šifra"
         }
+
         temp.roleId = values.roleId ? "" : emptyFieldError
 
         setErrors(temp)
@@ -128,6 +129,7 @@ const MangeUserForm = ({ push }) => {
                 className="group-selector"
                 value={values.roleId}
                 onChange={handleInputChange}
+                {...(errors.roleId && { error: true, helperText: errors.roleId })}
             >
                 {allRoles.map((role) => (
                     <MenuItem key={role.roleId} value={role.roleId}>
