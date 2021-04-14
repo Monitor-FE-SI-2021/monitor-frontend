@@ -103,7 +103,7 @@ const MangeUserForm = ({ push, groupOptions, fetchAllGroups }) => {
         e.preventDefault()
 
         if (validate()) {
-            showSwalToast("Uspješno kreiran korisnik")
+            showSwalToast("Uspješno izmijenjena mašina", 'success')
         }
     }
 
