@@ -18,7 +18,8 @@ export const RouteLink = {
     FileManagerView: '/file-manager',
     SecurityQuestions: '/securityQuestions',
     Tasks: '/tasks',
-    AdminPanel: '/admin-panel'
+    AdminPanel: '/admin-panel',
+    ManageUser: '/manage-user'
 }
 
 const initialState = {

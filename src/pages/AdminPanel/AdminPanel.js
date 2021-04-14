@@ -10,7 +10,7 @@ const AdminPanel = ({ push }) => {
             <div className="top">
                 <span className='page-title'> Admin Panel </span>
                 <div>
-                    <button className="custom-btn" onClick={() => push(RouteLink.ManageDevice)}>Kreiraj korisnika</button>
+                    <button className="custom-btn" onClick={() => push(RouteLink.ManageUser)}>Kreiraj korisnika</button>
                 </div>
             </div>
             <div>
