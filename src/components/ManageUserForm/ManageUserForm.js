@@ -8,8 +8,9 @@ import {AsyncButton} from "../AsyncButton/AsyncButton";
 import "../ManageDeviceForm/ManageDeviceForm.scss"
 import validator from "validator/es";
 import request, { roles } from "../../service";
+import { fetchAllGroups } from "../../store/modules/groups/actions";
 
-const MangeUserForm = ({ push }) => {
+const MangeUserForm = ({ push, groupOptions, fetchAllGroups }) => {
 
     const [allRoles, setAllRoles] = useState([])
 
@@ -23,6 +24,9 @@ const MangeUserForm = ({ push }) => {
     }
 
     useEffect( () => {
+        if (!groupOptions?.length) {
+            fetchAllGroups();
+        }
         fetchRoles()
     }, [])
 
@@ -33,7 +37,8 @@ const MangeUserForm = ({ push }) => {
         phone: "",
         password: "",
         passwordRepeat: "",
-        roleId: ""
+        roleId: "",
+        groupId: ""
     }
 
     const [values, setValues] = useState(initialValues)
@@ -79,6 +84,7 @@ const MangeUserForm = ({ push }) => {
         }
 
         temp.roleId = values.roleId ? "" : emptyFieldError
+        temp.groupId = values.groupId ? "" : emptyFieldError
 
         setErrors(temp)
 
@@ -126,7 +132,6 @@ const MangeUserForm = ({ push }) => {
                 select
                 name="roleId"
                 label="Uloga"
-                className="group-selector"
                 value={values.roleId}
                 onChange={handleInputChange}
                 {...(errors.roleId && { error: true, helperText: errors.roleId })}
@@ -134,6 +139,22 @@ const MangeUserForm = ({ push }) => {
                 {allRoles.map((role) => (
                     <MenuItem key={role.roleId} value={role.roleId}>
                         {role.name}
+                    </MenuItem>
+                ))}
+            </TextField>
+
+            <TextField
+                variant="outlined"
+                select
+                name="groupId"
+                value={values.groupId}
+                label="Grupa"
+                onChange={handleInputChange}
+                {...(errors.groupId && { error: true, helperText: errors.groupId })}
+            >
+                {groupOptions.map((group) => (
+                    <MenuItem key={group.id} value={group.id}>
+                        {group.name}
                     </MenuItem>
                 ))}
             </TextField>
@@ -148,4 +169,30 @@ const MangeUserForm = ({ push }) => {
     );
 }
 
-export default connect(null, { push })(MangeUserForm)
+export default connect(state => {
+
+    const groupsTree = state.groups.groups;
+
+    const allGroups = groupsTree.subGroups ? flattenGroup(groupsTree.subGroups) : [];
+
+    const groupOptions = allGroups.filter(g => g.subGroups.length === 0).map(g => ({
+        id: g.groupId,
+        name: g.name
+    }))
+
+    return {
+        selectedDevice: state.devices.selectedDevice,
+        groupOptions
+    }
+}, { push, fetchAllGroups })(MangeUserForm)
+
+export const flattenGroup = data => {
+
+    return data.reduce((acc, group) => {
+        acc.push(group);
+        if (group?.subGroups?.length) {
+            acc.push(...flattenGroup(group.subGroups))
+        }
+        return acc;
+    }, [])
+}
