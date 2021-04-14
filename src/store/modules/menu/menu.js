@@ -17,7 +17,8 @@ export const RouteLink = {
     MyProfile: '/my-profile',
     FileManagerView: '/file-manager',
     SecurityQuestions: '/securityQuestions',
-    Tasks: '/tasks'
+    Tasks: '/tasks',
+    AdminPanel: '/admin-panel'
 }
 
 const initialState = {
@@ -51,6 +52,11 @@ const initialState = {
         {
             link: RouteLink.Tasks,
             name: "Users",
+            icon: "",
+        },
+        {
+            link: RouteLink.AdminPanel,
+            name: "Admin Panel",
             icon: "",
         }
     ],
