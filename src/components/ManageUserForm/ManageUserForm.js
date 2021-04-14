@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import { connect } from "react-redux";
 import { TextField, MenuItem } from '@material-ui/core';
 import { showSwalToast } from "../../utils/utils";
@@ -7,8 +7,24 @@ import { push } from "connected-react-router";
 import {AsyncButton} from "../AsyncButton/AsyncButton";
 import "../ManageDeviceForm/ManageDeviceForm.scss"
 import validator from "validator/es";
+import request, { roles } from "../../service";
 
 const MangeUserForm = ({ push }) => {
+
+    const [allRoles, setAllRoles] = useState([])
+
+    const fetchRoles = () => {
+        request(roles + `/GetRoles`, 'GET')
+            .then(response => response.data)
+            .then(r => {
+                console.log(r.data)
+                setAllRoles(r.data)
+            })
+    }
+
+    useEffect( () => {
+        fetchRoles()
+    }, [])
 
     const initialValues = {
         name: "",
@@ -110,7 +126,15 @@ const MangeUserForm = ({ push }) => {
                 name="roleId"
                 label="Uloga"
                 className="group-selector"
-            />
+                value={values.roleId}
+                onChange={handleInputChange}
+            >
+                {allRoles.map((role) => (
+                    <MenuItem key={role.roleId} value={role.roleId}>
+                        {role.name}
+                    </MenuItem>
+                ))}
+            </TextField>
 
             <div className='buttons'>
                 <button className="custom-btn outlined" onClick={() => push(RouteLink.AdminPanel)}>Otkaži</button>
@@ -122,4 +146,4 @@ const MangeUserForm = ({ push }) => {
     );
 }
 
-export default connect(() => {}, { push })(MangeUserForm)
+export default connect(null, { push })(MangeUserForm)
