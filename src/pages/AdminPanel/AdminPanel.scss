@@ -1,0 +1,17 @@
+.admin-panel {
+  overflow: auto;
+
+  .top {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--main-color);
+
+    .page-title {
+      font-size: 28px;
+      font-weight: bold;
+      color: var(--main-color);
+    }
+  }
+}
