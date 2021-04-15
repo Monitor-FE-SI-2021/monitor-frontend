@@ -802,7 +802,7 @@ class FileManagerTable extends React.Component {
         var arrayOfGroups = [];
         const response = await request(url, 'GET');
         arrayOfGroups = response.data.data.subGroups;
-        var html = '<div class = "modal-title"> Odaberite grupu/e na koje zelite poslati oznacene fajlove ↓</div>'
+        var html = '<div class = "modal-title"> Odaberite grupu na koju želite poslati označene fajlove ↓</div>'
        html= html +'<div class="swal-text">';
 
         for (var i = 0; i < arrayOfGroups.length; i++) {
