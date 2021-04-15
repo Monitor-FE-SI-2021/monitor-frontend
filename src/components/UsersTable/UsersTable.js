@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import './UsersTable.scss';
 import UserScheduler from '../../pages/Tasks/components/UserScheduler';
 import request, { userTasks } from "../../service";
+import GoogleMapMonitors from '../../pages/Tasks/components/GoogleMapMonitors.js';
 
 const UsersTable = ({ users } ) => {
     const [tableData, setTableData] = useState(users);
@@ -65,7 +66,11 @@ const UsersTable = ({ users } ) => {
             </div>
 
             <div className="map">
-                   
+            {!hidden && (
+                    <React.Fragment>
+                       {<GoogleMapMonitors tasks={ tasks }/>}    
+                    </React.Fragment>
+                  )}
             </div>
             
         </div>
