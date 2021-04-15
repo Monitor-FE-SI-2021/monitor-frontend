@@ -802,7 +802,8 @@ class FileManagerTable extends React.Component {
         var arrayOfGroups = [];
         const response = await request(url, 'GET');
         arrayOfGroups = response.data.data.subGroups;
-        var html = '<div class="swal-text">';
+        var html = '<div class = "modal-title"> Odaberite grupu/e na koje zelite poslati oznacene fajlove ↓</div>'
+       html= html + '<div class="swal-text">';
 
         for (var i = 0; i < arrayOfGroups.length; i++) {
             html = html + this.getTableForGroups(arrayOfGroups[i]);
@@ -825,11 +826,11 @@ class FileManagerTable extends React.Component {
             html = html + '</div>';
         } else {
             html = '<div class="swalItem">';
-            html = html + '<div class="form-check">';
-            html = html + `<label class="form-check-label" for="${group.groupId}">`
+            html = html + '<div>';
+            html = html + `<label class="align-checkbox" for="${group.groupId}">`
             html = html + group.name;
             html = html + "</label>";
-            html = html + `<input class="form-check-input " type="checkbox" value="" id="${group.groupId}">`;
+            html = html + `<input type="checkbox" value="" id="${group.groupId}">`;
             html = html + "</div>";
         }
         return html;

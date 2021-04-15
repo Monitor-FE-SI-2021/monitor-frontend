@@ -126,7 +126,8 @@
   }
 
   .file-checkbox {
-    margin-right: 0px;
+   display: inline-block;
+   width: 50px;
   }
 }
 
@@ -146,7 +147,18 @@
 }
 
 .swalItem{
-  margin: 6px 0;
+  margin: 10px 0;
+  display: block;
+}
+
+.align-checkbox {
+  display: inline-block;
+  width:550px;
+}
+
+.modal-title {
+  background:#5b77bd;
+  color:whitesmoke;
 }
 
 .swal-text{
