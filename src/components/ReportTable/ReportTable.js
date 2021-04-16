@@ -3,14 +3,13 @@ import { useState } from "react";
 import GetAppIcon from '@material-ui/icons/GetApp';
 import dayjs from 'dayjs';
 
-const ReportTable = ({ reports }) => {
-    const [tableData, setTableData] = useState(reports);
+const ReportTable = ({ report }) => {
 
     const downloadTableRow = (tableRow) => {
         window.open(tableRow.uriLink);
     }
 
-    const [tableFields, setTableFields] = useState([
+    const tableFields = [
         {
             name: 'name',
             title: 'Report name',
@@ -20,21 +19,22 @@ const ReportTable = ({ reports }) => {
             title: 'Date',
             slot: 'date',
         },
-        // {
-        //     name: 'frequency',
-        //     title: 'Frequency',
-        // },
         {
-            name: 'actions',
+            name: 'frequency',
+            title: 'Frequency',
+            slot: 'frequency',
+        },
+        {
+            name: 'uriLink',
             title: 'Download',
             width: '20%',
             align: 'left',
-            slot: 'actions',
+            slot: 'uriLink',
         }
-    ])
+    ];
 
     return (
-        <CustomTable data={tableData} fields={tableFields}>
+        <CustomTable data={report.reportInstances} fields={tableFields}>
 
             <TableSlot slot='date' render={(dataRow) => (
                 <div>
@@ -42,10 +42,14 @@ const ReportTable = ({ reports }) => {
                 </div>
             )}/>
 
-            <TableSlot slot='actions' render={dataRow => (
+            <TableSlot slot='uriLink' render={dataRow => (
                 <div>
                     <GetAppIcon onClick={() => downloadTableRow(dataRow)}/>
                 </div>
+            )}/>
+
+            <TableSlot slot='frequency' render={dataRow => (
+                <div>{report.frequency}</div>
             )}/>
 
         </CustomTable>
