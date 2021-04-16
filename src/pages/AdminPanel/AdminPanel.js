@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import React from "react";
 import { push } from "connected-react-router";
 import "../Devices/Devices.scss"
+import AdminUsersTable from "../../components/AdminUsersTable/AdminUsersTable";
 
 const AdminPanel = ({ push }) => {
     return (
@@ -14,7 +15,7 @@ const AdminPanel = ({ push }) => {
                 </div>
             </div>
             <div>
-                <h3>Tabela svih korisnika</h3>
+                <AdminUsersTable />
             </div>
         </div>
     )
