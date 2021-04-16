@@ -233,7 +233,7 @@ class FileManagerTable extends React.Component {
     handleClick = async (selectedId) => {
         var file = this.state.responseObject.find(file => file.id == selectedId);
         if (file.data.type == 'file') {
-            if (file.data.extension != '.txt') return;
+            if (file.data.extension != '.txt' && file.data.extension != '.log' && file.data.extension != '.html' && file.data.extension != '.xml') return;
 
             //Kliknut file
             var text = await this.getText(file);
