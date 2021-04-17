@@ -143,11 +143,15 @@ const DeviceTable = ({
     }
 
     const getDevicePath = (groupId,path,groups) =>{
-        if(!groups.get(groupId).parentGroupId) return path;
+        if(!groups.get(groupId).parentGroupId) {
+            return path.map((item,index) => {
+                return <span key={index}>{item}</span>
+            })
+        }
         if(path === ''){
-            path = groups.get(groupId).name;
+            path = [<b>{groups.get(groupId).name}</b>];
         } else {
-            path = groups.get(groupId).name + ' / ' + path;
+            path = [groups.get(groupId).name + ' / ' ,...path];
         }
         return getDevicePath(groups.get(groupId).parentGroupId,path,groups);
     }
@@ -166,15 +170,6 @@ const DeviceTable = ({
 
     const groupArray = getGroupArray(allGroups);
     let groupMap = new Map(groupArray.map(group => [group.groupId, group]));
-    let path = '';
-    path = getDevicePath(21,path,groupMap);
-    console.log(path);
-
-    const renderGroupPath = group => {
-        //const groupPath = getGroupPath(user.groupId)
-        //console.log(groupPath);
-        //return <div>{groupPath}</div>
-    }
 
     const handleFiltersChange = (name, value) => {
 
@@ -235,7 +230,7 @@ const DeviceTable = ({
                              droppableId={group?.groupId ?? null}
                              hasDragAndDrop={hasDragAndDrop}>
                     <TableSlot slot='group' render={device => (
-                        <span>
+                        <span className="path">
                             {getDevicePath(device.groupId,'',groupMap)}
                         </span>)}/>
                     <TableSlot slot='actions' render={dataRow => (
