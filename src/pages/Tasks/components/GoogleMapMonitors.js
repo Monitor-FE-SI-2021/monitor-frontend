@@ -1,8 +1,11 @@
 import {render} from '@testing-library/react';
 import React, {Component, useState} from 'react';
 import {withGoogleMap, GoogleMap, Marker, InfoWindow} from "react-google-maps"
-import request, {devices} from "../../../service";
+import request from "../../../service";
+import userTaskTrackers from "../../../service";
 import './GoogleMapMonitors.scss';
+
+
 const yellowMarkerURL = "http://maps.google.com/mapfiles/ms/micons/yellow-dot.png"
 
 
@@ -11,19 +14,23 @@ class GoogleMapMonitors extends Component {
     render() {
 
         const tasks = this.props.tasks;
+        console.log("Ovo su taskovi koji su u map komponenti:\n");
+        console.log(tasks);
+        //console.log(tasks[10]);
 
         const MyMapComponent = withGoogleMap((props) => {
-                //const [selectedMachine, setSelectedMachine] = useState(null)
                 return (
                     <GoogleMap
                         defaultZoom={8}
                         defaultCenter={{lat: 43.856, lng: 18.413}}
                     >
-                        {tasks.map(task => {
+                        {
+                        tasks.map(task => {
                             let trackers = task.userTrackers;
+                            console.log(trackers);
                             trackers.map(tracker => (
                                 <Marker
-                                    key={tracker.id}
+                                    //key={tracker.id}
                                     position={{
                                         lat: tracker.locationLatitude,
                                         lng: tracker.locationLongitutde
@@ -32,8 +39,8 @@ class GoogleMapMonitors extends Component {
                                 >
                                 </Marker>
                             ))
-                            
-                            })
+                        
+                        })
                         }
                     </GoogleMap>
                 )

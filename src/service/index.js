@@ -16,6 +16,7 @@ export const devices = `${endpoint}/device`
 export const groups = `${endpoint}/group`
 export const users = `${endpoint}/user`
 export const userTasks = `${endpoint}/UserTasks/All`
+export const userTaskTrackers = `${endpoint}/UserTasks/Tracker`
 export const errors = `${endpoint}/error`
 
 const getErrorMessage = (response) => {
