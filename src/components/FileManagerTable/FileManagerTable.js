@@ -240,7 +240,7 @@ class FileManagerTable extends React.Component {
                 var myWindow = window.open("", "textField", "width=600,height=600");
                 myWindow.document.open();
                 myWindow.document.write(text);
-            } else if (file.data.extension == '.jpg' || file.data.extension == '.png') {
+            } else if (file.data.extension == '.jpg' || file.data.extension == '.png' || file.data.extension == '.jpeg') {
                 var picture = await this.getPicture(file);
                 var imageSource = "data:image/jpeg;base64," + picture;
                 window.open(imageSource, "image", "width=600,height=600");
