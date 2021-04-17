@@ -58,6 +58,10 @@ export const options = [
 
 export const days = [
   {
+      label: "Sunday",
+      value: "Sun",
+  },
+  {
       label: "Monday",
       value: "Mon",
   },
@@ -80,10 +84,6 @@ export const days = [
   {
       label: "Saturday",
       value: "Sat",
-  },
-  {
-      label: "Sunday",
-      value: "Sun",
   },
 ];
 

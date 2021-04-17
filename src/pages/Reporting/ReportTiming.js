@@ -9,7 +9,7 @@ import { options, days, months, times } from './constants/index';
 
 import './ReportTiming.scss'
 
-const ReportTiming = ({ setTimeInfo }) => {
+const ReportTiming = ({ setTimeInfo, values }) => {
     const [frequency, setFrequency] = useState(options[0]);
     const [day, setDay] = useState(days[0]);
     const [month, setMonth] = useState(months[0]);
@@ -17,13 +17,17 @@ const ReportTiming = ({ setTimeInfo }) => {
     const [time, setTime] = useState(times[0]);
 
     useEffect(() => {
-        setTimeInfo({
-            frequency,
-            day,
-            month,
-            dayInMonth,
-            time,
-        });
+        if (!values) {
+            setTimeInfo({
+                frequency,
+                day,
+                month,
+                dayInMonth,
+                time,
+            });
+        } else {
+            console.log('ovo DOSLO', values);
+        }
     }, []);
 
     const createDays = (d) => {

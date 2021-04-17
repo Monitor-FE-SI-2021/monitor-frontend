@@ -2,10 +2,11 @@ import { connect } from "react-redux";
 import React, { useState, useEffect } from 'react';
 import QueryBuilder from 'react-querybuilder';
 import { formatQuery } from 'react-querybuilder';
+import { setReportToStore } from "../../store/modules/report/report";
 
 import request from "../../service";
 
-import { fields, frequencies, devices, queryFields } from './constants';
+import { fields, frequencies, devices, queryFields, days, months, times } from './constants';
 import ReportTiming from './ReportTiming';
 
 import Button from '@material-ui/core/Button';
@@ -21,30 +22,113 @@ import './Reporting.scss';
 
 
 
-const Reports = ({ user, push }) => {
+const Reports = ({ user, push, report, setReportToStore }) => {
     const [selectedGroup, setSelectedGroup] = useState({ group: null, parent: null });
     const [groupStack, setGroupStack] = useState([]);
     const [groups, setGroups] = useState([]);
     const [queryValue, setQueryValue] = useState("");
-    const [title, setTitle] = useState("");
+    const [title, setTitle] = useState(report?.name ? report.name: "");
     const [selectedColumns, setSelectedColumns] = useState([]);
     const [frequencyInfo, setFrequencyInfo] = useState(null);
-    const [sendEmailValue, setSendEmailValue] = useState(false);
+    const [sendEmailValue, setSendEmailValue] = useState(report?.sendEmail ? report.sendEmail : false);
+    const [values, setValues] = useState(null);
+    const [loadedGroupId, setLoadedGroupId] = useState(null);
+    const [foundPathToGroup, setFoundPathToGroup] = useState(false);
+    const [loadedGroup, setLoadedGroup] = useState(report ? true : false);
+    const [checkBoxes, setCheckBoxes] = useState([false,false,false,false,false,false,false,false,false]);
+    const [loadedQuery, setLoadedQuery] = useState("");
 
+    const initValues = (data) => {
+        const newDate = new Date(data?.nextDate);
+        const newTime = `${(newDate.getHours() + 2)}:00:00`;
+        const findTime = times.find(e => e.value === newTime);
+        const obj = {
+            frequency: {
+                label: data?.frequency,
+                value: data?.frequency
+            },
+            day: {
+                label: days[newDate.getDay()].label,
+                value: days[newDate.getDay()].value
+            },
+            month: {
+                label: months[newDate.getMonth()].label,
+                value: months[newDate.getMonth()].value,
+            },
+            dayInMonth: newDate.getDate(),
+            time: {
+                label: findTime?.label,
+                value: findTime?.value
+            }
+        }
+        setValues(obj);
+    }
 
+    let arrToSubGroups = {};
+    const arrPathToGroup = [];
+
+    const initGroup = () => {
+        if(loadedGroupId){
+            let subGroups = [];
+            groupStack.forEach(levelOnePass => {
+                subGroups = levelOnePass?.group?.subGroups;
+            })
+            addSubGroupsRecursivly(subGroups);
+        }
+    }
+    const addSubGroupsRecursivly = (subGroups) => {
+        subGroups.forEach(el => {
+            arrToSubGroups[`${el.groupId}`] = el.parentGroupId;
+            if(el.subGroups) addSubGroupsRecursivly(el.subGroups);
+        })
+    }
+    const findMeAGroup = () => {
+        if(arrToSubGroups[loadedGroupId]){
+            let index = loadedGroupId;
+            while(arrToSubGroups[index]){
+                arrPathToGroup.push(index);
+                index = arrToSubGroups[index];
+            }
+        }
+        changeGroupForce();
+    }
 
     const setData = async () => {
         const res = await request("https://si-2021.167.99.244.168.nip.io/api/group/MyAssignedGroups");
-        console.log("ovo je res", res, user);
         setGroups(res.data.data.subGroups);
         setSelectedGroup({depth: 0, group: {groupId : -1, subGroups : res.data.data.subGroups}, parent: null });
         setGroupStack([{depth: 0, group: {groupId : -1, subGroups : res.data.data.subGroups}, parent: null }]);
-        console.log(res.data.data.subGroups);
+        if (!(report === null)) {
+            initValues(report);
+            const parsedReportQuery = JSON.parse(report? report.query : "{}");
+            const numberOfGroup = parsedReportQuery?.group;
+            setLoadedGroupId(numberOfGroup);
+            setSelectedColumns(parsedReportQuery?.select);
+            const arr = [];
+            fields.forEach(el => {
+                const found = parsedReportQuery?.select.find(elem => elem === el.name);
+                if(found) {
+                    arr.push(true);
+                } else {
+                    arr.push(false);
+                }
+            })
+            setCheckBoxes(arr);
+            setLoadedQuery(JSON.stringify(parsedReportQuery))
+            setReportToStore(null);
+        } 
     };
 
     useEffect(() => {
         setData();
     }, []);
+
+    useEffect(() => {
+        initGroup();
+        setTimeout(()=>{
+            if(!foundPathToGroup) findMeAGroup();
+        }, 1000);
+    }, [groupStack, loadedGroupId]);
 
     const changeTitle = (event) => {
         setTitle(event.target.value);
@@ -54,8 +138,24 @@ const Reports = ({ user, push }) => {
         setSelectedGroup({depth : selectedGroup.depth + 1, group: event.target.value, parent: selectedGroup });
         setGroups(event.target.value.subGroups);
         setGroupStack([...groupStack, {depth: selectedGroup.depth + 1, group: event.target.value, parent: selectedGroup }]);
-        console.log(index);
     };
+
+    const changeGroupForce = () => {
+        const foundGroup = selectedGroup.group?.subGroups.find(el => el.groupId === arrPathToGroup[arrPathToGroup.length-1])
+        if(foundGroup){
+            arrPathToGroup.pop();
+            setSelectedGroup({depth : selectedGroup.depth + 1, group: foundGroup, parent: selectedGroup });
+            setGroups(foundGroup.subGroups);
+            setGroupStack([...groupStack, {depth: selectedGroup.depth + 1, group: foundGroup, parent: selectedGroup }]);
+            setTimeout(() => {
+                if(arrPathToGroup.length > 0)changeGroupForce();
+                else {
+                    setFoundPathToGroup(true);
+                    setLoadedGroup(true);
+                }
+            }, 200);
+        }
+    }
 
     const changeQuery = query => {
         setQueryValue(query);
@@ -71,14 +171,12 @@ const Reports = ({ user, push }) => {
         let dateCurrent = new Date();
         
         const freq = frequencyInfo?.frequency?.value;
-        console.log('FREQ INFORMACIJE', frequencyInfo)
         switch(freq){
             case "Daily":
                 const dailyHours = frequencyInfo.time.value.split(':');
                 dateCurrent.setHours(parseInt(dailyHours[0]) + 2, dailyHours[1], dailyHours[2]);
                 break;
             case "Weekly":
-                console.log(frequencyInfo, 'testbest weekly');
                 const daysMap = {
                     "Mon": 1,
                     "Tue": 2,
@@ -134,7 +232,6 @@ const Reports = ({ user, push }) => {
         const groupClause = selectedGroup.group.groupId;
 
         const finalQuery = {select: selectClause, where: whereClause, group: groupClause, freq: frequencyInfo.frequency.value};
-        console.log(JSON.stringify(finalQuery));
 
         const body = {
             name: title,
@@ -145,7 +242,7 @@ const Reports = ({ user, push }) => {
             sendEmail: sendEmailValue,
         };
         
-        const response = await request("https://si-2021.167.99.244.168.nip.io/api/report/CreateReport", "POST", body);
+        const response = await request("http://localhost:4000/api/report/CreateReport", "POST", body);
         if (response.status === 200) {
             window.alert("Uspjesno kreiran report!");
             push(RouteLink.ReportList);
@@ -155,16 +252,17 @@ const Reports = ({ user, push }) => {
     const groupBacktrack = e => {
         if (selectedGroup.parent == null) return;
         var newGroups = selectedGroup.parent.group.subGroups;
-        console.log(selectedGroup);
         setSelectedGroup(selectedGroup.parent);
         setGroups(newGroups);
         var newStack = groupStack.slice(0,-1);
         Promise.all([setGroupStack(groupStack.slice(0,-2))]).then(()=>setGroupStack(newStack));
-        console.log(groupStack);
 
     }
 
-    const changeSelectedColumns = (event) => {
+    const changeSelectedColumns = (event, index) => {
+        const temp = [...checkBoxes];
+        temp[index] = event.target.checked;
+        setCheckBoxes(temp);
         if (event.target.checked) {
             setSelectedColumns([...selectedColumns, event.target.value]);
         }
@@ -173,10 +271,15 @@ const Reports = ({ user, push }) => {
         }
     };
 
-    const handleSendEmailValue = (event) => {
-        setSendEmailValue(event.target.value);
+    const handleSendEmailValue = (value) => {
+        setSendEmailValue(value);
     };
-
+    
+    const resetState = () => {
+        setLoadedGroup(false); 
+        setData();
+    }
+    
     return (
         <div className="reportingWrapper">
             <h1> Reporting </h1>
@@ -189,12 +292,30 @@ const Reports = ({ user, push }) => {
 
                 <div className="inputWrapper">
                     <InputLabel className="inputLabelWrapper" id="frequencyLabel"> Do you want to be send an email with this report? </InputLabel>
-                    <input id="emailCheckbox" type="checkbox" value={sendEmailValue} onChange={handleSendEmailValue}></input>
+                    <input id="emailCheckbox" type="checkbox" checked={sendEmailValue} onChange={() => handleSendEmailValue(!sendEmailValue)}></input>
                 </div>
 
-                <ReportTiming setTimeInfo={(info) => setFrequencyInfo(info)} />
+                <ReportTiming editData={values ? values : false} setTimeInfo={(info) => setFrequencyInfo(info)} />
 
-                <div className="groupInputWrapper">
+                {(foundPathToGroup && loadedGroup) && (
+                    <div>
+                        <div>
+                            Groups are locked. Last picked group was {selectedGroup.group.name}.
+                        </div>
+                        <div>
+                            Query is:
+                        </div>
+                        <textarea value={loadedQuery} style={{ width: 400, height:150}}>
+
+                        </textarea>
+                        <div>
+                            If you wish to change these parameters click Unlock.
+                        </div>
+                        
+                        <Button onClick={() => resetState()} variant="contained" color="default"> Unlock </Button>
+                    </div>
+                )}
+                {!loadedGroup && <div className="groupInputWrapper">
 
                     {groupStack.map(group_it => (
                         
@@ -209,7 +330,7 @@ const Reports = ({ user, push }) => {
                                     return (
                                         <div className="inputWrapper">
                                             <InputLabel className="inputLabelWrapper" id={"groupLabel"+ group_it.groupId}> Choose a {group_it.parent == null ? "group" : "subgroup"} </InputLabel>
-                                            <Select className="select" labelId={"groupLabel"+ group_it.groupId} onChange={(e) => changeGroup(e, group_it.group.groupId)}>
+                                            <Select name={'myselectinput'} className="select" labelId={"groupLabel"+ group_it.groupId} onChange={(e) => changeGroup(e, group_it.group.groupId)}>
                                                 {group_it.group.subGroups.map(el => <MenuItem key={el.groupId} value={el}> {el.name} </MenuItem>)}
                                             </Select>
                                         </div>
@@ -218,7 +339,7 @@ const Reports = ({ user, push }) => {
                                     return (
                                         <div className="inputWrapper">
                                             <InputLabel className="inputLabelWrapper" id={"groupLabel"+ group_it.groupId}> Choose a {group_it.parent == null ? "group" : "subgroup"} </InputLabel>
-                                            <Select className="select" labelId={"groupLabel"+ group_it.groupId} onChange={(e) => changeGroup(e, group_it.group.groupId)} disabled="disabled">
+                                            <Select name={'myselectinput'} className="select" labelId={"groupLabel"+ group_it.groupId} onChange={(e) => changeGroup(e, group_it.group.groupId)} disabled="disabled">
                                                 {group_it.group.subGroups.map(el => <MenuItem key={el.groupId} value={el}> {el.name} </MenuItem>)}
                                             </Select>
                                         </div>
@@ -237,17 +358,17 @@ const Reports = ({ user, push }) => {
                             <Button onClick={groupBacktrack}>Undo</Button> 
                         </div>
                     </div>
-                </div>
-
-                <div className="queryBuilderWrapper">
+                </div>}
+                {!loadedGroup && <div className="queryBuilderWrapper">
                     <h3 className="queryBuilderTitle"> What do you want in your report? </h3>
                     <QueryBuilder
                         title="reportBuilder"
                         fields={fields}
                         onQueryChange={changeQuery}
                         showNotToggle={true}
+                        enableMountQueryChange={false}
                     />
-                </div>
+                </div>}
                 
                 <div>
                     <h3 className="queryBuilderTitle"> Which columns do you want in your report? </h3>
@@ -255,8 +376,9 @@ const Reports = ({ user, push }) => {
                     {fields.map((inputField, index) => (
                         <div key={index}>
                             <Checkbox
+                                checked={checkBoxes[index]}
                                 value={inputField.name}
-                                onChange={changeSelectedColumns}
+                                onChange={(e) => changeSelectedColumns(e, index)}
                             />
                             <InputLabel className="selectCol">
                                 {inputField.label}
@@ -274,5 +396,6 @@ const Reports = ({ user, push }) => {
 export default connect(state => {
     return {
         user: state.login.user,
+        report: state.report.report
     };
-}, {push})(Reports);
+}, {push, setReportToStore})(Reports);

@@ -5,11 +5,13 @@ import { push } from "connected-react-router";
 import { RouteLink } from "../../store/modules/menu/menu";
 import { FormControl, MenuItem, Select, Popover } from "@material-ui/core";
 import request from "../../service";
+import { setReportToStore } from "../../store/modules/report/report";
+import { frequenciesFilter } from './constants';
+import Switch from '@material-ui/core/Switch';
 
 import './ReportList.scss';
-import { frequenciesFilter } from './constants';
 
-const ReportList = ({ user, push }) => {
+const ReportList = ({ user, push, report, setReportToStore }) => {
     const [reports, setReports] = useState([]);
     const [open, setOpen] = React.useState(false);
     const [filter, setFilter] = useState([]);
@@ -43,35 +45,34 @@ const ReportList = ({ user, push }) => {
     const setData = async (frequencies) => {
         emptyReports();
 
-        if (frequencies === null && selectedName === "") {
+        // if (frequencies === null && selectedName === "") {
             setReports([]);
-            const res = await request('https://si-2021.167.99.244.168.nip.io/api/report/GetReports');
-            for (let re of res.data.data)
-                for (let r of re.reportInstances)
-                    reports.push(r);
-            console.log(res.data.data);
-            setReports(reports);
+            const res = await request('http://localhost:4000/api/report/GetReports');
+            // for (let re of res.data.data)
+            //     for (let r of re.reportInstances)
+            //         reports.push(r);
+            setReports(res?.data?.data);
 
-        }
-        else if (frequencies !== null) {
-            setSelectedName("");
-            const res = await request('https://si-2021.167.99.244.168.nip.io/api/report/GetReports?' + `Frequency=${frequencies}`);
-            setReports([]);
-            for (let repo of res.data.data)
-                for (let r of repo.reportInstances)
-                    reports.push(r);
+        // }
+        // else if (frequencies !== null) {
+        //     setSelectedName("");
+        //     const res = await request('https://si-2021.167.99.244.168.nip.io/api/report/GetReports?' + `Frequency=${frequencies}`);
+        //     setReports([]);
+        //     for (let repo of res.data.data)
+        //         for (let r of repo.reportInstances)
+        //             reports.push(r);
 
-            setReports(reports);
-        }
-        else {
-            setSelectedFrequency("noFilter");
-            const res = await request('https://si-2021.167.99.244.168.nip.io/api/report/GetReportInstances?' + `Name=${selectedName}`);
-            setReports([]);
-            for (let repo of res.data.data)
-                reports.push(repo);
+        //     setReports(reports);
+        // }
+        // else {
+        //     setSelectedFrequency("noFilter");
+        //     const res = await request('https://si-2021.167.99.244.168.nip.io/api/report/GetReportInstances?' + `Name=${selectedName}`);
+        //     setReports([]);
+        //     for (let repo of res.data.data)
+        //         reports.push(repo);
 
-            setReports(reports);
-        }
+        //     setReports(reports);
+        // }
     };
 
     useEffect(() => {
@@ -106,7 +107,20 @@ const ReportList = ({ user, push }) => {
         if (e.key === "Escape") handleClose();
     }
 
-    console.log("OVO SUUUU REPORTIIIII", reports)
+    const putToStore = (value) => {
+        setReportToStore(value);
+        push(RouteLink.Reporting);
+    }
+
+    const changeSendEmail = async (item) => {
+        const res = await request(`http://localhost:4000/api/report/ChangeSendingEmail/${item.reportId}`, "PUT");
+        setReports(res?.data?.data);
+    }
+
+    const stopReport = async (reportId) => {
+        const res = await request(`http://localhost:4000/api/report/StopReport/${reportId}`, "PATCH");
+        setData();
+    }
 
     return (
         <div className="reportingWrapper page">
@@ -159,8 +173,16 @@ const ReportList = ({ user, push }) => {
             </div>
             {reports.map(item => (
                 <div className="reportTable" key={item.id}>
-                    <h3>{item.report.name}</h3>
-                    <ReportTable report={item.report} /> 
+                    <div className="reportHeader">
+                        <h3>{item.name}</h3>
+                        <div>
+                            Send email: 
+                            <Switch color="primary" checked={item.sendEmail} onChange={() => changeSendEmail(item)} />
+                            <button className="editButton" onClick={() => putToStore(item)}>Edit</button>
+                            <button className="deleteButton" onClick={() => stopReport(item.reportId)}>Delete</button>
+                        </div>
+                    </div>
+                    <ReportTable report={item} /> 
                 </div>
             ))}
         </div>
@@ -169,5 +191,6 @@ const ReportList = ({ user, push }) => {
 export default connect(state => {
     return {
         user: state.login.user,
+        report: state.report.report
     };
-}, { push })(ReportList);
+}, { push, setReportToStore })(ReportList);
