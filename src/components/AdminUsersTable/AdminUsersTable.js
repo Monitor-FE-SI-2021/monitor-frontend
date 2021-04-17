@@ -34,6 +34,10 @@ const AdminUsersTable = ({users, selectUser, push}) => {
             name: 'phone',
             title: 'Telefon',
         },
+        { 
+            name: 'groupId',
+            title: 'Grupa',
+        },
         {
             name: 'actions',
             title: 'Akcije',
@@ -43,11 +47,46 @@ const AdminUsersTable = ({users, selectUser, push}) => {
         }]
     );
 
+    // const getDevicePath = (groupId,path,groups) =>{
+    //     if(!groups.get(groupId).parentGroupId) {
+    //         return path.map((item,index) => {
+    //             return <span key={index}>{item}</span>
+    //         })
+    //     }
+    //     if(path === ''){
+    //         path = [<b>{groups.get(groupId).name}</b>];
+    //     } else {
+    //         path = [groups.get(groupId).name + ' / ' ,...path];
+    //     }
+    //     return getDevicePath(groups.get(groupId).parentGroupId,path,groups);
+    // }
+
+    // const getGroupArray = groups => {
+    //     if(!groups) return [];
+    //     let output = [];
+    //     if(!groups.parentGroupId){
+    //         output = [...output,groups];
+    //     }
+    //     groups.subGroups.forEach(group => {
+    //         output = [...output, group, ...getGroupArray(group)];
+    //     })
+    //     return output;
+    // }
+
+    
+    // const groupArray = getGroupArray(allGroups);
+    // let groupMap = new Map(groupArray.map(group => [group.groupId, group]));
+
+
 
     return (
         <div className='admin-users-table'>
             <CustomTable data={users}
                          fields={tableFields}>
+                {/* <TableSlot slot='group' render={user => (
+                        <span className="path">
+                            {getDevicePath(user.groupId,'',groupMap)}
+                        </span>)}/>              */}
                 <TableSlot slot='actions' render={dataRow => (
                     <div className='actions'>
                         <Edit className='edit-btn' onClick={() => editUser(dataRow)}/>
