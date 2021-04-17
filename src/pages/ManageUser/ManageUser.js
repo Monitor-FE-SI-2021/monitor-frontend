@@ -15,7 +15,7 @@ const ManageUser = (props) => {
     return (
         <div className='page manage-user'>
             <Paper className={classes.pageContent}>
-                <ManageUserForm/>
+                <ManageUserForm user={props?.user}/>
             </Paper>
         </div>
     )

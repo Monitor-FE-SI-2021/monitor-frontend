@@ -7,14 +7,15 @@ import { push } from "connected-react-router";
 import {AsyncButton} from "../AsyncButton/AsyncButton";
 import "../ManageDeviceForm/ManageDeviceForm.scss"
 import validator from "validator/es";
-import request, { roles } from "../../service";
+import request, { roles, users} from "../../service";
 import { fetchAllGroups, setGroupsAsync } from "../../store/modules/groups/actions";
 import { cloneDeep } from "lodash";
 import { selectUser } from "../../store/modules/users/actions";
 
-const MangeUserForm = ({ selectedUser, push, groupOptions, fetchAllGroups}) => {
+const MangeUserForm = ({ selectedUser, user, push, groupOptions, fetchAllGroups}) => {
   
     const initialValues = {
+        user: user?.userId ?? '',
         name: "",
         lastname: "",
         email: "",
@@ -54,6 +55,20 @@ const MangeUserForm = ({ selectedUser, push, groupOptions, fetchAllGroups}) => {
 
         return form;
     }
+
+    
+    const transformFormToUser = (form) => {
+        return {
+            Name: form.name ?? '',
+            LastName: form.lastname ?? '',
+            Email: form.email ?? '',
+            Phone: form.phone ?? '',
+            Password: form.password ?? '',
+            RoleId: form.roleId,
+            GroupId: form.groupId
+        }
+    }
+
 
     useEffect( () => {
         if (!groupOptions?.length) {
@@ -129,33 +144,40 @@ const MangeUserForm = ({ selectedUser, push, groupOptions, fetchAllGroups}) => {
     const handleSubmit = (e) => {
         e.preventDefault()
 
-        // if (validate()) {
+        const userData = transformFormToUser(values);
 
-        //     if (editMode === true) {
+        console.log(userData);
 
-        //         request(users + `/${groupId}`, 'PUT', userData)
-        //             .then(r => {
-        //                 console.log(r.data);
-        //                 showSwalToast(`Uspješno izmijenjen korisnik '${userData.Name}'`, 'success');
-        //                 setValues(initialValues);
-        //             }).finally(() => {
-        //             push(RouteLink.AdminPanel);
-        //         })
-        //     } else {
+        const userId = user.UserId;
 
-        //         delete deviceData.DeviceUid;
+        delete userData.UserId;
 
-        //         request(users + `/CreateDevice?groupId=${groupId}`, 'POST', userData)
-        //             .then(r => {
-        //                 console.log(r.data);
-        //                 showSwalToast(`Uspješno kreiran korisnik '${userData.Name}'`, 'success');
-        //                 setValues(initialValues);
-        //             }).finally(() => {
-        //             push(RouteLink.AdminPanel);
-        //         })
+        if (validate()) {
 
-        //     }
-       // }
+            if (editMode === true) {
+
+                request(users + `/Update?userId=${userId}`, 'PUT', userData)
+                    .then(r => {
+                        console.log(r.data);
+                        showSwalToast(`Uspješno izmijenjen korisnik '${userData.Name}'`, 'success');
+                        setValues(initialValues);
+                    }).finally(() => {
+                    push(RouteLink.AdminPanel);
+                })
+            } else {
+
+
+                request(users + `/CreateNew?userId=${userId}`, 'POST', userData)
+                    .then(r => {
+                        console.log(r.data);
+                        showSwalToast(`Uspješno kreiran korisnik '${userData.Name}'`, 'success');
+                        setValues(initialValues);
+                    }).finally(() => {
+                    push(RouteLink.AdminPanel);
+                })
+
+            }
+       }
     }
 
         return (
