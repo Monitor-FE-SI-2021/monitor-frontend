@@ -8,7 +8,7 @@ import {
     setActiveGlobal,
     updateDevicesTableForGroup
 } from "../../store/modules/devices/actions";
-import { fetchAllGroups, searchGroupsAction } from "../../store/modules/groups/actions";
+import { fetchAllGroups, searchGroupsAction} from "../../store/modules/groups/actions";
 import { push } from "connected-react-router";
 import { RouteLink } from "../../store/modules/menu/menu";
 import { Spinner } from "../../components/Spinner/Spinner";
@@ -21,14 +21,13 @@ import AllDevices from "../../components/AllDevices/AllDevices";
 
 const getRootGroups = (groupTree) => {
     const parentGroups = [];
-
     if (typeof groupTree.subGroups === "undefined") {
         return parentGroups
     }
 
     return groupTree.subGroups;
-
 }
+
 
 const Devices = ({
                      allGroups,
@@ -52,7 +51,7 @@ const Devices = ({
     useEffect(() => {
         request(wsEndpoint + "/agent/online")
             .then((res) => {
-                setActiveGlobal(res.data)
+                setActiveGlobal(res.data);
             })
     }, [])
 
@@ -60,6 +59,15 @@ const Devices = ({
         fetchAllDevices();
         fetchAllGroups();
     }, [fetchAllDevices, fetchAllGroups])
+
+  /*  var path = "";
+    const getGroupPath = (groupId) => {
+        const group = selectGroup(groupId);
+        console.log(group);
+        path = group.name + '/' + path;
+        if(group.parentGroup == null) return path;
+        return getGroupPath(group.parentGroup);
+    }*/
 
     const onDragEnd = (result) => {
 
@@ -140,6 +148,8 @@ const Devices = ({
         );
     });
 
+
+
     const searchDevices = (e) => {
         const searchText = e.target.value;
         searchDevicesAction(searchText);
@@ -204,3 +214,5 @@ export default connect((state) => ({
     searchGroupsAction,
     searchDevicesAction
 })(Devices);
+
+

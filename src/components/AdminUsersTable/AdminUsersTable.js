@@ -1,10 +1,18 @@
-import React, {useState} from "react";
-import CustomTable, {TableSlot} from "../CustomTable/CustomTable";
-import {CastConnected, Edit} from "@material-ui/icons";
-import dayjs from "dayjs";
+import './AdminUsersTable.scss';
+import { connect } from "react-redux";
+import { Edit } from "@material-ui/icons";
+import React, { useState } from "react";
+import CustomTable, { TableSlot } from "../CustomTable/CustomTable";
+import { selectUser } from "../../store/modules/users/actions";
+import { push } from "connected-react-router";
+import { RouteLink } from "../../store/modules/menu/menu";
 
+const AdminUsersTable = ({users, selectUser, push}) => {
 
-const AdminUsersTable = () => {
+    const editUser = (user) => {
+        selectUser(user);
+        push(RouteLink.ManageUser);
+    }
 
 
     const [tableFields] = useState([
@@ -21,12 +29,10 @@ const AdminUsersTable = () => {
         {
             name: 'email',
             title: 'E-mail',
-            sort: true,
         },
         {
             name: 'phone',
             title: 'Telefon',
-            slot: true,
         },
         {
             name: 'actions',
@@ -37,28 +43,27 @@ const AdminUsersTable = () => {
         }]
     );
 
+
     return (
-        <>
-        <h1>USERSI ADMINOVI MAJCIN SINE</h1>
-        <React.Fragment>
+        <div className='admin-users-table'>
             <CustomTable data={users}
-                         async={async}
-                         fields={tableFields}
-            <TableSlot slot='actions' render={dataRow => (
-                <div className='actions'>
-                    {canConnectToDevice(dataRow) && (
-                        <CastConnected className='connect-btn'
-                                       onClick={() => connectDevice(dataRow)}/>
-                    )}
-                    <Edit className='edit-btn' onClick={() => editDevice(dataRow)}/>
-                </div>
-            )}/>
+                         fields={tableFields}>
+                <TableSlot slot='actions' render={dataRow => (
+                    <div className='actions'>
+                        <Edit className='edit-btn' onClick={() => editUser(dataRow)}/>
+                    </div>
+                )}/>
+
+
             </CustomTable>
-        </React.Fragment>
-        </>
-
+            {/*
+                <CustomPagination totalCount={deviceTable.totalCount}
+                                  page={deviceTable.page}
+                                  perPage={deviceTable.perPage}
+                                  handleChangePage={handleChangePage}
+                                  handleChangePerPage={handleChangePerPage}
+                /> */}
+        </div>
     )
-
 }
-
-export default AdminUsersTable;
+export default connect(state => ({}), {selectUser, push})(AdminUsersTable);

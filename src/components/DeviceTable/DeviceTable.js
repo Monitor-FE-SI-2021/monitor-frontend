@@ -16,6 +16,7 @@ import { Checkbox, Chip, FormControl, Input, ListItemText, MenuItem, Select } fr
 import { ALL_DEVICES_TABLE_KEY, DEVICE_STATUS } from "../../store/modules/devices/devices";
 import CustomPagination from "../CustomTable/components/CustomPagination";
 
+
 const DEVICE_WS_STATUS = {
     WAITING: "Waiting",
     IN_USE: "In use",
@@ -45,6 +46,7 @@ const DeviceTable = ({
                          updateActiveDevice,
                          hasDragAndDrop = false,
                          showGroup,
+                         allGroups
                      }) => {
 
     const [statusFilterOpened, setStatusFilterOpened] = React.useState(false);
@@ -52,6 +54,9 @@ const DeviceTable = ({
     const async = deviceTable?.async;
 
     const deviceTableKey = group ? group.groupId : ALL_DEVICES_TABLE_KEY;
+
+   
+
 
     const editDevice = (device) => {
         selectDevice(device);
@@ -94,6 +99,7 @@ const DeviceTable = ({
             name: 'groupName',
             title: 'Grupa',
             disabled: !showGroup,
+            slot: 'group',
         },
         {
             name: 'location',
@@ -134,6 +140,40 @@ const DeviceTable = ({
         return <Chip style={{ background: backgroundColor, color: "#fff" }}
                      size={'small'}
                      label={text}/>
+    }
+
+    const getDevicePath = (groupId,path,groups) =>{
+        if(!groups.get(groupId).parentGroupId) return path;
+        if(path === ''){
+            path = groups.get(groupId).name;
+        } else {
+            path = groups.get(groupId).name + ' / ' + path;
+        }
+        return getDevicePath(groups.get(groupId).parentGroupId,path,groups);
+    }
+
+    const getGroupArray = groups => {
+        if(!groups) return [];
+        let output = [];
+        if(!groups.parentGroupId){
+            output = [...output,groups];
+        }
+        groups.subGroups.forEach(group => {
+            output = [...output, group, ...getGroupArray(group)];
+        })
+        return output;
+    }
+
+    const groupArray = getGroupArray(allGroups);
+    let groupMap = new Map(groupArray.map(group => [group.groupId, group]));
+    let path = '';
+    path = getDevicePath(21,path,groupMap);
+    console.log(path);
+
+    const renderGroupPath = group => {
+        //const groupPath = getGroupPath(user.groupId)
+        //console.log(groupPath);
+        //return <div>{groupPath}</div>
     }
 
     const handleFiltersChange = (name, value) => {
@@ -194,6 +234,10 @@ const DeviceTable = ({
                              handleSort={handleSort}
                              droppableId={group?.groupId ?? null}
                              hasDragAndDrop={hasDragAndDrop}>
+                    <TableSlot slot='group' render={device => (
+                        <span>
+                            {getDevicePath(device.groupId,'',groupMap)}
+                        </span>)}/>
                     <TableSlot slot='actions' render={dataRow => (
                         <div className='actions'>
                             {canConnectToDevice(dataRow) && (
@@ -239,6 +283,7 @@ export default connect((state, ownProps) => {
         return {
             activeDevices: state.devices.activeDevices,
             user: state.login.user,
+            allGroups: state.groups.groups,
             deviceTable
         }
     },
