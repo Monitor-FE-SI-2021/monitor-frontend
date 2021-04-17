@@ -4,10 +4,26 @@ import {withGoogleMap, GoogleMap, Marker, InfoWindow} from "react-google-maps"
 import request from "../../../service";
 import userTaskTrackers from "../../../service";
 import './GoogleMapMonitors.scss';
+import MarkerWithLabel from "react-google-maps/lib/components/addons/MarkerWithLabel";
 
 
 const yellowMarkerURL = "http://maps.google.com/mapfiles/ms/micons/yellow-dot.png"
 
+
+function compareTrackersByTime( a, b ) {
+    if ( Date.parse(a.time) < Date.parse(b.time) ){
+      return -1;
+    }
+    if ( Date.parse(a.time) > Date.parse(b.time) ){
+      return 1;
+    }
+    return 0;
+}
+
+
+function sortTrackersByTime(trackers) {
+    return trackers.sort(compareTrackersByTime);
+}
 
 class GoogleMapMonitors extends Component {
    
@@ -16,34 +32,34 @@ class GoogleMapMonitors extends Component {
         const tasks = this.props.tasks;
         console.log("Ovo su taskovi koji su u map komponenti:\n");
         console.log(tasks);
-        //console.log(tasks[10]);
+
+        let allTrackers = [];
+        for(let task of tasks) {
+            for(let tracker of task.userTrackers)
+                allTrackers.push(tracker);
+        }
+        sortTrackersByTime(allTrackers);
+        console.log("EVO SVIH TRACKERA ZA USERA, POREDANI PO VREMENU CHECK INA");
+        console.log(allTrackers);
 
         const MyMapComponent = withGoogleMap((props) => {
-                return (
-                    <GoogleMap
+                return (<GoogleMap
                         defaultZoom={8}
                         defaultCenter={{lat: 43.856, lng: 18.413}}
                     >
-                        {
-                        tasks.map(task => {
-                            let trackers = task.userTrackers;
-                            console.log(trackers);
-                            trackers.map(tracker => (
-                                <Marker
-                                    //key={tracker.id}
-                                    position={{
-                                        lat: tracker.locationLatitude,
-                                        lng: tracker.locationLongitutde
-                                    }}
-                                    icon={{url: yellowMarkerURL}}
-                                >
-                                </Marker>
-                            ))
-                        
-                        })
+                        {allTrackers.map(tracker => (
+                            <Marker
+                                key={tracker.id}
+                                position={{
+                                    lat: tracker.locationLatitude,
+                                    lng: tracker.locationLongitutde
+                                }}
+                                icon={{url: "https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + allTrackers.indexOf(tracker) + "|FE6256|000000"}}
+                            >
+                            </Marker>
+                        ))
                         }
-                    </GoogleMap>
-                )
+                    </GoogleMap>)
             }
         );
 
