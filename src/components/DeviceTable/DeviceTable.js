@@ -64,7 +64,7 @@ const DeviceTable = ({
         if (activeDevice) {
             request(wsEndpoint + "/agent/connect", "POST", {
                 deviceUid: activeDevice.deviceUid,
-                user: user?.email,
+                //user: user?.email,
             }).then(r => {
                 if (r?.data?.type === DEVICE_WS_STATUS.IN_USE) {
                     showSwalToast("Uređaj je uspješno konektovan.", 'success')

@@ -43,7 +43,7 @@ const Terminal = (props) => {
       modified = modified.replace(/\\r/g, "\r");
       let novaLista = modified.split("\n");
 
-      console.log("Ovo je spisak fajlova: " + novaLista);
+      //console.log("Ovo je spisak fajlova: " + novaLista);
 
       setTabCommands(novaLista);
       //IZMJENA ELMIR<-
@@ -66,9 +66,9 @@ const Terminal = (props) => {
   //pravljenje novog brancha
   React.useEffect(() => {
     const token = localStorage.getItem(STORAGE_KEY);
-    console.log("TOKEN: "+token);
-    console.log("setting device_id to local storage "+props.machine.deviceId);
-    console.log("setting user to local storage "+props.user)
+    //console.log("TOKEN: "+token);
+    //console.log("setting device_id to local storage "+props.machine.deviceId);
+    //console.log("setting user to local storage "+props.user)
     window.localStorage.setItem("device_id", props.machine.deviceId);
     window.localStorage.setItem("userId", props.user.userId);
     inputText.current.value = "";
@@ -78,6 +78,8 @@ const Terminal = (props) => {
   React.useEffect(() => {
     inputText.current.focus();
   }, [inputText]);
+
+  const [restartCommand, setRestartCommand] = React.useState([]);
 
   const logsHistory = (e) => {
     if (e.key === "ArrowUp" || e.key === "ArrowDown" || e.key === "Tab") e.preventDefault();
@@ -129,19 +131,37 @@ const Terminal = (props) => {
           token={token}
           user={props.user}
           setTabCommands = {setTabCommands}
+          restartCommands = {restartCommand}
+          setRestartCommands = {setRestartCommand}
         />
         <div className="input-prompt">
-          <Prompt path={put} />
+          {/* <Prompt path={put} restartCommands = {restartCommand} /> */}
           {/* <Prompt path={put} /> */}
-          <input
+          {restartCommand.length==1 && <span>Unesite username: </span>}
+          {restartCommand.length==2 && <span>Unesite Password: </span>}
+          {restartCommand.length!=1 && restartCommand.length!=2 && <Prompt path={put} />}
+
+
+          {restartCommand.length==2 && <input
+            className="input-console"
+            type="password"
+            ref={inputText}
+            onKeyPress={({ target: { value }, key }) =>
+              onEnter(value, key, props.machine.name, put, restartCommand, setRestartCommand)
+            }
+            onKeyDown={logsHistory}
+          />}
+
+          {restartCommand.length!=2 && <input
             className="input-console"
             type="text"
             ref={inputText}
             onKeyPress={({ target: { value }, key }) =>
-              onEnter(value, key, props.machine.name, put)
+              onEnter(value, key, props.machine.name, put, restartCommand, setRestartCommand)
             }
             onKeyDown={logsHistory}
-          />
+          />}
+          
         </div>
       </div>
     </div>
