@@ -1,4 +1,4 @@
-import { SET_USERS, SET_USERS_ASYNC } from "./types"
+import { SET_USERS, SET_USERS_ASYNC, SELECT_USER } from "./types"
 
 const initialState = {
     async: false,
@@ -19,6 +19,12 @@ const ACTION_HANDLERS = {
             async: action.async
         }
     },
+    [SELECT_USER]: (state, action) => {
+        return {
+            ...state,
+            selectedUser: action.user
+        }
+    }
 }
 
 export default function users(state = initialState, action) {

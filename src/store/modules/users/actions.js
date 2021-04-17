@@ -1,7 +1,8 @@
 import request, { users } from '../../../service';
 import {
     SET_USERS,
-    SET_USERS_ASYNC
+    SET_USERS_ASYNC,
+    SELECT_USER
 } from './types'
 
 export function fetchAllUsers() {
@@ -20,5 +21,14 @@ export function fetchAllUsers() {
             }).finally(() => {
                 dispatch({ type: SET_USERS_ASYNC, async: false });
             })
+    }
+}
+
+export function selectUser(user) {
+    return dispatch => {
+        dispatch({
+            type: SELECT_USER,
+            user
+        })
     }
 }

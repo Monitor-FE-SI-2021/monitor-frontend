@@ -16,6 +16,7 @@ import { Checkbox, Chip, FormControl, Input, ListItemText, MenuItem, Select } fr
 import { ALL_DEVICES_TABLE_KEY, DEVICE_STATUS } from "../../store/modules/devices/devices";
 import CustomPagination from "../CustomTable/components/CustomPagination";
 
+
 const DEVICE_WS_STATUS = {
     WAITING: "Waiting",
     IN_USE: "In use",
@@ -52,6 +53,9 @@ const DeviceTable = ({
     const async = deviceTable?.async;
 
     const deviceTableKey = group ? group.groupId : ALL_DEVICES_TABLE_KEY;
+
+   
+
 
     const editDevice = (device) => {
         selectDevice(device);
@@ -94,6 +98,7 @@ const DeviceTable = ({
             name: 'groupName',
             title: 'Grupa',
             disabled: !showGroup,
+            slot: 'group',
         },
         {
             name: 'location',
@@ -134,6 +139,12 @@ const DeviceTable = ({
         return <Chip style={{ background: backgroundColor, color: "#fff" }}
                      size={'small'}
                      label={text}/>
+    }
+
+    const renderGroupPath = group => {
+        //const groupPath = getGroupPath(user.groupId)
+        //console.log(groupPath);
+        //return <div>{groupPath}</div>
     }
 
     const handleFiltersChange = (name, value) => {
@@ -194,6 +205,10 @@ const DeviceTable = ({
                              handleSort={handleSort}
                              droppableId={group?.groupId ?? null}
                              hasDragAndDrop={hasDragAndDrop}>
+                    <TableSlot slot='group' render={user => (
+                        <span>
+                            {renderGroupPath(user)}
+                        </span>)}/>
                     <TableSlot slot='actions' render={dataRow => (
                         <div className='actions'>
                             {canConnectToDevice(dataRow) && (

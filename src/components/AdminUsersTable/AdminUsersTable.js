@@ -1,8 +1,13 @@
+import './AdminUsersTable.scss';
+import { connect } from "react-redux";
 import { Edit } from "@material-ui/icons";
 import React, { useState } from "react";
 import CustomTable, { TableSlot } from "../CustomTable/CustomTable";
+import { selectUser } from "../../store/modules/users/actions";
+import { push } from "connected-react-router";
+import { RouteLink } from "../../store/modules/menu/menu";
 
-const AdminUsersTable = ({users}) => {
+const AdminUsersTable = ({users, selectUser, push}) => {
     /* const users = [
         {
             name:'Tarik',
@@ -23,6 +28,13 @@ const AdminUsersTable = ({users}) => {
             phone:'1234566789' 
         }
     ] */
+
+        
+    const editUser = (user) => {
+        selectUser(user);
+        push(RouteLink.ManageUser);
+    }
+
 
     const [tableFields] = useState([
         {
@@ -51,16 +63,15 @@ const AdminUsersTable = ({users}) => {
             slot: 'actions'
         }]
     );
-    
+
 
     return (
-        <React.Fragment>
+        <div className='admin-users-table'>
                 <CustomTable data={users}
                              fields={tableFields}>
                     <TableSlot slot='actions' render={dataRow => (
                         <div className='actions'>
-                           
-                            <Edit className='edit-btn' onClick={() => {console.log('Admin useres table actions')}}/>
+                             <Edit className='edit-btn' onClick={() => editUser(dataRow)}/>
                         </div>
                     )}/>
 
@@ -73,8 +84,7 @@ const AdminUsersTable = ({users}) => {
                                   handleChangePage={handleChangePage}
                                   handleChangePerPage={handleChangePerPage}
                 /> */}
-            </React.Fragment>
+            </div>
     )
 }
-
-export default AdminUsersTable
+export default connect(state => ({}), {selectUser, push})(AdminUsersTable);

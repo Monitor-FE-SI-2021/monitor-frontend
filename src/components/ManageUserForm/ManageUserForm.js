@@ -8,28 +8,12 @@ import {AsyncButton} from "../AsyncButton/AsyncButton";
 import "../ManageDeviceForm/ManageDeviceForm.scss"
 import validator from "validator/es";
 import request, { roles } from "../../service";
-import { fetchAllGroups } from "../../store/modules/groups/actions";
+import { fetchAllGroups, setGroupsAsync } from "../../store/modules/groups/actions";
+import { cloneDeep } from "lodash";
+import { selectUser } from "../../store/modules/users/actions";
 
-const MangeUserForm = ({ push, groupOptions, fetchAllGroups }) => {
-
-    const [allRoles, setAllRoles] = useState([])
-
-    const fetchRoles = () => {
-        request(roles + `/GetRoles`, 'GET')
-            .then(response => response.data)
-            .then(r => {
-                console.log(r.data)
-                setAllRoles(r.data)
-            })
-    }
-
-    useEffect( () => {
-        if (!groupOptions?.length) {
-            fetchAllGroups();
-        }
-        fetchRoles()
-    }, [])
-
+const MangeUserForm = ({ selectedUser, push, groupOptions, fetchAllGroups}) => {
+  
     const initialValues = {
         name: "",
         lastname: "",
@@ -41,9 +25,52 @@ const MangeUserForm = ({ push, groupOptions, fetchAllGroups }) => {
         groupId: ""
     }
 
+    const [editMode, setEditMode] = useState(false);
     const [values, setValues] = useState(initialValues)
     const [errors, setErrors] = useState({})
+    const [allRoles, setAllRoles] = useState([])
 
+    const fetchRoles = () => {
+        request(roles + `/GetRoles`, 'GET')
+            .then(response => response.data)
+            .then(r => {
+                console.log(r.data)
+                setAllRoles(r.data)
+            })
+    }
+
+    const transformUserToForm = (user) => {
+
+        const form = cloneDeep(user);
+
+        form.name = user.name;
+        form.lastname = user.lastname;
+        form.email = user.email;
+        form.phone = user.phone;
+        form.password = user.password;
+        form.passwordRepeat = user.passwordRepeat;
+        form.roleId = user.roleId;
+        form.groupId = user.groupId;
+
+        return form;
+    }
+
+    useEffect( () => {
+        if (!groupOptions?.length) {
+            fetchAllGroups();
+        }
+        if (selectedUser) {
+            setValues(transformUserToForm(selectedUser));
+        }
+        fetchRoles();
+        setEditMode(Boolean(selectedUser));
+        return () => {
+            selectUser(null);
+        }
+
+    }, [selectedUser, fetchAllGroups, selectUser, groupOptions?.length])
+
+ 
     const validate = () => {
         let temp = {}
         let letterNumber = /^[0-9a-zA-Z]+$/
@@ -102,9 +129,33 @@ const MangeUserForm = ({ push, groupOptions, fetchAllGroups }) => {
     const handleSubmit = (e) => {
         e.preventDefault()
 
-        if (validate()) {
-            showSwalToast("Uspješno izmijenjena mašina", 'success')
-        }
+        // if (validate()) {
+
+        //     if (editMode === true) {
+
+        //         request(users + `/${groupId}`, 'PUT', userData)
+        //             .then(r => {
+        //                 console.log(r.data);
+        //                 showSwalToast(`Uspješno izmijenjen korisnik '${userData.Name}'`, 'success');
+        //                 setValues(initialValues);
+        //             }).finally(() => {
+        //             push(RouteLink.AdminPanel);
+        //         })
+        //     } else {
+
+        //         delete deviceData.DeviceUid;
+
+        //         request(users + `/CreateDevice?groupId=${groupId}`, 'POST', userData)
+        //             .then(r => {
+        //                 console.log(r.data);
+        //                 showSwalToast(`Uspješno kreiran korisnik '${userData.Name}'`, 'success');
+        //                 setValues(initialValues);
+        //             }).finally(() => {
+        //             push(RouteLink.AdminPanel);
+        //         })
+
+        //     }
+       // }
     }
 
         return (
@@ -162,7 +213,7 @@ const MangeUserForm = ({ push, groupOptions, fetchAllGroups }) => {
             <div className='buttons'>
                 <button className="custom-btn outlined" onClick={() => push(RouteLink.AdminPanel)}>Otkaži</button>
                 <AsyncButton className="custom-btn" onClick={handleSubmit}>
-                    Kreiraj korisnika
+                    {editMode === true ? "Izmijeni korisnika" : "Kreiraj korisnika"}
                 </AsyncButton>
             </div>
         </form>
@@ -181,7 +232,7 @@ export default connect(state => {
     }))
 
     return {
-        selectedDevice: state.devices.selectedDevice,
+        selectedUser: state.users.selectedUser,
         groupOptions
     }
 }, { push, fetchAllGroups })(MangeUserForm)

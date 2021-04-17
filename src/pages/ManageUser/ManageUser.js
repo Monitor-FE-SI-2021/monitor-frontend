@@ -9,13 +9,13 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-const ManageUser = () => {
+const ManageUser = (props) => {
     const classes = useStyles();
 
     return (
-        <div className='page manage-device'>
+        <div className='page manage-user'>
             <Paper className={classes.pageContent}>
-                <ManageUserForm />
+                <ManageUserForm/>
             </Paper>
         </div>
     )
