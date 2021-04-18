@@ -7,15 +7,14 @@ import { push } from "connected-react-router";
 import {AsyncButton} from "../AsyncButton/AsyncButton";
 import "../ManageDeviceForm/ManageDeviceForm.scss"
 import validator from "validator/es";
-import request, { roles, users} from "../../service";
+import request, { roles, users } from "../../service";
 import { fetchAllGroups, setGroupsAsync } from "../../store/modules/groups/actions";
 import { cloneDeep } from "lodash";
 import { selectUser } from "../../store/modules/users/actions";
 
-const MangeUserForm = ({ selectedUser, user, push, groupOptions, fetchAllGroups, selectUser}) => {
+const MangeUserForm = ({ selectedUser, push, groupOptions, fetchAllGroups, selectUser}) => {
   
     const initialValues = {
-        user: user?.userId ?? '',
         name: "",
         lastname: "",
         email: "",
@@ -48,11 +47,12 @@ const MangeUserForm = ({ selectedUser, user, push, groupOptions, fetchAllGroups,
         form.lastname = user.lastname;
         form.email = user.email;
         form.phone = user.phone;
-        form.password = user.password;
-        form.passwordRepeat = user.passwordRepeat;
+        // form.password = user.password;
+        // form.passwordRepeat = user.password;
+        form.password = "";         // temp
+        form.passwordRepeat = "";   // temp
         form.roleId = user.roleId;
         form.groupId = user.groupId;
-
         return form;
     }
 
@@ -69,15 +69,19 @@ const MangeUserForm = ({ selectedUser, user, push, groupOptions, fetchAllGroups,
         }
     }
 
+    useEffect(() => {
+        fetchRoles();
+    }, [])
+
 
     useEffect( () => {
         if (!groupOptions?.length) {
             fetchAllGroups();
         }
         if (selectedUser) {
+            console.log(selectedUser)
             setValues(transformUserToForm(selectedUser));
         }
-        fetchRoles();
         setEditMode(Boolean(selectedUser));
         return () => {
             selectUser(null);
@@ -148,12 +152,11 @@ const MangeUserForm = ({ selectedUser, user, push, groupOptions, fetchAllGroups,
 
         console.log(userData);
 
-        //const userId = user.UserId;
+        const userId = userData.UserId;
 
-        //delete userData.UserId;
+        delete userData.UserId;
 
         if (validate()) {
-            alert("OK")
 
             // if (editMode === true) {
             //
