@@ -9,7 +9,7 @@ export function fetchAllUsers() {
 
     return dispatch => {
         dispatch({ type: SET_USERS_ASYNC, async: true });
-        return request(users + '/All').then(response => response.data)
+        return request(users + '/GetAllUsers').then(response => response.data)
             .then(r => {
                 console.log(r.data,'allusersdata')
                 const users = r.data;
