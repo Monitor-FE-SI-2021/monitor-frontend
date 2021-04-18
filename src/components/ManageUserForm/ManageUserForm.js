@@ -12,7 +12,7 @@ import { fetchAllGroups, setGroupsAsync } from "../../store/modules/groups/actio
 import { cloneDeep } from "lodash";
 import { selectUser } from "../../store/modules/users/actions";
 
-const MangeUserForm = ({ selectedUser, user, push, groupOptions, fetchAllGroups}) => {
+const MangeUserForm = ({ selectedUser, user, push, groupOptions, fetchAllGroups, selectUser}) => {
   
     const initialValues = {
         user: user?.userId ?? '',
@@ -114,8 +114,8 @@ const MangeUserForm = ({ selectedUser, user, push, groupOptions, fetchAllGroups}
 
         if (values.phone === "")
             temp.phone = emptyFieldError
-        else if (!values.phone.match(/^[0-9]{6}/) && !values.phone.includes(" "))
-            temp.phone = "Polje mora sadržavati najmanje 6 cifri"
+        else if (!values.phone.match(/^\+{0,1}[0-9]{6}/) && !values.phone.includes(" "))
+            temp.phone = "Polje mora sadržavati najmanje 6 cifri i može početi sa +"
         else
             temp.phone = ""
 
@@ -148,35 +148,36 @@ const MangeUserForm = ({ selectedUser, user, push, groupOptions, fetchAllGroups}
 
         console.log(userData);
 
-        const userId = user.UserId;
+        //const userId = user.UserId;
 
-        delete userData.UserId;
+        //delete userData.UserId;
 
         if (validate()) {
+            alert("OK")
 
-            if (editMode === true) {
-
-                request(users + `/Update?userId=${userId}`, 'PUT', userData)
-                    .then(r => {
-                        console.log(r.data);
-                        showSwalToast(`Uspješno izmijenjen korisnik '${userData.Name}'`, 'success');
-                        setValues(initialValues);
-                    }).finally(() => {
-                    push(RouteLink.AdminPanel);
-                })
-            } else {
-
-
-                request(users + `/CreateNew?userId=${userId}`, 'POST', userData)
-                    .then(r => {
-                        console.log(r.data);
-                        showSwalToast(`Uspješno kreiran korisnik '${userData.Name}'`, 'success');
-                        setValues(initialValues);
-                    }).finally(() => {
-                    push(RouteLink.AdminPanel);
-                })
-
-            }
+            // if (editMode === true) {
+            //
+            //     request(users + `/Update?userId=${userId}`, 'PUT', userData)
+            //         .then(r => {
+            //             console.log(r.data);
+            //             showSwalToast(`Uspješno izmijenjen korisnik '${userData.Name}'`, 'success');
+            //             setValues(initialValues);
+            //         }).finally(() => {
+            //         push(RouteLink.AdminPanel);
+            //     })
+            // } else {
+            //
+            //
+            //     request(users + `/CreateNew?userId=${userId}`, 'POST', userData)
+            //         .then(r => {
+            //             console.log(r.data);
+            //             showSwalToast(`Uspješno kreiran korisnik '${userData.Name}'`, 'success');
+            //             setValues(initialValues);
+            //         }).finally(() => {
+            //         push(RouteLink.AdminPanel);
+            //     })
+            //
+            // }
        }
     }
 
@@ -257,7 +258,7 @@ export default connect(state => {
         selectedUser: state.users.selectedUser,
         groupOptions
     }
-}, { push, fetchAllGroups })(MangeUserForm)
+}, { push, fetchAllGroups, selectUser })(MangeUserForm)
 
 export const flattenGroup = data => {
 
