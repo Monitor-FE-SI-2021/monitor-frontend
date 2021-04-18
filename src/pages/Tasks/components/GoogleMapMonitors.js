@@ -25,6 +25,19 @@ function sortTrackersByTime(trackers) {
     return trackers.sort(compareTrackersByTime);
 }
 
+function setNonLeapingLocations(trackers) {
+    trackers.map((tracker, i) => {
+        const trackerSameLocation = trackers.find((m, j) => {
+            return i !== j && tracker.locationLatitude === m.locationLatitude
+                && tracker.locationLongitutde === m.locationLongitutde
+        })
+        if (trackerSameLocation) {
+            tracker.locationLatitude = tracker.locationLatitude + (Math.random() - .5) / 30000;
+            tracker.locationLongitutde = tracker.locationLongitutde + (Math.random() - .5) / 30000;
+        }
+    })
+}
+
 class GoogleMapMonitors extends Component {
    
     render() {
@@ -41,8 +54,10 @@ class GoogleMapMonitors extends Component {
         sortTrackersByTime(allTrackers);
         console.log("EVO SVIH TRACKERA ZA USERA, POREDANI PO VREMENU CHECK INA");
         console.log(allTrackers);
+        setNonLeapingLocations(allTrackers);
 
         const MyMapComponent = withGoogleMap((props) => {
+            const [selectedTracker, setSelectedTracker] = useState(null)
                 return (<GoogleMap
                         defaultZoom={8}
                         defaultCenter={{lat: 43.856, lng: 18.413}}
@@ -55,10 +70,23 @@ class GoogleMapMonitors extends Component {
                                     lng: tracker.locationLongitutde
                                 }}
                                 icon={{url: "https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + allTrackers.indexOf(tracker) + "|FE6256|000000"}}
+                                onClick={() => setSelectedTracker(tracker)}
                             >
                             </Marker>
                         ))
                         }
+                        {selectedTracker && (
+                            <InfoWindow
+                                position={{lat: selectedTracker.locationLatitude, lng: selectedTracker.locationLongitutde}}
+                                onCloseClick={() => setSelectedTracker(null)}
+                            >
+                                <div>
+                                    <h2>{new Date(selectedTracker.time).toLocaleString()}</h2>
+                                    <p>{selectedTracker.locationLatitude}</p>
+                                    <p>{selectedTracker.locationLongitutde}</p>
+                                </div>
+                            </InfoWindow>
+                        )}
                     </GoogleMap>)
             }
         );
