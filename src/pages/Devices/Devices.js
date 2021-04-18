@@ -50,7 +50,7 @@ const Devices = ({
     const async = devicesAsync || groupsAsync;
 
     useEffect(() => {
-        request(wsEndpoint + "/agent/online")
+        request(wsEndpoint + "/agents/online")
             .then((res) => {
                 setActiveGlobal(res.data)
             })

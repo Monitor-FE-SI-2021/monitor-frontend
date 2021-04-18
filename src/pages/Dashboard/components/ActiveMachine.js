@@ -4,11 +4,14 @@ import debounce from 'lodash/debounce';
 import NewWindow from '../../../components/NewWindow/NewWindow';
 import RemoteAccess from '../../RemoteAccess/RemoteAccess.js';
 import Avatar from "./MachineAvatar.js";
+import { showSwalToast } from "../../../utils/utils";
+
 
 import './ActiveMachine.scss';
 
-const ActiveMachine = ({data, img, onDisconnect, getStatistics, sDate, eDate}) => {
+const ActiveMachine = ({data, img, onDisconnect, getStatistics, sDate, eDate, user}) => {
     const [remoteAccessOpen, setRemoteAccessOpen] = useState(false);
+    const [configurationOpen, setConfigurationOpen] = useState(false)
     const popup = useRef();
 
     const handleOnClick = debounce(
@@ -23,7 +26,13 @@ const ActiveMachine = ({data, img, onDisconnect, getStatistics, sDate, eDate}) =
                 id={data.deviceId}
                 onClick={handleOnClick}
                 
-                onDoubleClick={() => remoteAccessOpen ? popup.current.focus() : setRemoteAccessOpen(true)}
+                onDoubleClick={() => {
+                    if (user.email !== data.user) {
+                        showSwalToast("Device already in use.")
+                        return
+                    }
+                    remoteAccessOpen ? popup.current.focus() : setRemoteAccessOpen(true)
+                }}
             >
                 <div className="img-info">
                     <div className="card-img">
@@ -37,6 +46,13 @@ const ActiveMachine = ({data, img, onDisconnect, getStatistics, sDate, eDate}) =
                     </div>
                 </div>
                 <div className="card-actions">
+                    <button
+                        onClick={() => {
+                            configurationOpen ? popup.current.focus() : setConfigurationOpen(true)
+                        }}
+                    >
+                        Configuration
+                    </button>
                     <button
                         onClick={() => {
                             onDisconnect(data);
@@ -57,6 +73,21 @@ const ActiveMachine = ({data, img, onDisconnect, getStatistics, sDate, eDate}) =
                     <RemoteAccess machine={data} />
                 </NewWindow>
             ) }
+
+            {
+                configurationOpen && (
+                    <NewWindow
+                        onClose={() => setConfigurationOpen(false)}
+                        title={`Configuration - ${data.name} (${data.location})`}
+                        ref={popup}
+                    >
+                        <div>
+                            <h3>CPU</h3>
+                            <p>podaci vezani za cpu</p>
+                        </div>
+                    </NewWindow>
+                )
+            }
         </>
     );
 };

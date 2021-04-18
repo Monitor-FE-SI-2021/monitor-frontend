@@ -108,6 +108,7 @@ export let barchartMaxValue = 10
 const Dashboard = ({ user }) => {
     
     let activeMachines = []
+    let configuration = null
     const [async, setAsync] = React.useState(true)
     const [machines, setMachines] = React.useState([]);
     const [active, setActive] = React.useState([...activeMachines]);
@@ -118,8 +119,14 @@ const Dashboard = ({ user }) => {
     const [startDate, setStartDate] = React.useState(start);
     var [chartType, setChartType] = React.useState(true)
 
+    function getConfiguration(machine, startDate, endDate) {
+        request("https://si-grupa5.herokuapp.com/api/agent/info/system")
+            .then((res) => console.log(res))
+            .catch((err) => console.log(err))
+    }
     
     function filterActive(activeMachines, allMachines) {
+        console.log(activeMachines)
         return activeMachines ? activeMachines.filter((machine) => {
             const existingMachine = allMachines.find(({ deviceUid }) => {
                 return machine.status !== "Waiting" && machine.deviceUid === deviceUid;
@@ -195,7 +202,7 @@ const Dashboard = ({ user }) => {
                 const allMachines = res.data.data;
                 setMachines(allMachines);
                 setAsync(true)
-                request("https://si-grupa5.herokuapp.com/api/agent/online")
+                request("https://si-grupa5.herokuapp.com/api/agents/online")
                     .then((res) => {
                         setActive(filterActive(res?.data, allMachines));
                     })
@@ -211,7 +218,6 @@ const Dashboard = ({ user }) => {
         
     }, []);
 
-    console.log(clickedMachine)
 
     const disconnectMachine = (machine) => {
         removedMachine = machine
@@ -281,7 +287,7 @@ const Dashboard = ({ user }) => {
                                     getStatistics={getStatistics}
                                     sDate={startDate.toISOString()}
                                     eDate={endDate.toISOString()}
-                                    
+                                    user={user}
                                 />
                             ))
                         ) : (
