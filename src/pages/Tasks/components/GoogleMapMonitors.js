@@ -4,11 +4,17 @@ import {withGoogleMap, GoogleMap, Marker, InfoWindow} from "react-google-maps"
 import request from "../../../service";
 import userTaskTrackers from "../../../service";
 import './GoogleMapMonitors.scss';
+//import request from "/../../../service";
 import MarkerWithLabel from "react-google-maps/lib/components/addons/MarkerWithLabel";
 
 
 const yellowMarkerURL = "http://maps.google.com/mapfiles/ms/micons/yellow-dot.png"
 
+async function taskData(id){
+    const res = await request("https://si-2021.167.99.244.168.nip.io/api/UserTasks/"+id);
+    
+    return res.data.data;
+}
 
 function compareTrackersByTime( a, b ) {
     if ( Date.parse(a.time) < Date.parse(b.time) ){
@@ -58,6 +64,8 @@ class GoogleMapMonitors extends Component {
 
         const MyMapComponent = withGoogleMap((props) => {
             const [selectedTracker, setSelectedTracker] = useState(null)
+            const [currentTask, setCurrentTask] = useState(null)
+            
                 return (<GoogleMap
                         defaultZoom={8}
                         defaultCenter={{lat: 43.856, lng: 18.413}}
@@ -70,7 +78,12 @@ class GoogleMapMonitors extends Component {
                                     lng: tracker.locationLongitutde
                                 }}
                                 icon={{url: "https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + allTrackers.indexOf(tracker) + "|FE6256|000000"}}
-                                onClick={() => setSelectedTracker(tracker)}
+                                onClick={async () => {
+                                    let taskD = await taskData(tracker.userTaskId);
+                                    
+                                    setCurrentTask(taskD);
+                                    setSelectedTracker(tracker);
+                                }}
                             >
                             </Marker>
                         ))
@@ -78,12 +91,15 @@ class GoogleMapMonitors extends Component {
                         {selectedTracker && (
                             <InfoWindow
                                 position={{lat: selectedTracker.locationLatitude, lng: selectedTracker.locationLongitutde}}
-                                onCloseClick={() => setSelectedTracker(null)}
+                                onCloseClick={() => {
+                                    //setCurrentTask(null);
+                                    setSelectedTracker(null);}}
                             >
                                 <div>
+                                    <h1>{currentTask.location ? currentTask.location : 'Nema specificiranu lokaciju'}</h1>
+                                   
                                     <h2>{new Date(selectedTracker.time).toLocaleString()}</h2>
-                                    <p>{selectedTracker.locationLatitude}</p>
-                                    <p>{selectedTracker.locationLongitutde}</p>
+                                    <p>{currentTask.description ? currentTask.description : 'Nema specificiran opis' }</p>
                                 </div>
                             </InfoWindow>
                         )}
