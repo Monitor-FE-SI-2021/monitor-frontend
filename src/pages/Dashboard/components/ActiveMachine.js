@@ -9,7 +9,7 @@ import { showSwalToast } from "../../../utils/utils";
 
 import './ActiveMachine.scss';
 
-const ActiveMachine = ({data, img, onDisconnect, getStatistics, sDate, eDate, user}) => {
+const ActiveMachine = ({data, img, onDisconnect, getStatistics, sDate, eDate, user, getConfiguration}) => {
     const [remoteAccessOpen, setRemoteAccessOpen] = useState(false);
     const [configurationOpen, setConfigurationOpen] = useState(false)
     const popup = useRef();
@@ -49,6 +49,7 @@ const ActiveMachine = ({data, img, onDisconnect, getStatistics, sDate, eDate, us
                     <button
                         onClick={() => {
                             configurationOpen ? popup.current.focus() : setConfigurationOpen(true)
+                            getConfiguration(data)
                         }}
                     >
                         Configuration

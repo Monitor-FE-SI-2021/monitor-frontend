@@ -119,8 +119,10 @@ const Dashboard = ({ user }) => {
     const [startDate, setStartDate] = React.useState(start);
     var [chartType, setChartType] = React.useState(true)
 
-    function getConfiguration(machine, startDate, endDate) {
-        request("https://si-grupa5.herokuapp.com/api/agent/info/system")
+    function getConfiguration(machine) {
+        request("https://si-grupa5.herokuapp.com/api/agent/info/system", "POST", {
+            deviceUid: machine.deviceUid,
+        })
             .then((res) => console.log(res))
             .catch((err) => console.log(err))
     }
@@ -288,6 +290,7 @@ const Dashboard = ({ user }) => {
                                     sDate={startDate.toISOString()}
                                     eDate={endDate.toISOString()}
                                     user={user}
+                                    getConfiguration={getConfiguration}
                                 />
                             ))
                         ) : (
