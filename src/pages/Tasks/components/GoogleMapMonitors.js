@@ -11,7 +11,7 @@ import MarkerWithLabel from "react-google-maps/lib/components/addons/MarkerWithL
 const yellowMarkerURL = "http://maps.google.com/mapfiles/ms/micons/yellow-dot.png"
 
 async function taskData(id){
-    const res = await request("https://si-2021.167.99.244.168.nip.io/api/UserTasks/"+id);
+    const res = await request("https://si-2021.167.99.244.168.nip.io/api/UserTasks/Admin/"+id);
     
     return res.data.data;
 }
@@ -90,15 +90,16 @@ class GoogleMapMonitors extends Component {
                         }
                         {selectedTracker && (
                             <InfoWindow
+                            
                                 position={{lat: selectedTracker.locationLatitude, lng: selectedTracker.locationLongitutde}}
                                 onCloseClick={() => {
                                     //setCurrentTask(null);
                                     setSelectedTracker(null);}}
                             >
                                 <div>
-                                    <h1>{currentTask.device.location ? currentTask.device.location : 'Nema specificiranu lokaciju'}</h1>
+                                    <h1>{currentTask.device ? currentTask.device.location : currentTask.location}</h1>
                                     <h2>{new Date(selectedTracker.time).toLocaleString()}</h2>
-                                    <h3>{currentTask.device.name ? currentTask.device.name : 'Nije specificiran naziv mašine'}</h3>
+                                    <h3>{currentTask.device ? currentTask.device.name : 'Nije specificiran naziv mašine'}</h3>
                                     <p>{currentTask.description ? currentTask.description : 'Nema specificiran opis' }</p>
                                 </div>
                             </InfoWindow>
