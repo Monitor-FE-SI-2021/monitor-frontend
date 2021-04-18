@@ -7,7 +7,7 @@ import { selectUser } from "../../store/modules/users/actions";
 import { push } from "connected-react-router";
 import { RouteLink } from "../../store/modules/menu/menu";
 
-const AdminUsersTable = ({users, selectUser, push}) => {
+const AdminUsersTable = ({users, selectUser, push, allGroups}) => {
 
     const editUser = (user) => {
         selectUser(user);
@@ -37,6 +37,7 @@ const AdminUsersTable = ({users, selectUser, push}) => {
         { 
             name: 'groupId',
             title: 'Grupa',
+            // slot: 'group',
         },
         {
             name: 'actions',
@@ -83,10 +84,10 @@ const AdminUsersTable = ({users, selectUser, push}) => {
         <div className='admin-users-table'>
             <CustomTable data={users}
                          fields={tableFields}>
-                {/* <TableSlot slot='group' render={user => (
+                {/* { <TableSlot slot='group' render={user => (
                         <span className="path">
                             {getDevicePath(user.groupId,'',groupMap)}
-                        </span>)}/>              */}
+                        </span>)}/>              } */}
                 <TableSlot slot='actions' render={dataRow => (
                     <div className='actions'>
                         <Edit className='edit-btn' onClick={() => editUser(dataRow)}/>
@@ -105,4 +106,4 @@ const AdminUsersTable = ({users, selectUser, push}) => {
         </div>
     )
 }
-export default connect(state => ({}), {selectUser, push})(AdminUsersTable);
+export default connect(state => ({allGroups: state.groups.groups,}), {selectUser, push})(AdminUsersTable);
