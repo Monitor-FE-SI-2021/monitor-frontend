@@ -46,14 +46,14 @@ const ActiveMachine = ({data, img, onDisconnect, getStatistics, sDate, eDate, us
                     </div>
                 </div>
                 <div className="card-actions">
-                    <button
+                    <button id="configuration"
                         onClick={() => {
                             configurationOpen ? popup.current.focus() : setConfigurationOpen(true)
                         }}
                     >
                         Configuration
                     </button>
-                    <button
+                    <button id="disconnect"
                         onClick={() => {
                             onDisconnect(data);
                             setRemoteAccessOpen(false);
