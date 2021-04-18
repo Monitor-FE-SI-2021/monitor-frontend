@@ -93,13 +93,12 @@ class GoogleMapMonitors extends Component {
                                 position={{lat: selectedTracker.locationLatitude, lng: selectedTracker.locationLongitutde}}
                                 onCloseClick={() => {
                                     //setCurrentTask(null);
-                                    console.log(currentTask);
                                     setSelectedTracker(null);}}
                             >
                                 <div>
                                     <h1>{currentTask.device.location ? currentTask.device.location : 'Nema specificiranu lokaciju'}</h1>
-                                   
                                     <h2>{new Date(selectedTracker.time).toLocaleString()}</h2>
+                                    <h3>{currentTask.device.name ? currentTask.device.name : 'Nije specificiran naziv mašine'}</h3>
                                     <p>{currentTask.description ? currentTask.description : 'Nema specificiran opis' }</p>
                                 </div>
                             </InfoWindow>
