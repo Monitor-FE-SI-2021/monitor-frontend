@@ -13,7 +13,7 @@ async function retrieveUsersFromDatabase() {
     return request(getUsers)
             .then(r => {
                 if (r.status === 200) {
-                    r.data.data.forEach((user) => {
+                    r.data.data.users.forEach((user) => {
                         users.push(new User(user.userId, user.name, user.lastname, user.email, user.phone, user.address));
                     });
                     return users;
