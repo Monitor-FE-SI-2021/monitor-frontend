@@ -5,6 +5,7 @@ import DragAndDrop from '../DragAndDrop/DragAndDrop';
 import Swal from "sweetalert2";
 import {FaCopy, FaCut, FaPencilAlt, FaTrash} from "react-icons/fa";
 import Checkbox from '@material-ui/core/Checkbox';
+import CommunicationDialerSip from 'material-ui/svg-icons/communication/dialer-sip';
 const config = require("../Terminal/config");
 const userFiles = "https://si-grupa5.herokuapp.com/api/web/user/file-tree";
 const folderIconUrl = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHg9IjBweCIgeT0iMHB4Igp3aWR0aD0iNDgiIGhlaWdodD0iNDgiCnZpZXdCb3g9IjAgMCAxNzIgMTcyIgpzdHlsZT0iIGZpbGw6IzAwMDAwMDsiPjxnIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0ibm9uemVybyIgc3Ryb2tlPSJub25lIiBzdHJva2Utd2lkdGg9IjEiIHN0cm9rZS1saW5lY2FwPSJidXR0IiBzdHJva2UtbGluZWpvaW49Im1pdGVyIiBzdHJva2UtbWl0ZXJsaW1pdD0iMTAiIHN0cm9rZS1kYXNoYXJyYXk9IiIgc3Ryb2tlLWRhc2hvZmZzZXQ9IjAiIGZvbnQtZmFtaWx5PSJub25lIiBmb250LXdlaWdodD0ibm9uZSIgZm9udC1zaXplPSJub25lIiB0ZXh0LWFuY2hvcj0ibm9uZSIgc3R5bGU9Im1peC1ibGVuZC1tb2RlOiBub3JtYWwiPjxwYXRoIGQ9Ik0wLDE3MnYtMTcyaDE3MnYxNzJ6IiBmaWxsPSJub25lIj48L3BhdGg+PGc+PHBhdGggZD0iTTE0My4zMzMzMyw0M2gtNjQuNWwtMTQuMzMzMzMsLTE0LjMzMzMzaC0zNS44MzMzM2MtNy44ODMzMywwIC0xNC4zMzMzMyw2LjQ1IC0xNC4zMzMzMywxNC4zMzMzM3YyOC42NjY2N2gxNDMuMzMzMzN2LTE0LjMzMzMzYzAsLTcuODgzMzMgLTYuNDUsLTE0LjMzMzMzIC0xNC4zMzMzMywtMTQuMzMzMzN6IiBmaWxsPSIjNWI3N2JkIj48L3BhdGg+PHBhdGggZD0iTTE0My4zMzMzMyw0M2gtMTE0LjY2NjY3Yy03Ljg4MzMzLDAgLTE0LjMzMzMzLDYuNDUgLTE0LjMzMzMzLDE0LjMzMzMzdjcxLjY2NjY3YzAsNy44ODMzMyA2LjQ1LDE0LjMzMzMzIDE0LjMzMzMzLDE0LjMzMzMzaDExNC42NjY2N2M3Ljg4MzMzLDAgMTQuMzMzMzMsLTYuNDUgMTQuMzMzMzMsLTE0LjMzMzMzdi03MS42NjY2N2MwLC03Ljg4MzMzIC02LjQ1LC0xNC4zMzMzMyAtMTQuMzMzMzMsLTE0LjMzMzMzeiIgZmlsbD0iIzkzYWJmNiI+PC9wYXRoPjwvZz48L2c+PC9zdmc+";
@@ -499,7 +500,6 @@ class FileManagerTable extends React.Component {
         }
     }
 
-
     sendCopyRequest = async (newPath, name) => {
         try {
             const requestOptions = {
@@ -796,23 +796,167 @@ class FileManagerTable extends React.Component {
         }
     }
 
+    async getUidsFromGroup(groupId){
+        const url = "https://si-2021.167.99.244.168.nip.io/api/device/AllDevicesForGroup?groupId=" + groupId;
+        const response = await request(url, 'GET');
+
+        var devices = response.data.data.devices;
+        var arr = [];
+        for(var i =0; i < devices.length; i++) {
+            var device = devices[i];
+            arr = [...arr, device.deviceUid];
+        }
+
+        return arr;
+    }
 
     async sendToAgents() {
         const url = 'https://si-2021.167.99.244.168.nip.io/api/group/MyAssignedGroups';
         var arrayOfGroups = [];
         const response = await request(url, 'GET');
+
         arrayOfGroups = response.data.data.subGroups;
-        var html = '<div class="swal-text">';
+        var html = '<div class = "modal-title"> Odaberite grupu na koju želite poslati označene fajlove ↓</div>'
+        html= html +'<div class="swal-text">';
 
         for (var i = 0; i < arrayOfGroups.length; i++) {
             html = html + this.getTableForGroups(arrayOfGroups[i]);
         }
         html = html + '</div>';
 
+
         Swal.fire({
-            html: html.toString(),
-            width: '50%'
-        })
+            html: html,
+            width: '50%',
+            showCancelButton: true,
+
+            preConfirm: () => {
+                var arr = [];
+                for (var i = 0; i < arrayOfGroups.length; i++) {
+                    arr = [...arr, ...this.getGroupIds(arrayOfGroups[i])];
+                }
+
+                var arrChecked = []
+                for (var i = 0; i < arr.length; i++) {
+                    if(document.getElementById(arr[i]).checked) arrChecked = [...arrChecked, arr[i]];
+                }
+                
+                var arrUid = [];
+                var arrPromiseUid = [];
+                for (var i = 0; i < arrChecked.length; i++) {
+                    var x = this.getUidsFromGroup(arrChecked[i]);
+                    x.then((res) => {
+                        arrUid = [...arrUid, ...res];
+                    })
+                    arrPromiseUid = [...arrPromiseUid, x];
+                }
+
+                Promise.all(arrPromiseUid).then(() => {
+                    var url = "https://si-grupa5.herokuapp.com/api/agent/files/put" //+ this.state.user.email;
+                    var body = {deviceUids: [], files: []};
+                    for (var i = 0 ; i < arrUid.length; i++) {
+                        body.deviceUids.push({deviceUid : arrUid[i]});
+                    }
+                    body.files = this.getCheckedFiles();
+
+
+                    body.deviceUids = [{deviceUid: "33098e25-c605-4132-ad95-f38ecc3bd7a1"}];
+                    //url = "http://109.237.39.237:25565/api/agent/files/put";
+
+                    console.log(body);
+                    console.log(JSON.stringify(body));
+
+                    /*
+                    request(url, 'POST', {body : JSON.stringify(body)})
+                    .then((res) => {
+                        console.log(res);
+                    }).catch((err) => {
+                        console.log(err);
+                        console.log(err.message);
+                        console.log(err.name);
+
+                    });
+                    */
+                    console.log(this.state.user);
+
+                    try {
+                        const requestOptions = {
+                            method: "POST",
+                            headers: {"Content-Type": "application/json"},
+                            body: JSON.stringify({
+                                email: config.email,
+                                password: config.password,
+                            }),
+                        };
+            
+                        fetch(config.url, requestOptions)
+                        .then((response) => {
+                            console.log(response);
+                            if (response.status == 200) {
+                                console.log("waka 1");
+                                response.json().then((x) => {
+                                    console.log(x);
+                                    console.log("waka 2");
+                                    const token = x.accessToken; console.log(token);
+                                    tokenGlobal = token;
+
+                                    const requestOptions1 = {
+                                        method: "POST",
+                                        headers: {
+                                            Accept: "application/json",
+                                            "Content-Type": "application/json",
+                                            Authorization: "Bearer " + token,
+                                        },
+                                        body: JSON.stringify(body),
+                                    };
+                                    
+                                    console.log(JSON.stringify(body));
+                                    console.log("waka 3");
+                                    fetch(url, requestOptions1)
+                                    .then((response) => {
+                                        console.log(response);
+                                        if(response.status == 200){
+                                            Swal.fire(
+                                                'Success',
+                                                'File is successfuly uploaded',
+                                                'success'
+                                              )
+                                        } else{
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: 'Oops...',
+                                                text: 'Something went wrong!',
+                                              })
+                                        }
+                                    })
+                                    .catch((err) => {
+                                        console.log("waka 4");
+                                        console.log(err);
+                                    });
+                                });       
+                            }
+                        }).catch((err) => {
+                            console.log(err);
+                            console.log(err.name);
+                            console.log(err.message);
+                        });
+                        
+                    } catch (e) {
+                        console.log(e);
+                        console.log(e.name);
+                        console.log(e.message);
+
+                    }
+                })
+            }
+
+        }).then((result) => {
+            if(result.isConfirmed){
+
+                console.log("HELLo");
+
+            }
+        });
     }
 
     getTableForGroups(group) {
@@ -824,17 +968,30 @@ class FileManagerTable extends React.Component {
             }
             html = html + '</div>';
         } else {
-            html = '<div class="swalItem">';
-            html = html + '<div class="form-check">';
-            html = html + `<label class="form-check-label" for="${group.groupId}">`
-            html = html + group.name;
-            html = html + "</label>";
-            html = html + `<input class="form-check-input " type="checkbox" value="" id="${group.groupId}">`;
+            html = html + '<div class="swalItem">';
+            html = html +   '<div>';
+            html = html +       `<label class="align-checkbox" for="${group.groupId}">`
+            html = html +           group.name;
+            html = html +       "</label>";
+            html = html +       `<input type="checkbox" value="${group.groupId}" id="${group.groupId}" onChange="console.log">`;
+            html = html +   "</div>";
             html = html + "</div>";
+
         }
         return html;
     }
 
+    getGroupIds(group){
+        var arr = [];
+        if (typeof group.subGroups !== 'undefined' && group.subGroups.length > 0) {
+            for (var i = 0; i < group.subGroups.length; i++) {
+                arr = [...arr, ...this.getGroupIds(group.subGroups[i])];
+            }
+        } else { 
+            arr = [...arr, group.groupId];
+        }
+        return arr;
+    }
 
     clickNewFolder() {
         Swal.fire({
@@ -862,8 +1019,30 @@ class FileManagerTable extends React.Component {
     }
 
     getCheckedFiles() {
-        const sendFiles = this.state.checkedFiles;
-        console.log(JSON.stringify(sendFiles));
+        var sendFiles = this.state.checkedFiles;
+        var arr = []
+        for(var i = 0; i < sendFiles.length; i++){
+            if(sendFiles[i].data.type=="file") {
+                arr.push({fileName: sendFiles[i].fileName, path: sendFiles[i].data.path.split('/').slice(2, -1).join('/')});
+            } else {
+                arr = [...arr, ...this.getChildren(sendFiles[i].data.children)];
+            }
+        }
+
+        return arr;
+    }
+
+    getChildren(children) {
+        var arr = [];
+        for(var i = 0; i < children.length; i++){
+            if(children[i].type=="file") {
+                arr.push({fileName: children[i].name, path: children[i].path.split('/').slice(2, -1).join('/')});
+            } else {
+                arr = [...arr, ...this.getChildren(children[i].children)];
+            }
+        }
+
+        return arr;
     }
 
     render() {
