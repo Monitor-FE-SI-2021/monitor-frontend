@@ -19,7 +19,7 @@ const HourPicker = ({ timeSet }) => {
     <FormControl>
       <InputLabel shrink className="demo-simple-select-placeholder-label-label">
         Time
-          </InputLabel>
+      </InputLabel>
       <Select 
         className="select selectHour"
         onChange={handleChange}
