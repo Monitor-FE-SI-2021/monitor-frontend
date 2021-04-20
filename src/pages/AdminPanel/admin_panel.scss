@@ -1,0 +1,53 @@
+.admin-panel {
+    overflow: auto;
+
+    .search-fields {
+        margin-top: 10px;
+    }
+
+    .groups-list {
+        padding: 10px 30px 10px 10px;
+    }
+
+    .top {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+
+        .page-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--main-color);
+        }
+    }
+
+    .search {
+        width: 25%;
+        margin-right: 10px;
+        margin-top: 10px;
+        border-radius: 12px;
+        -webkit-transition: 1s;
+        transition: 1s;
+
+        .MuiFormLabel-root.Mui-focused {
+
+        }
+    }
+
+
+    .group {
+
+        .tab {
+            cursor: pointer;
+        }
+
+        .custom-table-container {
+            margin-left: 20px;
+        }
+    }
+
+}
+
+

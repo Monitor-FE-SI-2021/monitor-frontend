@@ -1,4 +1,14 @@
 .admin-users-table {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    align-items: flex-end;
+
+    .custom-table-container {
+        flex-basis: 0;
+        flex-grow: 1;
+        overflow: auto;
+    }
 
     .actions {
         margin-right: 8px;

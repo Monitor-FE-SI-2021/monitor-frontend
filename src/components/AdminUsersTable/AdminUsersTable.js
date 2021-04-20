@@ -1,19 +1,39 @@
 import './AdminUsersTable.scss';
 import { connect } from "react-redux";
 import { Edit } from "@material-ui/icons";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CustomTable, { TableSlot } from "../CustomTable/CustomTable";
-import { selectUser } from "../../store/modules/users/actions";
+import {
+    fetchAllUsers,
+    selectUser,
+    setUsersPage,
+    setUsersPerPage,
+    setUsersSort
+} from "../../store/modules/users/actions";
 import { push } from "connected-react-router";
 import { RouteLink } from "../../store/modules/menu/menu";
+import CustomPagination from "../CustomTable/components/CustomPagination";
 
-const AdminUsersTable = ({users, selectUser, push, allGroups}) => {
+const AdminUsersTable = ({
+                             users,
+                             selectUser,
+                             push,
+                             allGroups,
+                             page,
+                             perPage,
+                             totalCount,
+                             setUsersPage,
+                             setUsersPerPage,
+                             async,
+                             sortField,
+                             sortOrder,
+                             setUsersSort,
+                             fetchAllUsers
+                         }) => {
 
-    const editUser = (user) => {
-        selectUser(user);
-        push(RouteLink.ManageUser);
-    }
-
+    useEffect(() => {
+        fetchAllUsers();
+    }, [fetchAllUsers, page, perPage, sortField, sortOrder])
 
     const [tableFields] = useState([
         {
@@ -29,12 +49,13 @@ const AdminUsersTable = ({users, selectUser, push, allGroups}) => {
         {
             name: 'email',
             title: 'E-mail',
+            sort: true,
         },
         {
             name: 'phone',
             title: 'Telefon',
         },
-        { 
+        {
             name: 'groupId',
             title: 'Grupa',
             // slot: 'group',
@@ -74,15 +95,26 @@ const AdminUsersTable = ({users, selectUser, push, allGroups}) => {
     //     return output;
     // }
 
-    
+
+    const editUser = (user) => {
+        selectUser(user);
+        push(RouteLink.ManageUser);
+    }
+
     // const groupArray = getGroupArray(allGroups);
     // let groupMap = new Map(groupArray.map(group => [group.groupId, group]));
 
-
+    const handleSort = (field, order) => {
+        setUsersSort({ sortField: field, sortOrder: order });
+    }
 
     return (
         <div className='admin-users-table'>
             <CustomTable data={users}
+                         async={async}
+                         activeSortField={sortField}
+                         activeSortOrder={sortOrder}
+                         handleSort={handleSort}
                          fields={tableFields}>
                 {/* { <TableSlot slot='group' render={user => (
                         <span className="path">
@@ -96,14 +128,27 @@ const AdminUsersTable = ({users, selectUser, push, allGroups}) => {
 
 
             </CustomTable>
-            {/*
-                <CustomPagination totalCount={deviceTable.totalCount}
-                                  page={deviceTable.page}
-                                  perPage={deviceTable.perPage}
-                                  handleChangePage={handleChangePage}
-                                  handleChangePerPage={handleChangePerPage}
-                /> */}
+            <CustomPagination totalCount={totalCount}
+                              page={page}
+                              perPage={perPage}
+                              handleChangePage={setUsersPage}
+                              handleChangePerPage={setUsersPerPage}
+            />
         </div>
     )
 }
-export default connect(state => ({allGroups: state.groups.groups,}), {selectUser, push})(AdminUsersTable);
+export default connect(state => {
+
+    const { users, totalCount, page, perPage, async, sortField, sortOrder } = state.users;
+
+    return {
+        allGroups: state.groups.groups,
+        users,
+        totalCount,
+        page,
+        perPage,
+        async,
+        sortField,
+        sortOrder
+    }
+}, { selectUser, push, setUsersPage, setUsersPerPage, fetchAllUsers, setUsersSort })(AdminUsersTable);
