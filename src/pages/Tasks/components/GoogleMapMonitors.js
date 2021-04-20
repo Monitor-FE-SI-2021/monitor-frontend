@@ -1,18 +1,10 @@
-import {render} from '@testing-library/react';
 import React, {Component, useState} from 'react';
 import {withGoogleMap, GoogleMap, Marker, InfoWindow} from "react-google-maps"
 import request from "../../../service";
-import userTaskTrackers from "../../../service";
-import './GoogleMapMonitors.scss';
-//import request from "/../../../service";
-import MarkerWithLabel from "react-google-maps/lib/components/addons/MarkerWithLabel";
 
-
-const yellowMarkerURL = "http://maps.google.com/mapfiles/ms/micons/yellow-dot.png"
 
 async function taskData(id){
-    const res = await request("https://si-2021.167.99.244.168.nip.io/api/UserTasks/Admin/"+id);
-    
+    const res = await request("https://si-2021.167.99.244.168.nip.io/api/UserTasks/Admin/"+id);    
     return res.data.data;
 }
 
@@ -29,6 +21,15 @@ function compareTrackersByTime( a, b ) {
 
 function sortTrackersByTime(trackers) {
     return trackers.sort(compareTrackersByTime);
+}
+
+function filterTrakersLastWeek(trackers) {
+    let seventhDay = new Date();
+    seventhDay.setDate(seventhDay.getDate() - 7);
+
+    return trackers.filter((tracker) => {
+        return new Date(tracker.time).getTime() >= seventhDay.getTime();
+    });
 }
 
 function setNonLeapingLocations(trackers) {
@@ -57,6 +58,9 @@ class GoogleMapMonitors extends Component {
             for(let tracker of task.userTrackers)
                 allTrackers.push(tracker);
         }
+        console.log("Prije filtriranja");
+        console.log(allTrackers);
+        allTrackers = filterTrakersLastWeek(allTrackers);
         sortTrackersByTime(allTrackers);
         console.log("EVO SVIH TRACKERA ZA USERA, POREDANI PO VREMENU CHECK INA");
         console.log(allTrackers);
@@ -110,16 +114,14 @@ class GoogleMapMonitors extends Component {
 
 
         return (
-        <div className="map-wrapper">
-            <div className="map-wrapper">
+        <div>
             <MyMapComponent
                 googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyDqy4jIX3sEoscEfuE-stH6oWMHNLaQIs8&v=3.exp&libraries=geometry,drawing,places"
                 loadingElement={<div style={{ height: "100%" }} />}
-                containerElement={<div style={{ height: "400px" }} />}
+                containerElement={<div style={{ height: "350px" }} />}
                 mapElement={<div style={{ height: "100%", width:"100%", borderRadius: "25px", border: "1px solid #ccc" }} />}
             />
-            </div>
-            </div>
+        </div>
         );
     }
 

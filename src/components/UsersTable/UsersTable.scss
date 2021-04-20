@@ -5,7 +5,7 @@
 
   .tableWrap {
     overflow-y: scroll;
-    max-height: 600px;
+    max-height: 760px;
     width: 25%;
     float: left;
 
@@ -26,6 +26,7 @@
       border-right: 1px solid;
       border-left: 1px solid;
       border-color: grey;
+      width: 100%;
     }
   }
 
@@ -47,6 +48,6 @@
   .map {
     width: 73%;
     float: right;
-    margin-top: 5%;
+    margin-top: 1%;
   }
 }
