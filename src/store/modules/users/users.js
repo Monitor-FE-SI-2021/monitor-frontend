@@ -4,7 +4,9 @@ import {
     SELECT_USER,
     SET_USERS_PAGE,
     SET_USERS_PER_PAGE,
-    SET_USERS_TOTAL_COUNT, SET_USERS_SORT
+    SET_USERS_TOTAL_COUNT,
+    SET_USERS_SORT,
+    SET_USERS_SEARCH_TEXT
 } from "./types"
 
 const initialState = {
@@ -14,7 +16,9 @@ const initialState = {
     totalCount: 1,
     sortField: 'name',
     sortOrder: 'desc',
-    users: []
+    searchText: '',
+    users: [],
+    selectedUser: null,
 }
 
 const ACTION_HANDLERS = {
@@ -62,6 +66,12 @@ const ACTION_HANDLERS = {
             ...state,
             sortField,
             sortOrder
+        }
+    },
+    [SET_USERS_SEARCH_TEXT]: (state, { searchText }) => {
+        return {
+            ...state,
+            searchText
         }
     }
 }

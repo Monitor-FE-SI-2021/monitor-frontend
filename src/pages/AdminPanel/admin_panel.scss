@@ -14,7 +14,6 @@
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 10px;
 
         .page-title {
             font-size: 28px;
@@ -25,8 +24,7 @@
 
     .search {
         width: 25%;
-        margin-right: 10px;
-        margin-top: 10px;
+        margin: 10px 10px 20px 0;
         border-radius: 12px;
         -webkit-transition: 1s;
         transition: 1s;

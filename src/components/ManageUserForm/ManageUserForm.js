@@ -47,6 +47,7 @@ const MangeUserForm = ({ selectedUser, push, groupOptions, fetchAllGroupsForAdmi
 
     const transformUserToForm = (user) => {
 
+        console.log(user);
         const form = cloneDeep(user);
 
         form.name = user.name;
@@ -59,6 +60,9 @@ const MangeUserForm = ({ selectedUser, push, groupOptions, fetchAllGroupsForAdmi
         form.passwordRepeat = "";   // temp
         form.roleId = user.roleId;
         form.groupId = user.groupId;
+
+        console.log(form);
+
         return form;
     }
 

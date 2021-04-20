@@ -5,14 +5,15 @@ import {
     SELECT_USER,
     SET_USERS_PAGE,
     SET_USERS_PER_PAGE,
-    SET_USERS_SORT
+    SET_USERS_SORT,
+    SET_USERS_SEARCH_TEXT
 } from './types'
 
 export function fetchAllUsers() {
 
     return (dispatch, getState) => {
 
-        const { page, perPage, sortField, sortOrder, async } = getState().users;
+        const { page, perPage, sortField, sortOrder, async, searchText} = getState().users;
 
         if (async) {
             return;
@@ -22,7 +23,9 @@ export function fetchAllUsers() {
             enable_pagination: 'true',
             page: page || 1,
             per_page: perPage || 10,
-            // name: searchText ?? '',
+            name: searchText ?? '',
+            last_name: searchText ?? '',
+            email: searchText ?? '',
             sort_by: `${sortField}_${sortOrder}`
         }
 
@@ -54,7 +57,6 @@ export function selectUser(user) {
 }
 
 export function setUsersPage(page) {
-    console.log(page);
     return dispatch => {
         dispatch({
             type: SET_USERS_PAGE,
@@ -78,6 +80,15 @@ export function setUsersSort({ sortField, sortOrder }) {
             type: SET_USERS_SORT,
             sortField,
             sortOrder
+        })
+    }
+}
+
+export function searchUsers(searchText) {
+    return dispatch => {
+        dispatch({
+            type: SET_USERS_SEARCH_TEXT,
+            searchText
         })
     }
 }

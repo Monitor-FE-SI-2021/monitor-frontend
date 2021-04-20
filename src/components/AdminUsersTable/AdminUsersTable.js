@@ -1,7 +1,7 @@
 import './AdminUsersTable.scss';
 import { connect } from "react-redux";
 import { Edit } from "@material-ui/icons";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import CustomTable, { TableSlot } from "../CustomTable/CustomTable";
 import {
     fetchAllUsers,
@@ -13,6 +13,7 @@ import {
 import { push } from "connected-react-router";
 import { RouteLink } from "../../store/modules/menu/menu";
 import CustomPagination from "../CustomTable/components/CustomPagination";
+import { debounce } from "lodash/function";
 
 const AdminUsersTable = ({
                              users,
@@ -27,13 +28,25 @@ const AdminUsersTable = ({
                              async,
                              sortField,
                              sortOrder,
+                             searchText,
                              setUsersSort,
                              fetchAllUsers
                          }) => {
 
+    const fetchData = () => fetchAllUsers();
+
+    const fetchDataDebounced = useCallback(
+        debounce(fetchData, 400),
+        []
+    );
+
     useEffect(() => {
         fetchAllUsers();
-    }, [fetchAllUsers, page, perPage, sortField, sortOrder])
+    }, [page, perPage, sortField, sortOrder])
+
+    useEffect(() => {
+        fetchDataDebounced();
+    }, [searchText])
 
     const [tableFields] = useState([
         {
@@ -139,7 +152,7 @@ const AdminUsersTable = ({
 }
 export default connect(state => {
 
-    const { users, totalCount, page, perPage, async, sortField, sortOrder } = state.users;
+    const { users, totalCount, page, perPage, async, sortField, sortOrder, searchText } = state.users;
 
     return {
         allGroups: state.groups.groups,
@@ -149,6 +162,7 @@ export default connect(state => {
         perPage,
         async,
         sortField,
-        sortOrder
+        sortOrder,
+        searchText
     }
 }, { selectUser, push, setUsersPage, setUsersPerPage, fetchAllUsers, setUsersSort })(AdminUsersTable);
