@@ -55,9 +55,6 @@ const DeviceTable = ({
 
     const deviceTableKey = group ? group.groupId : ALL_DEVICES_TABLE_KEY;
 
-   
-
-
     const editDevice = (device) => {
         selectDevice(device);
         push(RouteLink.ManageDevice);
