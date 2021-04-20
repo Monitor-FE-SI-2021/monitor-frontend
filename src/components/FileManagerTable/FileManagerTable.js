@@ -236,20 +236,25 @@ class FileManagerTable extends React.Component {
         if (file.data.type == 'file') {
             if (file.data.extension == '.txt' || file.data.extension == '.log' || file.data.extension == '.html' || file.data.extension == '.xml') {
                 //Kliknut file
-                var text = await this.getText(file);
-
+                var text = await this.getBase64File(file);
+                var decodedString = atob(text);
                 var myWindow = window.open("", "textField", "width=600,height=600");
                 myWindow.document.open();
-                myWindow.document.write(text);
+                myWindow.document.write(decodedString);
             } else if (file.data.extension == '.jpg' || file.data.extension == '.png' || file.data.extension == '.jpeg') {
-                var picture = await this.getPicture(file);
+                var picture = await this.getBase64File(file);
                 var imageSource = "data:image/jpeg;base64," + picture;
                 window.open(imageSource, "image", "width=600,height=600");
-            } else {
+            } else if (file.data.extension == '.pdf') {
+                var b64 = await this.getBase64File(file);
+                var pdfFile = "data:application/pdf;base64," + b64;
+                const objType = 'application/pdf';
+                var openPdf = window.open("", "", "width=600,height=600");
+                openPdf.document.write('<object style="width: 100%; height: 100%" data= ' + pdfFile + ' type = ' + objType + '></object>')
+            }
+            else {
                 return;
             }
-
-
         } else {
             //Kliknut folder
             this.state.activeFolder += '/' + file.data.name;
@@ -754,8 +759,7 @@ class FileManagerTable extends React.Component {
 
     }
 
-    getPicture = async (file) => {
-        // var image;
+    getBase64File = async (file) => {
         try {
             const requestOptions = {
                 method: "POST",
