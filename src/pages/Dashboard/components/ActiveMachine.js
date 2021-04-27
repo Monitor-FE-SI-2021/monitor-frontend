@@ -64,6 +64,10 @@ const ActiveMachine = ({data, img, onDisconnect, getStatistics, sDate, eDate, us
                 <div className="card-actions">
                     <button id="configuration"
                         onClick={() => {
+                            if (user.email !== data.user) {
+                                showSwalToast("Device already in use.")
+                                return
+                            }
                             configurationOpen ? popup.current.focus() : setConfigurationOpen(true)
                             getConfiguration(data)
                         }}
