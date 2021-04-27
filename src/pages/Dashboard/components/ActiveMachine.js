@@ -5,19 +5,35 @@ import NewWindow from '../../../components/NewWindow/NewWindow';
 import RemoteAccess from '../../RemoteAccess/RemoteAccess.js';
 import Avatar from "./MachineAvatar.js";
 import { showSwalToast } from "../../../utils/utils";
+import {Spinner} from "../../../components/Spinner/Spinner";
 
 
 import './ActiveMachine.scss';
+import request from "../../../service";
 
-const ActiveMachine = ({data, img, onDisconnect, getStatistics, sDate, eDate, user, getConfiguration}) => {
+
+const ActiveMachine = ({data, img, onDisconnect, getStatistics, sDate, eDate, user}) => {
     const [remoteAccessOpen, setRemoteAccessOpen] = useState(false);
+    const [async, setAsync] = React.useState(false)
     const [configurationOpen, setConfigurationOpen] = useState(false)
+    const [configString, setConfigString] = useState("")
     const popup = useRef();
 
     const handleOnClick = debounce(
         () => getStatistics(data, sDate, eDate),
         300
     );
+
+    function getConfiguration(machine) {
+        setAsync(true)
+        request("https://si-grupa5.herokuapp.com/api/agent/info/system", "POST", {
+            deviceUid: machine.deviceUid,
+        })
+            .then((res) => setConfigString(res.data.message.replace(/\\n/g, "\n").replace(/\\r/g, "\r")))
+            .catch((err) => console.log(err))
+            .finally(() => setAsync(false))
+        console.log(configString)
+    }
     
     return (
         <>
@@ -82,10 +98,12 @@ const ActiveMachine = ({data, img, onDisconnect, getStatistics, sDate, eDate, us
                         title={`Configuration - ${data.name} (${data.location})`}
                         ref={popup}
                     >
-                        <div>
-                            <h3>CPU</h3>
-                            <p>podaci vezani za cpu</p>
-                        </div>
+                        {async ? <Spinner/> :
+                            <div>
+                                <h3>Desktop configuration</h3>
+                                <pre>{configString}</pre>
+                            </div>
+                        }
                     </NewWindow>
                 )
             }

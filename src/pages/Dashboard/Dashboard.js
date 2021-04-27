@@ -84,8 +84,6 @@ function convertStatistics(statistic) {
     return [Math.round(statistic * 100), Math.round((1 - statistic) * 100)];
 }
 
-
-
 const allMachinesString = "All machines"
 
 let removedMachine = null
@@ -120,11 +118,15 @@ const Dashboard = ({ user }) => {
     var [chartType, setChartType] = React.useState(true)
 
     function getConfiguration(machine) {
+        let configString = ""
         request("https://si-grupa5.herokuapp.com/api/agent/info/system", "POST", {
             deviceUid: machine.deviceUid,
         })
-            .then((res) => console.log(res))
+            .then((res) => { configString = res.data.message.replace(/\\n/g, "\n").replace(/\\r/g, "\r")
+            console.log(configString)})
             .catch((err) => console.log(err))
+        console.log(configString)
+        return configString
     }
     
     function filterActive(activeMachines, allMachines) {
@@ -140,6 +142,8 @@ const Dashboard = ({ user }) => {
             return existingMachine;
         }) : [];
     }
+
+   // console.log(configString.replace(/\\n/g, "\n").replace(/\\r/g, "\r"))
 
     function getStatistics(machine, startDate, endDate) {
         request(errors + "/DateInterval?DeviceUID=" + machine.deviceUid + "&StartDate=" + startDate + "&EndDate" + endDate)
@@ -290,7 +294,7 @@ const Dashboard = ({ user }) => {
                                     sDate={startDate.toISOString()}
                                     eDate={endDate.toISOString()}
                                     user={user}
-                                    getConfiguration={getConfiguration}
+                                    //getConfiguration={getConfiguration}
                                 />
                             ))
                         ) : (
