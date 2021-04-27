@@ -9,7 +9,13 @@
 .card:hover {
 	background-color: #ffffff;
 }
-
+pre{
+	font-family: Consolas;
+	margin-left: 5px
+	}
+.conf h3{
+	margin-left: 5px
+}
 .img-info {
 	display: flex;
 	height: 140px;

@@ -99,7 +99,7 @@ const ActiveMachine = ({data, img, onDisconnect, getStatistics, sDate, eDate, us
                         ref={popup}
                     >
                         {async ? <Spinner/> :
-                            <div>
+                            <div className="conf">
                                 <h3>Desktop configuration</h3>
                                 <pre>{configString}</pre>
                             </div>
