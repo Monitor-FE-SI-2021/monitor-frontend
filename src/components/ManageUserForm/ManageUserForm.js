@@ -26,6 +26,7 @@ const MangeUserForm = ({ selectedUser, push, groupOptions, fetchAllGroupsForAdmi
         groupId: ""
     }
 
+    const [addEditAsync, setAddEditAsync] = useState(false);
     const [editMode, setEditMode] = useState(false);
     const [values, setValues] = useState(initialValues)
     const [errors, setErrors] = useState({})
@@ -156,19 +157,23 @@ const MangeUserForm = ({ selectedUser, push, groupOptions, fetchAllGroupsForAdmi
 
         const userData = transformFormToUser(values);
 
+        if (addEditAsync) return;
+
         console.log(userData);
 
         if (validate()) {
+
+            setAddEditAsync(true);
 
             if (editMode === true) {
 
                 request(authEndpoint + `/User/Update`, 'PUT', userData)
                     .then(r => {
                         console.log(r.data);
-                        showSwalToast(`Uspješno izmijenjen korisnik '${userData.Name}'`, 'success');
+                        showSwalToast(`Uspješno izmijenjen korisnik '${userData.name}'`, 'success');
                     }).then(() => {
                     push(RouteLink.AdminPanel);
-                })
+                }).finally(() => setAddEditAsync(false))
             } else {
                 // request(users + `/CreateNew?userId=${userId}`, 'POST', userData)
                 //     .then(r => {
@@ -250,7 +255,7 @@ const MangeUserForm = ({ selectedUser, push, groupOptions, fetchAllGroupsForAdmi
 
             <div className='buttons'>
                 <button className="custom-btn outlined" onClick={() => push(RouteLink.AdminPanel)}>Otkaži</button>
-                <AsyncButton className="custom-btn" onClick={handleSubmit}>
+                <AsyncButton className="custom-btn" onClick={handleSubmit} async={addEditAsync}>
                     {editMode === true ? "Izmijeni korisnika" : "Kreiraj korisnika"}
                 </AsyncButton>
             </div>

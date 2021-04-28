@@ -90,6 +90,11 @@ const AdminUsersTable = ({
             slot: 'group',
         },
         {
+            name: 'role',
+            title: 'Role',
+            slot: 'role',
+        },
+        {
             name: 'actions',
             title: 'Akcije',
             width: '20%',
@@ -142,7 +147,9 @@ const AdminUsersTable = ({
     }
 
     const getRoleName = (user) => {
-        return allRoles.find(r => r.roleId === user.roleId)
+        console.log(user);
+        console.log(allRoles);
+        return allRoles.find(r => r.roleId === user.roleId)?.name || ''
     }
 
     return (
@@ -156,6 +163,10 @@ const AdminUsersTable = ({
                 <TableSlot slot='group' render={user => (
                     <span className="path">
                             {getUserGroupPath(user.groupId?.[0] || user.groupId, '', groupMap)}
+                        </span>)}/>
+                <TableSlot slot='role' render={user => (
+                    <span className="role-name">
+                        {getRoleName(user)}
                         </span>)}/>
                 <TableSlot slot='actions' render={dataRow => (
                     <div className='actions'>
