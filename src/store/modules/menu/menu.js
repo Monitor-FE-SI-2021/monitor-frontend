@@ -1,3 +1,5 @@
+import { ROLE_ACCESS_LEVELS } from "../../../utils/consts";
+
 export const SET_MENU_EXPANDED = 'SET_MENU_EXPANDED';
 
 export const RouteLink = {
@@ -52,13 +54,15 @@ const initialState = {
         },
         {
             link: RouteLink.Tasks,
-            name: "Users",
+            name: "Tasks",
             icon: "",
+            accessLevel: ROLE_ACCESS_LEVELS.MonitorSuperAdmin
         },
         {
             link: RouteLink.AdminPanel,
-            name: "Admin Panel",
+            name: "Users",
             icon: "",
+            accessLevel: ROLE_ACCESS_LEVELS.MonitorSuperAdmin
         }
     ],
 };

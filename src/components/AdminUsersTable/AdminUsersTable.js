@@ -14,6 +14,8 @@ import { push } from "connected-react-router";
 import { RouteLink } from "../../store/modules/menu/menu";
 import CustomPagination from "../CustomTable/components/CustomPagination";
 import { debounce } from "lodash/function";
+import { fetchAllGroupsForAdmin } from "../../store/modules/groups/actions";
+import request, { roles } from "../../service";
 
 const AdminUsersTable = ({
                              users,
@@ -30,8 +32,12 @@ const AdminUsersTable = ({
                              sortOrder,
                              searchText,
                              setUsersSort,
-                             fetchAllUsers
+                             fetchAllUsers,
+                             fetchAllGroupsForAdmin
                          }) => {
+
+    const [allRoles, setAllRoles] = useState([])
+    const [rolesAsync, setRolesAsync] = useState(false);
 
     const fetchData = () => fetchAllUsers();
 
@@ -39,6 +45,20 @@ const AdminUsersTable = ({
         debounce(fetchData, 400),
         []
     );
+
+    useEffect(() => {
+        fetchAllGroupsForAdmin();
+
+        setRolesAsync(true);
+        request(roles + `/GetRoles`, 'GET')
+            .then(response => response.data)
+            .then(r => {
+                setAllRoles(r.data)
+            })
+            .finally(() => {
+                setRolesAsync(false);
+            })
+    }, [])
 
     useEffect(() => {
         fetchAllUsers();
@@ -65,13 +85,9 @@ const AdminUsersTable = ({
             sort: true,
         },
         {
-            name: 'phone',
-            title: 'Telefon',
-        },
-        {
             name: 'groupId',
             title: 'Grupa',
-            // slot: 'group',
+            slot: 'group',
         },
         {
             name: 'actions',
@@ -82,31 +98,38 @@ const AdminUsersTable = ({
         }]
     );
 
-    // const getDevicePath = (groupId,path,groups) =>{
-    //     if(!groups.get(groupId).parentGroupId) {
-    //         return path.map((item,index) => {
-    //             return <span key={index}>{item}</span>
-    //         })
-    //     }
-    //     if(path === ''){
-    //         path = [<b>{groups.get(groupId).name}</b>];
-    //     } else {
-    //         path = [groups.get(groupId).name + ' / ' ,...path];
-    //     }
-    //     return getDevicePath(groups.get(groupId).parentGroupId,path,groups);
-    // }
+    // TODO, SIMPLIFY THIS --------------
 
-    // const getGroupArray = groups => {
-    //     if(!groups) return [];
-    //     let output = [];
-    //     if(!groups.parentGroupId){
-    //         output = [...output,groups];
-    //     }
-    //     groups.subGroups.forEach(group => {
-    //         output = [...output, group, ...getGroupArray(group)];
-    //     })
-    //     return output;
-    // }
+    const getGroupArray = groups => {
+        if (!groups || JSON.stringify(allGroups) === '{}') return [];
+        let output = [];
+        if (!groups.parentGroupId) {
+            output = [...output, groups];
+        }
+        groups.subGroups.forEach(group => {
+            output = [...output, group, ...getGroupArray(group)];
+        })
+        return output;
+    }
+
+    const groupArray = getGroupArray(allGroups);
+    let groupMap = new Map(groupArray.map(group => [group.groupId, group]));
+
+    const getUserGroupPath = (groupId, path, groups) => {
+        if (!groups.get(groupId)?.parentGroupId && Array.isArray(path)) {
+            return path.map((item, index) => {
+                return <span key={index}>{item}</span>
+            })
+        }
+        if (path === '') {
+            path = [<b>{groups.get(groupId)?.name}</b>];
+        } else {
+            path = [groups.get(groupId)?.name + ' / ', ...path];
+        }
+        return getUserGroupPath(groups.get(groupId)?.parentGroupId, path, groups);
+    }
+
+    // TODO --------------
 
 
     const editUser = (user) => {
@@ -114,25 +137,26 @@ const AdminUsersTable = ({
         push(RouteLink.ManageUser);
     }
 
-    // const groupArray = getGroupArray(allGroups);
-    // let groupMap = new Map(groupArray.map(group => [group.groupId, group]));
-
     const handleSort = (field, order) => {
         setUsersSort({ sortField: field, sortOrder: order });
+    }
+
+    const getRoleName = (user) => {
+        return allRoles.find(r => r.roleId === user.roleId)
     }
 
     return (
         <div className='admin-users-table'>
             <CustomTable data={users}
-                         async={async}
+                         async={async || rolesAsync}
                          activeSortField={sortField}
                          activeSortOrder={sortOrder}
                          handleSort={handleSort}
                          fields={tableFields}>
-                {/* { <TableSlot slot='group' render={user => (
-                        <span className="path">
-                            {getDevicePath(user.groupId,'',groupMap)}
-                        </span>)}/>              } */}
+                <TableSlot slot='group' render={user => (
+                    <span className="path">
+                            {getUserGroupPath(user.groupId?.[0] || user.groupId, '', groupMap)}
+                        </span>)}/>
                 <TableSlot slot='actions' render={dataRow => (
                     <div className='actions'>
                         <Edit className='edit-btn' onClick={() => editUser(dataRow)}/>
@@ -165,4 +189,12 @@ export default connect(state => {
         sortOrder,
         searchText
     }
-}, { selectUser, push, setUsersPage, setUsersPerPage, fetchAllUsers, setUsersSort })(AdminUsersTable);
+}, {
+    selectUser,
+    push,
+    setUsersPage,
+    setUsersPerPage,
+    fetchAllUsers,
+    setUsersSort,
+    fetchAllGroupsForAdmin
+})(AdminUsersTable);

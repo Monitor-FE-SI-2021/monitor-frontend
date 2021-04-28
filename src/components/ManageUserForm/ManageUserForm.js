@@ -6,11 +6,12 @@ import { push } from "connected-react-router";
 import { AsyncButton } from "../AsyncButton/AsyncButton";
 import "../ManageDeviceForm/ManageDeviceForm.scss"
 import validator from "validator/es";
-import request, { roles } from "../../service";
+import request, { authEndpoint, roles, users } from "../../service";
 import { fetchAllGroupsForAdmin } from "../../store/modules/groups/actions";
 import { cloneDeep } from "lodash";
 import { selectUser } from "../../store/modules/users/actions";
 import { Spinner } from "../Spinner/Spinner";
+import { showSwalToast } from "../../utils/utils";
 
 const MangeUserForm = ({ selectedUser, push, groupOptions, fetchAllGroupsForAdmin, selectUser, groupsAsync }) => {
 
@@ -61,21 +62,19 @@ const MangeUserForm = ({ selectedUser, push, groupOptions, fetchAllGroupsForAdmi
         form.roleId = user.roleId;
         form.groupId = user.groupId;
 
-        console.log(form);
-
         return form;
     }
 
 
     const transformFormToUser = (form) => {
         return {
-            Name: form.name ?? '',
-            LastName: form.lastname ?? '',
-            Email: form.email ?? '',
-            Phone: form.phone ?? '',
-            Password: form.password ?? '',
-            RoleId: form.roleId,
-            GroupId: form.groupId
+            name: form.name ?? '',
+            lastname: form.lastname ?? '',
+            email: form.email ?? '',
+            phone: form.phone ?? '',
+            roleId: form.roleId,
+            groupId: form.groupId?.[0] || form.groupId,
+            userId: form.userId,
         }
     }
 
@@ -132,8 +131,6 @@ const MangeUserForm = ({ selectedUser, push, groupOptions, fetchAllGroupsForAdmi
         else
             temp.phone = ""
 
-        temp.password = values.password ? "" : emptyFieldError
-        temp.passwordRepeat = values.passwordRepeat ? "" : emptyFieldError
         if (!values.passwordRepeat.match(values.password)) {
             temp.passwordRepeat = "Polje nije saglasno sa poljem Šifra"
         }
@@ -161,35 +158,27 @@ const MangeUserForm = ({ selectedUser, push, groupOptions, fetchAllGroupsForAdmi
 
         console.log(userData);
 
-        const userId = userData.UserId;
-
-        delete userData.UserId;
-
         if (validate()) {
 
-            // if (editMode === true) {
-            //
-            //     request(users + `/Update?userId=${userId}`, 'PUT', userData)
-            //         .then(r => {
-            //             console.log(r.data);
-            //             showSwalToast(`Uspješno izmijenjen korisnik '${userData.Name}'`, 'success');
-            //             setValues(initialValues);
-            //         }).finally(() => {
-            //         push(RouteLink.AdminPanel);
-            //     })
-            // } else {
-            //
-            //
-            //     request(users + `/CreateNew?userId=${userId}`, 'POST', userData)
-            //         .then(r => {
-            //             console.log(r.data);
-            //             showSwalToast(`Uspješno kreiran korisnik '${userData.Name}'`, 'success');
-            //             setValues(initialValues);
-            //         }).finally(() => {
-            //         push(RouteLink.AdminPanel);
-            //     })
-            //
-            // }
+            if (editMode === true) {
+
+                request(authEndpoint + `/User/Update`, 'PUT', userData)
+                    .then(r => {
+                        console.log(r.data);
+                        showSwalToast(`Uspješno izmijenjen korisnik '${userData.Name}'`, 'success');
+                    }).then(() => {
+                    push(RouteLink.AdminPanel);
+                })
+            } else {
+                // request(users + `/CreateNew?userId=${userId}`, 'POST', userData)
+                //     .then(r => {
+                //         console.log(r.data);
+                //         showSwalToast(`Uspješno kreiran korisnik '${userData.Name}'`, 'success');
+                //         setValues(initialValues);
+                //     }).finally(() => {
+                //     push(RouteLink.AdminPanel);
+                // })
+            }
         }
     }
 
