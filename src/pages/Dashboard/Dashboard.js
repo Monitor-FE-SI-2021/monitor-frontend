@@ -195,7 +195,7 @@ const Dashboard = ({ user }) => {
                 const allMachines = res.data.data;
                 setMachines(allMachines);
                 setAsync(true)
-                request("https://si-grupa5.herokuapp.com/api/agent/online")
+                request("https://si-grupa5.herokuapp.com/api/agents/online")
                     .then((res) => {
                         setActive(filterActive(res?.data, allMachines));
                     })

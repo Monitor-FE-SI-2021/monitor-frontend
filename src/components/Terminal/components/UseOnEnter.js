@@ -32,7 +32,7 @@ const UseOnEnter = () => {
   const [savedLogs, setSavedLogs] = React.useState([]);
   const [counter, setCounter] = React.useState(0);
 
-  const onEnter = async (value, key, name, path) => {
+  const onEnter = async (value, key, name, path, restartCommand, setRestartCommand) => {
     
     if (key === "Enter") {
       //console.log("Proba")
@@ -42,35 +42,67 @@ const UseOnEnter = () => {
       
       if(value==="")
       return updateConsoleOutput(consoleOutput => consoleOutput.concat(""))
+
       
-      setSavedLogs(savedLogs => savedLogs.concat(newInput))
+      
+      //setSavedLogs(savedLogs => savedLogs.concat(newInput))
       let newInput2 = newInput.replace(/ +/g, ' ').trim();
-      newInput=path.concat("> ").concat(value)
+      //console.log("OVDJE VALJA", restartCommand)
+      if(restartCommand.length==1){
+        //console.log("DOSO TUTUTUT")
+        newInput="Unesite username: ".concat(value)
+        newInput2 = "*"
+      }
+      else if(restartCommand.length==2){
+        let zamjena = "****"
+        newInput="Unesite password: ".concat(zamjena)
+        newInput2 = "*"
+      }
+      else{
+        //console.log("DOSO DJE NE VALJA")
+        newInput=path.concat("> ").concat(value)
+      }
       updateConsoleOutput(consoleOutput => consoleOutput.concat(newInput))
+
+      if(value=="shutdown -r")
+        newInput2 = "*"
+
+      if(value=="shutdown -r" || restartCommand.length!=0){
+        setRestartCommand([...restartCommand, value]);
+      }
       
-      console.log(newInput2)
+      //console.log(newInput2)
       let args = newInput2.split(" ");
 
       const argument = String(commands[args[0]]);
 
       const newConsoleLine = String(commands[args[0]]) || "Invalid Command";
       //newInput2 = "\""+newInput2 + "\""
-      console.log("Input ", newConsoleLine)
+      //console.log("Input ", newConsoleLine)
       
       if(newConsoleLine==="Invalid Command"){
       return updateConsoleOutput(consoleOutput =>
         consoleOutput.concat("Invalid Command"), setCounter(brojac=>brojac+1)
       )}
         //console.log("Name ", name)
+
       if(args.length>1){
         // addNewLog({
         //   command_type: args[0].toString(),
         //   args: args[1].toString(),
         //   response: ""
         // }, name)
-        window.localStorage.setItem("command_type", args[0].toString())
-        window.localStorage.setItem("args", args[1].toString())
+        
+        if(newInput2!="*"){
+          window.localStorage.setItem("command_type", args[0].toString())
+          window.localStorage.setItem("args", args[1].toString())
         return updateConsoleOutput(consoleOutput => consoleOutput.concat("Valid Command!" + args[0].toString() + " " + args[1].toString() + "!")),setCounter(counter=>counter+1); 
+        }
+        else{
+          window.localStorage.setItem("command_type", "shutdown -r");
+          window.localStorage.setItem("args", "")
+        return updateConsoleOutput(consoleOutput => consoleOutput.concat(" "),setCounter(counter=>counter+1));
+        }
       }
       else {
         // addNewLog({
@@ -78,9 +110,17 @@ const UseOnEnter = () => {
         //   args: "",
         //   response: ""
         // }, name)
-        window.localStorage.setItem("command_type", args[0].toString())
-        window.localStorage.setItem("args", "")
-        return updateConsoleOutput(consoleOutput => consoleOutput.concat("Valid Command!" + args[0].toString() + "!")),setCounter(counter=>counter+1); 
+        
+        if(newInput2!="*"){
+          window.localStorage.setItem("command_type", args[0].toString())
+          window.localStorage.setItem("args", "")
+        return updateConsoleOutput(consoleOutput => consoleOutput.concat("Valid Command!" + args[0].toString() + "!")),setCounter(counter=>counter+1); }
+        else{
+          window.localStorage.setItem("command_type", "shutdown -r");
+          window.localStorage.setItem("args", "")
+          
+          return updateConsoleOutput(consoleOutput => consoleOutput.concat(" "),setCounter(counter=>counter+1));
+        }
       }
     }
   };

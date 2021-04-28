@@ -15,7 +15,9 @@ const MapConsoleOutput = ({
   id,
   setPut,
   user,
-  setTabCommands
+  setTabCommands,
+  restartCommands,
+  setRestartCommands
 }) => {
   const scrollRef = React.useRef();
 
@@ -28,14 +30,27 @@ const MapConsoleOutput = ({
     if (consoleOutput.length > 1) {
       //console.log( consoleOutput[consoleOutput.length-1])
       if (consoleOutput[consoleOutput.length - 1]) {
+      
         let item = consoleOutput[consoleOutput.length - 1].toString();
-  
         const isCommandValid = item.includes("Valid Command!");
-        if (isCommandValid) {
-          const command = item.toString().split("!")[1];
+        //console.log("RESTART2 ", restartCommands);
+        if ((isCommandValid && restartCommands.length==0) || restartCommands.length==3) {
+          let command = item.toString().split("!")[1];
           console.log("Item string ", command);
-          console.log("Path ", path)
-  
+          //console.log("Path ", path)
+          
+          if(restartCommands.length==3){
+            //console.log("STIGO BGM")
+            command = restartCommands.join().replace(/,/g, ' ');
+            setRestartCommands([])
+            //setRestartCommands(restartCommands.pop());
+            // setRestartCommands(restartCommands.pop());
+            // setRestartCommands(restartCommands.pop());
+            
+            //console.log("Komanda ", command);
+            
+          }
+          console.log("Komanda: ", command)
            request(wsEndpoint + "/agent/command", "POST", {
             deviceUid: id,
             command: command,
