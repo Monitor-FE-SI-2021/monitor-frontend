@@ -76,6 +76,7 @@ const MangeUserForm = ({ selectedUser, push, groupOptions, fetchAllGroupsForAdmi
             roleId: form.roleId,
             groupId: form.groupId?.[0] || form.groupId,
             userId: form.userId,
+            password: form.password ?? '',
         }
     }
 
@@ -169,20 +170,20 @@ const MangeUserForm = ({ selectedUser, push, groupOptions, fetchAllGroupsForAdmi
 
                 request(authEndpoint + `/User/Update`, 'PUT', userData)
                     .then(r => {
-                        console.log(r.data);
                         showSwalToast(`Uspješno izmijenjen korisnik '${userData.name}'`, 'success');
                     }).then(() => {
+                }).finally(() => {
+                    setAddEditAsync(false)
                     push(RouteLink.AdminPanel);
-                }).finally(() => setAddEditAsync(false))
+                })
             } else {
-                // request(users + `/CreateNew?userId=${userId}`, 'POST', userData)
-                //     .then(r => {
-                //         console.log(r.data);
-                //         showSwalToast(`Uspješno kreiran korisnik '${userData.Name}'`, 'success');
-                //         setValues(initialValues);
-                //     }).finally(() => {
-                //     push(RouteLink.AdminPanel);
-                // })
+                request(authEndpoint + `/User/CreateNew`, 'POST', userData)
+                    .then(r => {
+                        showSwalToast(`Uspješno kreiran korisnik '${userData.name}'`, 'success');
+                    }).finally(() => {
+                    setAddEditAsync(false)
+                    push(RouteLink.AdminPanel);
+                })
             }
         }
     }
