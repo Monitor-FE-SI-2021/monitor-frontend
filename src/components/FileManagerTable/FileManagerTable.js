@@ -234,14 +234,27 @@ class FileManagerTable extends React.Component {
     handleClick = async (selectedId) => {
         var file = this.state.responseObject.find(file => file.id == selectedId);
         if (file.data.type == 'file') {
-            if (file.data.extension != '.txt') return;
-
-            //Kliknut file
-            var text = await this.getText(file);
-
-            var myWindow = window.open("", "textFeild", "width=600,height=600");
-            myWindow.document.open();
-            myWindow.document.write(text);
+            if (file.data.extension == '.txt' || file.data.extension == '.log' || file.data.extension == '.html' || file.data.extension == '.xml') {
+                //Kliknut file
+                var text = await this.getBase64File(file);
+                var decodedString = atob(text);
+                var myWindow = window.open("", "textField", "width=600,height=600");
+                myWindow.document.open();
+                myWindow.document.write(decodedString);
+            } else if (file.data.extension == '.jpg' || file.data.extension == '.png' || file.data.extension == '.jpeg') {
+                var picture = await this.getBase64File(file);
+                var imageSource = "data:image/jpeg;base64," + picture;
+                window.open(imageSource, "image", "width=600,height=600");
+            } else if (file.data.extension == '.pdf') {
+                var b64 = await this.getBase64File(file);
+                var pdfFile = "data:application/pdf;base64," + b64;
+                const objType = 'application/pdf';
+                var openPdf = window.open("", "", "width=600,height=600");
+                openPdf.document.write('<object style="width: 100%; height: 100%" data= ' + pdfFile + ' type = ' + objType + '></object>')
+            }
+            else {
+                return;
+            }
         } else {
             //Kliknut folder
             this.state.activeFolder += '/' + file.data.name;
@@ -744,6 +757,54 @@ class FileManagerTable extends React.Component {
             console.log(e);
         }
 
+    }
+
+    getBase64File = async (file) => {
+        try {
+            const requestOptions = {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({
+                    email: config.email,
+                    password: config.password,
+                }),
+            };
+
+            var response = await fetch(config.url, requestOptions);
+            if (response.status == 200) {
+                var x = await response.json();
+                const token = x.accessToken;
+
+                let pathToFile = new String(this.state.activeFolder);
+                pathToFile = pathToFile.substring(2,);
+
+                const requestOptions2 = {
+                    method: "POST",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer " + token,
+                    },
+                    body: JSON.stringify({
+                        fileName: file.fileName,
+                        user: this.state.user.email,
+                        path: pathToFile
+                    })
+                };
+
+                return await fetch('https://si-grupa5.herokuapp.com/api/web/user/file/get', requestOptions2)
+                    .then((res) => {
+                        return res.json().then((res) => {
+                            return res.base64;
+                        });
+
+                    }).catch((error) => {
+                        console.log(error);
+                    });
+            }
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     getText = async (file) => {

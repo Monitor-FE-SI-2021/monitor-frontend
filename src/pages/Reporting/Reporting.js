@@ -71,6 +71,7 @@ const Reports = ({ user, push }) => {
         let dateCurrent = new Date();
         
         const freq = frequencyInfo?.frequency?.value;
+        console.log('FREQ INFORMACIJE', frequencyInfo)
         switch(freq){
             case "Daily":
                 const dailyHours = frequencyInfo.time.value.split(':');
