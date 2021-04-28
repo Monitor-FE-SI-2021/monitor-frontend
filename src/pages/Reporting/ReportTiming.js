@@ -104,7 +104,7 @@ const ReportTiming = ({ setTimeInfo }) => {
                 </Select>
             </div>
             {
-                frequency.value === 'weekly' ?
+                frequency.value === 'Weekly' ?
                 <div className="timeInputWrapper">
                     <InputLabel className="timeLabelWrapper"> Day of the week: </InputLabel>
                     <Select value={day} onChange={handleDay}>
@@ -114,7 +114,7 @@ const ReportTiming = ({ setTimeInfo }) => {
                 null
             }
             {
-                frequency.value === 'monthly' ?
+                frequency.value === 'Monthly' ?
                 <div className="timeInputWrapper">
                     <InputLabel className="timeLabelWrapper"> Day: </InputLabel>
                     <Select value={dayInMonth} onChange={handleDayInMonth}>
@@ -124,7 +124,7 @@ const ReportTiming = ({ setTimeInfo }) => {
                 null
             }
             {
-                frequency.value === 'yearly' ?
+                frequency.value === 'Yearly' ?
                 <div>
                     <div className="timeInputWrapper">
                         <InputLabel className="timeLabelWrapper"> Month: </InputLabel>

@@ -1,14 +1,14 @@
-import {connect} from "react-redux";
-import React, {useEffect, useState} from "react";
+import { connect } from "react-redux";
+import React, { useEffect, useState } from "react";
 import './Questions.css';
-import {requestForgotPassword} from "../../store/modules/login/login";
-import {RouteLink} from "../../store/modules/menu/menu";
+import { requestForgotPassword } from "../../store/modules/login/login";
+import { RouteLink } from "../../store/modules/menu/menu";
 import axios from "axios";
-import {STORAGE_KEY} from "../../utils/consts";
+import { STORAGE_KEY } from "../../utils/consts";
 import ReactDOM from 'react-dom';
-import {push} from 'connected-react-router';
+import { push } from 'connected-react-router';
 import request from "../../service";
-import {showSwalToast} from "../../utils/utils";
+import { showSwalToast } from "../../utils/utils";
 
 const tooken = window.localStorage.getItem(STORAGE_KEY);
 const securityQuestions = "https://si-2021.167.99.244.168.nip.io:3333/AllSecurityQuestions";
@@ -88,7 +88,7 @@ function Questions() {
 
 
     return (
-        <div className="formDiv">
+        <div className="formDiv questions-page">
             <form id="form">
                 <h2>Security questions?</h2>
                 <p>Question 1</p>

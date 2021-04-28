@@ -1,28 +1,23 @@
 .table-wrapper {
-  margin: 0 auto;
-  width: 700px;
+  margin: 15px;
+  width: 1000px;
   height: 400px;
   overflow-y: scroll;
   border-bottom: 2px solid black;
-  margin-bottom: 10px;
 
   table {
-    //background-color: white;
     width: 100%;
     border-collapse: collapse;
-    //border-top: 2px solid black;
-    //border-left: 2px solid black;
+    border-radius:6px;
+    -moz-border-radius:6px;
+    color: #5b77bd;;
   }
 
-  //th,
   tr:hover:not(tr:first-of-type) {
-    //border-bottom: 1px solid black;
-    //text-align: center;
     background-color: #ebebeb;
   }
 
   th {
-    //background-color: #f9f9f9;
     font-size: 18px;
     height: 50px;
     text-transform: uppercase;
@@ -30,24 +25,29 @@
 
   td {
     height: 50px;
-    //border-right: 2px solid black;
   }
 
   th {
     border-bottom: 2px solid black;
-    //border-right: 2px solid black;
   }
 
-  .file-download,
+  .file-name,
   .file-rename,
-  .file-delete {
+  .file-delete,
+  .file-copy,
+  .file-move {
     transition: 0.2s ease-in-out;
     cursor: pointer;
   }
 
+  .file-name {
+    width: 70%;
+  }
+
   .file-manipulation {
-    cursor: pointer;
-    width: 14%;
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
   }
 
   .file-delete:hover {
@@ -65,22 +65,15 @@
   }
 
   .header-row {
-    background: linear-gradient(
-      to top,
-      rgba(235, 189, 73, 0.6),
-      rgba(235, 189, 73, 0)
-    );
+    background: #5b77bd;
+    color: white;
   }
 
-  .centriraj {
+  .center-data {
     text-align: center;
   }
 
-  .centriraj-lijevo {
-    text-align: left;
-  }
-
-  .pomjereni-naziv {
+  .fix-name {
     padding-left: 8px;
     vertical-align: middle;
   }
@@ -90,8 +83,78 @@
     padding-right: 3px;
   }
 
-  .back-button {
-    width: 25px;
-    height: 25px;
+  .date-style {
+    color: #a7aabd;
+    width: 27%;
+  }
+
+  .center-vertical {
+    vertical-align: middle;
+  }
+
+  .sort-arrow:hover {
+    transition: 0.3s ease-in-out;
+    background-color: #93abf6;
+    border-radius: 100%;
+  }
+
+  .file-name-div {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    width: 550px;
+  }
+
+  .file-date-added {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    width: 218px;
+  }
+
+  .manipulation {
+    width: 210px;
+  }
+
+  .file-name-offset {
+    padding-left: 8px;
+  }
+
+  .file-manipulation-wrapper {
+    display: flex;
+    justify-content: center;
+  }
+
+  .file-checkbox {
+    margin-right: 0px;
   }
 }
+
+.top-button {
+  border: 0;
+  padding: 10px;
+  margin-left: 15px;
+  margin-top: 5px;
+  background:#5b77bd;
+  color: whitesmoke;
+  cursor: pointer;
+}
+
+.disable-button {
+  pointer-events: none;
+  background: #A7AABD;
+}
+
+.swalItem{
+  margin: 6px 0;
+}
+
+.swal-text{
+  max-height: 16em;
+  overflow-y: scroll;
+  width: 100%;
+  text-align: left;
+}
+
+
+

@@ -213,7 +213,7 @@ const ManageDeviceForm = ({ selectedDevice, group, groupOptions, fetchAllGroups,
 
             <div className='buttons'>
                 <button className="custom-btn outlined" onClick={() => push(RouteLink.Devices)}>Otkaži</button>
-                <AsyncButton className="custom-btn" async={async}>
+                <AsyncButton className="custom-btn" async={async} onClick={handleSubmit}>
                     {editMode === true ? "Izmijeni mašinu" : "Kreiraj mašinu"}
                 </AsyncButton>
             </div>
