@@ -860,7 +860,7 @@ class FileManagerTable extends React.Component {
                     body.files = this.getCheckedFiles();
 
 
-                    body.deviceUids = [{deviceUid: "33098e25-c605-4132-ad95-f38ecc3bd7a1"}];
+                   // body.deviceUids = [{deviceUid: "eba54ce1-1df9-49ca-b104-801a8827f911"}]; // ovo zakomentarisi i radit ce
                     //url = "http://109.237.39.237:25565/api/agent/files/put";
 
                     console.log(body);
@@ -922,6 +922,7 @@ class FileManagerTable extends React.Component {
                                                 'success'
                                               )
                                         } else{
+                                            console.log(response.json())
                                             Swal.fire({
                                                 icon: 'error',
                                                 title: 'Oops...',
