@@ -17,7 +17,8 @@ export const RouteLink = {
     MyProfile: '/my-profile',
     FileManagerView: '/file-manager',
     SecurityQuestions: '/securityQuestions',
-    Tasks: '/tasks'
+    Tasks: '/tasks',
+    EditReport: '/view-report',
 }
 
 const initialState = {
@@ -52,7 +53,12 @@ const initialState = {
             link: RouteLink.Tasks,
             name: "Users",
             icon: "",
-        }
+        },
+        {
+            link: RouteLink.EditReport,
+            name: "Edit Report",
+            icon: "",
+        },
     ],
 };
 

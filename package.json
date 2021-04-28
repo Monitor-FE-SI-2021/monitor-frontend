@@ -21,6 +21,7 @@
     "axios": "^0.21.1",
     "chart.js": "^2.9.4",
     "classnames": "^2.3.1",
+    "code-prettify": "^0.1.0",
     "connected-react-router": "^6.9.1",
     "dayjs": "^1.10.4",
     "firebase": "^8.3.1",

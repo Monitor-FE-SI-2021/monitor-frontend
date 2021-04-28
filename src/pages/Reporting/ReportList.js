@@ -109,7 +109,7 @@ const ReportList = ({ user, push, report, setReportToStore }) => {
 
     const putToStore = (value) => {
         setReportToStore(value);
-        push(RouteLink.Reporting);
+        push(RouteLink.EditReport);
     }
 
     const changeSendEmail = async (item) => {

@@ -8,25 +8,31 @@ import HourPicker from './HourPicker.js';
 import { options, days, months, times } from './constants/index';
 
 import './ReportTiming.scss'
+import { Button } from '@material-ui/core';
 
-const ReportTiming = ({ setTimeInfo, values }) => {
+const ReportTiming = ({ setTimeInfo, editData }) => {
     const [frequency, setFrequency] = useState(options[0]);
     const [day, setDay] = useState(days[0]);
     const [month, setMonth] = useState(months[0]);
     const [dayInMonth, setDayInMonth] = useState(1);
     const [time, setTime] = useState(times[0]);
+    const [view, setView] = useState(false);
 
     useEffect(() => {
-        if (!values) {
-            setTimeInfo({
-                frequency,
-                day,
-                month,
-                dayInMonth,
-                time,
-            });
-        } else {
-            console.log('ovo DOSLO', values);
+        setTimeInfo({
+            frequency,
+            day,
+            month,
+            dayInMonth,
+            time,
+        });
+        if (editData) {
+            setFrequency(editData.frequency);
+            setDay(editData.day);
+            setMonth(editData.month);
+            setDayInMonth(editData.dayInMonth);
+            setTime(editData.time);
+            setView(true);
         }
     }, []);
 
@@ -94,6 +100,8 @@ const ReportTiming = ({ setTimeInfo, values }) => {
     };
 
     return (
+        <>
+        { !view ?
         <div className="timingWrapper">
             <div className="timeInputWrapper">
                 <InputLabel className="timeLabelWrapper"> How often do you want your report? </InputLabel>
@@ -146,6 +154,17 @@ const ReportTiming = ({ setTimeInfo, values }) => {
                 null
             }
         </div>
+        :
+        <div className="timingWrapper">
+            <div className="timeInputWrapper"><InputLabel className="timeLabelWrapper"> Current Frequency: </InputLabel> {frequency.label}</div>
+            <div className="timeInputWrapper"><InputLabel className="timeLabelWrapper"> Current Time: </InputLabel> {time.label}</div>
+            {frequency.label === 'Weekly' ? <div className="timeInputWrapper"><InputLabel className="timeLabelWrapper"> Current Day: </InputLabel> {day.label}</div> : null}
+            {(frequency.label === 'Yearly' || frequency.label === 'Monthly') ? <div className="timeInputWrapper"><InputLabel className="timeLabelWrapper"> Current Month: </InputLabel> {month.label}</div> : null}
+            {(frequency.label === 'Yearly' || frequency.label === 'Monthly') ? <div className="timeInputWrapper"><InputLabel className="timeLabelWrapper"> Current Day in Month: </InputLabel> {dayInMonth}</div> : null}
+            <Button onClick={() => setView(false)} variant="contained" color="default">Change Time</Button>
+        </div>
+        }
+        </>
     );
 }
 
