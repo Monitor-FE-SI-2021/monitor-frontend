@@ -1,3 +1,5 @@
+import { ROLE_ACCESS_LEVELS } from "../../../utils/consts";
+
 export const SET_MENU_EXPANDED = 'SET_MENU_EXPANDED';
 
 export const RouteLink = {
@@ -17,7 +19,9 @@ export const RouteLink = {
     MyProfile: '/my-profile',
     FileManagerView: '/file-manager',
     SecurityQuestions: '/securityQuestions',
-    Tasks: '/tasks'
+    Tasks: '/tasks',
+    AdminPanel: '/admin-panel',
+    ManageUser: '/manage-user'
 }
 
 const initialState = {
@@ -50,8 +54,15 @@ const initialState = {
         },
         {
             link: RouteLink.Tasks,
+            name: "Tasks",
+            icon: "",
+            accessLevel: ROLE_ACCESS_LEVELS.MonitorSuperAdmin
+        },
+        {
+            link: RouteLink.AdminPanel,
             name: "Users",
             icon: "",
+            accessLevel: ROLE_ACCESS_LEVELS.MonitorSuperAdmin
         }
     ],
 };

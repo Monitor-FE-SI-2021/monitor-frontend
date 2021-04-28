@@ -17,6 +17,7 @@ export const groups = `${endpoint}/group`
 export const users = `${endpoint}/user`
 export const userTasks = `${endpoint}/UserTasks/All`
 export const errors = `${endpoint}/error`
+export const roles = `${endpoint}/role`
 
 const getErrorMessage = (response) => {
 
