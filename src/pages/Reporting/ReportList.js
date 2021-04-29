@@ -114,7 +114,7 @@ const ReportList = ({ user, push, report, setReportToStore }) => {
 
     const stopReport = async (reportId) => {
         const res = await request(`https://si-2021.167.99.244.168.nip.io/api/report/StopReport/${reportId}`, "PATCH");
-        setData();
+        handleReset();
     }
 
     return (
