@@ -242,9 +242,15 @@ class FileManagerTable extends React.Component {
                 myWindow.document.open();
                 myWindow.document.write(decodedString);
             } else if (file.data.extension == '.jpg' || file.data.extension == '.png' || file.data.extension == '.jpeg') {
+               /* var picture = await this.getBase64File(file);
+                var imageSource = "data:image/jpeg;base64," + picture;
+                window.open(imageSource, "image", "width=600,height=600");*/
+
                 var picture = await this.getBase64File(file);
                 var imageSource = "data:image/jpeg;base64," + picture;
-                window.open(imageSource, "image", "width=600,height=600");
+                var myWindow = window.open("", "image", "width=600,height=600");
+                myWindow.document.write('<img src=' + imageSource + '></img>');
+
             } else if (file.data.extension == '.pdf') {
                 var b64 = await this.getBase64File(file);
                 var pdfFile = "data:application/pdf;base64," + b64;
@@ -921,7 +927,7 @@ class FileManagerTable extends React.Component {
                     body.files = this.getCheckedFiles();
 
 
-                    body.deviceUids = [{deviceUid: "33098e25-c605-4132-ad95-f38ecc3bd7a1"}];
+                    //body.deviceUids = [{deviceUid: "eba54ce1-1df9-49ca-b104-801a8827f911"}]; // ovo zakomentarisi i radit ce
                     //url = "http://109.237.39.237:25565/api/agent/files/put";
 
                     console.log(body);
@@ -983,11 +989,12 @@ class FileManagerTable extends React.Component {
                                                 'success'
                                               )
                                         } else{
-                                            Swal.fire({
+                                            console.log(response.json())
+                                            /*Swal.fire({
                                                 icon: 'error',
                                                 title: 'Oops...',
                                                 text: 'Something went wrong!',
-                                              })
+                                              })*/
                                         }
                                     })
                                     .catch((err) => {
