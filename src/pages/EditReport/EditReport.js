@@ -249,7 +249,7 @@ const Reports = ({ user, push, report, setReportToStore }) => {
             ReportId: reportId,
         };
         
-        const response = await request("http://localhost:4000/api/report/EditReport", "PUT", body);
+        const response = await request("https://si-2021.167.99.244.168.nip.io/api/report/EditReport", "PUT", body);
         if (response.status === 200) {
             window.alert("Report successfully updated!");
             push(RouteLink.ReportList);
@@ -377,7 +377,7 @@ const Reports = ({ user, push, report, setReportToStore }) => {
                         <InputLabel className="queryLabel">
                             Query:
                         </InputLabel>
-                        <textarea value={elementJson} cols="55" rows="10">
+                        <textarea value={elementJson} cols="55" rows="10" readOnly>
                         </textarea>
                         
                         <Button onClick={() => resetState()} variant="contained" color="default"> Change Query </Button>

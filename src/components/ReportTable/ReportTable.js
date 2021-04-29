@@ -3,7 +3,7 @@ import { useState } from "react";
 import GetAppIcon from '@material-ui/icons/GetApp';
 import dayjs from 'dayjs';
 
-const ReportTable = ({ report }) => {
+const ReportTable = ({ report, filter }) => {
 
     const downloadTableRow = (tableRow) => {
         window.open(tableRow.uriLink);
@@ -33,8 +33,28 @@ const ReportTable = ({ report }) => {
         }
     ];
 
+    const tableFieldsNameFilter = [
+        {
+            name: 'name',
+            title: 'Report name',
+        },
+        {
+            name: 'date',
+            title: 'Date',
+            slot: 'date',
+        },
+        {
+            name: 'uriLink',
+            title: 'Download',
+            width: '20%',
+            align: 'left',
+            slot: 'uriLink',
+        }
+    ];
+
     return (
-        <CustomTable data={report.reportInstances} fields={tableFields}>
+        <>
+        {!filter && <CustomTable data={report.reportInstances} fields={tableFields}>
 
             <TableSlot slot='date' render={(dataRow) => (
                 <div>
@@ -52,7 +72,23 @@ const ReportTable = ({ report }) => {
                 <div>{report.frequency}</div>
             )}/>
 
-        </CustomTable>
+        </CustomTable>}
+        {filter && <CustomTable data={report} fields={tableFieldsNameFilter}>
+
+            <TableSlot slot='date' render={(dataRow) => (
+                <div>
+                    {dayjs(dataRow.date).format('DD.MM.YYYY.')}
+                </div>
+            )}/>
+
+            <TableSlot slot='uriLink' render={dataRow => (
+                <div>
+                    <GetAppIcon onClick={() => downloadTableRow(dataRow)}/>
+                </div>
+            )}/>
+
+        </CustomTable>}
+        </>
     )
 }
 

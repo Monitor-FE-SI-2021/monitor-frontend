@@ -10,6 +10,7 @@ import { frequenciesFilter } from './constants';
 import Switch from '@material-ui/core/Switch';
 
 import './ReportList.scss';
+import CustomTable from "../../components/CustomTable/CustomTable";
 
 const ReportList = ({ user, push, report, setReportToStore }) => {
     const [reports, setReports] = useState([]);
@@ -42,37 +43,30 @@ const ReportList = ({ user, push, report, setReportToStore }) => {
         for (let i = 0; i < size; i++)
             reports.pop();
     };
+
     const setData = async (frequencies) => {
         emptyReports();
 
-        // if (frequencies === null && selectedName === "") {
+        if (frequencies === null && selectedName === "") {
             setReports([]);
-            const res = await request('http://localhost:4000/api/report/GetReports');
-            // for (let re of res.data.data)
-            //     for (let r of re.reportInstances)
-            //         reports.push(r);
+            const res = await request('https://si-2021.167.99.244.168.nip.io/api/report/GetReports');
             setReports(res?.data?.data);
 
-        // }
-        // else if (frequencies !== null) {
-        //     setSelectedName("");
-        //     const res = await request('https://si-2021.167.99.244.168.nip.io/api/report/GetReports?' + `Frequency=${frequencies}`);
-        //     setReports([]);
-        //     for (let repo of res.data.data)
-        //         for (let r of repo.reportInstances)
-        //             reports.push(r);
-
-        //     setReports(reports);
-        // }
-        // else {
-        //     setSelectedFrequency("noFilter");
-        //     const res = await request('https://si-2021.167.99.244.168.nip.io/api/report/GetReportInstances?' + `Name=${selectedName}`);
-        //     setReports([]);
-        //     for (let repo of res.data.data)
-        //         reports.push(repo);
-
-        //     setReports(reports);
-        // }
+        }
+        else if (frequencies !== null) {
+            setSelectedName("");
+            const res = await request('https://si-2021.167.99.244.168.nip.io/api/report/GetReports?' + `Frequency=${frequencies}`);
+            let newArray = [];
+            res.data.data.forEach(item => {
+                if (item.reportInstances.length > 0) newArray.push(item);
+            })
+            setReports(newArray);
+        }
+        else {
+            setSelectedFrequency("noFilter");
+            const res = await request('https://si-2021.167.99.244.168.nip.io/api/report/GetReportInstances?' + `Name=${selectedName}`);
+            setReports(res?.data?.data);
+        }
     };
 
     useEffect(() => {
@@ -93,10 +87,11 @@ const ReportList = ({ user, push, report, setReportToStore }) => {
         setOpen(true);
     };
 
-    const handleReset = () => {
+    const handleReset = async () => {
+        const res = await request('https://si-2021.167.99.244.168.nip.io/api/report/GetReports');
+        setReports(res?.data?.data);
         setSelectedName("");
         setSelectedFrequency("noFilter");
-        setData(null);
     };
     ;
     const handleResetFreq = () => {
@@ -113,12 +108,12 @@ const ReportList = ({ user, push, report, setReportToStore }) => {
     }
 
     const changeSendEmail = async (item) => {
-        const res = await request(`http://localhost:4000/api/report/ChangeSendingEmail/${item.reportId}`, "PUT");
+        const res = await request(`https://si-2021.167.99.244.168.nip.io/api/report/ChangeSendingEmail/${item.reportId}`, "PUT");
         setReports(res?.data?.data);
     }
 
     const stopReport = async (reportId) => {
-        const res = await request(`http://localhost:4000/api/report/StopReport/${reportId}`, "PATCH");
+        const res = await request(`https://si-2021.167.99.244.168.nip.io/api/report/StopReport/${reportId}`, "PATCH");
         setData();
     }
 
@@ -159,9 +154,9 @@ const ReportList = ({ user, push, report, setReportToStore }) => {
                                     type="text"
                                     className="MuiInputBase-input MuiInput-input"
                                     placeholder="Name"
-                                    onChange={e => setSelectedName(e.target.value)}
                                     onKeyPress={event => {
                                         if (event.key === 'Enter') {
+                                            setSelectedName(event.target.value);
                                             handleResetFreq();
                                             filterName();
                                         }
@@ -171,8 +166,8 @@ const ReportList = ({ user, push, report, setReportToStore }) => {
                     </FormControl>
                 : null}
             </div>
-            {reports.map(item => (
-                <div className="reportTable" key={item.id}>
+            {selectedName === '' && reports.map(item => (
+                <div className="reportTable" key={item.reportId}>
                     <div className="reportHeader">
                         <h3>{item.name}</h3>
                         <div>
@@ -182,9 +177,12 @@ const ReportList = ({ user, push, report, setReportToStore }) => {
                             <button className="deleteButton" onClick={() => stopReport(item.reportId)}>Delete</button>
                         </div>
                     </div>
-                    <ReportTable report={item} /> 
+                    <ReportTable report={item} filter={false} />
                 </div>
             ))}
+            {selectedName !== '' &&
+                <ReportTable report={reports} filter={true} />
+            }
         </div>
     )
 };
