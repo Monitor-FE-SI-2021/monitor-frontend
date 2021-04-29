@@ -110,7 +110,7 @@ const DragAndDrop = (props) => {
 
                     Swal.fire({
                         title: "File manager",
-                        text: "Datoteka uspješno poslana!",
+                        text: "File successfully uploaded!",
                         type: "success",
                     });
 

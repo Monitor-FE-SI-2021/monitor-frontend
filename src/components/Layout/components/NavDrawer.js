@@ -6,6 +6,7 @@ import { setMenuExpanded } from "../../../store/modules/menu/menu";
 import { STORAGE_KEY } from "../../../utils/consts";
 import { RouteLink } from "../../../store/modules/menu/menu";
 import classnames from "classnames";
+import { getUserAccessLevel } from "../../../utils/utils";
 
 function NavDrawer({ push, menuItems, isMenuExpanded, setMenuExpanded, user }) {
 
@@ -52,10 +53,18 @@ function NavDrawer({ push, menuItems, isMenuExpanded, setMenuExpanded, user }) {
 }
 
 export default connect(state => {
+
+    const userAccessLevel = getUserAccessLevel(state.login.user);
+
+    const menuItemsForUser = state.menu.items.filter(item => {
+        if (!item.accessLevel) return true;
+
+        return userAccessLevel >= item.accessLevel;
+    })
+
     return {
-        menuItems: state.menu.items,
+        menuItems: menuItemsForUser,
         user: state.login.user,
         isMenuExpanded: state.menu.isMenuExpanded,
-        access_level: 0,    // TODO
     };
 }, { push, setMenuExpanded })(NavDrawer);

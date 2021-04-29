@@ -1,52 +1,53 @@
 .users-table {
-    .grid-container{
-        width: 100%;
+  .grid-container {
+    width: 100%;
+  }
+
+  .tableWrap {
+    overflow-y: scroll;
+    max-height: 765px;
+    width: 25%;
+    float: left;
+
+    th {
+      padding: 10px;
+      font-weight: normal;
     }
 
-    .tableWrap{
-        overflow-y: scroll;
-        max-height: 600px;
-        width: 25%;
-        float: left;
-
-        th{
-            padding: 10px;
-            font-weight: normal;
-        }
-
-        table, th{
-            border-collapse: collapse;
-            border-bottom: 1px solid;
-            border-color: grey;
-            text-align: left;
-        
-        }
-
-        table{
-            border-right: 1px solid;
-            border-left: 1px solid;
-            border-color: grey;
-        }
-
+    table,
+    th {
+      border-collapse: collapse;
+      border-bottom: 1px solid;
+      border-color: grey;
+      text-align: left;
     }
 
-    #table-header{
-        background-color: #495c8f;
-        color: white;
-        border-top: 1px solid #495c8f;
-        border-bottom: 1px solid #495c8f;
-        border-left: 1px solid #495c8f;
-        border-right: 1px solid #495c8f;
-        font-weight: bold;
+    table {
+      border-right: 1px solid;
+      border-left: 1px solid;
+      border-color: grey;
+      width: 100%;
     }
+  }
 
-    .scheduler{
-        width: 73%;
-        float: right;
-    }
+  #table-header {
+    background-color: #495c8f;
+    color: white;
+    border-top: 1px solid #495c8f;
+    border-bottom: 1px solid #495c8f;
+    border-left: 1px solid #495c8f;
+    border-right: 1px solid #495c8f;
+    font-weight: bold;
+  }
 
-    .map{
-        width: 73%;
-        float: right;
-    }
+  .scheduler {
+    width: 73%;
+    float: right;
+  }
+
+  .map {
+    width: 73%;
+    float: right;
+    margin-top: 1%;
+  }
 }

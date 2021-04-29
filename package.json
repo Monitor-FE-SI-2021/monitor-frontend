@@ -55,6 +55,7 @@
     "typeface-mulish": "^1.1.13",
     "typeface-roboto": "^1.1.13",
     "use-state": "^0.0.3",
+    "validator": "^13.5.2",
     "web-vitals": "^1.1.1"
   },
   "scripts": {

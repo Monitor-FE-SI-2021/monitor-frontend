@@ -84,8 +84,6 @@ function convertStatistics(statistic) {
     return [Math.round(statistic * 100), Math.round((1 - statistic) * 100)];
 }
 
-
-
 const allMachinesString = "All machines"
 
 let removedMachine = null
@@ -108,6 +106,7 @@ export let barchartMaxValue = 10
 const Dashboard = ({ user }) => {
     
     let activeMachines = []
+    let configuration = null
     const [async, setAsync] = React.useState(true)
     const [machines, setMachines] = React.useState([]);
     const [active, setActive] = React.useState([...activeMachines]);
@@ -118,8 +117,20 @@ const Dashboard = ({ user }) => {
     const [startDate, setStartDate] = React.useState(start);
     var [chartType, setChartType] = React.useState(true)
 
+    function getConfiguration(machine) {
+        let configString = ""
+        request("https://si-grupa5.herokuapp.com/api/agent/info/system", "POST", {
+            deviceUid: machine.deviceUid,
+        })
+            .then((res) => { configString = res.data.message.replace(/\\n/g, "\n").replace(/\\r/g, "\r")
+            console.log(configString)})
+            .catch((err) => console.log(err))
+        console.log(configString)
+        return configString
+    }
     
     function filterActive(activeMachines, allMachines) {
+        console.log(activeMachines)
         return activeMachines ? activeMachines.filter((machine) => {
             const existingMachine = allMachines.find(({ deviceUid }) => {
                 return machine.status !== "Waiting" && machine.deviceUid === deviceUid;
@@ -131,6 +142,8 @@ const Dashboard = ({ user }) => {
             return existingMachine;
         }) : [];
     }
+
+   // console.log(configString.replace(/\\n/g, "\n").replace(/\\r/g, "\r"))
 
     function getStatistics(machine, startDate, endDate) {
         request(errors + "/DateInterval?DeviceUID=" + machine.deviceUid + "&StartDate=" + startDate + "&EndDate" + endDate)
@@ -195,7 +208,7 @@ const Dashboard = ({ user }) => {
                 const allMachines = res.data.data;
                 setMachines(allMachines);
                 setAsync(true)
-                request("https://si-grupa5.herokuapp.com/api/agent/online")
+                request("https://si-grupa5.herokuapp.com/api/agents/online")
                     .then((res) => {
                         setActive(filterActive(res?.data, allMachines));
                     })
@@ -211,7 +224,6 @@ const Dashboard = ({ user }) => {
         
     }, []);
 
-    console.log(clickedMachine)
 
     const disconnectMachine = (machine) => {
         removedMachine = machine
@@ -281,7 +293,8 @@ const Dashboard = ({ user }) => {
                                     getStatistics={getStatistics}
                                     sDate={startDate.toISOString()}
                                     eDate={endDate.toISOString()}
-                                    
+                                    user={user}
+                                    //getConfiguration={getConfiguration}
                                 />
                             ))
                         ) : (
