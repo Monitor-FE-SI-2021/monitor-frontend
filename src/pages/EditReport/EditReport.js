@@ -43,7 +43,8 @@ const Reports = ({ user, push, report, setReportToStore }) => {
     const initValues = (data) => {
       setReportId(data.reportId);
       const newDate = new Date(data?.nextDate);
-      const newTime = `${(newDate.getHours() + 2)}:00:00`;
+      let newTime = `${(newDate.getHours())}:00:00`;
+      if (newTime.length < 8) newTime = '0' + newTime;
       const findTime = times.find(e => e.value === newTime);
       const obj = {
           frequency: {
@@ -124,7 +125,6 @@ const Reports = ({ user, push, report, setReportToStore }) => {
     };
 
     useEffect(() => {
-      console.log('ovo je report', report)
       setData();
     }, []);
 

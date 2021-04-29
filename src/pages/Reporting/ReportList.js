@@ -166,6 +166,7 @@ const ReportList = ({ user, push, report, setReportToStore }) => {
                     </FormControl>
                 : null}
             </div>
+            {reports.length === 0 && <div>No results</div>}
             {selectedName === '' && reports.map(item => (
                 <div className="reportTable" key={item.reportId}>
                     <div className="reportHeader">
@@ -180,7 +181,7 @@ const ReportList = ({ user, push, report, setReportToStore }) => {
                     <ReportTable report={item} filter={false} />
                 </div>
             ))}
-            {selectedName !== '' &&
+            {selectedName !== '' && reports.length !== 0  &&
                 <ReportTable report={reports} filter={true} />
             }
         </div>

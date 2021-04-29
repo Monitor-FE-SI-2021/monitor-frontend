@@ -19,20 +19,23 @@ const ReportTiming = ({ setTimeInfo, editData }) => {
     const [view, setView] = useState(false);
 
     useEffect(() => {
-        setTimeInfo({
-            frequency,
-            day,
-            month,
-            dayInMonth,
-            time,
-        });
         if (editData) {
+            console.log('ovo je editData', editData)
             setFrequency(editData.frequency);
             setDay(editData.day);
             setMonth(editData.month);
             setDayInMonth(editData.dayInMonth);
             setTime(editData.time);
             setView(true);
+        }
+        else {
+            setTimeInfo({
+                frequency,
+                day,
+                month,
+                dayInMonth,
+                time,
+            });
         }
     }, []);
 
