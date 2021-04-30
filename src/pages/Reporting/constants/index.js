@@ -1,16 +1,16 @@
 export const fields = [
-  { name: "avgRamUsage", label: "Average RAM Usage" },
-  { name: "avgGpuUsage", label: "Average GPU Usage" },
-  { name: "quarterlyCpuUsage", label: "Quarterly CPU Usage" },
-  { name: "diskUtilization", label: "Disk Utilization" },
+  { name: "avgRamUsage", label: "Average RAM Usage", inputType: 'number' },
+  { name: "avgGpuUsage", label: "Average GPU Usage", inputType: 'number' },
+  { name: "quarterlyCpuUsage", label: "Quarterly CPU Usage", inputType: 'number' },
+  { name: "diskUtilization", label: "Disk Utilization", inputType: 'number' },
   { name: "name", label: "Name" },
   { name: "location", label: "Location" },
-  { name: "latitude", label: "Latitude" },
-  { name: "longitude", label: "Longitude" },
+  { name: "latitude", label: "Latitude", inputType: 'number' },
+  { name: "longitude", label: "Longitude", inputType: 'number' },
   { name: "status", label: "Status" },
-  { name: "lastTimeOnline", label: "Last Time Online" },
-  { name: "timeLog", label: "Time Log" },
-  { name: "groupName", label: "Group Name" },
+  //{ name: "lastTimeOnline", label: "Last Time Online" },
+  //{ name: "timeLog", label: "Time Log" },
+  //{ name: "groupName", label: "Group Name" },
 ];
 
 export const frequencies = [
@@ -40,19 +40,19 @@ export const devices = [
 export const options = [
   {
       label: "Daily",
-      value: "daily",
+      value: "Daily",
   },
   {
       label: "Weekly",
-      value: "weekly",
+      value: "Weekly",
   },
   {
       label: "Monthly",
-      value: "monthly",
+      value: "Monthly",
   },
   {
       label: "Yearly",
-      value: "yearly",
+      value: "Yearly",
   },
 ];
 
@@ -248,3 +248,19 @@ export const times = [
       value: "23:00:00",
   },
 ];
+
+export const queryFields = [
+    { name: "(SELECT avg(RamUsage) FROM DEVICE_STATUS_LOG dsl where BEGIN_PLACEHOLDER < dsl.TimeStamp and dsl.TimeStamp < END_PLACEHOLDER and dsl.DeviceId = d.DeviceId)", label: "Average RAM Usage", inputType: 'number' },
+    { name: "(SELECT avg(GPUUsage) FROM DEVICE_STATUS_LOG dsl where BEGIN_PLACEHOLDER < dsl.TimeStamp and dsl.TimeStamp < END_PLACEHOLDER and dsl.DeviceId = d.DeviceId))", label: "Average GPU Usage", inputType: 'number' },
+    { name: "(SELECT avg(CpuUsage) FROM DEVICE_STATUS_LOG dsl where BEGIN_PLACEHOLDER < dsl.TimeStamp and dsl.TimeStamp < END_PLACEHOLDER and dsl.DeviceId = d.DeviceId))", label: "Quarterly CPU Usage", inputType: 'number' },
+    { name: "(SELECT avg(HDDUsage) FROM DEVICE_STATUS_LOG dsl where BEGIN_PLACEHOLDER < dsl.TimeStamp and dsl.TimeStamp < END_PLACEHOLDER and dsl.DeviceId = d.DeviceId))", label: "Disk Utilization", inputType: 'number' },
+    { name: "d.name", label: "Name" },
+    { name: "d.location", label: "Location" },
+    { name: "d.latitude", label: "Latitude", inputType: 'number' },
+    { name: "d.longitude", label: "Longitude", inputType: 'number' },
+    { name: "d.status", label: "Status" },
+    //{ name: "d.lastTimeOnline", label: "Last Time Online" },
+    //{ name: "d.timeLog", label: "Time Log" },
+    { name: "d.groupName", label: "Group Name" },
+];
+

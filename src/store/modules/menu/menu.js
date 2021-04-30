@@ -1,3 +1,5 @@
+import { ROLE_ACCESS_LEVELS } from "../../../utils/consts";
+
 export const SET_MENU_EXPANDED = 'SET_MENU_EXPANDED';
 
 export const RouteLink = {
@@ -9,11 +11,17 @@ export const RouteLink = {
     AddDevice: '/manage-device',
     ManageDevice: '/manage-device',
     ManageGroup: '/manage-group',
+    EmailVerification: '/verify-email',
     Terminal: '/terminal',
     RemoteControl: '/remotecontrol',
     TwoFactorAuthentication: '/security',
+    secutityQuestions: '/securityQuestions',
+    MyProfile: '/my-profile',
     FileManagerView: '/file-manager',
-    SecurityQuestions: '/securityQuestions'
+    SecurityQuestions: '/securityQuestions',
+    Tasks: '/tasks',
+    AdminPanel: '/admin-panel',
+    ManageUser: '/manage-user'
 }
 
 const initialState = {
@@ -35,8 +43,8 @@ const initialState = {
             icon: "",
         },
         {
-            link: RouteLink.TwoFactorAuthentication,
-            name: 'Two Factor Authentication',
+            link: RouteLink.MyProfile,
+            name: 'My Profile',
             icon: ""
         },
         {
@@ -45,9 +53,16 @@ const initialState = {
             icon: ""
         },
         {
-            link: RouteLink.SecurityQuestions,
-            name: 'Security Questions',
-            icon: ""
+            link: RouteLink.Tasks,
+            name: "Tasks",
+            icon: "",
+            accessLevel: ROLE_ACCESS_LEVELS.MonitorSuperAdmin
+        },
+        {
+            link: RouteLink.AdminPanel,
+            name: "Users",
+            icon: "",
+            accessLevel: ROLE_ACCESS_LEVELS.MonitorSuperAdmin
         }
     ],
 };

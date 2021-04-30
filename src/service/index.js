@@ -15,6 +15,9 @@ export const answerCheck  = 'https://si-2021.167.99.244.168.nip.io:3333/answerCh
 export const devices = `${endpoint}/device`
 export const groups = `${endpoint}/group`
 export const users = `${endpoint}/user`
+export const userTasks = `${endpoint}/UserTasks/All`
+export const errors = `${endpoint}/error`
+export const roles = `${endpoint}/role`
 
 const getErrorMessage = (response) => {
 
