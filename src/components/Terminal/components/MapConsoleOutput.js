@@ -20,7 +20,7 @@ const MapConsoleOutput = ({
   setRestartCommands
 }) => {
   const scrollRef = React.useRef();
-//merge
+//merg
   React.useEffect(() => {
     if (scrollRef.current)
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
