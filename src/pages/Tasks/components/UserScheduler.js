@@ -13,10 +13,16 @@ import {
   AppointmentTooltip
 } from '@devexpress/dx-react-scheduler-material-ui';
 import DescriptionIcon from '@material-ui/icons/Description';
+import Alert from '@material-ui/lab/Alert';
 
 
 function UserScheduler({ tasks }) {
   const [currentDate, currentDateChange] = useState(new Date())
+  const [showAlert, setShowAlert] = React.useState(false);
+
+  React.useEffect(() => {
+    tasks.length!=0 ? setShowAlert(false) : setShowAlert(true);
+  }, [tasks])
 
   const transformedTask = tasks.map((task) => (
     { title: task.device ? (task.device.location) : (task.location), startDate: task.startTime, endDate: task.endTime, ...task }));
@@ -67,7 +73,10 @@ const Content = ({
 );
 
   return (
-    <Paper style={{}}>
+    <Paper>
+      {
+        showAlert ? <Alert severity="warning">The user has no tasks defined!</Alert> : null
+      }
       <Scheduler
           data={transformedTask}
           height={400}

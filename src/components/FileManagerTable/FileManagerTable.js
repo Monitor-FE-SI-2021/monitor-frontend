@@ -5,6 +5,7 @@ import DragAndDrop from '../DragAndDrop/DragAndDrop';
 import Swal from "sweetalert2";
 import {FaCopy, FaCut, FaPencilAlt, FaTrash} from "react-icons/fa";
 import Checkbox from '@material-ui/core/Checkbox';
+import CommunicationDialerSip from 'material-ui/svg-icons/communication/dialer-sip';
 const config = require("../Terminal/config");
 const userFiles = "https://si-grupa5.herokuapp.com/api/web/user/file-tree";
 const folderIconUrl = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHg9IjBweCIgeT0iMHB4Igp3aWR0aD0iNDgiIGhlaWdodD0iNDgiCnZpZXdCb3g9IjAgMCAxNzIgMTcyIgpzdHlsZT0iIGZpbGw6IzAwMDAwMDsiPjxnIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0ibm9uemVybyIgc3Ryb2tlPSJub25lIiBzdHJva2Utd2lkdGg9IjEiIHN0cm9rZS1saW5lY2FwPSJidXR0IiBzdHJva2UtbGluZWpvaW49Im1pdGVyIiBzdHJva2UtbWl0ZXJsaW1pdD0iMTAiIHN0cm9rZS1kYXNoYXJyYXk9IiIgc3Ryb2tlLWRhc2hvZmZzZXQ9IjAiIGZvbnQtZmFtaWx5PSJub25lIiBmb250LXdlaWdodD0ibm9uZSIgZm9udC1zaXplPSJub25lIiB0ZXh0LWFuY2hvcj0ibm9uZSIgc3R5bGU9Im1peC1ibGVuZC1tb2RlOiBub3JtYWwiPjxwYXRoIGQ9Ik0wLDE3MnYtMTcyaDE3MnYxNzJ6IiBmaWxsPSJub25lIj48L3BhdGg+PGc+PHBhdGggZD0iTTE0My4zMzMzMyw0M2gtNjQuNWwtMTQuMzMzMzMsLTE0LjMzMzMzaC0zNS44MzMzM2MtNy44ODMzMywwIC0xNC4zMzMzMyw2LjQ1IC0xNC4zMzMzMywxNC4zMzMzM3YyOC42NjY2N2gxNDMuMzMzMzN2LTE0LjMzMzMzYzAsLTcuODgzMzMgLTYuNDUsLTE0LjMzMzMzIC0xNC4zMzMzMywtMTQuMzMzMzN6IiBmaWxsPSIjNWI3N2JkIj48L3BhdGg+PHBhdGggZD0iTTE0My4zMzMzMyw0M2gtMTE0LjY2NjY3Yy03Ljg4MzMzLDAgLTE0LjMzMzMzLDYuNDUgLTE0LjMzMzMzLDE0LjMzMzMzdjcxLjY2NjY3YzAsNy44ODMzMyA2LjQ1LDE0LjMzMzMzIDE0LjMzMzMzLDE0LjMzMzMzaDExNC42NjY2N2M3Ljg4MzMzLDAgMTQuMzMzMzMsLTYuNDUgMTQuMzMzMzMsLTE0LjMzMzMzdi03MS42NjY2N2MwLC03Ljg4MzMzIC02LjQ1LC0xNC4zMzMzMyAtMTQuMzMzMzMsLTE0LjMzMzMzeiIgZmlsbD0iIzkzYWJmNiI+PC9wYXRoPjwvZz48L2c+PC9zdmc+";
@@ -233,14 +234,33 @@ class FileManagerTable extends React.Component {
     handleClick = async (selectedId) => {
         var file = this.state.responseObject.find(file => file.id == selectedId);
         if (file.data.type == 'file') {
-            if (file.data.extension != '.txt') return;
+            if (file.data.extension == '.txt' || file.data.extension == '.log' || file.data.extension == '.html' || file.data.extension == '.xml') {
+                //Kliknut file
+                var text = await this.getBase64File(file);
+                var decodedString = atob(text);
+                var myWindow = window.open("", "textField", "width=600,height=600");
+                myWindow.document.open();
+                myWindow.document.write(decodedString);
+            } else if (file.data.extension == '.jpg' || file.data.extension == '.png' || file.data.extension == '.jpeg') {
+               /* var picture = await this.getBase64File(file);
+                var imageSource = "data:image/jpeg;base64," + picture;
+                window.open(imageSource, "image", "width=600,height=600");*/
 
-            //Kliknut file
-            var text = await this.getText(file);
+                var picture = await this.getBase64File(file);
+                var imageSource = "data:image/jpeg;base64," + picture;
+                var myWindow = window.open("", "image", "width=600,height=600");
+                myWindow.document.write('<img src=' + imageSource + '></img>');
 
-            var myWindow = window.open("", "textFeild", "width=600,height=600");
-            myWindow.document.open();
-            myWindow.document.write(text);
+            } else if (file.data.extension == '.pdf') {
+                var b64 = await this.getBase64File(file);
+                var pdfFile = "data:application/pdf;base64," + b64;
+                const objType = 'application/pdf';
+                var openPdf = window.open("", "", "width=600,height=600");
+                openPdf.document.write('<object style="width: 100%; height: 100%" data= ' + pdfFile + ' type = ' + objType + '></object>')
+            }
+            else {
+                return;
+            }
         } else {
             //Kliknut folder
             this.state.activeFolder += '/' + file.data.name;
@@ -376,14 +396,9 @@ class FileManagerTable extends React.Component {
             await this.checkIfDirectoryIsEmpty(path)
                 .then(r => isDirectoryEmpty = r)
 
-            if (isDirectoryEmpty) {
-                popupText = 'The directory is empty'
-            } else {
-                popupText = 'The directory is not empty'
-            }
             Swal.fire({
                 title: 'Are you sure?',
-                text: popupText,
+                text: 'You cannot return the directory after you delete it',
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -391,15 +406,39 @@ class FileManagerTable extends React.Component {
                 confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    this.sendFolderDeleteRequest(file.fileName)
-                    Swal.fire(
-                        'Deleted!',
-                        'Your directory has been deleted.',
-                        'success'
-                    )
+                    if(!isDirectoryEmpty) {
+                        // directory is not empty
+                        Swal.fire({
+                            title: 'Are you sure?',
+                            text: "The directory is not empty!",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Yes, delete it!'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                this.sendFolderDeleteRequest(file.fileName)
+                                Swal.fire(
+                                    'Deleted!',
+                                    'Your file has been deleted.',
+                                    'success'
+                                )
+                            }
+                        })
+                    } else {
+                        // directory is empty
+                        this.sendFolderDeleteRequest(file.fileName)
+                        Swal.fire(
+                            'Deleted!',
+                            'Your directory has been deleted.',
+                            'success'
+                        )
+                    }
                 }
             })
         } else {
+            //deleting a basic file
             Swal.fire({
                 title: 'Are you sure?',
                 text: "You cannot return the file after you delete it",
@@ -479,7 +518,6 @@ class FileManagerTable extends React.Component {
             console.log(e);
         }
     }
-
 
     sendCopyRequest = async (newPath, name) => {
         try {
@@ -727,6 +765,54 @@ class FileManagerTable extends React.Component {
 
     }
 
+    getBase64File = async (file) => {
+        try {
+            const requestOptions = {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({
+                    email: config.email,
+                    password: config.password,
+                }),
+            };
+
+            var response = await fetch(config.url, requestOptions);
+            if (response.status == 200) {
+                var x = await response.json();
+                const token = x.accessToken;
+
+                let pathToFile = new String(this.state.activeFolder);
+                pathToFile = pathToFile.substring(2,);
+
+                const requestOptions2 = {
+                    method: "POST",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer " + token,
+                    },
+                    body: JSON.stringify({
+                        fileName: file.fileName,
+                        user: this.state.user.email,
+                        path: pathToFile
+                    })
+                };
+
+                return await fetch('https://si-grupa5.herokuapp.com/api/web/user/file/get', requestOptions2)
+                    .then((res) => {
+                        return res.json().then((res) => {
+                            return res.base64;
+                        });
+
+                    }).catch((error) => {
+                        console.log(error);
+                    });
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
     getText = async (file) => {
         var returnable = null;
         try {
@@ -777,23 +863,168 @@ class FileManagerTable extends React.Component {
         }
     }
 
+    async getUidsFromGroup(groupId){
+        const url = "https://si-2021.167.99.244.168.nip.io/api/device/AllDevicesForGroup?groupId=" + groupId;
+        const response = await request(url, 'GET');
+
+        var devices = response.data.data.devices;
+        var arr = [];
+        for(var i =0; i < devices.length; i++) {
+            var device = devices[i];
+            arr = [...arr, device.deviceUid];
+        }
+
+        return arr;
+    }
 
     async sendToAgents() {
         const url = 'https://si-2021.167.99.244.168.nip.io/api/group/MyAssignedGroups';
         var arrayOfGroups = [];
         const response = await request(url, 'GET');
+
         arrayOfGroups = response.data.data.subGroups;
-        var html = '<div class="swal-text">';
+        var html = '<div class = "modal-title"> Odaberite grupu na koju želite poslati označene fajlove ↓</div>'
+        html= html +'<div class="swal-text">';
 
         for (var i = 0; i < arrayOfGroups.length; i++) {
             html = html + this.getTableForGroups(arrayOfGroups[i]);
         }
         html = html + '</div>';
 
+
         Swal.fire({
-            html: html.toString(),
-            width: '50%'
-        })
+            html: html,
+            width: '50%',
+            showCancelButton: true,
+
+            preConfirm: () => {
+                var arr = [];
+                for (var i = 0; i < arrayOfGroups.length; i++) {
+                    arr = [...arr, ...this.getGroupIds(arrayOfGroups[i])];
+                }
+
+                var arrChecked = []
+                for (var i = 0; i < arr.length; i++) {
+                    if(document.getElementById(arr[i]).checked) arrChecked = [...arrChecked, arr[i]];
+                }
+                
+                var arrUid = [];
+                var arrPromiseUid = [];
+                for (var i = 0; i < arrChecked.length; i++) {
+                    var x = this.getUidsFromGroup(arrChecked[i]);
+                    x.then((res) => {
+                        arrUid = [...arrUid, ...res];
+                    })
+                    arrPromiseUid = [...arrPromiseUid, x];
+                }
+
+                Promise.all(arrPromiseUid).then(() => {
+                    var url = "https://si-grupa5.herokuapp.com/api/agent/files/put" //+ this.state.user.email;
+                    var body = {deviceUids: [], files: []};
+                    for (var i = 0 ; i < arrUid.length; i++) {
+                        body.deviceUids.push({deviceUid : arrUid[i]});
+                    }
+                    body.files = this.getCheckedFiles();
+
+
+                    //body.deviceUids = [{deviceUid: "eba54ce1-1df9-49ca-b104-801a8827f911"}]; // ovo zakomentarisi i radit ce
+                    //url = "http://109.237.39.237:25565/api/agent/files/put";
+
+                    console.log(body);
+                    console.log(JSON.stringify(body));
+
+                    /*
+                    request(url, 'POST', {body : JSON.stringify(body)})
+                    .then((res) => {
+                        console.log(res);
+                    }).catch((err) => {
+                        console.log(err);
+                        console.log(err.message);
+                        console.log(err.name);
+
+                    });
+                    */
+                    console.log(this.state.user);
+
+                    try {
+                        const requestOptions = {
+                            method: "POST",
+                            headers: {"Content-Type": "application/json"},
+                            body: JSON.stringify({
+                                email: config.email,
+                                password: config.password,
+                            }),
+                        };
+            
+                        fetch(config.url, requestOptions)
+                        .then((response) => {
+                            console.log(response);
+                            if (response.status == 200) {
+                                console.log("waka 1");
+                                response.json().then((x) => {
+                                    console.log(x);
+                                    console.log("waka 2");
+                                    const token = x.accessToken; console.log(token);
+                                    tokenGlobal = token;
+
+                                    const requestOptions1 = {
+                                        method: "POST",
+                                        headers: {
+                                            Accept: "application/json",
+                                            "Content-Type": "application/json",
+                                            Authorization: "Bearer " + token,
+                                        },
+                                        body: JSON.stringify(body),
+                                    };
+                                    
+                                    console.log(JSON.stringify(body));
+                                    console.log("waka 3");
+                                    fetch(url, requestOptions1)
+                                    .then((response) => {
+                                        console.log(response);
+                                        if(response.status == 200){
+                                            Swal.fire(
+                                                'Success',
+                                                'File is successfuly uploaded',
+                                                'success'
+                                              )
+                                        } else{
+                                            console.log(response.json())
+                                            /*Swal.fire({
+                                                icon: 'error',
+                                                title: 'Oops...',
+                                                text: 'Something went wrong!',
+                                              })*/
+                                        }
+                                    })
+                                    .catch((err) => {
+                                        console.log("waka 4");
+                                        console.log(err);
+                                    });
+                                });       
+                            }
+                        }).catch((err) => {
+                            console.log(err);
+                            console.log(err.name);
+                            console.log(err.message);
+                        });
+                        
+                    } catch (e) {
+                        console.log(e);
+                        console.log(e.name);
+                        console.log(e.message);
+
+                    }
+                })
+            }
+
+        }).then((result) => {
+            if(result.isConfirmed){
+
+                console.log("HELLo");
+
+            }
+        });
     }
 
     getTableForGroups(group) {
@@ -805,17 +1036,30 @@ class FileManagerTable extends React.Component {
             }
             html = html + '</div>';
         } else {
-            html = '<div class="swalItem">';
-            html = html + '<div class="form-check">';
-            html = html + `<label class="form-check-label" for="${group.groupId}">`
-            html = html + group.name;
-            html = html + "</label>";
-            html = html + `<input class="form-check-input " type="checkbox" value="" id="${group.groupId}">`;
+            html = html + '<div class="swalItem">';
+            html = html +   '<div>';
+            html = html +       `<label class="align-checkbox" for="${group.groupId}">`
+            html = html +           group.name;
+            html = html +       "</label>";
+            html = html +       `<input type="checkbox" value="${group.groupId}" id="${group.groupId}" onChange="console.log">`;
+            html = html +   "</div>";
             html = html + "</div>";
+
         }
         return html;
     }
 
+    getGroupIds(group){
+        var arr = [];
+        if (typeof group.subGroups !== 'undefined' && group.subGroups.length > 0) {
+            for (var i = 0; i < group.subGroups.length; i++) {
+                arr = [...arr, ...this.getGroupIds(group.subGroups[i])];
+            }
+        } else { 
+            arr = [...arr, group.groupId];
+        }
+        return arr;
+    }
 
     clickNewFolder() {
         Swal.fire({
@@ -843,8 +1087,30 @@ class FileManagerTable extends React.Component {
     }
 
     getCheckedFiles() {
-        const sendFiles = this.state.checkedFiles;
-        console.log(JSON.stringify(sendFiles));
+        var sendFiles = this.state.checkedFiles;
+        var arr = []
+        for(var i = 0; i < sendFiles.length; i++){
+            if(sendFiles[i].data.type=="file") {
+                arr.push({fileName: sendFiles[i].fileName, path: sendFiles[i].data.path.split('/').slice(2, -1).join('/')});
+            } else {
+                arr = [...arr, ...this.getChildren(sendFiles[i].data.children)];
+            }
+        }
+
+        return arr;
+    }
+
+    getChildren(children) {
+        var arr = [];
+        for(var i = 0; i < children.length; i++){
+            if(children[i].type=="file") {
+                arr.push({fileName: children[i].name, path: children[i].path.split('/').slice(2, -1).join('/')});
+            } else {
+                arr = [...arr, ...this.getChildren(children[i].children)];
+            }
+        }
+
+        return arr;
     }
 
     render() {

@@ -4,6 +4,7 @@ import menu from "./menu/menu";
 import devices from "./devices/devices";
 import groups from "./groups/groups";
 import login from "./login/login";
+import report from "./report/report";
 import users from "./users/users"
 
 // Kada napravite reducer (store module), dodajte ga ovdje ispod (counter, menu, noviModul, ...)
@@ -14,6 +15,7 @@ const createRootReducer = (history) => combineReducers({
     devices,
     groups,
     login,
-    users
+    report,
+    users,
 })
 export default createRootReducer

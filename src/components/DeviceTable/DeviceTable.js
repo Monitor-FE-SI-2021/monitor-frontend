@@ -139,29 +139,31 @@ const DeviceTable = ({
                      label={text}/>
     }
 
-    const getDevicePath = (groupId,path,groups) =>{
-        if(!groups.get(groupId).parentGroupId) {
-            return path.map((item,index) => {
+    const getDevicePath = (groupId, path, groups) => {
+        if (!groups.get(groupId)?.parentGroupId && Array.isArray(path)) {
+            return path.map((item, index) => {
                 return <span key={index}>{item}</span>
             })
         }
-        if(path === ''){
-            path = [<b>{groups.get(groupId).name}</b>];
+        if (path === '') {
+            path = [<b>{groups.get(groupId)?.name}</b>];
         } else {
-            path = [groups.get(groupId).name + ' / ' ,...path];
+            path = [groups.get(groupId)?.name + ' / ', ...path];
         }
-        return getDevicePath(groups.get(groupId).parentGroupId,path,groups);
+        return getDevicePath(groups.get(groupId)?.parentGroupId, path, groups);
     }
 
     const getGroupArray = groups => {
-        if(!groups) return [];
+        if (!groups) return [];
         let output = [];
-        if(!groups.parentGroupId){
-            output = [...output,groups];
+        if (!groups.parentGroupId) {
+            output = [...output, groups];
         }
-        groups.subGroups.forEach(group => {
-            output = [...output, group, ...getGroupArray(group)];
-        })
+        if (groups.subGroups) {
+            groups.subGroups.forEach(group => {
+                output = [...output, group, ...getGroupArray(group)];
+            })
+        }
         return output;
     }
 
@@ -228,7 +230,7 @@ const DeviceTable = ({
                              hasDragAndDrop={hasDragAndDrop}>
                     <TableSlot slot='group' render={device => (
                         <span className="path">
-                            {getDevicePath(device.groupId,'',groupMap)}
+                            {getDevicePath(device.groupId, '', groupMap)}
                         </span>)}/>
                     <TableSlot slot='actions' render={dataRow => (
                         <div className='actions'>

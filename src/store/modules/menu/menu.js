@@ -20,6 +20,7 @@ export const RouteLink = {
     FileManagerView: '/file-manager',
     SecurityQuestions: '/securityQuestions',
     Tasks: '/tasks',
+    EditReport: '/view-report',
     AdminPanel: '/admin-panel',
     ManageUser: '/manage-user'
 }
@@ -63,7 +64,13 @@ const initialState = {
             name: "Users",
             icon: "",
             accessLevel: ROLE_ACCESS_LEVELS.MonitorSuperAdmin
-        }
+        },
+        {
+            link: RouteLink.EditReport,
+            name: "Edit Report",
+            icon: "",
+        },
+            
     ],
 };
 
