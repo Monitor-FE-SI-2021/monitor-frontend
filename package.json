@@ -21,6 +21,7 @@
     "axios": "^0.21.1",
     "chart.js": "^2.9.4",
     "classnames": "^2.3.1",
+    "code-prettify": "^0.1.0",
     "connected-react-router": "^6.9.1",
     "dayjs": "^1.10.4",
     "firebase": "^8.3.1",
@@ -54,6 +55,7 @@
     "typeface-mulish": "^1.1.13",
     "typeface-roboto": "^1.1.13",
     "use-state": "^0.0.3",
+    "validator": "^13.5.2",
     "web-vitals": "^1.1.1"
   },
   "scripts": {

@@ -1,0 +1,36 @@
+.admin-users-table {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    align-items: flex-end;
+
+    .custom-table-container {
+        flex-basis: 0;
+        flex-grow: 1;
+        overflow: auto;
+    }
+
+    .actions {
+        margin-right: 8px;
+
+        svg {
+            cursor: pointer;
+        }
+
+        .edit-btn {
+            margin-left: 10px;
+            opacity: 0.8;
+            color: var(--main-color);
+
+            &:hover {
+                opacity: 1;
+            }
+        }
+    }
+
+    .role-name {
+        color: #666;
+        font-weight: bold;
+    }
+}
+
