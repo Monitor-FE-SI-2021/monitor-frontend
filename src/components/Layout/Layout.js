@@ -17,7 +17,10 @@ import RemoteControl from "../../pages/RemoteControl/RemoteControl";
 import MyProfile from "../MyProfile/MyProfile"
 import EmailVerification from "../MyProfile/EmailVerification"
 import ManageGroup from "../../pages/ManageGroup/ManageGroup";
+import EditReport from "../../pages/EditReport/EditReport";
 import FileManagerView from "../../pages/FileManager/FileManager"
+import AdminPanel from "../../pages/AdminPanel/AdminPanel";
+import ManageUser from "../../pages/ManageUser/ManageUser";
 
 const Layout = ({ isMenuExpanded, loginAsync, userAsync, user }) => {
     if (loginAsync || userAsync) {
@@ -45,11 +48,14 @@ const Layout = ({ isMenuExpanded, loginAsync, userAsync, user }) => {
                     <Route path={RouteLink.MyProfile} component={MyProfile}/>
                     <Route path={RouteLink.EmailVerification} component={EmailVerification}/>
                     <Route path={RouteLink.Tasks} component={Tasks}/>
+                    <Route path={RouteLink.EditReport} component={EditReport}/>
                     <Route
                         path={RouteLink.RemoteControl + "/:name?/:tab?"}
                         component={RemoteControl}
                     />
                     <Route path={RouteLink.FileManagerView} component={FileManagerView}/>
+                    <Route path={RouteLink.AdminPanel} component={AdminPanel}/>
+                    <Route path={RouteLink.ManageUser} component={ManageUser}/>
                 </Switch>
             </div>
         </div>

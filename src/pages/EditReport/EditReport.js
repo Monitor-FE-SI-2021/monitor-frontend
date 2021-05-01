@@ -6,8 +6,8 @@ import { setReportToStore } from "../../store/modules/report/report";
 
 import request from "../../service";
 
-import { fields, frequencies, devices, queryFields, days, months, times } from './constants';
-import ReportTiming from './ReportTiming';
+import { fields, frequencies, devices, queryFields, days, months, times } from '../Reporting/constants';
+import ReportTiming from '../Reporting/ReportTiming';
 
 import Button from '@material-ui/core/Button';
 import Select from '@material-ui/core/Select';
@@ -18,7 +18,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import { push } from "connected-react-router";
 import { RouteLink } from "../../store/modules/menu/menu";
 
-import './Reporting.scss';
+import './EditReport.scss';
 
 
 
@@ -38,32 +38,35 @@ const Reports = ({ user, push, report, setReportToStore }) => {
     const [checkBoxes, setCheckBoxes] = useState([false,false,false,false,false,false,false,false,false]);
     const [loadedQuery, setLoadedQuery] = useState("");
     const [reportId, setReportId] = useState("");
+    const [loading, setLoading] = useState(true);
 
     const initValues = (data) => {
-        setReportId(data.reportId);
-        const newDate = new Date(data?.nextDate);
-        const newTime = `${(newDate.getHours() + 2)}:00:00`;
-        const findTime = times.find(e => e.value === newTime);
-        const obj = {
-            frequency: {
-                label: data?.frequency,
-                value: data?.frequency
-            },
-            day: {
-                label: days[newDate.getDay()].label,
-                value: days[newDate.getDay()].value
-            },
-            month: {
-                label: months[newDate.getMonth()].label,
-                value: months[newDate.getMonth()].value,
-            },
-            dayInMonth: newDate.getDate(),
-            time: {
-                label: findTime?.label,
-                value: findTime?.value
-            }
-        }
-        setValues(obj);
+      setReportId(data.reportId);
+      const newDate = new Date(data?.nextDate);
+      let newTime = `${(newDate.getHours())}:00:00`;
+      if (newTime.length < 8) newTime = '0' + newTime;
+      const findTime = times.find(e => e.value === newTime);
+      const obj = {
+          frequency: {
+              label: data?.frequency,
+              value: data?.frequency
+          },
+          day: {
+              label: days[newDate.getDay()].label,
+              value: days[newDate.getDay()].value
+          },
+          month: {
+              label: months[newDate.getMonth()].label,
+              value: months[newDate.getMonth()].value,
+          },
+          dayInMonth: newDate.getDate(),
+          time: {
+              label: findTime?.label,
+              value: findTime?.value
+          }
+      }
+      setValues(obj);
+
     }
 
     let arrToSubGroups = {};
@@ -122,7 +125,7 @@ const Reports = ({ user, push, report, setReportToStore }) => {
     };
 
     useEffect(() => {
-        setData();
+      setData();
     }, []);
 
     useEffect(() => {
@@ -150,10 +153,11 @@ const Reports = ({ user, push, report, setReportToStore }) => {
             setGroups(foundGroup.subGroups);
             setGroupStack([...groupStack, {depth: selectedGroup.depth + 1, group: foundGroup, parent: selectedGroup }]);
             setTimeout(() => {
-                if(arrPathToGroup.length > 0)changeGroupForce();
+                if(arrPathToGroup.length > 0) changeGroupForce();
                 else {
                     setFoundPathToGroup(true);
                     setLoadedGroup(true);
+                    setLoading(false);
                 }
             }, 200);
         }
@@ -176,7 +180,7 @@ const Reports = ({ user, push, report, setReportToStore }) => {
         switch(freq){
             case "Daily":
                 const dailyHours = frequencyInfo.time.value.split(':');
-                dateCurrent.setHours(parseInt(dailyHours[0]) + 2, dailyHours[1], dailyHours[2]);
+                dateCurrent.setHours(parseInt(dailyHours[0]), dailyHours[1], dailyHours[2]);
                 break;
             case "Weekly":
                 const daysMap = {
@@ -242,11 +246,12 @@ const Reports = ({ user, push, report, setReportToStore }) => {
             nextDate: calculateDate(),
             frequency: frequencyInfo.frequency.value,
             sendEmail: sendEmailValue,
+            ReportId: reportId,
         };
         
-        const response = await request("https://si-2021.167.99.244.168.nip.io/api/report/CreateReport", "POST", body);
+        const response = await request("https://si-2021.167.99.244.168.nip.io/api/report/EditReport", "PUT", body);
         if (response.status === 200) {
-            window.alert("Report created successfully!");
+            window.alert("Report successfully updated!");
             push(RouteLink.ReportList);
         }
     };
@@ -278,11 +283,16 @@ const Reports = ({ user, push, report, setReportToStore }) => {
     };
     
     const resetState = (value) => {
-        if (value === 'group') setLoadedGroup(false); 
-        else setData();
+      if (value === 'group') {
+        setLoadedGroup(false); 
+        setData();
+      }
+      else {
+        setLoadedQuery(false);
+      }
     }
 
-    const elementJson = loadedQuery.replaceAll('\\\"', '')
+    const elementJson = loadedQuery && loadedQuery.replaceAll('\\\"', '')
         .replace('"select":', '\n\tselect: ')
         .replace('"where":', '\n\twhere: ')
         .replace('"group":', '\n\tgroup: ')
@@ -290,11 +300,10 @@ const Reports = ({ user, push, report, setReportToStore }) => {
         .replace('}', '\n}')
         .replaceAll('","', '", "')
 
-    
     return (
         <div className="reportingWrapper">
-            <h1> Create Report </h1>
-
+            <h1> Edit Report </h1>
+            { !loading ?
             <div className="reportingInput">
                 <div className="inputWrapper">
                     <InputLabel className="inputLabelWrapper" id="frequencyLabel"> Report title:  </InputLabel>
@@ -306,7 +315,18 @@ const Reports = ({ user, push, report, setReportToStore }) => {
                     <input id="emailCheckbox" type="checkbox" checked={sendEmailValue} onChange={() => handleSendEmailValue(!sendEmailValue)}></input>
                 </div>
 
-                <ReportTiming editData={values ? values : false} setTimeInfo={(info) => setFrequencyInfo(info)} />
+                <ReportTiming editData={values || false} setTimeInfo={(info) => setFrequencyInfo(info)} />
+
+                {(foundPathToGroup && loadedGroup) && (
+                    <div className="query_wrapper">
+                        <InputLabel className="queryLabel">
+                          Group:
+                        </InputLabel>
+                        {selectedGroup.group.name}
+                        <Button onClick={() => resetState('group')} variant="contained" color="default"> Change Group </Button>
+                    </div>
+                )}
+
                 {!loadedGroup && <div className="groupInputWrapper">
 
                     {groupStack.map(group_it => (
@@ -351,7 +371,20 @@ const Reports = ({ user, push, report, setReportToStore }) => {
                         </div>
                     </div>
                 </div>}
-                {!loadedGroup && <div className="queryBuilderWrapper">
+
+                {(loadedQuery) && (
+                    <div className="query_wrapper">
+                        <InputLabel className="queryLabel">
+                            Query:
+                        </InputLabel>
+                        <textarea value={elementJson} cols="55" rows="10" readOnly>
+                        </textarea>
+                        
+                        <Button onClick={() => resetState()} variant="contained" color="default"> Change Query </Button>
+                    </div>
+                )}
+
+                {!loadedQuery && <div className="queryBuilderWrapper">
                     <h3 className="queryBuilderTitle"> What do you want in your report? </h3>
                     <QueryBuilder
                         title="reportBuilder"
@@ -379,8 +412,13 @@ const Reports = ({ user, push, report, setReportToStore }) => {
                     ))}
                 </div>
 
-                <Button onClick={submitReportForm} variant="contained" color="default" disabled={checkQuery()}> Submit </Button>
+                <Button onClick={submitReportForm} variant="contained" color="default"> Submit </Button>
             </div>
+            : 
+            <div>
+              Loading...
+            </div>
+        }
         </div>
     )
 };

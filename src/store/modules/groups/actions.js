@@ -1,6 +1,36 @@
 import { SET_GROUPS, SET_GROUPS_ASYNC, SEARCH_GROUPS_ACTION, SELECT_GROUP } from "./types";
 import request, { groups } from "../../../service";
 
+export const fetchAllGroupsForAdmin = () => {
+
+    return dispatch => {
+
+        dispatch({ type: SET_GROUPS_ASYNC, async: false });
+
+        return request(groups + '/GetAllGroups').then(response => response.data)
+            .then(r => {
+
+                let groupTree = r.data;
+
+                if (Array.isArray(r.data)) {        // If we got more root groups (Imtec, Genelec), transform array to object
+                    groupTree = {
+                        name: 'root',
+                        parentGroupId: null,
+                        subGroups: r.data
+                    }
+                }
+
+                dispatch({
+                    type: SET_GROUPS,
+                    groups: groupTree,
+                })
+
+            }).finally(() => {
+                dispatch({ type: SET_GROUPS_ASYNC, async: false });
+            })
+    }
+}
+
 export const fetchAllGroups = () => {
 
     return (dispatch, getState) => {

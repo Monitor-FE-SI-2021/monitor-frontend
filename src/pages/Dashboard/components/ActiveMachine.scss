@@ -1,7 +1,7 @@
 .card {
 	border-radius: 10px;
 	box-shadow: 0 2px 5px #ccc;
-	height: 200px;
+	height: 240px;
 	margin-bottom: 10px;
 	cursor: pointer;
 }
@@ -9,7 +9,13 @@
 .card:hover {
 	background-color: #ffffff;
 }
-
+.conf pre{
+	font-family: Consolas, Courier;
+	margin-left: 5px
+	}
+.conf h3{
+	margin-left: 5px
+}
 .img-info {
 	display: flex;
 	height: 140px;

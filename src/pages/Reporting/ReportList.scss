@@ -70,3 +70,39 @@
     width: 200px;
     margin-left: 50px;
 }
+
+.reportHeader {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.editButton {
+    border: none;
+    background: rgb(137, 207, 143);
+    font-weight: 100;
+    padding: 5px 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border-radius: 6px;
+    display: inline-block;
+    align-self: flex-end;
+    color: #fff;
+    margin: 10px;
+}
+
+.deleteButton {
+    border: none;
+    background: rgb(209, 110, 110);
+    font-weight: 100;
+    padding: 5px 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border-radius: 6px;
+    display: inline-block;
+    align-self: flex-end;
+    color: #fff;
+    margin: 10px;
+}

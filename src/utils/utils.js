@@ -1,4 +1,5 @@
 import Swal from 'sweetalert2'
+import { ROLE_ACCESS_LEVELS } from "./consts";
 
 export function getDeepProp(obj, props) {
     return props.split('.').reduce(function (acc, p) {
@@ -27,4 +28,18 @@ export function findParentGroup(childGroup, rootGroups) {
 
         return findParentGroup(childGroup, group.subGroups);
     }
+}
+
+export function mergeName(user) {
+    if (!user) return '';
+
+    return user.name + ' ' + user.lastName;
+}
+
+export function getUserAccessLevel(user) {
+    if (!user || !user?.role?.name) {
+        return 0;
+    }
+
+    return ROLE_ACCESS_LEVELS[user.role.name];
 }
