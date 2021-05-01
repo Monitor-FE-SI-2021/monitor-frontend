@@ -59,6 +59,7 @@ const ManageDeviceForm = ({ selectedDevice, group, groupOptions, fetchAllGroups,
         }
 
         if (selectedDevice) {
+            console.log("Evo vidis da moze")
             setValues(transformDeviceToForm(selectedDevice));
         }
 
@@ -124,7 +125,7 @@ const ManageDeviceForm = ({ selectedDevice, group, groupOptions, fetchAllGroups,
 
         const deviceData = transformFormToDevice(values);
 
-        console.log(deviceData);
+        //console.log(deviceData);
 
         const groupId = deviceData.GroupId;
 
@@ -169,24 +170,24 @@ const ManageDeviceForm = ({ selectedDevice, group, groupOptions, fetchAllGroups,
 
     return (
         <form className="manage-device-form" onSubmit={handleSubmit}>
-            <TextField variant="outlined" label="Naziv" name="name" value={values.name} onChange={handleInputChange}
+            <TextField inputProps={{"data-testid":"nameField"}} variant="outlined" label="Naziv" name="name" value={values.name} onChange={handleInputChange}
                        {...(errors.name && { error: true, helperText: errors.name })} />
 
-            <TextField variant="outlined" label="Lokacija" name="location" value={values.location}
+            <TextField inputProps={{"data-testid":"locationField"}} variant="outlined" label="Lokacija" name="location" value={values.location}
                        onChange={handleInputChange}
                        {...(errors.location && { error: true, helperText: errors.location })} />
 
-            <TextField variant="outlined" label="Geografska širina" type='number' name="latitude"
+            <TextField inputProps={{"data-testid":"latitudeField"}} variant="outlined" label="Geografska širina" type='number' name="latitude"
                        value={values.latitude}
                        onChange={handleInputChange}
                        {...(errors.latitude && { error: true, helperText: errors.latitude })}/>
 
-            <TextField variant="outlined" label="Geografska dužina" type='number' name="longitude"
+            <TextField inputProps={{"data-testid":"longitudeField"}} variant="outlined" label="Geografska dužina" type='number' name="longitude"
                        value={values.longitude}
                        onChange={handleInputChange}
                        {...(errors.longitude && { error: true, helperText: errors.longitude })}/>
 
-            <TextField variant="outlined"
+            <TextField inputProps={{"data-testid":"installationCodeField"}} variant="outlined"
                        disabled={installationCodeDisabled}
                        label="Instalacioni kod"
                        name="installationCode"
@@ -195,6 +196,7 @@ const ManageDeviceForm = ({ selectedDevice, group, groupOptions, fetchAllGroups,
                        {...(errors.installationCode && { error: true, helperText: errors.installationCode })}/>
 
             <TextField
+                inputProps={{"data-testid":"groupSelectionField"}}
                 variant="outlined"
                 select
                 name="group"
