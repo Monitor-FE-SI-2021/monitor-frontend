@@ -20,7 +20,7 @@ const MapConsoleOutput = ({
   setRestartCommands
 }) => {
   const scrollRef = React.useRef();
-//merge
+//merg
   React.useEffect(() => {
     if (scrollRef.current)
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -83,7 +83,10 @@ const MapConsoleOutput = ({
               window.localStorage.setItem("response", "Poziv nije uspio");
               addNewLog();
             }
-            clone[clone.length - 1] = "Poziv nije uspio";
+            if(!command.includes("shutdown"))
+              clone[clone.length - 1] = "Poziv nije uspio";
+            else
+              clone[clone.length - 1] = "Masina se restartuje!";
             updateConsoleOutput(clone);
           });
         }
@@ -105,10 +108,7 @@ const MapConsoleOutput = ({
         } else {
           return (
             <div key={index}>
-              <span style={{whiteSpace: 'pre-line'}}> 
-                {item} 
-              </span>
-              
+              <span style={{whiteSpace: 'pre-line'}}>{item}</span>
             </div>
           );
         }
