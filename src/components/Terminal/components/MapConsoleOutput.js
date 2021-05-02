@@ -64,6 +64,9 @@ const MapConsoleOutput = ({
             let modified = res.data.message.replace(/\\n/g, "\n");
             modified = modified.replace(/\\r/g, "\r");
             console.log(modified);
+            if(command=="shutdown -s")
+            clone[clone.length - 1] = "Masina se gasi!"
+            else
             clone[clone.length - 1] = modified;
             
             if (clone != "" || clone != null) updateConsoleOutput(clone);
@@ -83,10 +86,12 @@ const MapConsoleOutput = ({
               window.localStorage.setItem("response", "Poziv nije uspio");
               addNewLog();
             }
-            if(!command.includes("shutdown"))
-              clone[clone.length - 1] = "Poziv nije uspio";
+            if(command.includes("shutdown -r"))
+            clone[clone.length - 1] = "Masina se restartuje!";
+            else if(command.includes("shutdown -s")) 
+            clone[clone.length - 1] = "Masina se gasi!";
             else
-              clone[clone.length - 1] = "Masina se restartuje!";
+            clone[clone.length - 1] = "Poziv nije uspio";
             updateConsoleOutput(clone);
           });
         }
