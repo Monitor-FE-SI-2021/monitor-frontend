@@ -32,7 +32,6 @@ const ActiveMachine = ({data, img, onDisconnect, getStatistics, sDate, eDate, us
             .then((res) => setConfigString(res.data.message.replace(/\\n/g, "\n").replace(/\\r/g, "\r")))
             .catch((err) => console.log(err))
             .finally(() => setAsync(false))
-        console.log(configString)
     }
     
     return (

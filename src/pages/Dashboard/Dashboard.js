@@ -91,7 +91,6 @@ let clickedMachine = null
 let allMachinesUsage = null
 let lastDisconnected = null
 let allErrors = []
-let activeMachinesForUser = []
 
 function machineNameAndLocation(machine) {
     if (!machine) return ""
@@ -101,12 +100,6 @@ function machineNameAndLocation(machine) {
     }
     return name
 }
-/*
-function setActiveMachinesForUser(activeMachines, user, setActiveForUser) {
-    setActiveForUser(activeMachines.filter((machine) =>
-        machine.user === user.email
-    ))
-}*/
 
 export let barchartMaxValue = 10
 
@@ -148,7 +141,6 @@ const Dashboard = ({ user }) => {
                 machine.deviceId = existingMachine.deviceId
                 machine.lastTimeOnline = existingMachine.lastTimeOnline;
             }
-            setActiveForUser()
             return existingMachine;
         }) : [];
         setActiveForUser(active.filter((machine) =>
@@ -157,13 +149,10 @@ const Dashboard = ({ user }) => {
         return active
     }
 
-   // console.log(configString.replace(/\\n/g, "\n").replace(/\\r/g, "\r"))
-
     function getStatistics(machine, startDate, endDate) {
         request(errors + "/DateInterval?DeviceUID=" + machine.deviceUid + "&StartDate=" + startDate + "&EndDate" + endDate)
             .then((res) => res.data.data)
             .then((res) => {
-                console.log([res])
                 setErrorCharts([res])
             })
 
@@ -191,7 +180,6 @@ const Dashboard = ({ user }) => {
     function datePickerChange(startDate, endDate) {
         startDate = startDate.toISOString()
         endDate = endDate.toISOString()
-        console.log(startDate, endDate)
         if (clickedMachine?.name === allMachinesString) {
             getAllDevicesStatistics(startDate, endDate)
         }
@@ -251,7 +239,6 @@ const Dashboard = ({ user }) => {
                 user: user.email
             })
                 .then((res) => {
-                    console.log(res.status)
                     cloned.splice(index, 1);
                     lastDisconnected = machine
                     if (cloned.length === 0 || removedMachine?.deviceId === clickedMachine?.deviceId) {
@@ -262,7 +249,6 @@ const Dashboard = ({ user }) => {
             setActive(cloned);
                 })
                 .catch((err) => {
-                   // console.log(clickedMachine)
                     console.log(err)})
         }
     };
