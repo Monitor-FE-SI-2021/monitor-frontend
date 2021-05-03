@@ -6,5 +6,10 @@ describe('Dashboard tests', () => {
 
         expect(convertStatistics(averageCPUUsage)).toStrictEqual([5340, -5240]);
     })
+
+    it('Incorrect machine name', () => {
+        const machine=null;
+        expect(machineNameAndLocation(machine)).toStrictEqual("");
+    })
 })
 
