@@ -11,5 +11,14 @@ describe('Dashboard tests', () => {
         const machine=null;
         expect(machineNameAndLocation(machine)).toStrictEqual("");
     })
-})
 
+    it('Machine name without location', () => {
+        const machine={name: "All machines"};
+        expect(machineNameAndLocation(machine)).toStrictEqual("All machines");
+    })
+
+    it('Machine name with location', () => {
+        const machine={name: "Machine1", location: "Sarajevo"};
+        expect(machineNameAndLocation(machine)).toStrictEqual("Machine1 (Sarajevo)");
+    })
+})
