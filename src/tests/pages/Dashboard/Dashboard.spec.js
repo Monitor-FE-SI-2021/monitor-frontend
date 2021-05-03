@@ -1,5 +1,4 @@
-import { convertStatistics, machineNameAndLocation, filterActive} from "../../../pages/Dashboard/Dashboard";
-import Dashboard from "../../../pages/Dashboard/Dashboard";
+import { convertStatistics, machineNameAndLocation, filterActive, Dashboard} from "../../../pages/Dashboard/Dashboard";
 import React from "react";
 import ReactDOM from 'react-dom';
 
@@ -39,6 +38,6 @@ describe('Dashboard tests', () => {
         const div =document.createElement("div");
         const user={"email":"osoba5@email.com"};
        
-        ReactDOM.render(<Dashboard user={user} ></Dashboard>, div)
+        ReactDOM.render(<Dashboard user={user} />, div)
     })
 })

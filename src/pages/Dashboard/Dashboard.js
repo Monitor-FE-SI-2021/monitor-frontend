@@ -8,14 +8,8 @@ import request, { devices, errors } from "../../service";
 import GoogleMapMonitors from "./components/GoogleMapMonitors";
 import DatePicker from "react-datepicker";
 import {Spinner} from "../../components/Spinner/Spinner"
-
 import "react-datepicker/dist/react-datepicker.css";
-
 import "./dashboard.scss";
-import {Bar} from "react-chartjs-2";
-import {STORAGE_KEY} from "../../utils/consts";
-import { LiveTv } from "@material-ui/icons";
-
 
 let barChart = {
 
@@ -79,7 +73,6 @@ let hddUsageChart = {
     ],
 };
 
-
 export function convertStatistics(statistic) {
     return [Math.round(statistic * 100), Math.round((1 - statistic) * 100)];
 }
@@ -102,7 +95,6 @@ export function machineNameAndLocation(machine) {
 }
 
 export function filterActive(activeMachines, allMachines, setActiveForUser, user) {
-    console.log(activeMachines)
     let active = activeMachines ? activeMachines.filter((machine) => {
         const existingMachine = allMachines.find(({ deviceUid }) => {
             return machine.status !== "Waiting" && machine.deviceUid === deviceUid;
@@ -121,10 +113,9 @@ export function filterActive(activeMachines, allMachines, setActiveForUser, user
 
 export let barchartMaxValue = 10
 
-const Dashboard = ({ user }) => {
+export const Dashboard = ({ user }) => {
     
     let activeMachines = []
-    let configuration = null
     const [async, setAsync] = React.useState(true)
     const [machines, setMachines] = React.useState([]);
     const [active, setActive] = React.useState([...activeMachines]);
@@ -136,16 +127,6 @@ const Dashboard = ({ user }) => {
     var [chartType, setChartType] = React.useState(true)
     const [showForUser, setShowForUser] = React.useState(true)
     const [activeForUser, setActiveForUser] = React.useState([])
-
-    function getConfiguration(machine) {
-        let configString = ""
-        request("https://si-grupa5.herokuapp.com/api/agent/info/system", "POST", {
-            deviceUid: machine.deviceUid,
-        })
-            .then((res) => configString = res.data.message.replace(/\\n/g, "\n").replace(/\\r/g, "\r"))
-            .catch((err) => console.log(err))
-        return configString
-    }
 
     function getStatistics(machine, startDate, endDate) {
         request(errors + "/DateInterval?DeviceUID=" + machine.deviceUid + "&StartDate=" + startDate + "&EndDate" + endDate)
@@ -267,7 +248,6 @@ const Dashboard = ({ user }) => {
             setShowCharts(false)
             setShowCharts(true)
         }
-
     };
 
     return (
@@ -318,7 +298,6 @@ const Dashboard = ({ user }) => {
                                         sDate={startDate.toISOString()}
                                         eDate={endDate.toISOString()}
                                         user={user}
-                                        //getConfiguration={getConfiguration}
                                     />
                                 ))
                             ) : (

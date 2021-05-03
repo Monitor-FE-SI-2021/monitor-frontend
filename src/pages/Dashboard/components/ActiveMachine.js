@@ -32,7 +32,6 @@ const ActiveMachine = ({data, img, onDisconnect, getStatistics, sDate, eDate, us
                 className="card"
                 id={data.deviceId}
                 onClick={handleOnClick}
-                
                 onDoubleClick={() => {
                     if (user.email !== data.user) {
                         showSwalToast("Device already in use.")
@@ -45,7 +44,6 @@ const ActiveMachine = ({data, img, onDisconnect, getStatistics, sDate, eDate, us
                     <div className="card-img">
                         <Avatar img={img}/>
                     </div>
-
                     <div className="card-info">
                         <h3>{data.name}</h3>
                         <h3>{data.location}</h3>
@@ -62,8 +60,7 @@ const ActiveMachine = ({data, img, onDisconnect, getStatistics, sDate, eDate, us
                             configurationOpen ? popup.current.focus() : setConfigurationOpen(true)
                             getConfiguration(data)
                         }}
-                    >
-                        Configuration
+                    > Configuration
                     </button>
                     <button id="disconnect"
                         onClick={() => {

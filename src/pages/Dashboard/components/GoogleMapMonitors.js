@@ -51,11 +51,8 @@ export function checkMachineErrors(errors, machines) {
     })
 }
 
-
 class GoogleMapMonitors extends Component {
     render() {
-
-
         let activeMachines = this.props.activeMachines
         let allMachines = this.props.allMachines
         let allErrors = this.props.allErrors

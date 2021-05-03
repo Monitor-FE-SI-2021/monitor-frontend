@@ -1502,6 +1502,11 @@
   resolved "https://registry.yarnpkg.com/@firebase/webchannel-wrapper/-/webchannel-wrapper-0.4.1.tgz#600f2275ff54739ad5ac0102f1467b8963cd5f71"
   integrity sha512-0yPjzuzGMkW1GkrC8yWsiN7vt1OzkMIi9HgxRmKREZl2wnNPOKo/yScTjXf/O57HM8dltqxPF6jlNLFVtc2qdw==
 
+"@googlemaps/jest-mocks@^0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@googlemaps/jest-mocks/-/jest-mocks-0.1.1.tgz#fe9b6a54fabe5fae609c7eff19c87dd9051cb64d"
+  integrity sha512-n+lANUnxETOyt/nSQV8LsmqAZJbGiC3r+aXEPn95U//k+5dVszQlfeZxSYAI0Gc3YfunyD9VyLbyMpm+S663Mg==
+
 "@grpc/grpc-js@^1.0.0":
   version "1.2.12"
   resolved "https://registry.yarnpkg.com/@grpc/grpc-js/-/grpc-js-1.2.12.tgz#0153f27512acf69184bb52c0a1035ca91d6c14b0"
@@ -7855,6 +7860,11 @@ jest-get-type@^26.3.0:
   version "26.3.0"
   resolved "https://registry.yarnpkg.com/jest-get-type/-/jest-get-type-26.3.0.tgz#e97dc3c3f53c2b406ca7afaed4493b1d099199e0"
   integrity sha512-TpfaviN1R2pQWkIihlfEanwOXK0zcxrKEE4MlU6Tn7keoXdN6/3gK/xl0yEh8DOunn5pOVGKf8hB4R9gVh04ig==
+
+jest-google-maps-mock@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/jest-google-maps-mock/-/jest-google-maps-mock-1.0.7.tgz#59ab38135703b14c494af59fbf84fe8251154b17"
+  integrity sha512-3kehJKBCC1FeMNdWSIYZThZMvN957HvvHKuPKBSQO2Qbl81z2N/CSkl2MFqOkxwtdQb78eRktzt2H5DmU2Rs8Q==
 
 jest-haste-map@^26.6.2:
   version "26.6.2"

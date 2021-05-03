@@ -48,7 +48,7 @@ describe('Google Map tests', () => {
         expect(machines[1].imageURL).toStrictEqual("http://maps.google.com/mapfiles/ms/micons/yellow-dot.png");
         
     })
-    /*
+
     it('Google map renders successfully', () => {
         const div =document.createElement("div");
         const allMachines=[{"deviceUid":"1", "name":"Aj", "location":"Sarajevo", "lastTimeOnline":"2.2.2021", "locationLatitude":"45", "locationLongitude":"45"}];
@@ -73,5 +73,5 @@ describe('Google Map tests', () => {
        
         ReactDOM.render(<GoogleMapMonitors allMachines={allMachines} activeMachines={activeMachines} allErrors={errors} ></GoogleMapMonitors>, div)
     })
-    */
+
 })
