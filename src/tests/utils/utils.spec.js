@@ -6,4 +6,9 @@ describe('utils tests', () => {
 
         expect(mergeName(user)).toBe('huso husic');
     })
+
+    it('dummy test', () => {
+
+        expect('test').toBe('test');
+    })
 })
