@@ -141,6 +141,7 @@ export default function CustomTable({
                                             alignItems: "center",
                                         }}>
                                             <UpArrow
+                                                data-testid="sortAscendingButton"
                                                 className={'sort-icon'}
                                                 style={{
                                                     color: (activeSortField === field.name && activeSortOrder === 'asc') && "#7c90ff"
