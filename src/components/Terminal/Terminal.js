@@ -23,7 +23,7 @@ var counterOfSavedLogs = 0;
 var counterOfTabCommands = -1;
 
 
-const Terminal = (props) => {
+export const Terminal = (props) => {
   //console.log("IP ", props);
   const inputText = React.useRef();
 
