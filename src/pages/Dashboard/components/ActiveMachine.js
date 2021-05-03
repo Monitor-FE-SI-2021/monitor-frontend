@@ -1,16 +1,12 @@
 import React, { useRef, useState } from "react";
 import debounce from 'lodash/debounce';
-
 import NewWindow from '../../../components/NewWindow/NewWindow';
 import RemoteAccess from '../../RemoteAccess/RemoteAccess.js';
 import Avatar from "./MachineAvatar.js";
 import { showSwalToast } from "../../../utils/utils";
 import {Spinner} from "../../../components/Spinner/Spinner";
-
-
 import './ActiveMachine.scss';
 import request from "../../../service";
-
 
 const ActiveMachine = ({data, img, onDisconnect, getStatistics, sDate, eDate, user}) => {
     const [remoteAccessOpen, setRemoteAccessOpen] = useState(false);
@@ -18,11 +14,7 @@ const ActiveMachine = ({data, img, onDisconnect, getStatistics, sDate, eDate, us
     const [configurationOpen, setConfigurationOpen] = useState(false)
     const [configString, setConfigString] = useState("")
     const popup = useRef();
-
-    const handleOnClick = debounce(
-        () => getStatistics(data, sDate, eDate),
-        300
-    );
+    const handleOnClick = debounce(() => getStatistics(data, sDate, eDate),300);
 
     function getConfiguration(machine) {
         setAsync(true)
@@ -78,8 +70,7 @@ const ActiveMachine = ({data, img, onDisconnect, getStatistics, sDate, eDate, us
                             onDisconnect(data);
                             setRemoteAccessOpen(false);
                         }}
-                    >
-                        Disconnect
+                    > Disconnect
                     </button>
                 </div>
             </div>
@@ -93,15 +84,12 @@ const ActiveMachine = ({data, img, onDisconnect, getStatistics, sDate, eDate, us
                     <RemoteAccess machine={data} />
                 </NewWindow>
             ) }
-
-            {
-                configurationOpen && (
+            {   configurationOpen && (
                     <NewWindow
                         onClose={() => setConfigurationOpen(false)}
                         title={`Configuration - ${data.name} (${data.location})`}
                         ref={popup}
-                    >
-                        {async ? <Spinner/> :
+                    >   {async ? <Spinner/> :
                             <div className="conf">
                                 <h3>Desktop configuration</h3>
                                 <pre>{configString}</pre>
@@ -113,5 +101,4 @@ const ActiveMachine = ({data, img, onDisconnect, getStatistics, sDate, eDate, us
         </>
     );
 };
-
 export default ActiveMachine;
