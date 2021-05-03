@@ -101,6 +101,24 @@ export function machineNameAndLocation(machine) {
     return name
 }
 
+export function filterActive(activeMachines, allMachines, setActiveForUser, user) {
+    console.log(activeMachines)
+    let active = activeMachines ? activeMachines.filter((machine) => {
+        const existingMachine = allMachines.find(({ deviceUid }) => {
+            return machine.status !== "Waiting" && machine.deviceUid === deviceUid;
+        });
+        if (existingMachine) {
+            machine.deviceId = existingMachine.deviceId
+            machine.lastTimeOnline = existingMachine.lastTimeOnline;
+        }
+        return existingMachine;
+    }) : [];
+    setActiveForUser(active.filter((machine) =>
+        machine.user === user.email
+    ))
+    return active
+}
+
 export let barchartMaxValue = 10
 
 const Dashboard = ({ user }) => {
@@ -124,29 +142,9 @@ const Dashboard = ({ user }) => {
         request("https://si-grupa5.herokuapp.com/api/agent/info/system", "POST", {
             deviceUid: machine.deviceUid,
         })
-            .then((res) => { configString = res.data.message.replace(/\\n/g, "\n").replace(/\\r/g, "\r")
-            console.log(configString)})
+            .then((res) => configString = res.data.message.replace(/\\n/g, "\n").replace(/\\r/g, "\r"))
             .catch((err) => console.log(err))
-        console.log(configString)
         return configString
-    }
-    
-    function filterActive(activeMachines, allMachines) {
-        console.log(activeMachines)
-        let active = activeMachines ? activeMachines.filter((machine) => {
-            const existingMachine = allMachines.find(({ deviceUid }) => {
-                return machine.status !== "Waiting" && machine.deviceUid === deviceUid;
-            });
-            if (existingMachine) {
-                machine.deviceId = existingMachine.deviceId
-                machine.lastTimeOnline = existingMachine.lastTimeOnline;
-            }
-            return existingMachine;
-        }) : [];
-        setActiveForUser(active.filter((machine) =>
-            machine.user === user.email
-        ))
-        return active
     }
 
     function getStatistics(machine, startDate, endDate) {
@@ -211,7 +209,7 @@ const Dashboard = ({ user }) => {
                 setAsync(true)
                 request("https://si-grupa5.herokuapp.com/api/agents/online")
                     .then((res) => {
-                        setActive(filterActive(res?.data, allMachines));
+                        setActive(filterActive(res?.data, allMachines, setActiveForUser, user));
                     })
                     .finally(() => setAsync(false))
                 // setActive(filterActive(activeMachines, allMachines))
