@@ -14,7 +14,7 @@ let tokenGlobal = '';
 class FileManagerTable extends React.Component {
     constructor(props) {
         super(props);
-
+        //console.log("kad tek kreiram ovo je mail:",props.user.email);
         this.state = {
             responseObject: [
                 {
@@ -198,12 +198,12 @@ class FileManagerTable extends React.Component {
                     </td>
                     <td className="date-style">{oneObject.fileName == "LOADING..." ? " " : this.displayFormattedDate(date)}</td>
                     <div className="file-manipulation-wrapper">
-                        <td className="file-manipulation file-delete center-data" onClick={() => {
+                        <td data-testid="fileDelete" className="file-manipulation file-delete center-data" onClick={() => {
                             this.handleDelete(id)
                         }}>
                             <FaTrash size={20}/>
                         </td>
-                        <td className="file-manipulation file-rename center-data" onClick={() => {
+                        <td data-testid="fileRename" className="file-manipulation file-rename center-data" onClick={() => {
                             this.handleRename(id)
                         }}>
                             <FaPencilAlt size={20}/>
@@ -213,7 +213,7 @@ class FileManagerTable extends React.Component {
                         }}>
                             <FaCopy size={20}/>
                         </td>
-                        <td className="file-manipulation file-move center-data" onClick={() => {
+                        <td data-testid="fileMove" className="file-manipulation file-move center-data" onClick={() => {
                             this.handleMove(id)
                         }}>
                             <FaCut size={20}/>
@@ -384,8 +384,9 @@ class FileManagerTable extends React.Component {
     }
 
     handleDelete = async (id) => {
+        
         var file = this.state.responseObject.find(file => file.id == id);
-
+        
         var directoryPath = this.state.activeFolder + '/' + file.data.name;
         var path = directoryPath.trim('/').split('/');
 
@@ -404,7 +405,7 @@ class FileManagerTable extends React.Component {
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
+            }).then(async (result) => {
                 if (result.isConfirmed) {
                     if(!isDirectoryEmpty) {
                         // directory is not empty
@@ -416,19 +417,21 @@ class FileManagerTable extends React.Component {
                             confirmButtonColor: '#3085d6',
                             cancelButtonColor: '#d33',
                             confirmButtonText: 'Yes, delete it!'
-                        }).then((result) => {
+                        }).then(async (result) => {
                             if (result.isConfirmed) {
-                                this.sendFolderDeleteRequest(file.fileName)
+                                await this.sendFolderDeleteRequest(file.fileName)
                                 Swal.fire(
                                     'Deleted!',
                                     'Your file has been deleted.',
                                     'success'
                                 )
+                                console.log("dosao sam do ovdje znaci obrisao sam folder!");
                             }
                         })
                     } else {
                         // directory is empty
-                        this.sendFolderDeleteRequest(file.fileName)
+                        //console.log("evo me ovdje saljem da se brise fajl: ",file.fileName);
+                        await this.sendFolderDeleteRequest(file.fileName)
                         Swal.fire(
                             'Deleted!',
                             'Your directory has been deleted.',
@@ -628,6 +631,8 @@ class FileManagerTable extends React.Component {
         this.state.globalId = id;
         var file = this.state.responseObject.find(file => file.id == id);
 
+        console.log("Evo pozvao sam rename!!!");
+
         Swal.fire({
             title: 'Change file name',
             input: 'text',
@@ -716,6 +721,7 @@ class FileManagerTable extends React.Component {
     }
 
     addFolder = async (newFolder) => {
+        console.log("ovo je user:",this.props.user);
         try {
             const requestOptions = {
                 method: "POST",
@@ -752,7 +758,7 @@ class FileManagerTable extends React.Component {
                             text: "Directory successfully sent!",
                             type: "success",
                         });
-
+                        console.log("USPJEŠNO SAM SE DODAOOOO");
                         this.updateResponse();
 
                     }).catch((error) => {
@@ -1116,7 +1122,7 @@ class FileManagerTable extends React.Component {
     render() {
         return (
             <div>
-                <button className="top-button" onClick={() => this.clickUp()}
+                <button data-testid="goUp" className="top-button" onClick={() => this.clickUp()}
                         disabled={this.state.activeFolder == '.' ? "disabled" : ""}>Go UP
                 </button>
                 <button className="top-button" onClick={() => this.clickNewFolder()}>New folder</button>

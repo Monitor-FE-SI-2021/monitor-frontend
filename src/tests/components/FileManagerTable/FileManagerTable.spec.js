@@ -1,0 +1,149 @@
+import { findByRole, findByText, getAllByTestId, render, screen, waitForElement } from '@testing-library/react';
+import React from 'react';
+import { Provider } from 'react-redux';
+import FileManagerTable from '../../../components/FileManagerTable/FileManagerTable';
+import ReactDOM from "react-dom";
+import store from '../../../store/store';
+import TestRenderer from 'react-test-renderer';
+import userEvent from '@testing-library/user-event'
+
+test("renders without crashing", async () => {
+    const user = {
+        email: "whoso@whoso.com",
+        userId: 1
+    }
+    const div = document.createElement("div");
+    ReactDOM.render(
+        <Provider store={store}>
+            <FileManagerTable user={user}></FileManagerTable>
+        </Provider>, div
+    );
+});
+
+test("adding a folder", async () => {
+    const user = {
+        email: "whoso@whoso.com",
+        userId: 1
+    }
+    const { getByText, getByRole } = render(
+        <Provider store={store}>
+            <FileManagerTable user={user}></FileManagerTable>
+        </Provider>
+    );
+
+    userEvent.click(getByText("New folder"));
+    userEvent.type(getByRole("textbox"), "AAA-novi-test");
+    userEvent.click(getByText("Add"));
+    const confirmation = await waitForElement(() => getByText("OK"), {timeout: 4000});
+    userEvent.click(confirmation);
+    const newFolder = await waitForElement(() => getByText("AAA-novi-test"), {timeout: 3000});
+    expect(newFolder.textContent).toBe("AAA-novi-test");
+}, 10000);
+
+test("renaming a folder", async () => {
+    const user = {
+        email: "whoso@whoso.com",
+        userId: 1
+    }
+    const { getByText, getByRole, getByTestId, getAllByTestId } = render(
+        <Provider store={store}>
+            <FileManagerTable user={user}></FileManagerTable>
+        </Provider>
+    );
+        const folder = await waitForElement(() => getByText("AAA-novi-test"), {timeout: 3000});
+        let options = getAllByTestId("fileRename");
+        userEvent.click(options[0]);
+        userEvent.type(getByRole("textbox"), "AAA-novi-test2")
+        userEvent.click(getByText("Rename"));
+        const confirmation = await waitForElement(() => getByText("OK"), {timeout: 3000});
+        expect(getByText("File/folder renamed successfully").textContent).toBe("File/folder renamed successfully");
+        userEvent.click(confirmation);
+        const renamedFolder = await waitForElement(() => getByText("AAA-novi-test2"), {timeout: 3000});
+        expect(renamedFolder.textContent).toBe("AAA-novi-test2");
+}, 10000);
+
+test("deleting a folder", async () => {
+    const user = {
+        email: "whoso@whoso.com",
+        userId: 1
+    }
+    const { getByText, getByRole, getByTestId, getAllByTestId } = render(
+        <Provider store={store}>
+            <FileManagerTable user={user}></FileManagerTable>
+        </Provider>
+    );
+    
+    let folder = await waitForElement(() => getByText("AAA-novi-test2"), {timeout: 4000});
+    let options = getAllByTestId("fileDelete");
+    userEvent.click(options[0]);
+    let alertBtnDelete = await waitForElement(() => getByText("Yes, delete it!"), {timeout: 2000});
+    userEvent.click(alertBtnDelete);
+    const confirmation = await waitForElement(() => getByText("OK"), {timeout: 4000});
+    expect(getByText("Your directory has been deleted.").textContent).toBe("Your directory has been deleted.");
+    userEvent.click(confirmation);
+}, 10000);
+
+// test("moving a folder into another and deleting both in the end", async () => {
+//     const user = {
+//         email: "whoso@whoso.com",
+//         userId: 1
+//     }
+//     const { getByText, getByRole, getByTestId, getAllByTestId } = render(
+//         <Provider store={store}>
+//             <FileManagerTable user={user}></FileManagerTable>
+//         </Provider>
+//     );
+
+//     //kreiranje dva testna foldera
+//     userEvent.click(getByText("New folder"));
+//     userEvent.type(getByRole("textbox"), "AAA-novi-test");
+//     userEvent.click(getByText("Add"));
+//     let confirmation = await waitForElement(() => getByText("OK"), {timeout: 2000});
+//     userEvent.click(confirmation);
+//     let newFolder = await waitForElement(() => getByText("AAA-novi-test"), {timeout: 4000});
+//     expect(newFolder.textContent).toBe("AAA-novi-test");
+
+//     userEvent.click(getByText("New folder"));
+//     userEvent.type(getByRole("textbox"), "AAA-novi-test2");
+//     userEvent.click(getByText("Add"));
+//     confirmation = await waitForElement(() => getByText("OK"), {timeout: 2000});
+//     userEvent.click(confirmation);
+//     newFolder = await waitForElement(() => getByText("AAA-novi-test2"), {timeout: 4000});
+//     expect(newFolder.textContent).toBe("AAA-novi-test2");
+
+//     //move-anje foldera
+//     let options = getAllByTestId("fileMove");
+//     userEvent.click(options[0]);
+//     userEvent.type(getByRole("textbox"), "AAA-novi-test2")
+//     userEvent.click(getByText("Move"));
+//     confirmation = await waitForElement(() => getByText("OK"), {timeout: 2000});
+//     expect(getByText("File/folder moved successfully").textContent).toBe("File/folder moved successfully");
+//     userEvent.click(confirmation);
+//     userEvent.click(getByText("AAA-novi-test2"));
+//     const movedFolder = await waitForElement(() => getByText("AAA-novi-test"), {timeout: 2000});
+//     expect(movedFolder.textContent).toBe("AAA-novi-test");
+// }, 25000);
+
+// test("cleanup test", async () => {
+//     const user = {
+//         email: "whoso@whoso.com",
+//         userId: 1
+//     }
+//     const { getByText, getByRole, getByTestId, getAllByTestId } = render(
+//         <Provider store={store}>
+//             <FileManagerTable user={user}></FileManagerTable>
+//         </Provider>
+//     );
+
+//     let options = getAllByTestId("fileDelete")
+//     userEvent.click(options[0]);
+//     let alertBtnDelete = await waitForElement(() => getByText("Yes, delete it!"), {timeout: 2000});
+//     userEvent.click(alertBtnDelete);
+//     let confirmation = await waitForElement(() => getByText("OK"), {timeout: 2500});
+//     options = getAllByTestId("fileDelete")
+//     userEvent.click(options[0]);
+//     alertBtnDelete = await waitForElement(() => getByText("Yes, delete it!"), {timeout: 2000});
+//     userEvent.click(alertBtnDelete);
+//     confirmation = await waitForElement(() => getByText("OK"), {timeout: 2500});
+//     userEvent.click(confirmation);
+// });
