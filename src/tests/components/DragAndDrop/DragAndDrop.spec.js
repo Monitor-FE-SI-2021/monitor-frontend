@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitForElement } from '@testing-library/react';
 import React from 'react';
 import ReactDOM from "react-dom";
 import { Provider } from 'react-redux';
@@ -7,11 +7,12 @@ import store from '../../../store/store';
 import {act, renderHook} from '@testing-library/react-hooks';
 
 
-test("renders without crashing", () => {
-    const div = document.createElement("div");
-    ReactDOM.render(
+test("renders without crashing", async () => {
+    const { getByText } = render(
         <Provider store={store}>
             <DragAndDrop></DragAndDrop>
-        </Provider>, div
+        </Provider>
     );
+    const description = await waitForElement(() => getByText("Drag 'n' drop some files here, or click to select files"), {timeout: 2000});
+    expect(description.textContent).not.toBeNull();
 });
