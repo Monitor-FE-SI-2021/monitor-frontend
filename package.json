@@ -62,6 +62,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test-coverage": "yarn test -- --coverage",
+    "test-coverage-all": "yarn test -- --coverage --watchAll=false",
+    "test-coverage-summary": "yarn test -- --coverage --watchAll=false --coverageReporters='text-summary'",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
