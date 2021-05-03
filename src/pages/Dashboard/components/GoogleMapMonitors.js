@@ -8,7 +8,7 @@ const redMarkerURL = "http://maps.google.com/mapfiles/ms/micons/red-dot.png"
 const yellowMarkerURL = "http://maps.google.com/mapfiles/ms/micons/yellow-dot.png"
 const ltBlueMarkerURL = "http://maps.google.com/mapfiles/ms/micons/ltblue-dot.png"
 
-function setActivityMarkers(activeMachines, allMachines) {
+export function setActivityMarkers(activeMachines, allMachines) {
     allMachines.map((machine) => {
         const isActiveMachine = activeMachines.find(({deviceUid}) => {
             return machine.deviceUid === deviceUid
@@ -21,7 +21,7 @@ function setActivityMarkers(activeMachines, allMachines) {
     })
 }
 
-function setNonLeapingLocations(machines) {
+export function setNonLeapingLocations(machines) {
     machines.map((machine, i) => {
         const machineSameLocation = machines.find((m, j) => {
             return i !== j && machine.locationLatitude === m.locationLatitude
@@ -34,7 +34,7 @@ function setNonLeapingLocations(machines) {
     })
 }
 
-function checkMachineErrors(errors, machines) {
+export function checkMachineErrors(errors, machines) {
 
     machines.map((machine) => {
         let statusCodesOfMachine = errors.find(e => e.deviceUID == machine.deviceUid);
@@ -53,18 +53,6 @@ function checkMachineErrors(errors, machines) {
 
 
 class GoogleMapMonitors extends Component {
-    /*
-        state = {
-            loading: true,
-            machines: []
-        };
-
-        async componentDidMount(){
-            const response = await request(devices + "/AllDevices");
-            this.setState({machines: response.data.data, loading:false})
-        }
-
-    */
     render() {
 
 
@@ -73,19 +61,8 @@ class GoogleMapMonitors extends Component {
         let allErrors = this.props.allErrors
 
         setNonLeapingLocations(allMachines)
-
-        /*
-        let machinesReadyToMark = [];
-        if (!this.state.loading) {
-            let activeMachines = filterActive([], this.state.machines)
-            machinesReadyToMark = filterInactiveMachines(this.state.machines, activeMachines);
-            console.log(machinesReadyToMark)
-        }
-*/
         setActivityMarkers(activeMachines, allMachines)
         checkMachineErrors(allErrors, allMachines)
-
-        //when calling a marker, check if loading is true/false
 
         const MyMapComponent = withGoogleMap((props) => {
                 const [selectedMachine, setSelectedMachine] = useState(null)
