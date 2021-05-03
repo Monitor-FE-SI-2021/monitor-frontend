@@ -80,7 +80,7 @@ let hddUsageChart = {
 };
 
 
-function convertStatistics(statistic) {
+export function convertStatistics(statistic) {
     return [Math.round(statistic * 100), Math.round((1 - statistic) * 100)];
 }
 
@@ -92,7 +92,7 @@ let allMachinesUsage = null
 let lastDisconnected = null
 let allErrors = []
 
-function machineNameAndLocation(machine) {
+export function machineNameAndLocation(machine) {
     if (!machine) return ""
     let name = machine.name
     if (name !== allMachinesString) {
