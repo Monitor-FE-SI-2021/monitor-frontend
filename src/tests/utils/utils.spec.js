@@ -9,6 +9,6 @@ describe('utils tests', () => {
 
     it('dummy test', () => {
 
-        expect('test').toBe('tes');
+        expect('test').toBe('te');
     })
 })
