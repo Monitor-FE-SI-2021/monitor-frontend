@@ -12,7 +12,7 @@ import Terminal from "../Terminal/Terminal";
 
 const config = require("../Terminal/config");
 
-const Tabs = (props, machine) => {
+export const Tabs = (props, machine) => {
     let { name, tab } = useParams();
 
     const toggleTab = (tab) => {
@@ -258,5 +258,142 @@ const Tabs = (props, machine) => {
         </div>
     );
 };
+export const Screenshot = () => {
+ 
 
+    const [url, setUrl] = useState("slkadhjaksl");
+
+    const handleClick = async () => {
+        try {
+            try {
+                const requestOptions = {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        email: config.email,
+                        password: config.password,
+                    }),
+                };
+
+                var response = await fetch(config.url, requestOptions);
+                //console.log(response.status)
+
+                //console.log(x);
+                if (response.status == 200) {
+                    var x = await response.json();
+                    //console.log(JSON.stringify(x.accessToken));
+                    const token = x.accessToken;
+                    console.log(JSON.stringify(props.machine));
+                    var odgovor = await fetch(wsEndpoint + "/screenshot", {
+                        method: "POST",
+                        headers: {
+                            Accept: "application/json",
+                            "Content-Type": "application/json",
+                            Authorization: "Bearer " + token,
+                        },
+                        body: JSON.stringify({
+                            name: props.machine.name,
+                            location: props.machine.location,
+                            ip: props.machine.ip,
+                            user: "test",
+                        }),
+                    }).then((r) => r.json());
+
+                    console.log(odgovor);
+                    setUrl(odgovor.message);
+                } else {
+                    //console.log("Error");
+                }
+            } catch (e) {
+                console.log(e);
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    const baseStyle = {
+        flex: 1,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        textAlign: "center",
+        padding: "80px",
+        borderWidth: 2,
+        borderRadius: 2,
+        borderColor: "#eeeeee",
+        borderStyle: "dashed",
+        backgroundColor: "#fafafa",
+        color: "#bdbdbd",
+        outline: "none",
+        transition: "border .24s ease-in-out",
+    };
+
+    const activeStyle = {
+        borderColor: "#2196f3",
+    };
+
+    const acceptStyle = {
+        borderColor: "#00e676",
+    };
+
+    const rejectStyle = {
+        borderColor: "#ff1744",
+    };
+
+    const convertBase64 = (file) => {
+        return new Promise((resolve, reject) => {
+            const fileReader = new FileReader();
+            fileReader.readAsDataURL(file);
+            fileReader.onload = () => {
+                resolve(fileReader.result);
+            };
+            fileReader.onerror = (error) => {
+                reject(error);
+            };
+        });
+    };
+
+    const handleFileRead = async (sendFile) => {
+        const file = sendFile;
+        const base64 = await convertBase64(file);
+        return base64;
+    };
+
+    let [requestMessage, setRequestMessage] = useState({
+        "name": "name",
+        "location": "location",
+        "ip": "string",
+        "fileName": "some file name",
+        "base64Data": "some file data",
+        "user": "username"
+    });
+
+   
+
+    
+
+    return (
+        <div className="container tabs-container">
+            
+            <div className="content-tabs">
+                
+                            <div className="screenshot">
+                                <p>Screenshot</p>
+                                <img
+                                    alt="Asked image will appear here."
+                                    className="screenshot-img"
+                                    src={`data:image/jpeg;base64,${url}`}
+                                />
+                            </div>
+                        </div>
+                    
+                    <button type="button" onClick={handleClick}>
+                        Get Screenshot
+                    </button>
+                </div>
+                
+    );
+
+  }
 export default connect((state) => ({}), {})(Tabs);
