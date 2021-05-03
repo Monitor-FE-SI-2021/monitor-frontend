@@ -1,4 +1,5 @@
-import {render, screen} from "@testing-library/react";
+import {fireEvent, render, screen} from "@testing-library/react";
+import { act } from "react-dom/test-utils";
 import {Provider} from "react-redux";
 import store from "../../../store/store";
 import Devices from "../../../pages/Devices/Devices";
@@ -45,4 +46,22 @@ describe("Test if devices is rendered properly", () => {
         )
         screen.getAllByText('Pretraži uređaje');
     });
+    it("Should be able to show some devices", async () => {
+        const {getByTestId, getAllByRole, container} = render(
+            <Provider store={store}>
+                <Devices />
+            </Provider>
+        )
+
+        const deviceSearchField = getByTestId("deviceSearchField");
+
+        await act(async () => {
+            fireEvent.click(deviceSearchField);
+        })
+
+        await act(async () => {
+            fireEvent.change(deviceSearchField, {target: {value: "e"}})
+            fireEvent.blur(deviceSearchField)
+        })
+    })
 });
