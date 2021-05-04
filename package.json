@@ -87,7 +87,7 @@
   },
   "devDependencies": {
     "@googlemaps/jest-mocks": "^0.1.1",
-    "jest-google-maps-mock": "^1.0.7",
+    "@testing-library/react-hooks": "^5.1.2",
     "react-awesome-modal": "^2.0.5",
     "sass": "^1.32.8",
     "sass-loader": "^11.0.1"

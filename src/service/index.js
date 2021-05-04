@@ -10,8 +10,8 @@ export const wsEndpoint = 'https://si-grupa5.herokuapp.com/api';
 export const authEndpoint = 'https://si-2021.167.99.244.168.nip.io:3333';
 export const forgotPassword = 'https://si-2021.167.99.244.168.nip.io:3333/forgotPassword';
 export const resetPassword = 'https://si-2021.167.99.244.168.nip.io:3333/changePassword';
-export const userSecurityQuestions  = 'https://si-2021.167.99.244.168.nip.io:3333/User/AllQuestions';
-export const answerCheck  = 'https://si-2021.167.99.244.168.nip.io:3333/answerCheck';
+export const userSecurityQuestions = 'https://si-2021.167.99.244.168.nip.io:3333/User/AllQuestions';
+export const answerCheck = 'https://si-2021.167.99.244.168.nip.io:3333/answerCheck';
 export const devices = `${endpoint}/device`
 export const groups = `${endpoint}/group`
 export const users = `${endpoint}/user`
@@ -84,7 +84,7 @@ const request = async (
 };
 
 const removeAllData = () => {
-    window.localStorage.clear();
+    localStorage.clear();
     history.push('/login');
 }
 
