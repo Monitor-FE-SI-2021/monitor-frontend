@@ -3,9 +3,12 @@ import store from "../../../store/store"
 import { fireEvent, render } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
 import ManageDeviceForm from "../../../components/ManageDeviceForm/ManageDeviceForm";
+import { Provider } from "react-redux";
 
 it("Manage device form error messages test", async () => {
-    const { getByTestId, getAllByRole, container } = render(<ManageDeviceForm store={store}/>)
+    const { getByTestId, getAllByRole, container } = render(<Provider store={store}>
+        <ManageDeviceForm/>
+    </Provider>)
 
     const nameInput = getByTestId("nameField");
     const locationInput = getByTestId("locationField");
