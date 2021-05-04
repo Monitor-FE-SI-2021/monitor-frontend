@@ -41,7 +41,7 @@ const request = async (
         }
     };
 
-    const token = window.localStorage.getItem(STORAGE_KEY);
+    const token = localStorage.getItem(STORAGE_KEY);
 
     if (token) {
         defaultConfig.headers.Authorization = "Bearer " + token;
