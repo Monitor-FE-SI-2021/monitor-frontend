@@ -237,14 +237,14 @@ const Reports = ({ user, push, report, setReportToStore }) => {
         const whereClause = JSON.parse(formatQuery(queryValue, 'json_without_ids').replaceAll('"operator":', '"operator_str":'));
         const groupClause = selectedGroup.group.groupId;
 
-        const finalQuery = {select: selectClause, where: whereClause, group: groupClause, freq: frequencyInfo.frequency.value};
+        const finalQuery = {select: selectClause, where: whereClause, group: groupClause, freq: frequencyInfo?.frequency?.value || values.frequency.value};
 
         const body = {
             name: title,
             userId: user.userId,
             query: JSON.stringify(finalQuery),
             nextDate: calculateDate(),
-            frequency: frequencyInfo.frequency.value,
+            frequency: frequencyInfo?.frequency?.value || values.frequency.value,
             sendEmail: sendEmailValue,
             ReportId: reportId,
         };
