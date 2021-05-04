@@ -36,7 +36,13 @@ describe("Test report table page", () => {
         screen.getByText('New report');
     });
 
-  
-   
+    it("New report buttonff", () => {
+        render(
+            <Provider store={store}>
+                <ReportList />
+            </Provider>)
+        screen.getByText('No results');
+    });
+
 });
 
