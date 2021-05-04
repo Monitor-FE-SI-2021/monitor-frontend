@@ -285,14 +285,6 @@ const Reports = ({ user, push, report, setReportToStore }) => {
         else setData();
     }
 
-    const elementJson = loadedQuery.replaceAll('\\\"', '')
-        .replace('"select":', '\n\tselect: ')
-        .replace('"where":', '\n\twhere: ')
-        .replace('"group":', '\n\tgroup: ')
-        .replace('"freq":', '\n\tfreq: ')
-        .replace('}', '\n}')
-        .replaceAll('","', '", "')
-
     
     return (
         <div className="reportingWrapper">
