@@ -1,16 +1,12 @@
 import React, { useRef, useState } from "react";
 import debounce from 'lodash/debounce';
-
 import NewWindow from '../../../components/NewWindow/NewWindow';
 import RemoteAccess from '../../RemoteAccess/RemoteAccess.js';
 import Avatar from "./MachineAvatar.js";
 import { showSwalToast } from "../../../utils/utils";
 import {Spinner} from "../../../components/Spinner/Spinner";
-
-
 import './ActiveMachine.scss';
 import request from "../../../service";
-
 
 const ActiveMachine = ({data, img, onDisconnect, getStatistics, sDate, eDate, user}) => {
     const [remoteAccessOpen, setRemoteAccessOpen] = useState(false);
@@ -18,11 +14,7 @@ const ActiveMachine = ({data, img, onDisconnect, getStatistics, sDate, eDate, us
     const [configurationOpen, setConfigurationOpen] = useState(false)
     const [configString, setConfigString] = useState("")
     const popup = useRef();
-
-    const handleOnClick = debounce(
-        () => getStatistics(data, sDate, eDate),
-        300
-    );
+    const handleOnClick = debounce(() => getStatistics(data, sDate, eDate),300);
 
     function getConfiguration(machine) {
         setAsync(true)
@@ -32,7 +24,6 @@ const ActiveMachine = ({data, img, onDisconnect, getStatistics, sDate, eDate, us
             .then((res) => setConfigString(res.data.message.replace(/\\n/g, "\n").replace(/\\r/g, "\r")))
             .catch((err) => console.log(err))
             .finally(() => setAsync(false))
-        console.log(configString)
     }
     
     return (
@@ -41,7 +32,6 @@ const ActiveMachine = ({data, img, onDisconnect, getStatistics, sDate, eDate, us
                 className="card"
                 id={data.deviceId}
                 onClick={handleOnClick}
-                
                 onDoubleClick={() => {
                     if (user.email !== data.user) {
                         showSwalToast("Device already in use.")
@@ -54,7 +44,6 @@ const ActiveMachine = ({data, img, onDisconnect, getStatistics, sDate, eDate, us
                     <div className="card-img">
                         <Avatar img={img}/>
                     </div>
-
                     <div className="card-info">
                         <h3>{data.name}</h3>
                         <h3>{data.location}</h3>
@@ -71,16 +60,14 @@ const ActiveMachine = ({data, img, onDisconnect, getStatistics, sDate, eDate, us
                             configurationOpen ? popup.current.focus() : setConfigurationOpen(true)
                             getConfiguration(data)
                         }}
-                    >
-                        Configuration
+                    > Configuration
                     </button>
                     <button id="disconnect"
                         onClick={() => {
                             onDisconnect(data);
                             setRemoteAccessOpen(false);
                         }}
-                    >
-                        Disconnect
+                    > Disconnect
                     </button>
                 </div>
             </div>
@@ -94,15 +81,12 @@ const ActiveMachine = ({data, img, onDisconnect, getStatistics, sDate, eDate, us
                     <RemoteAccess machine={data} />
                 </NewWindow>
             ) }
-
-            {
-                configurationOpen && (
+            {   configurationOpen && (
                     <NewWindow
                         onClose={() => setConfigurationOpen(false)}
                         title={`Configuration - ${data.name} (${data.location})`}
                         ref={popup}
-                    >
-                        {async ? <Spinner/> :
+                    >   {async ? <Spinner/> :
                             <div className="conf">
                                 <h3>Desktop configuration</h3>
                                 <pre>{configString}</pre>
@@ -114,5 +98,4 @@ const ActiveMachine = ({data, img, onDisconnect, getStatistics, sDate, eDate, us
         </>
     );
 };
-
 export default ActiveMachine;
