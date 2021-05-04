@@ -8,14 +8,8 @@ import request, { devices, errors } from "../../service";
 import GoogleMapMonitors from "./components/GoogleMapMonitors";
 import DatePicker from "react-datepicker";
 import {Spinner} from "../../components/Spinner/Spinner"
-
 import "react-datepicker/dist/react-datepicker.css";
-
 import "./dashboard.scss";
-import {Bar} from "react-chartjs-2";
-import {STORAGE_KEY} from "../../utils/consts";
-import { LiveTv } from "@material-ui/icons";
-
 
 let barChart = {
 
@@ -79,8 +73,7 @@ let hddUsageChart = {
     ],
 };
 
-
-function convertStatistics(statistic) {
+export function convertStatistics(statistic) {
     return [Math.round(statistic * 100), Math.round((1 - statistic) * 100)];
 }
 
@@ -92,7 +85,7 @@ let allMachinesUsage = null
 let lastDisconnected = null
 let allErrors = []
 
-function machineNameAndLocation(machine) {
+export function machineNameAndLocation(machine) {
     if (!machine) return ""
     let name = machine.name
     if (name !== allMachinesString) {
@@ -101,12 +94,28 @@ function machineNameAndLocation(machine) {
     return name
 }
 
+export function filterActive(activeMachines, allMachines, setActiveForUser, user) {
+    let active = activeMachines ? activeMachines.filter((machine) => {
+        const existingMachine = allMachines.find(({ deviceUid }) => {
+            return machine.status !== "Waiting" && machine.deviceUid === deviceUid;
+        });
+        if (existingMachine) {
+            machine.deviceId = existingMachine.deviceId
+            machine.lastTimeOnline = existingMachine.lastTimeOnline;
+        }
+        return existingMachine;
+    }) : [];
+    setActiveForUser(active.filter((machine) =>
+        machine.user === user.email
+    ))
+    return active
+}
+
 export let barchartMaxValue = 10
 
-const Dashboard = ({ user }) => {
+export const Dashboard = ({ user }) => {
     
     let activeMachines = []
-    let configuration = null
     const [async, setAsync] = React.useState(true)
     const [machines, setMachines] = React.useState([]);
     const [active, setActive] = React.useState([...activeMachines]);
@@ -116,40 +125,13 @@ const Dashboard = ({ user }) => {
     let start = new Date(end.getTime() - (7 * 24 * 60 * 60 * 1000));
     const [startDate, setStartDate] = React.useState(start);
     var [chartType, setChartType] = React.useState(true)
-
-    function getConfiguration(machine) {
-        let configString = ""
-        request("https://si-grupa5.herokuapp.com/api/agent/info/system", "POST", {
-            deviceUid: machine.deviceUid,
-        })
-            .then((res) => { configString = res.data.message.replace(/\\n/g, "\n").replace(/\\r/g, "\r")
-            console.log(configString)})
-            .catch((err) => console.log(err))
-        console.log(configString)
-        return configString
-    }
-    
-    function filterActive(activeMachines, allMachines) {
-        console.log(activeMachines)
-        return activeMachines ? activeMachines.filter((machine) => {
-            const existingMachine = allMachines.find(({ deviceUid }) => {
-                return machine.status !== "Waiting" && machine.deviceUid === deviceUid;
-            });
-            if (existingMachine) {
-                machine.deviceId = existingMachine.deviceId
-                machine.lastTimeOnline = existingMachine.lastTimeOnline;
-            }
-            return existingMachine;
-        }) : [];
-    }
-
-   // console.log(configString.replace(/\\n/g, "\n").replace(/\\r/g, "\r"))
+    const [showForUser, setShowForUser] = React.useState(true)
+    const [activeForUser, setActiveForUser] = React.useState([])
 
     function getStatistics(machine, startDate, endDate) {
         request(errors + "/DateInterval?DeviceUID=" + machine.deviceUid + "&StartDate=" + startDate + "&EndDate" + endDate)
             .then((res) => res.data.data)
             .then((res) => {
-                console.log([res])
                 setErrorCharts([res])
             })
 
@@ -177,7 +159,6 @@ const Dashboard = ({ user }) => {
     function datePickerChange(startDate, endDate) {
         startDate = startDate.toISOString()
         endDate = endDate.toISOString()
-        console.log(startDate, endDate)
         if (clickedMachine?.name === allMachinesString) {
             getAllDevicesStatistics(startDate, endDate)
         }
@@ -200,7 +181,6 @@ const Dashboard = ({ user }) => {
         barChart.datasets[0].data = numberOfEachError
     }
 
-
     React.useEffect(() => {
    
         request(devices + "/AllDevices")
@@ -210,7 +190,7 @@ const Dashboard = ({ user }) => {
                 setAsync(true)
                 request("https://si-grupa5.herokuapp.com/api/agents/online")
                     .then((res) => {
-                        setActive(filterActive(res?.data, allMachines));
+                        setActive(filterActive(res?.data, allMachines, setActiveForUser, user));
                     })
                     .finally(() => setAsync(false))
                 // setActive(filterActive(activeMachines, allMachines))
@@ -238,7 +218,6 @@ const Dashboard = ({ user }) => {
                 user: user.email
             })
                 .then((res) => {
-                    console.log(res.status)
                     cloned.splice(index, 1);
                     lastDisconnected = machine
                     if (cloned.length === 0 || removedMachine?.deviceId === clickedMachine?.deviceId) {
@@ -249,7 +228,6 @@ const Dashboard = ({ user }) => {
             setActive(cloned);
                 })
                 .catch((err) => {
-                   // console.log(clickedMachine)
                     console.log(err)})
         }
     };
@@ -270,7 +248,6 @@ const Dashboard = ({ user }) => {
             setShowCharts(false)
             setShowCharts(true)
         }
-
     };
 
     return (
@@ -278,30 +255,57 @@ const Dashboard = ({ user }) => {
             <div className="dashboard">
                 <div className="row machine-cards">
                     <h1>List of active machines</h1>
-                    <div className="scrollable"
-                    
-                    >
+                    <div className="stats">
+                        <button style={showForUser ? {backgroundColor : "white"} : {backgroundColor : "#F8FAFB"}} onClick={() => {
+                            setShowForUser(true)
+                        }}>For user</button>
+                        <button style={showForUser ? {backgroundColor : "#F8FAFB"} : {backgroundColor : "white"}} onClick={() => {
+                            setShowForUser(false)
+                        }}>All</button>
+                    </div>
+                    <div className="scrollable">
                         {
-                        async ? <Spinner/> : 
-                        (active?.length ? (
-                            active.map((machine, id) => (
-                                <ActiveMachine
-                                    key={id}
-                                    data={machine}
-                                    img={MachineIcon}
-                                    onDisconnect={disconnectMachine}
-                                    getStatistics={getStatistics}
-                                    sDate={startDate.toISOString()}
-                                    eDate={endDate.toISOString()}
-                                    user={user}
-                                    //getConfiguration={getConfiguration}
-                                />
+                            showForUser && (async ? <Spinner/> :
+                            (activeForUser?.length ? (
+                                activeForUser.map((machine, id) => (
+                                    <ActiveMachine
+                                        key={id}
+                                        data={machine}
+                                        img={MachineIcon}
+                                        onDisconnect={disconnectMachine}
+                                        getStatistics={getStatistics}
+                                        sDate={startDate.toISOString()}
+                                        eDate={endDate.toISOString()}
+                                        user={user}
+                                        //getConfiguration={getConfiguration}
+                                    />
+                                ))
+                            ) : (
+                                <div className='no-active-machines'>
+                                    No active machines.
+                                </div>
+                            )))
+                        }
+                        {
+                            !showForUser && (active?.length ? (
+                                active.map((machine, id) => (
+                                    <ActiveMachine
+                                        key={id}
+                                        data={machine}
+                                        img={MachineIcon}
+                                        onDisconnect={disconnectMachine}
+                                        getStatistics={getStatistics}
+                                        sDate={startDate.toISOString()}
+                                        eDate={endDate.toISOString()}
+                                        user={user}
+                                    />
+                                ))
+                            ) : (
+                                <div className='no-active-machines'>
+                                    No active machines.
+                                </div>
                             ))
-                        ) : (
-                            <div className='no-active-machines'>
-                                No active machines.
-                            </div>
-                        ))}
+                        }
                     </div>
                 </div>
 
