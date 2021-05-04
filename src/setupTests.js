@@ -22,15 +22,12 @@ class LocalStorageMock {
     }
 };
 
-let storage;
+let storageMock = new LocalStorageMock()
 
 beforeEach(() => {
     initialize();
-    storage = window.localStorage;
-    window.localStorage = new LocalStorageMock();
+    Object.defineProperty(window, 'localStorage', {
+        value: storageMock,
+        writable: true
+    })
 });
-
-afterEach(() => {
-    window.localStorage = storage
-})
-

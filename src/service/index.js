@@ -84,7 +84,7 @@ const request = async (
 };
 
 const removeAllData = () => {
-    localStorage.clear();
+    window.localStorage.clear();
     history.push('/login');
 }
 
