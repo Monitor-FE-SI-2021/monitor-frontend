@@ -42,7 +42,7 @@ const Reports = ({ user, push, report, setReportToStore }) => {
     const initValues = (data) => {
         setReportId(data.reportId);
         const newDate = new Date(data?.nextDate);
-        const newTime = `${(newDate.getHours() + 2)}:00:00`;
+        const newTime = `00:00:00`;
         const findTime = times.find(e => e.value === newTime);
         const obj = {
             frequency: {
@@ -176,7 +176,7 @@ const Reports = ({ user, push, report, setReportToStore }) => {
         switch(freq){
             case "Daily":
                 const dailyHours = frequencyInfo.time.value.split(':');
-                dateCurrent.setHours(parseInt(dailyHours[0]) + 2, dailyHours[1], dailyHours[2]);
+                dateCurrent.setHours(parseInt(dailyHours[0]), dailyHours[1], dailyHours[2]);
                 break;
             case "Weekly":
                 const daysMap = {
