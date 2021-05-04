@@ -22,7 +22,7 @@ import './EditReport.scss';
 
 
 
-const Reports = ({ user, push, report, setReportToStore }) => {
+const EditReport = ({ user, push, report, setReportToStore }) => {
     const [selectedGroup, setSelectedGroup] = useState({ group: null, parent: null });
     const [groupStack, setGroupStack] = useState([]);
     const [groups, setGroups] = useState([]);
@@ -194,13 +194,13 @@ const Reports = ({ user, push, report, setReportToStore }) => {
                 }
                 dateCurrent.setDate(dateCurrent.getDate() + (daysMap[frequencyInfo?.day?.value] + 7 - dateCurrent.getDay()) % 7 );
                 const weeklyHours = frequencyInfo.time.value.split(':');
-                dateCurrent.setHours(parseInt(weeklyHours[0]) + 2, weeklyHours[1], weeklyHours[2]);
+                dateCurrent.setHours(parseInt(weeklyHours[0]), weeklyHours[1], weeklyHours[2]);
                 break;
             case "Monthly":
                 dateCurrent.setDate(frequencyInfo?.dayInMonth);
                 if(dateCurrent< new Date()) dateCurrent.setMonth(dateCurrent.getMonth() + 1);
                 const monthlyHours = frequencyInfo.time.value.split(':');
-                dateCurrent.setHours(parseInt(monthlyHours[0]) + 2, monthlyHours[1], monthlyHours[2]);
+                dateCurrent.setHours(parseInt(monthlyHours[0]), monthlyHours[1], monthlyHours[2]);
                 break;
             case "Yearly": 
                 const monthsMap = {
@@ -221,7 +221,7 @@ const Reports = ({ user, push, report, setReportToStore }) => {
                 dateCurrent.setDate(frequencyInfo?.dayInMonth);
                 if(dateCurrent < new Date()) dateCurrent.setFullYear(dateCurrent.getFullYear() + 1);
                 const yearlyHours = frequencyInfo.time.value.split(':');
-                dateCurrent.setHours(parseInt(yearlyHours[0]) + 2, yearlyHours[1], yearlyHours[2]);
+                dateCurrent.setHours(parseInt(yearlyHours[0]), yearlyHours[1], yearlyHours[2]);
                 break;
             default:
                 break;
@@ -237,14 +237,14 @@ const Reports = ({ user, push, report, setReportToStore }) => {
         const whereClause = JSON.parse(formatQuery(queryValue, 'json_without_ids').replaceAll('"operator":', '"operator_str":'));
         const groupClause = selectedGroup.group.groupId;
 
-        const finalQuery = {select: selectClause, where: whereClause, group: groupClause, freq: frequencyInfo.frequency.value};
+        const finalQuery = {select: selectClause, where: whereClause, group: groupClause, freq: frequencyInfo?.frequency?.value || values.frequency.value};
 
         const body = {
             name: title,
             userId: user.userId,
             query: JSON.stringify(finalQuery),
             nextDate: calculateDate(),
-            frequency: frequencyInfo.frequency.value,
+            frequency: frequencyInfo?.frequency?.value || values.frequency.value,
             sendEmail: sendEmailValue,
             ReportId: reportId,
         };
@@ -428,4 +428,4 @@ export default connect(state => {
         user: state.login.user,
         report: state.report.report
     };
-}, {push, setReportToStore})(Reports);
+}, {push, setReportToStore})(EditReport);
