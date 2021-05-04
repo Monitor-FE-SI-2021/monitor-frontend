@@ -62,6 +62,129 @@ test("renaming a folder", async () => {
         expect(renamedFolder.textContent).toBe("AAA-novi-test2");
 }, 10000);
 
+test("sorting name descending", async () => {
+    const user = {
+        email: "whoso@whoso.com",
+        userId: 1
+    }
+    const { getByText, getByRole, getByTestId, getAllByTestId } = render(
+        <Provider store={store}>
+            <FileManagerTable user={user}></FileManagerTable>
+        </Provider>
+    );
+
+    userEvent.click(getByTestId("sortNameDesc"));
+    const sortedFolder = await waitForElement(() => getByText("AAA-novi-test2"), {timeout: 3000});
+    expect(sortedFolder.textContent).toBe("AAA-novi-test2");
+}, 10000);
+
+test("sorting name ascending", async () => {
+    const user = {
+        email: "whoso@whoso.com",
+        userId: 1
+    }
+    const { getByText, getByRole, getByTestId, getAllByTestId } = render(
+        <Provider store={store}>
+            <FileManagerTable user={user}></FileManagerTable>
+        </Provider>
+    );
+
+    userEvent.click(getByTestId("sortNameAsc"));
+    const sortedFolder = await waitForElement(() => getByText("AAA-novi-test2"), {timeout: 3000});
+    expect(sortedFolder.textContent).toBe("AAA-novi-test2");
+}, 10000);
+
+test("sorting date descending", async () => {
+    const user = {
+        email: "whoso@whoso.com",
+        userId: 1
+    }
+    const { getByText, getByRole, getByTestId, getAllByTestId } = render(
+        <Provider store={store}>
+            <FileManagerTable user={user}></FileManagerTable>
+        </Provider>
+    );
+
+    userEvent.click(getByTestId("sortDateDesc"));
+    const sortedFolder = await waitForElement(() => getByText("AAA-novi-test2"), {timeout: 3000});
+    expect(sortedFolder.textContent).toBe("AAA-novi-test2");
+}, 10000);
+
+test("sorting date ascending", async () => {
+    const user = {
+        email: "whoso@whoso.com",
+        userId: 1
+    }
+    const { getByText, getByRole, getByTestId, getAllByTestId } = render(
+        <Provider store={store}>
+            <FileManagerTable user={user}></FileManagerTable>
+        </Provider>
+    );
+
+    userEvent.click(getByTestId("sortDateAsc"));
+    const sortedFolder = await waitForElement(() => getByText("AAA-novi-test2"), {timeout: 3000});
+    expect(sortedFolder.textContent).toBe("AAA-novi-test2");
+}, 10000);
+
+test("clicking into folder", async () => {
+    const user = {
+        email: "whoso@whoso.com",
+        userId: 1
+    }
+    const { getByText, getByRole, getByTestId, getAllByTestId } = render(
+        <Provider store={store}>
+            <FileManagerTable user={user}></FileManagerTable>
+        </Provider>
+    );
+
+    let folder = await waitForElement(() => getByText("AAA-novi-test2"), {timeout: 4000});
+    userEvent.click(folder);
+    let updatedPath = await waitForElement(() => getByText("./AAA-novi-test2"));
+    expect(updatedPath.textContent).not.toBeNull();
+});
+
+test("mock moving folder", async () => {
+    const user = {
+        email: "whoso@whoso.com",
+        userId: 1
+    }
+    const { getByText, getByRole, getByTestId, getAllByTestId } = render(
+        <Provider store={store}>
+            <FileManagerTable user={user}></FileManagerTable>
+        </Provider>
+    );
+
+    let folder = await waitForElement(() => getByText("AAA-novi-test2"), {timeout: 4000});
+    let options = getAllByTestId("fileMove");
+    userEvent.click(options[0]);
+    let btnMove = await waitForElement(() => getByText("Move"), {timeout: 4000});
+    userEvent.click(btnMove);
+    let confirmation = await waitForElement(() => getByText("OK"), {timeout: 2000});
+    expect(getByText("File/folder moved successfully").textContent).toBe("File/folder moved successfully");
+    userEvent.click(confirmation);
+});
+
+test("mock copying folder", async () => {
+    const user = {
+        email: "whoso@whoso.com",
+        userId: 1
+    }
+    const { getByText, getByRole, getByTestId, getAllByTestId } = render(
+        <Provider store={store}>
+            <FileManagerTable user={user}></FileManagerTable>
+        </Provider>
+    );
+
+    let folder = await waitForElement(() => getByText("AAA-novi-test2"), {timeout: 4000});
+    let options = getAllByTestId("fileCopy");
+    userEvent.click(options[0]);
+    let btnMove = await waitForElement(() => getByText("Copy"), {timeout: 4000});
+    userEvent.click(btnMove);
+    let confirmation = await waitForElement(() => getByText("OK"), {timeout: 2000});
+    expect(getByText("File/folder copied successfully").textContent).toBe("File/folder copied successfully");
+    userEvent.click(confirmation);
+});
+
 test("deleting a folder", async () => {
     const user = {
         email: "whoso@whoso.com",

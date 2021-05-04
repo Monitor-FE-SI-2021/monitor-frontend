@@ -121,11 +121,11 @@ class FileManagerTable extends React.Component {
                         <span>File name</span>
                         <img onClick={() => {
                             this.sortFilesDescending()
-                        }} className="sort-arrow"
+                        }} data-testid="sortNameDesc" className="sort-arrow"
                              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAAWklEQVRIie2PsQ2AMBDEToCUHRENLEHJ2ulMS0FEHoLSnAew7yRjTB+ABcjUk4H5zjUUGqOkFNiUJE3RF3vgwRGSByPv5JWRb/KHSBt5IdJWfolswPqL3Jh+nMnK13/HbjBeAAAAAElFTkSuQmCC"></img>
                         <img onClick={() => {
                             this.sortFilesAscending()
-                        }} className="sort-arrow"
+                        }} data-testid="sortNameAsc" className="sort-arrow"
                              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAAVklEQVRIie3PsQ2AMAxE0RODIkUMwQyMHCg+FaIhAoPToHsD/LMls38BCjD1is+clp7x3JFGPGfkJv5t5GH83QgwBuKHctUaGhubpBq4qUpaQ1+YWZ4dI9Lbm/Wdan8AAAAASUVORK5CYII="/>
                     </div>
                 </th>
@@ -134,11 +134,11 @@ class FileManagerTable extends React.Component {
                         <span>Date added</span>
                         <img onClick={() => {
                             this.sortDateDescending()
-                        }} className="sort-arrow"
+                        }} data-testid="sortDateDesc" className="sort-arrow"
                              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAAWklEQVRIie2PsQ2AMBDEToCUHRENLEHJ2ulMS0FEHoLSnAew7yRjTB+ABcjUk4H5zjUUGqOkFNiUJE3RF3vgwRGSByPv5JWRb/KHSBt5IdJWfolswPqL3Jh+nMnK13/HbjBeAAAAAElFTkSuQmCC"></img>
                         <img onClick={() => {
                             this.sortDateAscending()
-                        }} className="sort-arrow"
+                        }} data-testid="sortDateAsc" className="sort-arrow"
                              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAAVklEQVRIie3PsQ2AMAxE0RODIkUMwQyMHCg+FaIhAoPToHsD/LMls38BCjD1is+clp7x3JFGPGfkJv5t5GH83QgwBuKHctUaGhubpBq4qUpaQ1+YWZ4dI9Lbm/Wdan8AAAAASUVORK5CYII="/>
                     </div>
                 </th>
@@ -208,7 +208,7 @@ class FileManagerTable extends React.Component {
                         }}>
                             <FaPencilAlt size={20}/>
                         </td>
-                        <td className="file-manipulation file-copy center-data" onClick={() => {
+                        <td data-testid="fileCopy" className="file-manipulation file-copy center-data" onClick={() => {
                             this.handleCopy(id)
                         }}>
                             <FaCopy size={20}/>
