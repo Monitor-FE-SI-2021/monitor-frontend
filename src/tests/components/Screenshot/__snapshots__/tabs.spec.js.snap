@@ -1,0 +1,59 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GetScreenshot test 1`] = `
+<div
+  className="container tabs-container"
+>
+  <div
+    className="content-tabs"
+  >
+    <div
+      className="screenshot"
+    >
+      <p>
+        Screenshot
+      </p>
+      <img
+        alt="Asked image will appear here."
+        className="screenshot-img"
+        src="data:image/jpeg;base64,slkadhjaksl"
+      />
+    </div>
+  </div>
+  <button
+    onClick={[Function]}
+    type="button"
+  >
+    Get Screenshot
+  </button>
+</div>
+`;
+
+exports[`GetScreenshot test 2`] = `
+<div
+  className="container tabs-container"
+>
+  <div
+    className="content-tabs"
+  >
+    <div
+      className="screenshot"
+    >
+      <p>
+        Screenshot
+      </p>
+      <img
+        alt="Asked image will appear here."
+        className="screenshot-img"
+        src="data:image/jpeg;base64,slkadhjaksl"
+      />
+    </div>
+  </div>
+  <button
+    onClick={[Function]}
+    type="button"
+  >
+    Get Screenshot
+  </button>
+</div>
+`;

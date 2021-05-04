@@ -51,6 +51,7 @@ const DragAndDrop = (props) => {
       };
 
       const onDrop = async (acceptedFiles) => {
+        console.log(acceptedFiles);
         const base64file = await handleFileRead(acceptedFiles[0]);
         const base64FileString = base64file.substring(base64file.indexOf(",") + 1);
         let requestMessageJson = JSON.stringify({
@@ -63,15 +64,6 @@ const DragAndDrop = (props) => {
         //this is used to re-render table of files with the newly added file
         setRequestMessage(requestMessageJson);
         console.log(JSON.parse(requestMessageJson))
-
-        /*
-        try {
-            var odgovor = await request(wsEndpoint + "/web/user/file/put", "post", requestMessageJson);
-            console.log(odgovor.data.message);
-        } catch (err) {
-            console.log(err);
-        }
-        */
         
         try{
             const requestOptions = {
@@ -166,9 +158,6 @@ const DragAndDrop = (props) => {
         return base64;
       };
        
-
-
-
     return (
     <div className="uploadArea">
         <div {...getRootProps({ style })}>
