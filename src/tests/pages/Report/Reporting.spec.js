@@ -1,5 +1,5 @@
 import store from "../../../store/store"
-import Reporting from "../../../pages/Reporting/Reporting";
+import Reports from "../../../pages/Reporting/Reporting";
 import { render, screen } from "@testing-library/react";
 import {Provider} from "react-redux";
 
@@ -9,10 +9,10 @@ import {Provider} from "react-redux";
 //     it("Page name ", () => {
 //         render(
 //             <Provider store={store}>
-//                 <Reporting />
+//                 <Reports />
 //             </Provider>)
 //         screen.getByText('Create Report');
 //     });
 
    
-});
+// });
