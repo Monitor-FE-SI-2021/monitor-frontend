@@ -20,7 +20,6 @@ const ReportTiming = ({ setTimeInfo, editData }) => {
 
     useEffect(() => {
         if (editData) {
-            console.log('ovo je editData', editData)
             setFrequency(editData.frequency);
             setDay(editData.day);
             setMonth(editData.month);

@@ -22,7 +22,7 @@ import './EditReport.scss';
 
 
 
-const Reports = ({ user, push, report, setReportToStore }) => {
+const EditReport = ({ user, push, report, setReportToStore }) => {
     const [selectedGroup, setSelectedGroup] = useState({ group: null, parent: null });
     const [groupStack, setGroupStack] = useState([]);
     const [groups, setGroups] = useState([]);
@@ -428,4 +428,4 @@ export default connect(state => {
         user: state.login.user,
         report: state.report.report
     };
-}, {push, setReportToStore})(Reports);
+}, {push, setReportToStore})(EditReport);
