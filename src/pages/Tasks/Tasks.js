@@ -11,22 +11,16 @@ const Tasks = ({push}) => {
     const [users, setUsers] = useState([]);
     
     const setData = async () => {
-        
-      
+    
             setUsers([]);
             const res = await request("https://si-2021.167.99.244.168.nip.io/api/user/All");
             
-
             var data =res.data.data;
            
             for(let user of data) {
                 users.push(user);
             }
-                
             setUsers(users);
-            
-        
-       
     };
    
     useEffect(() => {
