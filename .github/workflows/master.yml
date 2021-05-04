@@ -21,4 +21,4 @@ jobs:
         run: rm -rf node_modules && yarn install --frozen-lockfile
 
       - name: Run the tests
-        run: yarn test-coverage-all
+        run: yarn test-coverage-summary

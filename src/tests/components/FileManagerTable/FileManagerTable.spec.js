@@ -7,8 +7,6 @@ import store from '../../../store/store';
 import TestRenderer from 'react-test-renderer';
 import userEvent from '@testing-library/user-event'
 
-jest.setTimeout(20000)
-
 test("renders without crashing", async () => {
     const user = {
         email: "whoso@whoso.com",
@@ -20,7 +18,7 @@ test("renders without crashing", async () => {
             <FileManagerTable user={user}></FileManagerTable>
         </Provider>, div
     );
-});
+}, 20000);
 
 test("adding a folder", async () => {
     const user = {
@@ -40,7 +38,7 @@ test("adding a folder", async () => {
     userEvent.click(confirmation);
     const newFolder = await waitForElement(() => getByText("AAA-novi-test"), {timeout: 20000});
     expect(newFolder.textContent).toBe("AAA-novi-test");
-}, 10000);
+}, 20000);
 
 test("renaming a folder", async () => {
     const user = {
@@ -62,7 +60,7 @@ test("renaming a folder", async () => {
         userEvent.click(confirmation);
         const renamedFolder = await waitForElement(() => getByText("AAA-novi-test2"), {timeout: 20000});
         expect(renamedFolder.textContent).toBe("AAA-novi-test2");
-}, 10000);
+}, 20000);
 
 test("sorting name descending", async () => {
     const user = {
@@ -78,7 +76,7 @@ test("sorting name descending", async () => {
     userEvent.click(getByTestId("sortNameDesc"));
     const sortedFolder = await waitForElement(() => getByText("AAA-novi-test2"), {timeout: 20000});
     expect(sortedFolder.textContent).toBe("AAA-novi-test2");
-}, 10000);
+}, 20000);
 
 test("sorting name ascending", async () => {
     const user = {
@@ -94,7 +92,7 @@ test("sorting name ascending", async () => {
     userEvent.click(getByTestId("sortNameAsc"));
     const sortedFolder = await waitForElement(() => getByText("AAA-novi-test2"), {timeout: 20000});
     expect(sortedFolder.textContent).toBe("AAA-novi-test2");
-}, 10000);
+}, 20000);
 
 test("sorting date descending", async () => {
     const user = {
@@ -110,7 +108,7 @@ test("sorting date descending", async () => {
     userEvent.click(getByTestId("sortDateDesc"));
     const sortedFolder = await waitForElement(() => getByText("AAA-novi-test2"), {timeout: 20000});
     expect(sortedFolder.textContent).toBe("AAA-novi-test2");
-}, 10000);
+}, 20000);
 
 test("sorting date ascending", async () => {
     const user = {
@@ -126,7 +124,7 @@ test("sorting date ascending", async () => {
     userEvent.click(getByTestId("sortDateAsc"));
     const sortedFolder = await waitForElement(() => getByText("AAA-novi-test2"), {timeout: 20000});
     expect(sortedFolder.textContent).toBe("AAA-novi-test2");
-}, 10000);
+}, 20000);
 
 test("clicking into folder", async () => {
     const user = {
@@ -206,7 +204,7 @@ test("deleting a folder", async () => {
     const confirmation = await waitForElement(() => getByText("OK"), {timeout: 20000});
     expect(getByText("Your directory has been deleted.").textContent).toBe("Your directory has been deleted.");
     userEvent.click(confirmation);
-}, 10000);
+}, 20000);
 
 // test("moving a folder into another and deleting both in the end", async () => {
 //     const user = {
