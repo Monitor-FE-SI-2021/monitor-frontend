@@ -196,7 +196,7 @@ const Reports = ({ user, push, report, setReportToStore }) => {
                 dateCurrent.setDate(frequencyInfo?.dayInMonth);
                 if(dateCurrent< new Date()) dateCurrent.setMonth(dateCurrent.getMonth() + 1);
                 const monthlyHours = frequencyInfo.time.value.split(':');
-                dateCurrent.setHours(parseInt(monthlyHours[0]) + 2, monthlyHours[1], monthlyHours[2]);
+                dateCurrent.setHours(parseInt(monthlyHours[0]), monthlyHours[1], monthlyHours[2]);
                 break;
             case "Yearly": 
                 const monthsMap = {
@@ -217,7 +217,7 @@ const Reports = ({ user, push, report, setReportToStore }) => {
                 dateCurrent.setDate(frequencyInfo?.dayInMonth);
                 if(dateCurrent < new Date()) dateCurrent.setFullYear(dateCurrent.getFullYear() + 1);
                 const yearlyHours = frequencyInfo.time.value.split(':');
-                dateCurrent.setHours(parseInt(yearlyHours[0]) + 2, yearlyHours[1], yearlyHours[2]);
+                dateCurrent.setHours(parseInt(yearlyHours[0]), yearlyHours[1], yearlyHours[2]);
                 break;
             default:
                 break;
