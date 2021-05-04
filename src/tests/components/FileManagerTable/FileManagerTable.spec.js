@@ -7,6 +7,8 @@ import store from '../../../store/store';
 import TestRenderer from 'react-test-renderer';
 import userEvent from '@testing-library/user-event'
 
+jest.setTimeout(20000)
+
 test("renders without crashing", async () => {
     const user = {
         email: "whoso@whoso.com",
@@ -34,9 +36,9 @@ test("adding a folder", async () => {
     userEvent.click(getByText("New folder"));
     userEvent.type(getByRole("textbox"), "AAA-novi-test");
     userEvent.click(getByText("Add"));
-    const confirmation = await waitForElement(() => getByText("OK"), {timeout: 4000});
+    const confirmation = await waitForElement(() => getByText("OK"), {timeout: 20000});
     userEvent.click(confirmation);
-    const newFolder = await waitForElement(() => getByText("AAA-novi-test"), {timeout: 3000});
+    const newFolder = await waitForElement(() => getByText("AAA-novi-test"), {timeout: 20000});
     expect(newFolder.textContent).toBe("AAA-novi-test");
 }, 10000);
 
@@ -50,15 +52,15 @@ test("renaming a folder", async () => {
             <FileManagerTable user={user}></FileManagerTable>
         </Provider>
     );
-        const folder = await waitForElement(() => getByText("AAA-novi-test"), {timeout: 3000});
+        const folder = await waitForElement(() => getByText("AAA-novi-test"), {timeout: 20000});
         let options = getAllByTestId("fileRename");
         userEvent.click(options[0]);
         userEvent.type(getByRole("textbox"), "AAA-novi-test2")
         userEvent.click(getByText("Rename"));
-        const confirmation = await waitForElement(() => getByText("OK"), {timeout: 3000});
+        const confirmation = await waitForElement(() => getByText("OK"), {timeout: 20000});
         expect(getByText("File/folder renamed successfully").textContent).toBe("File/folder renamed successfully");
         userEvent.click(confirmation);
-        const renamedFolder = await waitForElement(() => getByText("AAA-novi-test2"), {timeout: 3000});
+        const renamedFolder = await waitForElement(() => getByText("AAA-novi-test2"), {timeout: 20000});
         expect(renamedFolder.textContent).toBe("AAA-novi-test2");
 }, 10000);
 
@@ -74,7 +76,7 @@ test("sorting name descending", async () => {
     );
 
     userEvent.click(getByTestId("sortNameDesc"));
-    const sortedFolder = await waitForElement(() => getByText("AAA-novi-test2"), {timeout: 3000});
+    const sortedFolder = await waitForElement(() => getByText("AAA-novi-test2"), {timeout: 20000});
     expect(sortedFolder.textContent).toBe("AAA-novi-test2");
 }, 10000);
 
@@ -90,7 +92,7 @@ test("sorting name ascending", async () => {
     );
 
     userEvent.click(getByTestId("sortNameAsc"));
-    const sortedFolder = await waitForElement(() => getByText("AAA-novi-test2"), {timeout: 3000});
+    const sortedFolder = await waitForElement(() => getByText("AAA-novi-test2"), {timeout: 20000});
     expect(sortedFolder.textContent).toBe("AAA-novi-test2");
 }, 10000);
 
@@ -106,7 +108,7 @@ test("sorting date descending", async () => {
     );
 
     userEvent.click(getByTestId("sortDateDesc"));
-    const sortedFolder = await waitForElement(() => getByText("AAA-novi-test2"), {timeout: 3000});
+    const sortedFolder = await waitForElement(() => getByText("AAA-novi-test2"), {timeout: 20000});
     expect(sortedFolder.textContent).toBe("AAA-novi-test2");
 }, 10000);
 
@@ -122,7 +124,7 @@ test("sorting date ascending", async () => {
     );
 
     userEvent.click(getByTestId("sortDateAsc"));
-    const sortedFolder = await waitForElement(() => getByText("AAA-novi-test2"), {timeout: 3000});
+    const sortedFolder = await waitForElement(() => getByText("AAA-novi-test2"), {timeout: 20000});
     expect(sortedFolder.textContent).toBe("AAA-novi-test2");
 }, 10000);
 
@@ -137,7 +139,7 @@ test("clicking into folder", async () => {
         </Provider>
     );
 
-    let folder = await waitForElement(() => getByText("AAA-novi-test2"), {timeout: 4000});
+    let folder = await waitForElement(() => getByText("AAA-novi-test2"), {timeout: 20000});
     userEvent.click(folder);
     let updatedPath = await waitForElement(() => getByText("./AAA-novi-test2"));
     expect(updatedPath.textContent).not.toBeNull();
@@ -154,10 +156,10 @@ test("mock moving folder", async () => {
         </Provider>
     );
 
-    let folder = await waitForElement(() => getByText("AAA-novi-test2"), {timeout: 4000});
+    let folder = await waitForElement(() => getByText("AAA-novi-test2"), {timeout: 20000});
     let options = getAllByTestId("fileMove");
     userEvent.click(options[0]);
-    let btnMove = await waitForElement(() => getByText("Move"), {timeout: 4000});
+    let btnMove = await waitForElement(() => getByText("Move"), {timeout: 20000});
     userEvent.click(btnMove);
     let confirmation = await waitForElement(() => getByText("OK"), {timeout: 2000});
     expect(getByText("File/folder moved successfully").textContent).toBe("File/folder moved successfully");
@@ -175,10 +177,10 @@ test("mock copying folder", async () => {
         </Provider>
     );
 
-    let folder = await waitForElement(() => getByText("AAA-novi-test2"), {timeout: 4000});
+    let folder = await waitForElement(() => getByText("AAA-novi-test2"), {timeout: 20000});
     let options = getAllByTestId("fileCopy");
     userEvent.click(options[0]);
-    let btnMove = await waitForElement(() => getByText("Copy"), {timeout: 4000});
+    let btnMove = await waitForElement(() => getByText("Copy"), {timeout: 20000});
     userEvent.click(btnMove);
     let confirmation = await waitForElement(() => getByText("OK"), {timeout: 2000});
     expect(getByText("File/folder copied successfully").textContent).toBe("File/folder copied successfully");
@@ -196,12 +198,12 @@ test("deleting a folder", async () => {
         </Provider>
     );
     
-    let folder = await waitForElement(() => getByText("AAA-novi-test2"), {timeout: 4000});
+    let folder = await waitForElement(() => getByText("AAA-novi-test2"), {timeout: 20000});
     let options = getAllByTestId("fileDelete");
     userEvent.click(options[0]);
     let alertBtnDelete = await waitForElement(() => getByText("Yes, delete it!"), {timeout: 2000});
     userEvent.click(alertBtnDelete);
-    const confirmation = await waitForElement(() => getByText("OK"), {timeout: 4000});
+    const confirmation = await waitForElement(() => getByText("OK"), {timeout: 20000});
     expect(getByText("Your directory has been deleted.").textContent).toBe("Your directory has been deleted.");
     userEvent.click(confirmation);
 }, 10000);
@@ -223,7 +225,7 @@ test("deleting a folder", async () => {
 //     userEvent.click(getByText("Add"));
 //     let confirmation = await waitForElement(() => getByText("OK"), {timeout: 2000});
 //     userEvent.click(confirmation);
-//     let newFolder = await waitForElement(() => getByText("AAA-novi-test"), {timeout: 4000});
+//     let newFolder = await waitForElement(() => getByText("AAA-novi-test"), {timeout: 20000});
 //     expect(newFolder.textContent).toBe("AAA-novi-test");
 
 //     userEvent.click(getByText("New folder"));
@@ -231,7 +233,7 @@ test("deleting a folder", async () => {
 //     userEvent.click(getByText("Add"));
 //     confirmation = await waitForElement(() => getByText("OK"), {timeout: 2000});
 //     userEvent.click(confirmation);
-//     newFolder = await waitForElement(() => getByText("AAA-novi-test2"), {timeout: 4000});
+//     newFolder = await waitForElement(() => getByText("AAA-novi-test2"), {timeout: 20000});
 //     expect(newFolder.textContent).toBe("AAA-novi-test2");
 
 //     //move-anje foldera
