@@ -22,7 +22,7 @@ import './EditReport.scss';
 
 
 
-const Reports = ({ user, push, report, setReportToStore }) => {
+const EditReport = ({ user, push, report, setReportToStore }) => {
     const [selectedGroup, setSelectedGroup] = useState({ group: null, parent: null });
     const [groupStack, setGroupStack] = useState([]);
     const [groups, setGroups] = useState([]);
@@ -237,14 +237,14 @@ const Reports = ({ user, push, report, setReportToStore }) => {
         const whereClause = JSON.parse(formatQuery(queryValue, 'json_without_ids').replaceAll('"operator":', '"operator_str":'));
         const groupClause = selectedGroup.group.groupId;
 
-        const finalQuery = {select: selectClause, where: whereClause, group: groupClause, freq: frequencyInfo.frequency.value};
+        const finalQuery = {select: selectClause, where: whereClause, group: groupClause, freq: frequencyInfo?.frequency?.value || values.frequency.value};
 
         const body = {
             name: title,
             userId: user.userId,
             query: JSON.stringify(finalQuery),
             nextDate: calculateDate(),
-            frequency: frequencyInfo.frequency.value,
+            frequency: frequencyInfo?.frequency?.value || values.frequency.value,
             sendEmail: sendEmailValue,
             ReportId: reportId,
         };
@@ -428,4 +428,4 @@ export default connect(state => {
         user: state.login.user,
         report: state.report.report
     };
-}, {push, setReportToStore})(Reports);
+}, {push, setReportToStore})(EditReport);

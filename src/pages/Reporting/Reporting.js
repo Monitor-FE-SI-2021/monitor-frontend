@@ -42,7 +42,7 @@ const Reports = ({ user, push, report, setReportToStore }) => {
     const initValues = (data) => {
         setReportId(data.reportId);
         const newDate = new Date(data?.nextDate);
-        const newTime = `${(newDate.getHours() + 2)}:00:00`;
+        const newTime = `00:00:00`;
         const findTime = times.find(e => e.value === newTime);
         const obj = {
             frequency: {
@@ -164,7 +164,7 @@ const Reports = ({ user, push, report, setReportToStore }) => {
     };
 
     const checkQuery = () => {
-        if (queryValue?.rules?.length <= 0 || title.length < 1 || frequencyInfo === null) return true;
+        if ((!queryValue.rules || queryValue.rules.length <= 0) || title.length < 1 || frequencyInfo === null || selectedGroup?.group?.groupId <= -1 || selectedColumns.length < 1) return true;
         return false;
     };
 
@@ -176,7 +176,7 @@ const Reports = ({ user, push, report, setReportToStore }) => {
         switch(freq){
             case "Daily":
                 const dailyHours = frequencyInfo.time.value.split(':');
-                dateCurrent.setHours(parseInt(dailyHours[0]) + 2, dailyHours[1], dailyHours[2]);
+                dateCurrent.setHours(parseInt(dailyHours[0]), dailyHours[1], dailyHours[2]);
                 break;
             case "Weekly":
                 const daysMap = {
@@ -281,14 +281,6 @@ const Reports = ({ user, push, report, setReportToStore }) => {
         if (value === 'group') setLoadedGroup(false); 
         else setData();
     }
-
-    const elementJson = loadedQuery.replaceAll('\\\"', '')
-        .replace('"select":', '\n\tselect: ')
-        .replace('"where":', '\n\twhere: ')
-        .replace('"group":', '\n\tgroup: ')
-        .replace('"freq":', '\n\tfreq: ')
-        .replace('}', '\n}')
-        .replaceAll('","', '", "')
 
     
     return (
