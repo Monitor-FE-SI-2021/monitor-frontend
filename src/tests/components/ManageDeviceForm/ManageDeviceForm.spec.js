@@ -5,7 +5,7 @@ import "@testing-library/jest-dom/extend-expect";
 import ManageDeviceForm from "../../../components/ManageDeviceForm/ManageDeviceForm";
 
 it("Manage device form error messages test", async () => {
-    const {getByTestId, getAllByRole, container} = render(<ManageDeviceForm store={store}/>)
+    const { getByTestId, getAllByRole, container } = render(<ManageDeviceForm store={store}/>)
 
     const nameInput = getByTestId("nameField");
     const locationInput = getByTestId("locationField");
@@ -22,7 +22,7 @@ it("Manage device form error messages test", async () => {
     expect(count).toBe(6)
 
     await act(async () => {
-        fireEvent.change(nameInput, {target: {value: "///"}})
+        fireEvent.change(nameInput, { target: { value: "///" } })
         fireEvent.blur(nameInput)
     })
 
@@ -33,12 +33,12 @@ it("Manage device form error messages test", async () => {
     expect(container.innerHTML).toMatch("Polje smije sadržavati samo karaktere: A-Z, a-z, 0-9")
 
     await act(async () => {
-        fireEvent.change(nameInput, {target: {value: ""}})
+        fireEvent.change(nameInput, { target: { value: "" } })
         fireEvent.blur(nameInput)
     })
 
     await act(async () => {
-        fireEvent.change(locationInput, {target: {value: "///"}})
+        fireEvent.change(locationInput, { target: { value: "///" } })
         fireEvent.blur(locationInput)
     })
 
@@ -49,7 +49,7 @@ it("Manage device form error messages test", async () => {
     expect(container.innerHTML).toMatch("Polje smije sadržavati samo karaktere: A-Z, a-z, 0-9")
 
     await act(async () => {
-        fireEvent.change(latitudeInput, {target: {value: "-90.1"}})
+        fireEvent.change(latitudeInput, { target: { value: "-90.1" } })
         fireEvent.blur(latitudeInput)
     })
 
@@ -60,7 +60,7 @@ it("Manage device form error messages test", async () => {
     expect(container.innerHTML).toMatch("Geografska širina je broj između -90 i 90")
 
     await act(async () => {
-        fireEvent.change(longitudeInput, {target: {value: "200"}})
+        fireEvent.change(longitudeInput, { target: { value: "200" } })
         fireEvent.blur(longitudeInput)
     })
 
@@ -69,19 +69,4 @@ it("Manage device form error messages test", async () => {
     })
 
     expect(container.innerHTML).toMatch("Geografska dužina je broj između -180 i 180")
-})
-
-// it("test", async () => {
-//     const device = {
-//         name: "Masina",
-//         location: "Lokacija",
-//         locationLatitude: "24",
-//         locationLongitude: "34",
-//         groupId: 1,
-//         deviceUid: 1
-//     }
-//
-//     const {getByTestId, getAllByRoleId, container} = render(<ManageDeviceForm selectedDevice={device} store={store} />)
-//
-//
-// })
+}, 20000)
