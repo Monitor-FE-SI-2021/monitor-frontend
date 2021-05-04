@@ -190,7 +190,7 @@ const Reports = ({ user, push, report, setReportToStore }) => {
                 }
                 dateCurrent.setDate(dateCurrent.getDate() + (daysMap[frequencyInfo?.day?.value] + 7 - dateCurrent.getDay()) % 7 );
                 const weeklyHours = frequencyInfo.time.value.split(':');
-                dateCurrent.setHours(parseInt(weeklyHours[0]) + 2, weeklyHours[1], weeklyHours[2]);
+                dateCurrent.setHours(parseInt(weeklyHours[0]), weeklyHours[1], weeklyHours[2]);
                 break;
             case "Monthly":
                 dateCurrent.setDate(frequencyInfo?.dayInMonth);
