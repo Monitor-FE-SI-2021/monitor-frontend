@@ -31,40 +31,4 @@ it("Manage device form error messages test", async () => {
     })
 
     expect(container.innerHTML).toMatch("Polje smije sadržavati samo karaktere: A-Z, a-z, 0-9")
-    //
-    // await act(async () => {
-    //     fireEvent.change(nameInput, { target: { value: "" } })
-    //     fireEvent.blur(nameInput)
-    // })
-    //
-    // await act(async () => {
-    //     fireEvent.change(locationInput, { target: { value: "///" } })
-    //     fireEvent.blur(locationInput)
-    // })
-    //
-    // await act(async () => {
-    //     fireEvent.click(submitButton)
-    // })
-    //
-    // expect(container.innerHTML).toMatch("Polje smije sadržavati samo karaktere: A-Z, a-z, 0-9")
-    //
-    // await act(async () => {
-    //     fireEvent.change(latitudeInput, { target: { value: "-90.1" } })
-    //     fireEvent.blur(latitudeInput)
-    // })
-    //
-    // await act(async () => {
-    //     fireEvent.click(submitButton)
-    // })
-    //
-    // expect(container.innerHTML).toMatch("Geografska širina je broj između -90 i 90")
-    //
-    // await act(async () => {
-    //     fireEvent.change(longitudeInput, { target: { value: "200" } })
-    //     fireEvent.blur(longitudeInput)
-    // })
-    //
-    // await act(async () => {
-    //     fireEvent.click(submitButton)
-    // })
 }, 20000)
