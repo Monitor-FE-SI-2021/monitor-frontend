@@ -164,9 +164,6 @@ const Reports = ({ user, push, report, setReportToStore }) => {
     };
 
     const checkQuery = () => {
-        console.log(selectedColumns.length < 1)
-        console.log(queryValue?.rules?.length <= 0, title.length < 1, frequencyInfo === null)
-        console.log(selectedGroup)
         if ((!queryValue.rules || queryValue.rules.length <= 0) || title.length < 1 || frequencyInfo === null || selectedGroup?.group?.groupId <= -1 || selectedColumns.length < 1) return true;
         return false;
     };

@@ -28,14 +28,6 @@ describe("Test create report page", () => {
       screen.getByText('Do you want to be send an email with this report?');
     });
 
-    it("Send email ", () => {
-      render(
-          <Provider store={store}>
-              <Reports />
-          </Provider>)
-      screen.getByText('Do you want to be send an email with this report?');
-    });
-
     it("Time ", () => {
       render(
           <Provider store={store}>
