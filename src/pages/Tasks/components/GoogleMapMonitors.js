@@ -8,7 +8,7 @@ async function taskData(id){
     return res.data.data;
 }
 
-function compareTrackersByTime( a, b ) {
+export function compareTrackersByTime( a, b ) {
     if ( Date.parse(a.time) < Date.parse(b.time) ){
       return -1;
     }
@@ -32,7 +32,7 @@ function filterTrakersLastWeek(trackers) {
     });
 }
 
-function setNonLeapingLocations(trackers) {
+export function setNonLeapingLocations(trackers) {
     trackers.map((tracker, i) => {
         const trackerSameLocation = trackers.find((m, j) => {
             return i !== j && tracker.locationLatitude === m.locationLatitude
@@ -45,25 +45,19 @@ function setNonLeapingLocations(trackers) {
     })
 }
 
-class GoogleMapMonitors extends Component {
+export class GoogleMapMonitors extends Component {
    
     render() {
 
         const tasks = this.props.tasks;
-        console.log("Ovo su taskovi koji su u map komponenti:\n");
-        console.log(tasks);
 
         let allTrackers = [];
         for(let task of tasks) {
             for(let tracker of task.userTrackers)
                 allTrackers.push(tracker);
         }
-        console.log("Prije filtriranja");
-        console.log(allTrackers);
         allTrackers = filterTrakersLastWeek(allTrackers);
         sortTrackersByTime(allTrackers);
-        console.log("EVO SVIH TRACKERA ZA USERA, POREDANI PO VREMENU CHECK INA");
-        console.log(allTrackers);
         setNonLeapingLocations(allTrackers);
 
         const MyMapComponent = withGoogleMap((props) => {
@@ -97,7 +91,6 @@ class GoogleMapMonitors extends Component {
                             
                                 position={{lat: selectedTracker.locationLatitude, lng: selectedTracker.locationLongitutde}}
                                 onCloseClick={() => {
-                                    //setCurrentTask(null);
                                     setSelectedTracker(null);}}
                             >
                                 <div>

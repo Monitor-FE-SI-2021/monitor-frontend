@@ -8,7 +8,7 @@ import UserScheduler from '../../pages/Tasks/components/UserScheduler';
 import request, { userTasks } from "../../service";
 import GoogleMapMonitors from '../../pages/Tasks/components/GoogleMapMonitors.js';
 
-const UsersTable = ({ users } ) => {
+export const UsersTable = ({ users } ) => {
     const [tableData, setTableData] = useState(users);
     const [selectedUser, setSelectedUser] = useState({"name" : "prvi", "lastname" : "prvi", "email" : "mail", "phone" : "telefon", userId: 1})
     const [tasks, setTasks] = useState({});
@@ -40,19 +40,24 @@ const UsersTable = ({ users } ) => {
             <div className="tableWrap">
 
               <table>
-                <tr>
-                   <th id="table-header">Name</th>
-                   <th id="table-header">Lastname</th>
-                   <th id="table-header">Calendar</th>
-                </tr>
+                <thead>
+                    <tr>
+                    <th id="table-header">Name</th>
+                    <th id="table-header">Lastname</th>
+                    <th id="table-header">Calendar</th>
+                    </tr>
+                </thead>
                 {users.map(user => 
-                  <tr>
-                    <th>{user.name}</th>
-                    <th>{user.lastname}</th>
-                    <th>
-                       < CalendarToday className='calendar-btn' onClick={() => viewCalendar(user)}/>
-                    </th>
-                </tr>)}
+                  <tbody>
+                    <tr key={user.userId}>
+                        <th>{user.name}</th>
+                        <th>{user.lastname}</th>
+                        <th>
+                        < CalendarToday data-testid={`calendar-${user.userId}`} className='calendar-btn' onClick={() => viewCalendar(user)}/>
+                        </th>
+                    </tr>
+                </tbody>
+                )}
                </table>
                 
             </div>
