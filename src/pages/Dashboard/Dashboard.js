@@ -208,7 +208,9 @@ export const Dashboard = ({ user }) => {
     const disconnectMachine = (machine) => {
         removedMachine = machine
         const index = active.indexOf(machine);
+        const indexForUser = activeForUser.indexOf(machine)
         const cloned = active.slice(0);
+        const clonedForUser = activeForUser.slice(0)
         if (
             index >= 0 &&
             window.confirm("Are you sure you wish to disconnect this machine?")
@@ -219,13 +221,16 @@ export const Dashboard = ({ user }) => {
             })
                 .then((res) => {
                     cloned.splice(index, 1);
+                    clonedForUser.splice(indexForUser, 1)
                     lastDisconnected = machine
-                    if (cloned.length === 0 || removedMachine?.deviceId === clickedMachine?.deviceId) {
+                    if (showForUser && clonedForUser.length === 0 || !showForUser && cloned.length === 0
+                            || removedMachine?.deviceId === clickedMachine?.deviceId) {
                         clickedMachine = { name: allMachinesString }
                         setCharts(allMachinesUsage, clickedMachine)
                         setErrorCharts(allErrors)
-                }
-            setActive(cloned);
+                    }
+                    setActive(cloned);
+                    setActiveForUser(clonedForUser)
                 })
                 .catch((err) => {
                     console.log(err)})
