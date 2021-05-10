@@ -8,7 +8,7 @@ describe('Active Machine tests', () => {
         const data = {"deviceId" : "xyz123",
         "location" : "Mostar - Braće Fejić" ,
         "name" : "Br1",
-        "path" : "C:\Users\Br\Desktop\SI\Doc", "user" : "broj5@email.com"};
+        "path" : "C:\\Users\\Br\\Desktop\\SI\\Doc", "user" : "broj5@email.com"};
         const img ="som.jpg";
         const onDisconnect=(data)=>{console.log(data)};
         const getStatistics=(data,sDate,eDate)=>{console.log(data)};

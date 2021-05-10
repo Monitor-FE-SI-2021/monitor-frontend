@@ -11,9 +11,6 @@ it("Manage device form error messages test", async () => {
     </Provider>)
 
     const nameInput = getByTestId("nameField");
-    const locationInput = getByTestId("locationField");
-    const latitudeInput = getByTestId("latitudeField");
-    const longitudeInput = getByTestId("longitudeField");
     const submitButton = getAllByRole("button")[1];
 
 
