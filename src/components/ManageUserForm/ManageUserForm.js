@@ -5,7 +5,8 @@ import { RouteLink } from "../../store/modules/menu/menu";
 import { push } from "connected-react-router";
 import { AsyncButton } from "../AsyncButton/AsyncButton";
 import "../ManageDeviceForm/ManageDeviceForm.scss"
-import validator from "validator/es";
+import isEmail from 'validator/lib/isEmail';
+//import  validator from "validator/es";
 import request, { authEndpoint, roles, users } from "../../service";
 import { fetchAllGroupsForAdmin } from "../../store/modules/groups/actions";
 import { cloneDeep } from "lodash";
@@ -121,7 +122,8 @@ const MangeUserForm = ({ selectedUser, push, groupOptions, fetchAllGroupsForAdmi
 
         if (values.email === "")
             temp.email = emptyFieldError
-        else if (!validator.isEmail(values.email))
+        //else if (!validator.isEmail(values.email))
+        else if (isEmail(values.email))
             temp.email = "Pogrešan email"
         else
             temp.email = ""
@@ -198,31 +200,32 @@ const MangeUserForm = ({ selectedUser, push, groupOptions, fetchAllGroupsForAdmi
 
     return (
         <form className="manage-device-form" onSubmit={handleSubmit}>
-            <TextField variant="outlined" label="Ime" name="name" value={values.name} onChange={handleInputChange}
+            <TextField inputProps={{"data-testid":"nameField"}} variant="outlined" label="Ime" name="name" value={values.name} onChange={handleInputChange}
                        {...(errors.name && { error: true, helperText: errors.name })} />
 
-            <TextField variant="outlined" label="Prezime" name="lastname" value={values.lastname}
+            <TextField inputProps={{"data-testid":"lastnameField"}} variant="outlined" label="Prezime" name="lastname" value={values.lastname}
                        onChange={handleInputChange}
                        {...(errors.lastname && { error: true, helperText: errors.lastname })} />
 
-            <TextField variant="outlined" label="Email" name="email" value={values.email}
+            <TextField inputProps={{"data-testid":"emailField"}} variant="outlined" label="Email" name="email" value={values.email}
                        onChange={handleInputChange}
                        {...(errors.email && { error: true, helperText: errors.email })} />
 
-            <TextField variant="outlined" label="Broj telefona" name="phone" value={values.phone}
+            <TextField inputProps={{"data-testid":"phoneNumberField"}} variant="outlined" label="Broj telefona" name="phone" value={values.phone}
                        onChange={handleInputChange}
                        {...(errors.phone && { error: true, helperText: errors.phone })} />
 
-            <TextField variant="outlined" label="Šifra" type="password" name="password" value={values.password}
+            <TextField inputProps={{"data-testid":"passwordField"}} variant="outlined" label="Šifra" type="password" name="password" value={values.password}
                        autoComplete={'new-password'}
                        onChange={handleInputChange}
                        {...(errors.password && { error: true, helperText: errors.password })} />
 
-            <TextField variant="outlined" label="Ponovite šifru" type="password" name="passwordRepeat"
+            <TextField inputProps={{"data-testid":"passwordRepeatField"}} variant="outlined" label="Ponovite šifru" type="password" name="passwordRepeat"
                        value={values.passwordRepeat} onChange={handleInputChange}
                        {...(errors.passwordRepeat && { error: true, helperText: errors.passwordRepeat })} />
 
             <TextField
+                inputProps={{"data-testid":"rolesSelectionField"}}
                 variant="outlined"
                 select
                 name="roleId"
@@ -239,6 +242,7 @@ const MangeUserForm = ({ selectedUser, push, groupOptions, fetchAllGroupsForAdmi
             </TextField>
 
             <TextField
+                inputProps={{"data-testid":"groupSelectionField"}}
                 variant="outlined"
                 select
                 name="groupId"

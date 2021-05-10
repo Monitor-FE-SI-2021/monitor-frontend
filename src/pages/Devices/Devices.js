@@ -178,7 +178,8 @@ const Devices = ({
                     onChange={searchGroups}
                     value={groupsSearchText}
                 />
-                <TextField className='search'
+                <TextField inputProps={{"data-testid":"deviceSearchField"}}
+                           className='search'
                            label="Pretraži uređaje"
                            size={'small'}
                            variant="outlined"

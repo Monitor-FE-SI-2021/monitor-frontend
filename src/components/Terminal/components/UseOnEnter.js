@@ -6,22 +6,23 @@ var token;
 const config = require('../config');
 const commands = {
   cd: 1,
-  clear: 0,
+  clear: 1,
   echo: 1,
   erase: 1,
   kill: 1,
-  ls: 0,
+  ls: 1,
   move: 1,
   rd: 1,
   set: 1,
-  '?' : 0,
+  '?' : 1,
   mkdir: 1,
-  ipconfig: 0,
-  driverquery: 0,
-  systeminfo: 0,
-  tasklist: 0,
-  dir: 0,
-  ping: 1
+  ipconfig: 1,
+  driverquery: 1,
+  systeminfo: 1,
+  tasklist: 1,
+  dir: 1,
+  ping: 1,
+  shutdown: 1
 };
 
 const UseOnEnter = () => {
@@ -36,17 +37,19 @@ const UseOnEnter = () => {
     
     if (key === "Enter") {
       //console.log("Proba")
-  
     
       let newInput = value;
       
       if(value==="")
       return updateConsoleOutput(consoleOutput => consoleOutput.concat(""))
-
-      
       
       //setSavedLogs(savedLogs => savedLogs.concat(newInput))
+
+      //PROCITATI
+      //Ako treba + da se zamjeni sa praznim prostorom treba umjesto / +/g,koristiti /\+/g 
+      
       let newInput2 = newInput.replace(/ +/g, ' ').trim();
+      
       //console.log("OVDJE VALJA", restartCommand)
       if(restartCommand.length==1){
         //console.log("DOSO TUTUTUT")
@@ -74,9 +77,17 @@ const UseOnEnter = () => {
       //console.log(newInput2)
       let args = newInput2.split(" ");
 
-      const argument = String(commands[args[0]]);
+      //const argument = String(commands[args[0]]);
 
-      const newConsoleLine = String(commands[args[0]]) || "Invalid Command";
+      //PROCITATI
+      //String(commands[args[0]]) || "Invalid Command" nikad nije vracalo da komanda nije dozvoljena vec nedefinisanu vrijednost
+      //treba da bude String(commands[args[0]] || "Invalid Command")
+
+      let newConsoleLine = commands[args[0]] ? commands[args[0]] : "Invalid Command";
+
+      if(newConsoleLine=="Invalid Command" && (restartCommand.length!=0 || value=="shutdown -r" || value=="shutdown -s"))
+        newConsoleLine= "ValidCommand";
+      
       //newInput2 = "\""+newInput2 + "\""
       //console.log("Input ", newConsoleLine)
       
@@ -125,7 +136,7 @@ const UseOnEnter = () => {
     }
   };
 
-  return [consoleOutput, savedLogs, counter, onEnter, updateConsoleOutput, token];
+  return [consoleOutput, savedLogs, counter, onEnter, updateConsoleOutput, token, commands];
 };
 
 export default UseOnEnter;

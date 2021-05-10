@@ -64,6 +64,8 @@ const AdminUsersTable = ({
         fetchAllUsers();
     }, [page, perPage, sortField, sortOrder])
 
+    const test = () => true;
+
     useEffect(() => {
         fetchDataDebounced();
     }, [searchText])
