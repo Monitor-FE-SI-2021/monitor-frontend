@@ -8,7 +8,7 @@ import {
     setActiveGlobal,
     updateDevicesTableForGroup
 } from "../../store/modules/devices/actions";
-import { fetchAllGroups, searchGroupsAction} from "../../store/modules/groups/actions";
+import { fetchAllGroups, fetchAllGroupsForAdmin, searchGroupsAction } from "../../store/modules/groups/actions";
 import { push } from "connected-react-router";
 import { RouteLink } from "../../store/modules/menu/menu";
 import { Spinner } from "../../components/Spinner/Spinner";
@@ -30,10 +30,12 @@ const getRootGroups = (groupTree) => {
 
 
 const Devices = ({
+                     user,
                      allGroups,
                      updateDevicesTableForGroup,
                      fetchAllDevices,
                      fetchAllGroups,
+                     fetchAllGroupsForAdmin,
                      push,
                      devicesAsync,
                      groupsAsync,
@@ -57,17 +59,21 @@ const Devices = ({
 
     useEffect(() => {
         fetchAllDevices();
-        fetchAllGroups();
+        if (user?.role?.name === "MonitorSuperAdmin") {
+            fetchAllGroupsForAdmin()
+        } else {
+            fetchAllGroups();
+        }
     }, [fetchAllDevices, fetchAllGroups])
 
-  /*  var path = "";
-    const getGroupPath = (groupId) => {
-        const group = selectGroup(groupId);
-        console.log(group);
-        path = group.name + '/' + path;
-        if(group.parentGroup == null) return path;
-        return getGroupPath(group.parentGroup);
-    }*/
+    /*  var path = "";
+      const getGroupPath = (groupId) => {
+          const group = selectGroup(groupId);
+          console.log(group);
+          path = group.name + '/' + path;
+          if(group.parentGroup == null) return path;
+          return getGroupPath(group.parentGroup);
+      }*/
 
     const onDragEnd = (result) => {
 
@@ -149,7 +155,6 @@ const Devices = ({
     });
 
 
-
     const searchDevices = (e) => {
         const searchText = e.target.value;
         searchDevicesAction(searchText);
@@ -178,7 +183,7 @@ const Devices = ({
                     onChange={searchGroups}
                     value={groupsSearchText}
                 />
-                <TextField inputProps={{"data-testid":"deviceSearchField"}}
+                <TextField inputProps={{ "data-testid": "deviceSearchField" }}
                            className='search'
                            label="Pretraži uređaje"
                            size={'small'}
@@ -198,6 +203,7 @@ const Devices = ({
 };
 
 export default connect((state) => ({
+    user: state.login.user,
     allDevices: state.devices.devices,
     allGroups: state.groups.groups,
     devicesAsync: state.devices.async,
@@ -213,7 +219,8 @@ export default connect((state) => ({
     push,
     setActiveGlobal,
     searchGroupsAction,
-    searchDevicesAction
+    searchDevicesAction,
+    fetchAllGroupsForAdmin
 })(Devices);
 
 
