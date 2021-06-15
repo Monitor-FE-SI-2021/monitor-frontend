@@ -122,8 +122,8 @@ const MangeUserForm = ({ selectedUser, push, groupOptions, fetchAllGroupsForAdmi
 
         if (values.email === "")
             temp.email = emptyFieldError
-        //else if (!validator.isEmail(values.email))
-        else if (isEmail(values.email))
+
+        else if (!isEmail(values.email))
             temp.email = "Pogrešan email"
         else
             temp.email = ""
@@ -215,14 +215,14 @@ const MangeUserForm = ({ selectedUser, push, groupOptions, fetchAllGroupsForAdmi
                        onChange={handleInputChange}
                        {...(errors.phone && { error: true, helperText: errors.phone })} />
 
-            <TextField inputProps={{"data-testid":"passwordField"}} variant="outlined" label="Šifra" type="password" name="password" value={values.password}
-                       autoComplete={'new-password'}
-                       onChange={handleInputChange}
-                       {...(errors.password && { error: true, helperText: errors.password })} />
+            {/*<TextField inputProps={{"data-testid":"passwordField"}} variant="outlined" label="Šifra" type="password" name="password" value={values.password}*/}
+            {/*           autoComplete={'new-password'}*/}
+            {/*           onChange={handleInputChange}*/}
+            {/*           {...(errors.password && { error: true, helperText: errors.password })} />*/}
 
-            <TextField inputProps={{"data-testid":"passwordRepeatField"}} variant="outlined" label="Ponovite šifru" type="password" name="passwordRepeat"
-                       value={values.passwordRepeat} onChange={handleInputChange}
-                       {...(errors.passwordRepeat && { error: true, helperText: errors.passwordRepeat })} />
+            {/*<TextField inputProps={{"data-testid":"passwordRepeatField"}} variant="outlined" label="Ponovite šifru" type="password" name="passwordRepeat"*/}
+            {/*           value={values.passwordRepeat} onChange={handleInputChange}*/}
+            {/*           {...(errors.passwordRepeat && { error: true, helperText: errors.passwordRepeat })} />*/}
 
             <TextField
                 inputProps={{"data-testid":"rolesSelectionField"}}
